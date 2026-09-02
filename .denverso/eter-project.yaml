@@ -1,0 +1,46 @@
+apiVersion: denverso-eter/v1
+kind: StaticHmlProject
+metadata:
+  name: eter-hml
+  contract: static-v1
+spec:
+  source_repository: Eteranima/Eter
+  source_root: src
+  generated_root: public
+  artifact:
+    archive_name: eter-hml-public.tar.gz
+    manifest_name: eter-hml-manifest.json
+  allowed_roots:
+    - .denverso/eter-project.yaml
+    - .github/CODEOWNERS
+    - .github/workflows
+    - AGENTS.md
+    - HANDOFF.md
+    - HOW-TO-SOLVE.md
+    - LICENSE
+    - NONCOMMERCIAL.md
+    - NOTICE
+    - README.md
+    - THIRD_PARTY_NOTICES.md
+    - docs
+    - src
+    - tests
+    - tools
+  prohibited_roots:
+    - deploy
+    - runtime
+    - scripts
+    - public
+    - historico
+    - Temp
+  classes:
+    docs: docs
+    content: src/scripts
+    assets: src/assets
+    tests: tests
+    tools: tools
+    workflow: .github/workflows
+    contract: .denverso, .github/CODEOWNERS, AGENTS.md, HANDOFF.md
+  large_change:
+    file_count: 25
+    total_bytes: 10485760

@@ -4,21 +4,71 @@ on:
   push:
   pull_request:
 
+concurrency:
+  group: eter-hml-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   verificar:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - name: Classificar diff e selecionar adaptadores
+        id: classificar
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ "$EVENT_NAME" = pull_request ]; then
+            base="$PR_BASE"
+          else
+            base="$PUSH_BEFORE"
+          fi
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            base="$(git rev-list --max-parents=0 HEAD)"
+          fi
+          python3 tools/classificar_diff.py \
+            --base "$base" \
+            --head "$GITHUB_SHA" \
+            --output-json classification.json \
+            --github-output "$GITHUB_OUTPUT"
       - name: Executar testes determinísticos
         run: python3 -m unittest discover -s tests
+      - name: Verificar sintaxe dos módulos JavaScript
+        run: find src -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
       - name: Materializar conteúdo estático
         run: python3 tools/construir_modular.py --source src --public public
       - name: Validar conteúdo público e contrato estático
         run: |
           python3 tests/validar_hml_estatica.py
           python3 tests/validar_publicacao.py public
+      - name: Adaptador de documentação e contrato
+        if: contains(steps.classificar.outputs.adapters, 'docs-contract') || contains(steps.classificar.outputs.adapters, 'contract-policy')
+        run: python3 tools/verificar_manifesto_projeto.py
+      - name: Adaptador de assets
+        if: contains(steps.classificar.outputs.adapters, 'asset-catalog')
+        run: python3 tools/construir_modular.py --source src --public public-adapter
+      - name: Adaptador de testes
+        if: contains(steps.classificar.outputs.adapters, 'test-discovery')
+        run: python3 -m unittest discover -s tests
+      - name: Adaptador de ferramentas
+        if: contains(steps.classificar.outputs.adapters, 'tool-smoke')
+        run: |
+          python3 tools/classificar_diff.py --help
+          python3 tools/empacotar_hml.py --help
+          python3 tools/verificar_manifesto_projeto.py
+      - name: Adaptador de workflow
+        if: contains(steps.classificar.outputs.adapters, 'workflow-policy')
+        run: python3 tests/test_workflow_policy.py
+      - name: Registrar mudança grande
+        if: steps.classificar.outputs.large_change == 'true'
+        run: echo "Mudança grande classificada; os gates completos já foram executados."
       - name: Empacotar artefato imutável
         run: |
           python3 tools/empacotar_hml.py \
@@ -26,7 +76,7 @@ jobs:
             --source-commit "$GITHUB_SHA" \
             --output-dir dist \
             --generated-at "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: eter-hml-${{ github.sha }}
           path: dist/
@@ -36,10 +86,11 @@ jobs:
     needs: verificar
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: eter-hml-${{ github.sha }}
           path: dist
