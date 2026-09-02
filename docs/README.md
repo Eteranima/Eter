@@ -9,6 +9,11 @@ Os capítulos de conteúdo, o atlas e `v531/` preservam material de design e
 fotografias técnicas anteriores. Eles não autorizam componentes de servidor nem
 alteram o contrato estático, anônimo e sem credenciais deste repositório.
 
+A fonte vigente já é modular em `src/`. Documentos sobre HTML monolítico,
+conversão ou caminhos de versões anteriores são históricos, não instruções de
+desenvolvimento. Comece sempre pelo
+[Guia de desenvolvimento](GUIA-DE-DESENVOLVIMENTO.md).
+
 ## Referências vigentes
 
 - [Estado atual](ESTADO-ATUAL.md) — limites e artefatos da HML.

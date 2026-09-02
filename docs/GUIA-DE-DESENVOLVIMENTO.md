@@ -5,6 +5,13 @@ desenvolvedora, seja um agente de programação. Ele descreve o repositório que
 publica a HML pública em `eterhml.denverso.com`; não descreve nem autoriza
 acesso ao ambiente de produção.
 
+> **Arquitetura atual:** o jogo é desenvolvido diretamente na árvore modular
+> final em `src/`, a mesma arquitetura estática entregue pelo servidor. Não
+> existe HTML monolítico grande como fonte de trabalho. Menções a conversões,
+> monólitos ou versões anteriores em documentos históricos servem somente como
+> contexto; não rode migrações nem recrie essas estruturas para uma melhoria
+> atual.
+
 Leia [AGENTS.md](../AGENTS.md) primeiro. Em caso de contradição, ele e os
 documentos de contrato (`ESTADO-ATUAL`, `ARQUITETURA-E-OPERACAO` e
 `GUIA-DE-PUBLICACAO`) prevalecem sobre documentos históricos e handoffs
@@ -101,6 +108,10 @@ Os documentos de conteúdo são o mapa funcional do jogo: `01` visão e tom,
 personagens, `07` habilidades, `08` itens/economia, `09` bestiário, `10`
 chefes, `11` mapas, `12` NPCs/diálogos, `13` missões e `14` capítulo. Consulte
 o documento correspondente antes de inventar ou alterar regras.
+
+O campo `source` em `src/asset-catalog.json` preserva a procedência de uma
+importação antiga de assets; ele **não** aponta para uma fonte atual nem é
+dependência do build. O build parte exclusivamente de `src/`.
 
 ## 4. Scripts: ordem, responsabilidades e extensões
 
