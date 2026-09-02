@@ -12,6 +12,7 @@ spec:
     manifest_name: eter-hml-manifest.json
   allowed_roots:
     - .denverso/eter-project.yaml
+    - .gitkeep
     - .gitignore
     - .github/CODEOWNERS
     - .github/workflows

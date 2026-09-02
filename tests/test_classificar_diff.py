@@ -82,6 +82,7 @@ class DiffClassifierTest(unittest.TestCase):
 
     def test_falha_fechado_para_raiz_desconhecida_ou_proibida(self) -> None:
         module = classifier_module()
+        self.assertEqual(module.classify_path(".gitkeep"), "contract")
         self.assertEqual(module.classify_path(".gitignore"), "contract")
         with self.assertRaisesRegex(ValueError, "desconhecida"):
             module.classify_path("arquivo-solto.txt")

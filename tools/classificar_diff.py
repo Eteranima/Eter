@@ -47,7 +47,7 @@ def classify_path(path: str) -> str:
         return "tools"
     if path.startswith(".github/workflows/"):
         return "workflow"
-    if path in {".github/CODEOWNERS", ".denverso/eter-project.yaml", ".gitignore", "AGENTS.md", "HANDOFF.md"}:
+    if path in {".github/CODEOWNERS", ".denverso/eter-project.yaml", ".gitkeep", ".gitignore", "AGENTS.md", "HANDOFF.md"}:
         return "contract"
     if path in {"README.md", "HOW-TO-SOLVE.md", "LICENSE", "NONCOMMERCIAL.md", "NOTICE", "THIRD_PARTY_NOTICES.md"}:
         return "docs"
