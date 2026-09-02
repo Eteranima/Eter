@@ -1,6 +1,7 @@
 # Documentação do Éter — HML estática
 
 Os contratos vigentes desta HML são [AGENTS.md](../AGENTS.md),
+[Guia de desenvolvimento](GUIA-DE-DESENVOLVIMENTO.md),
 [HANDOFF.md](../HANDOFF.md), [Estado atual](ESTADO-ATUAL.md),
 [Arquitetura](ARQUITETURA-E-OPERACAO.md) e [Guia de publicação](GUIA-DE-PUBLICACAO.md).
 
@@ -11,6 +12,9 @@ alteram o contrato estático, anônimo e sem credenciais deste repositório.
 ## Referências vigentes
 
 - [Estado atual](ESTADO-ATUAL.md) — limites e artefatos da HML.
+- [Guia de desenvolvimento](GUIA-DE-DESENVOLVIMENTO.md) — entrada para uma
+  pessoa desenvolvedora ou agente: estrutura, assets, scripts, saves, testes
+  e publicação contínua.
 - [Arquitetura e operação](ARQUITETURA-E-OPERACAO.md) — build e empacotamento.
 - [Guia de publicação](GUIA-DE-PUBLICACAO.md) — fluxo de pull request e release.
 
