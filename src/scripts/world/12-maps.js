@@ -253,7 +253,10 @@ const MAPS = {
 
   undercroft: {
     name:'Subterrâneo Selado',
-    fill:'x', region:'undercroft', outdoor:false, encounter:[9, 18], bgm:'dungeon',
+    /* P0 de mobs no campo: este é o primeiro mapa que troca a rolagem
+       por encontros visíveis. Os estados abaixo são só configuração;
+       morte, respawn e patrulha nascem em runtime no carregamento. */
+    fill:'x', region:'undercroft', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(10,6,24,0.5)',
     rows:[
       '##################################',
@@ -291,6 +294,11 @@ const MAPS = {
     ],
     chests:[ {item:'ether', qty:3}, {item:'hipot', qty:2} ],
     npcs:[],
+    mobs:[
+      {id:'sombras',       x:18, y:3,  visual:'shade', formation:[['shade', 2]], patrol:1},
+      {id:'golem_sombra',  x:21, y:7,  visual:'golem', formation:[['golem', 1], ['shade', 1]], patrol:1},
+      {id:'servo_inverno', x:12, y:12, visual:'frost', formation:[['frost', 1]], patrol:1},
+    ],
     signs:[
       {x:9,y:6, text:'INSCRIÇÃO — "O que foi selado aqui não dorme. Apenas espera ser lembrado."'},
     ],

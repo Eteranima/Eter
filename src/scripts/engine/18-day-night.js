@@ -194,6 +194,47 @@ function buildFormation(spec){
   return out;
 }
 
+/* Um encontro de mob só desaparece com vitória. Fuga conserva a entidade
+   no lugar; derrota recarrega o mapa e, como mob não é save, recompõe o
+   estado transitório sem gravar progresso artificial. */
+function defeatWorldMob(mob, now = Date.now()){
+  if (!mob || mob.defeated) return false;
+  mob.defeated = true; mob.engaging = false; mob.moving = false;
+  mob.respawnAt = now + rnd(15, 10) * 1000;
+  return true;
+}
+function respawnWorldMob(mob, now = Date.now()){
+  if (!mob?.defeated || now < mob.respawnAt) return false;
+  /* Não nasce em cima do grupo, de outro mob ou de objeto interativo.
+     Se o ponto ainda estiver ocupado, tenta de novo logo; o mínimo de
+     10 s já foi respeitado e o mapa continua transitável. */
+  if (!isSafeWorldMobTile(mob.homeX, mob.homeY, mob)){
+    mob.respawnAt = now + 500;
+    return false;
+  }
+  Object.assign(mob, {tx:mob.homeX, ty:mob.homeY, px:mob.homeX * TILE, py:mob.homeY * TILE,
+    fromX:mob.homeX, fromY:mob.homeY, moving:false, moveT:0, wait:rnd(3, 1),
+    defeated:false, engaging:false, respawnAt:0});
+  return true;
+}
+function startWorldMobBattle(mob){
+  if (!mob || mob.defeated || mob.engaging || G.scene !== 'FIELD') return false;
+  mob.engaging = true;
+  Sound.sfx('encounter');
+  FX.battleWipe(() => {
+    Battle.begin(buildFormation(mob.formation));
+    Battle.onFinish = kind => {
+      /* `gameOver()` recarrega um mapa novo sem chamar o gancho. Se uma
+         luta futura chegar a este callback obsoleto, ela não pode tocar
+         a instância já descartada. */
+      if (!G.map?.mobs?.includes(mob)) return;
+      if (kind === 'victory') defeatWorldMob(mob);
+      else mob.engaging = false;
+    };
+  });
+  return true;
+}
+
 /* --- Falas ------------------------------------------------------- */
 /** `npc.lines` aceita:
  *   - array de strings                      → fala simples
@@ -344,6 +385,8 @@ function interact(){
     });
     return;
   }
+  const mob = worldMobAt(tx, ty);
+  if (mob){ startWorldMobBattle(mob); return; }
   const boss = G.map.boss;
   if (boss && boss.eco && boss.tx === tx && boss.ty === ty){
     const n = G.revanches[boss.id] || 0;

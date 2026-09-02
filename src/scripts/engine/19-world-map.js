@@ -342,7 +342,26 @@ const Mapa = {
   },
 };
 
-/* --- NPCs -------------------------------------------------------- */
+/* --- Mobs e NPCs ------------------------------------------------- */
+function updateWorldMobs(dt){
+  const mobs = G.map?.mobs || [], now = Date.now();
+  for (const mob of mobs){
+    if (mob.defeated){ respawnWorldMob(mob, now); continue; }
+    if (mob.engaging) continue;
+    if (updateMover(mob, dt, MOVE_DUR * 1.9)) mob.wait = rnd(3.5, 1.5);
+    if (mob.moving) continue;
+    mob.wait -= dt;
+    if (mob.wait > 0) continue;
+    mob.wait = rnd(3, 1);
+    const dir = pick(['up','down','left','right']);
+    const [dx, dy] = DIRV[dir], nx = mob.tx + dx, ny = mob.ty + dy;
+    mob.dir = dir;
+    if (Math.abs(nx - mob.homeX) > mob.patrol || Math.abs(ny - mob.homeY) > mob.patrol) continue;
+    if (!isSafeWorldMobTile(nx, ny, mob)) continue;
+    mob.fromX = mob.tx; mob.fromY = mob.ty; mob.tx = nx; mob.ty = ny;
+    mob.moving = true; mob.moveT = 0;
+  }
+}
 function updateNPCs(dt){
   for (const n of G.map.npcs){
     if (updateMover(n, dt, MOVE_DUR * 1.6)) n.wait = rnd(4, 1.5);
@@ -387,6 +406,7 @@ function updateField(dt){
         break;
       }
   }
+  updateWorldMobs(dt);
   updateNPCs(dt);
   updateCamera(dt);
   if (G.banner.t > 0) G.banner.t -= dt;

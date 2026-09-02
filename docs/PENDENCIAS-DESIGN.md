@@ -43,15 +43,16 @@ aproveitar `RESERVADO_RACAS` como referência de identidade racial
 (o que cada raça É), mesmo sem o sistema mecânico de raça estar ligado
 ainda.
 
-## 3. Mob no modo World (arte + engine)
+## 3. Mob no modo World (arte + engine) — base entregue no P0
 
-Ver `docs/ATLAS-SPRITES.md`, seção 4: dimensão já definida (parado:
-84px de exibição, igual ao boss de campo; andando: grade 3×4 igual ao
-chibi). Falta o motor: hoje só NPC e boss de mapa têm entrada própria
-em `18-day-night.js`/`20-field-view.js` — um "mob comum" de bloqueio
-de passagem (ex.: 5 lobos numa passagem, liberados por uma skill de
-dano em área ensinada pelo Abel) precisa de um tipo de entidade novo
-no mapa, com gatilho de missão pra sumir ao ser "vencido"/dissipado.
-Combate de verdade contra eles pode ou não ser necessário dependendo
-de como a missão for desenhada (pode ser só um evento de campo, sem
-abrir tela de batalha).
+O P0 introduziu a entidade de mapa em `17-world.js`, o ciclo de
+combate/respawn em `18-day-night.js`, patrulha em `19-world-map.js` e
+desenho em `20-field-view.js`. O Subterrâneo Selado é o recorte inicial:
+três mobs visíveis, com combate real, sem encontro aleatório e sem
+persistir derrota ou temporizador no save.
+
+Ver `docs/ATLAS-SPRITES.md`, seção 4: o suporte atual é arte estática a
+84px. A grade 3×4 e mobs condicionais de missão continuam pendentes e
+devem ser projetados junto da missão que os consumir. A expansão para
+outras áreas requer equilibrar cada mapa e preservar as quests que hoje
+dependem de encontros aleatórios.

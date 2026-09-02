@@ -20,6 +20,7 @@ function isSolid(x, y){
      parar ninguém; um poço, sim. */
   if (G.map.decorSolido && G.map.decorSolido.has(x + ',' + y)) return true;
   for (const n of G.map.npcs) if (n.tx === x && n.ty === y) return true;
+  if (worldMobAt(x, y)) return true;
   /* O eco NÃO bloqueia: ele é sombra, e trancar o caminho de volta
      numa alcova sem saída prenderia quem só quis olhar. */
   if (G.map.boss && !G.map.boss.eco && G.map.boss.tx === x && G.map.boss.ty === y) return true;
@@ -33,6 +34,49 @@ function nearestFree(x, y){
   return {x, y};
 }
 
+/* --- Mobs de campo ------------------------------------------------
+   Eles pertencem à instância carregada do mapa, não ao save: entrar de
+   novo numa área recompõe seus encontros a partir da definição. Isso
+   mantém o contrato de save intacto e impede que um estado transitório
+   de patrulha vire dado persistido. */
+function worldMobAt(x, y){
+  return G.map?.mobs?.find(m => !m.defeated && m.tx === x && m.ty === y) || null;
+}
+function isSafeWorldMobTile(x, y, self = null){
+  const m = G.map, t = tileAt(x, y);
+  if (!m || !t || t.solid || t.warp || t.chest || t.save) return false;
+  if (m.decorSolido?.has(x + ',' + y)) return false;
+  if (m.npcs.some(n => n.tx === x && n.ty === y)) return false;
+  if (m.boss && m.boss.tx === x && m.boss.ty === y) return false;
+  if (m.mobs?.some(n => n !== self && !n.defeated && n.tx === x && n.ty === y)) return false;
+  if ((m.signs || []).some(s => s.x === x && s.y === y)) return false;
+  if ((m.def.triggers || []).some(g => g.x === x && g.y === y)) return false;
+  if (G.player?.tx === x && G.player?.ty === y) return false;
+  if (G.followers?.some(f => f.tx === x && f.ty === y)) return false;
+  return true;
+}
+function nearestSafeWorldMobTile(x, y){
+  if (isSafeWorldMobTile(x, y)) return {x, y};
+  for (let r = 1; r < 8; r++)
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++)
+      if (isSafeWorldMobTile(x + dx, y + dy)) return {x:x + dx, y:y + dy};
+  return null;
+}
+function makeWorldMob(spec){
+  const formation = (spec.formation || []).filter(([id, n]) => BESTIARY[id] && n > 0);
+  const art = BESTIARY[spec.visual] || BESTIARY[formation[0]?.[0]];
+  const p = art && nearestSafeWorldMobTile(spec.x, spec.y);
+  if (!p || !formation.length){
+    console.warn(`[${G.map?.id}] mob inválido:`, spec?.id || spec?.visual || 'sem id');
+    return null;
+  }
+  return {...spec, formation, tx:p.x, ty:p.y, px:p.x * TILE, py:p.y * TILE,
+    homeX:p.x, homeY:p.y, dir:'down', moving:false, moveT:0, animT:0,
+    fromX:p.x, fromY:p.y, wait:rnd(3, 1), patrol:Math.max(0, spec.patrol ?? 1),
+    sprite:art.sprite, color:art.color, accent:art.accent,
+    defeated:false, engaging:false, respawnAt:0};
+}
+
 function loadMap(id, sx, sy, sdir){
   const def = MAPS[id];
   if (!def){ console.error('mapa inexistente:', id); return; }
@@ -43,7 +87,7 @@ function loadMap(id, sx, sy, sdir){
   const grid = normalizeRows(def.rows, def.fill);
   const m = {
     id, def, grid, w:grid[0].length, h:grid.length,
-    name:def.name, warps:[], chests:[], signs:def.signs || [], npcs:[], boss:null,
+    name:def.name, warps:[], chests:[], signs:def.signs || [], npcs:[], mobs:[], boss:null,
     /* Decoração: peças do pacote posicionadas por casa, SEM entrar na
        gramática de tiles. Pôr cada prop como uma letra nova no mapa em
        texto encheria o alfabeto e obrigaria a redesenhar o mapa inteiro
@@ -94,6 +138,10 @@ function loadMap(id, sx, sy, sdir){
   activeParty().forEach((c, i) => { if (i > 0) G.followers.push(
     {char:c, tx:p.x, ty:p.y, px:p.x * TILE, py:p.y * TILE, dir:G.player.dir,
      moving:false, moveT:0, animT:0, fromX:p.x, fromY:p.y, sheet:c.sheet}); });
+  for (const spec of (def.mobs || [])){
+    const mob = makeWorldMob(spec);
+    if (mob) m.mobs.push(mob);
+  }
   resetEncounterCounter();
   showBanner(m.name);
   if (Sound.ready) Sound.bgm(def.bgm || 'field');
@@ -204,6 +252,8 @@ function tryStep(dir){
   p.dir = dir;
   const [dx, dy] = DIRV[dir];
   const nx = p.tx + dx, ny = p.ty + dy;
+  const mob = worldMobAt(nx, ny);
+  if (mob){ startWorldMobBattle(mob); return; }
   if (isSolid(nx, ny)) return;
   // followers seguem a trilha: cada um vai para onde estava o da frente
   const trail = [{x:p.tx, y:p.ty, dir}];

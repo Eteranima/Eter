@@ -2056,6 +2056,54 @@ function runSelfTests(){
     }
     ok('nenhum NPC ou chefe nasce dentro de parede', npcPresos.length === 0, npcPresos.join(' '));
 
+    /* P0 — Subterrâneo troca encontro aleatório por três entidades de
+       campo. A configuração precisa continuar pequena, combater só
+       espécies reais e não plantar ninguém em objeto/interação. */
+    {
+      const def = MAPS.undercroft, mobs = def?.mobs || [], ruins = [];
+      const g = def && normalizeRows(def.rows, def.fill);
+      for (const mob of mobs){
+        const t = g?.[mob.y]?.[mob.x] && TILEDEF[g[mob.y][mob.x]];
+        if (!t || t.solid || t.warp || t.chest || t.save) ruins.push(`${mob.id}:casa`);
+        if (!BESTIARY[mob.visual] || !(mob.formation || []).length ||
+            !mob.formation.every(([id, n]) => BESTIARY[id] && n > 0)) ruins.push(`${mob.id}:formação`);
+        if (!(mob.patrol >= 0 && mob.patrol <= 2)) ruins.push(`${mob.id}:patrulha`);
+      }
+      ok('o Subterrâneo tem até três mobs visíveis e nenhum encontro aleatório',
+         def?.encounter === null && mobs.length >= 1 && mobs.length <= 3,
+         `${mobs.length} mobs · encontro=${def?.encounter}`);
+      ok('todo mob do Subterrâneo nasce em chão seguro com formação válida',
+         ruins.length === 0, ruins.join(' '));
+
+      const mapaAnterior = G.mapId;
+      loadMap('undercroft');
+      const vivo = G.map.mobs[0], agora = Date.now();
+      ok('mobs de campo são instâncias transitórias e bloqueiam a própria casa',
+         G.map.mobs.length === mobs.length && !!vivo && isSolid(vivo.tx, vivo.ty));
+      if (vivo){
+        /* Exercita o gancho real sem abrir uma batalha durante o relatório:
+           fugir devolve o mob ao campo; vitória o marca para respawn. */
+        const wipe = FX.battleWipe, begin = Battle.begin, gancho = Battle.onFinish;
+        FX.battleWipe = cb => cb();
+        Battle.begin = () => {};
+        const iniciou = startWorldMobBattle(vivo);
+        Battle.onFinish?.('flee');
+        const fugiu = iniciou && !vivo.engaging && !vivo.defeated;
+        startWorldMobBattle(vivo);
+        Battle.onFinish?.('victory');
+        FX.battleWipe = wipe; Battle.begin = begin; Battle.onFinish = gancho;
+        ok('fuga conserva mob e vitória o remove do campo', fugiu && vivo.defeated);
+        const espera = vivo.respawnAt - agora;
+        ok('respawn de mob fica entre 10 e 15 segundos', espera >= 10000 && espera < 15000,
+           `${Math.round(espera)} ms`);
+        vivo.respawnAt = agora - 1;
+        respawnWorldMob(vivo, agora);
+        ok('mob reaparece na origem sem gravar estado de mapa',
+           !vivo.defeated && vivo.tx === vivo.homeX && vivo.ty === vivo.homeY);
+      }
+      if (mapaAnterior) loadMap(mapaAnterior);
+    }
+
     /* --- v5.28: mapa que PROMETE encontro tem de poder cumprir -------
        O encontro é gatilhado pelo TILE (`enc`), não pelo mapa. Três
        regiões inteiras — Ninhal de Éter, Coroa de Vidro e o Arquivo —
