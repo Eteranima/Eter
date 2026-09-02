@@ -1,0 +1,87 @@
+
+@font-face{font-family:'Press Start 2P';src:url('../assets/fontes/press-start-2p-latin-ext.woff2') format('woff2');font-display:swap}
+@font-face{font-family:'Inter';src:url('../assets/fontes/inter-latin-ext.woff2') format('woff2');font-weight:400 600;font-display:swap}
+  *{margin:0;padding:0;box-sizing:border-box}
+  /* 100dvh acompanha a barra de endereço do navegador móvel, que entra e
+     sai durante o jogo; com 100% o canvas ficava cortado embaixo. */
+  html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
+  body{background:#05050a;font-family:'Inter',sans-serif;color:#e0ddd4;
+       display:flex;flex-direction:column;align-items:center;justify-content:center;
+       -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  #stage{position:relative;flex:0 0 auto;line-height:0;
+         box-shadow:0 0 60px rgba(80,50,120,0.28);border-radius:3px;overflow:hidden}
+  canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;background:#0a0a0f;touch-action:none}
+
+  /* ---- Controles móveis (DOM: ficam fora do canvas de propósito) ---- */
+  #mobile-controls{position:fixed;left:0;right:0;bottom:0;display:none;z-index:20;
+      padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));
+      justify-content:space-between;align-items:flex-end;pointer-events:none;
+      background:linear-gradient(transparent,rgba(6,6,12,0.92) 45%)}
+  #mobile-controls > *{pointer-events:auto}
+  .dpad{display:grid;grid-template:repeat(3,46px)/repeat(3,46px);gap:3px}
+  .pad{background:rgba(58,42,90,0.72);border:1px solid #4a3a6a;border-radius:9px;color:#cfc8dd;
+       font-size:16px;display:flex;align-items:center;justify-content:center;touch-action:none;
+       backdrop-filter:blur(2px);transition:background .08s,transform .08s}
+  .pad.held{background:rgba(120,86,200,0.85);transform:scale(0.94)}
+  .pad.blank{visibility:hidden}
+  .act-col{display:flex;flex-direction:column;gap:9px;align-items:flex-end}
+  .act-row{display:flex;gap:9px;align-items:center}
+  .act{width:58px;height:58px;border-radius:50%;background:rgba(58,42,90,0.72);border:1px solid #4a3a6a;
+       color:#cfc8dd;font-family:'Press Start 2P',monospace;font-size:8px;display:flex;
+       align-items:center;justify-content:center;touch-action:none;transition:background .08s,transform .08s}
+  .act.sm{width:46px;height:46px;font-size:7px}
+  .act.held{background:rgba(120,86,200,0.85);transform:scale(0.93)}
+  .pad:focus-visible,.act:focus-visible{outline:3px solid #f2dc78;outline-offset:2px}
+  .act.confirm{border-color:#7a5aba}
+  .act.cancel{border-color:#8a4a4a;background:rgba(70,30,40,0.72)}
+  /* Tela cheia mora no canto, FORA da coluna de ações. Pô-lo junto do
+     MENU/TROCA alargava a coluna, e no modo deitado a largura dessa
+     coluna é subtraída do canvas — o botão de "aumentar a tela"
+     encolhia a tela. Aqui ele flutua no canto superior direito, sobre a
+     margem que já é vazia, e não custa um pixel de jogo.
+     Some sozinho onde a API não existe (Safari de iPhone): botão que não
+     faz nada é pior que botão nenhum. */
+  #btn-full{position:fixed;z-index:30;
+      top:calc(6px + env(safe-area-inset-top,0px));
+      right:calc(6px + env(safe-area-inset-right,0px));
+      width:36px;height:36px;border-radius:9px;
+      background:rgba(58,42,90,0.55);border:1px solid #4a3a6a;color:#cfc8dd;
+      font-family:system-ui,sans-serif;font-size:17px;line-height:1;
+      display:none;align-items:center;justify-content:center;
+      touch-action:none;-webkit-tap-highlight-color:transparent}
+  #btn-full.held{background:rgba(120,86,200,0.85);transform:scale(0.93)}
+  body.touch #btn-full{display:flex}
+  body.sem-fullscreen #btn-full{display:none}
+
+  body.touch #mobile-controls{display:flex}
+
+  /* ---- Celular deitado ----------------------------------------------
+     Em pé os controles moram numa faixa embaixo do canvas. Deitado não
+     há faixa: a tela inteira é altura útil, e o canvas 4:3 centralizado
+     deixa duas margens laterais vazias. Os controles se mudam para lá —
+     D-pad na margem esquerda, ações na direita — em vez de tapar o jogo.
+     `fitScreen()` reserva essas margens (RESERVA_LADO), então nada se
+     sobrepõe: aqui só cuidamos da posição e do tamanho dos botões. */
+  @media (orientation:landscape){
+    body.touch #mobile-controls{top:0;align-items:center;background:none;
+        padding:0 8px calc(0px + env(safe-area-inset-bottom,0px));
+        padding-left:calc(8px + env(safe-area-inset-left,0px));
+        padding-right:calc(8px + env(safe-area-inset-right,0px))}
+    body.touch .dpad{grid-template:repeat(3,40px)/repeat(3,40px);gap:3px}
+    body.touch .act{width:50px;height:50px}
+    body.touch .act.sm{width:40px;height:40px;font-size:6px}
+    body.touch .act-col{gap:7px}
+    body.touch .act-row{gap:7px}
+  }
+  /* Versão compacta dos controles. Quem liga é o `fitScreen`, pela
+     margem que sobrou depois de dimensionar o canvas — NÃO um
+     `@media (max-height)`. Com media query por altura, entrar em tela
+     cheia inchava os botões e encolhia o jogo (ver comentário em
+     fitScreen). O botão responde ao espaço, não ao aparelho. */
+  body.pad-compacto .dpad{grid-template:repeat(3,34px)/repeat(3,34px)}
+  body.pad-compacto .act{width:42px;height:42px;font-size:7px}
+  body.pad-compacto .act.sm{width:34px;height:34px;font-size:5px}
+
+  #hint{position:fixed;top:6px;left:50%;transform:translateX(-50%);font-size:10px;color:#4a4260;
+        letter-spacing:.5px;pointer-events:none;z-index:5;white-space:nowrap}
+  body.touch #hint{display:none}

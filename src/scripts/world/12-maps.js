@@ -1,0 +1,1224 @@
+const RESERVE_EXP = 0.5;
+
+/* ===================================================================
+   2b. MAPAS
+   Autoria em texto. Marcadores especiais ('+' porta, 'S' escada,
+   '$' baú) são varridos em ordem de leitura e casados com as listas
+   `warps` / `chests` — assim ninguém precisa contar colunas à mão.
+   Linhas curtas são preenchidas e as bordas são seladas no carregamento.
+   =================================================================== */
+
+const TILEDEF = {
+  '.': {id:'grass',  solid:false, enc:true},
+  ',': {id:'path',   solid:false},
+  'd': {id:'dirt',   solid:false, enc:true},
+  'x': {id:'crack',  solid:false, enc:true},
+  '#': {id:'wall',   solid:true},
+  'T': {id:'tree',   solid:true, tall:true},
+  '~': {id:'water',  solid:true},
+  'f': {id:'floor',  solid:false},
+  'c': {id:'carpet', solid:false},
+  /* v5.28 — MESMO DESENHO de `f` e `,`, mas com encontro ligado.
+     `floor` e `path` são o chão dos ACAMPAMENTOS e das estradas, onde
+     monstro não pode nascer, e o encontro é gatilhado pelo TILE (`enc`),
+     não pelo mapa. Três regiões inteiras foram escritas com esse chão
+     — Ninhal, Coroa de Vidro e Arquivo — e por isso nunca rolaram um
+     único encontro, mesmo declarando `encounter`. O jogador chegou na
+     Coroa e não encontrou nada; as missões de caça do Ninhal eram
+     impossíveis de fechar. A causa era esta linha faltando, não a
+     frequência das formações. Há teste travando isso agora. */
+  'o': {id:'floor',  solid:false, enc:true},   // salão com encontro
+  'p': {id:'path',   solid:false, enc:true},   // estrada com encontro
+  'b': {id:'shelf',  solid:true, tall:true},
+  '=': {id:'table',  solid:true, tall:true},
+  '^': {id:'pillar', solid:true, tall:true},
+  'B': {id:'brazier',solid:true, light:true, tall:true},
+  'r': {id:'rubble', solid:true, tall:true},
+  /* O ponto de save virou objeto ALTO para poder ser um pedestal de
+     verdade: alto só muda o desenho (base no chão, cresce para cima, e
+     entra na ordenação por Y). Continua atravessável, como sempre foi. */
+  '*': {id:'save',   solid:false, save:true, tall:true},
+  '$': {id:'chest',  solid:true, chest:true},
+  '+': {id:'door',   solid:false, warp:true},
+  'S': {id:'stairs', solid:false, warp:true},
+};
+
+const MAPS = {
+  patio: {
+    name:'Stone Reach — Pátio Central',
+    onEnter:{scene:'abertura_patio', flag:'cena_abertura'},
+    fill:'.', region:'patio', outdoor:true, encounter:[14, 26], bgm:'field',
+    tint:'rgba(30,20,60,0.18)',
+    /* Decoração do pacote de props. Cada peça ocupa UMA casa e cresce
+       para cima; `solido` só onde faz sentido esbarrar. Mover qualquer
+       uma é mexer num número aqui — não é redesenhar o mapa em texto.
+       Estes são poucos e de propósito: o pátio já tem 48 árvores, e
+       encher o gramado tiraria o lugar de andar. */
+    decor:[
+      {x:4,  y:3,  s:'prop_flores'},
+      {x:36, y:3,  s:'prop_flores_rosa'},
+      {x:2,  y:14, s:'prop_tronco'},
+      {x:36, y:14, s:'prop_caixa',  solido:true},
+      {x:37, y:14, s:'prop_barril', solido:true},
+      {x:20, y:1,  s:'prop_poco',   solido:true},
+      {x:1,  y:6,  s:'prop_placa'},
+      {x:38, y:6,  s:'prop_fogueira'},
+    ],
+    rows:[
+      '########################################',
+      '#######................................#',
+      '#####..................................#',
+      '###....############...........#####....#',
+      '#......#ffffffffff#...........#fff#....#',
+      '#..TT..#ffffffffff#..T.....T..#fff#..T.#',
+      '#......#####+######...........##+##....#',
+      '#..........,,,,,.................,.....#',
+      '#....,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
+      '#....,......~~~~~~....,......$....,....#',
+      '#....,......~~~~~~....,...........,....#',
+      '#....,,,,,,,~~~~~~,,,,,,,,,,,,,,,,,....#',
+      '#....,......~~~~~~....,...........,....#',
+      '#....,................,......*....,....#',
+      '#....,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,....#',
+      '#....,...........T....,....T......,....#',
+      '#..T.,................,...........,.T..#',
+      '#....,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,....#',
+      '#......................................#',
+      '#..TT.........TT..........TT.......TT..#',
+      '#.................S....................#',
+      '########################################',
+    ],
+    spawn:{x:19,y:13,dir:'down'},
+    warps:[
+      {to:'hall',  tx:15, ty:11, dir:'up'},   // porta grande (1º '+') → entrada sul do salão
+      {to:'annex', tx:7,  ty:5,  dir:'up'},   // anexo        (2º '+') → porta do anexo
+      /* v4.8 — portão sul. Fica na ÚLTIMA linha jogável de propósito:
+         a varredura de tiles é em ordem de leitura, então uma passagem
+         nova só pode entrar no fim da lista sem renumerar as antigas.
+         Travado até o Eco cair: a Mata Cindária é conteúdo de nível 19+
+         e mandar o jogador para lá no começo seria um convite a morrer. */
+      {to:'ashwood', tx:12, ty:2, dir:'down', needFlag:'echo_defeated',
+       blockedMsg:'O portão sul está lacrado. Enquanto o Subterrâneo não estiver resolvido, ninguém sai de Stone Reach.'},
+    ],
+    chests:[ {item:'potion', qty:2} ],
+    npcs:[
+      {x:15,y:8,  name:'Aluno', sheet:'npc_aluno', wander:true,
+       lines:['Você ouviu os boatos? Dizem que algo se mexe nos subterrâneos da academia...',
+              'A diretora Felt mandou trancar todas as entradas. Mas eu vi luz lá embaixo ontem.']},
+      // Missão em 3 estados, controlada por flags: oferta → aceita → entregue.
+      {x:31,y:13, name:'Profa. Lina', sheet:'npc_lina',
+       lines: G => {
+         if (G.flags.lina_paga)
+           return ['O Selo está quebrado e mesmo assim você voltou inteiro.',
+                   'Guarde bem esse talismã. Ele zumbe quando o éter mente.'];
+         if (G.flags.lina_aceita && G.flags.warden_defeated)
+           return [{text:'Você desceu. E voltou. ...Então era verdade.'},
+                   {text:'Pegue. Eu ia dar isso ao meu melhor aluno, e acho que já dei.',
+                    choices:[
+                      {label:'Aceitar o Selo Ressonante', set:{lina_paga:true},
+                       run:() => { Bag.add('t_resson'); G.gold += 600; Sound.sfx('levelup');
+                                   return ['Recebeu Selo Ressonante e 600₢!',
+                                           'Equipe pelo menu: Equipar → Talismã.']; }},
+                      {label:'Recusar (por enquanto)',
+                       then:['Orgulho é caro. Volte quando cansar dele.']},
+                    ]}];
+         if (G.flags.lina_aceita)
+           return ['O subterrâneo fica abaixo do Salão Principal. A escada existe, apesar do que dizem.',
+                   'Confirme o que há lá embaixo. E volte. Essa parte não é opcional.'];
+         return [{text:'Alunos de Stone Reach devem manter o controle sobre seu éter.'},
+                 {text:'Perder o equilíbrio emocional é o primeiro passo para a corrupção elemental.'},
+                 {text:'...Você não veio aqui para ouvir isso. Posso lhe pedir uma coisa?',
+                  choices:[
+                    {label:'Pode pedir.', set:{lina_aceita:true},
+                     then:['Algo se mexe abaixo do Salão Principal. A diretora nega.',
+                           'Desça. Confirme. Volte vivo. Nessa ordem.',
+                           'Se voltar, eu tenho algo que vale a caminhada.']},
+                    {label:'Agora não.',
+                     then:['Compreendo. A oferta fica de pé.']},
+                  ]}];
+       }},
+      {x:26,y:8, name:'Balconista', sheet:'npc_balconista', shop:'academia',
+       lines:['Empório da Academia. Preço de aluno, que é caro do mesmo jeito.']},
+      {x:19,y:17, name:'Kael Archimedes', sheet:'npc_kael', portrait:'kael_archimedes_portrait',
+       lines:['O Polar Cross não é um conceito teórico. É a convergência dos quatro eixos elementais.',
+              'Se vocês querem sobreviver ao que está vindo, vão precisar entender isso.',
+              '...E não, eu não vou explicar de novo. Prestem atenção da próxima vez.']},
+      {x:9,y:19,  name:'Zelador', sheet:'npc_zelador', wander:true, quest:'q_zelador',
+       lines:['Grama alta é ninho de bicho. Ande pelo calçamento se não quiser briga.']},
+    ],
+    signs:[
+      {x:10,y:6, text:'PLACA — "Academia Stone Reach · Salão Principal. Mantenha o éter contido nos corredores."'},
+    ],
+    /* `need` espera o Eco cair; `flag` garante que toca uma vez só.
+       O tile fica DUAS casas antes do portão, para a cena terminar com
+       o jogador ainda de frente para ele. */
+    triggers:[ {x:19, y:18, scene:'portao_sul', flag:'cena_portao', need:'echo_defeated'} ],
+  },
+
+  hall: {
+    name:'Stone Reach — Salão Principal',
+    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'field',
+    tint:'rgba(20,14,40,0.34)',
+    rows:[
+      '##############################',
+      '#bbbbbb#ffffffffffffff#bbbbbb#',
+      '#ffffff#ffffffffffffff#ffffff#',
+      '#ff==ff+ffff^ffff^ffff+ff==ff#',
+      '#ffffff#ffffffffffffff#ffffff#',
+      '#########fccccccccccf#########',
+      '#fffffffffccccccccccfffffffff#',
+      '#ff^fffffBccccccccccBffff^fff#',
+      '#ffffffffffccccccccffffffffff#',
+      '#fffffffffffcccccc$ffffffffff#',
+      '#ff^fffffffffcccc*ffffff^ffff#',
+      '#ffffffffffffffffffffffffffff#',
+      '#####f#ffffffff+ffffff########',
+      '#####fr#######################',
+      '#####Sr#######################',
+      '##############################',
+    ],
+    spawn:{x:15,y:11,dir:'up'},
+    warps:[
+      {to:'library',   tx:11, ty:8,  dir:'up'},   // 1º '+' ala oeste  → porta da biblioteca
+      {to:'library',   tx:11, ty:8,  dir:'up'},   // 2º '+' ala leste  → mesma sala
+      {to:'patio',     tx:12, ty:7,  dir:'down'}, // 3º '+' saída sul  → porta do pátio
+      {to:'undercroft',tx:5,  ty:2,  dir:'down'}, // 'S'    escada     → topo do subterrâneo
+    ],
+    chests:[ {item:'ether', qty:2} ],
+    npcs:[
+      {x:12,y:6, name:'Bibliotecária', sheet:'npc_bibliotecaria', quest:'q_bibliotecaria',
+       lines:['O salão fecha ao anoitecer. Ordens da diretora.',
+              'Aquela escada ali atrás... não existe. Entendido?']},
+      {x:20,y:8, name:'Veterano', sheet:'npc_veterano', quest:'q_veterano',
+       lines:['Cada elemento supera dois outros e apanha de dois outros. Decore o anel.',
+              'Fogo e Gelo se odeiam. Luz e Trevas também. Nesses casos, ambos batem forte.']},
+    ],
+    signs:[],
+  },
+
+  library: {
+    name:'Stone Reach — Ala de Estudos',
+    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'field',
+    tint:'rgba(24,16,44,0.38)',
+    rows:[
+      '######################',
+      '#bbbbbbbb##bbbbbbbbbb#',
+      '#ffffffff##ffffffffff#',
+      '#ff====fffffffff==fff#',
+      '#ffffffffffffffffffff#',
+      '#bbbb#fffff^^fffff#bb#',
+      '#ffff#ffffffffffff#ff#',
+      '#ffff#ffff$fffffff#ff#',
+      '#ffffffffffffffffffff#',
+      '#########ff+ff########',
+      '######################',
+    ],
+    spawn:{x:11,y:8,dir:'up'},
+    warps:[ {to:'hall', tx:8, ty:3, dir:'right'} ],   // volta pela porta oeste do salão
+    chests:[ {item:'hipot', qty:1} ],
+    npcs:[
+      {x:6,y:4, name:'Estudante', sheet:'npc_estudante',
+       lines:['"Ressonância": quando o éter de um mago transborda, o corpo vira condutor.',
+              'Dizem que dá pra sentir. Um zumbido no peito. Aí é só soltar.']},
+    ],
+    signs:[
+      {x:16,y:3, text:'LIVRO ABERTO — "Guarde-se quando o inimigo respirar fundo. Metade do dano é metade do luto."'},
+    ],
+  },
+
+  annex: {
+    name:'Stone Reach — Anexo Oeste',
+    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'field',
+    tint:'rgba(20,16,36,0.32)',
+    rows:[
+      '################',
+      '#bbbb##ffffffff#',
+      '#ffff##ff====ff#',
+      '#ff^fffffffffff#',
+      '#ffffffff$fffff#',
+      '#ffff##ffffffff#',
+      '#####ff+ff######',
+      '################',
+    ],
+    spawn:{x:8,y:5,dir:'up'},
+    warps:[ {to:'patio', tx:32, ty:7, dir:'down'} ],
+    chests:[ {item:'phoenix', qty:1} ],
+    npcs:[
+      {x:13,y:2, name:'Enfermeira', sheet:'npc_enfermeira', quest:'q_enfermeira',
+       lines:['Sente-se. Você está drenado.', '...Pronto. Party inteira restaurada. Não faça disso um hábito.'],
+       heal:true},
+    ],
+    signs:[],
+  },
+
+  undercroft: {
+    name:'Subterrâneo Selado',
+    fill:'x', region:'undercroft', outdoor:false, encounter:[9, 18], bgm:'dungeon',
+    tint:'rgba(10,6,24,0.5)',
+    rows:[
+      '##################################',
+      '#####Sxx##########################',
+      '#####xxx######xxxxxxxxx###########',
+      '#####xxxxxxxxxxxxxxxxxx###########',
+      '#####xxx######xxx###xxx###########',
+      '#####xxx######xxx###xxxxxxxxxx####',
+      '#####xxx##B###xxx###xxx#####xx####',
+      '#####xxxxxxxxxxxx###xxx#####xx####',
+      '#####xxx######rrr###xxx#####$x####',
+      '#####xxx###########xxxx#####xx####',
+      '#xxxxxxx###########xxx##rrrrxx####',
+      '#xxx################xxxxxxxxxx####',
+      '#xxx#####xxxxxx#####xxx###########',
+      '#xxxxxxxxxxxxxx#####xxx###########',
+      '#xxx#####xxxxxx###B#xxx###########',
+      '#xxx#####xxx$xx#####xxx###########',
+      '#xxx#####xxxxxx#####xxx###########',
+      '#xxxxxxxxxxxxxxxxxxxxxx###########',
+      '#xxx##############xxxxx###########',
+      '#*xx##############xxxxx###########',
+      '#xxx##############xxx+xS##########',
+      '##################################',
+    ],
+    spawn:{x:6,y:1,dir:'down'},
+    /* A varredura casa marcador com passagem em ordem de LEITURA. O 'S'
+       do esgoto entrou À DIREITA do '+' do santuário, na mesma linha:
+       é a única posição que acrescenta uma saída no fim da lista sem
+       renumerar as duas antigas. */
+    warps:[
+      {to:'hall',    tx:5,  ty:13, dir:'up'},   // 'S' de volta ao salão
+      {to:'sanctum', tx:10, ty:9,  dir:'up'},   // '+' porta do santuário
+      {to:'esgoto',  tx:2,  ty:2,  dir:'down'}, // 'S' (à direita) → bueiro
+    ],
+    chests:[ {item:'ether', qty:3}, {item:'hipot', qty:2} ],
+    npcs:[],
+    signs:[
+      {x:9,y:6, text:'INSCRIÇÃO — "O que foi selado aqui não dorme. Apenas espera ser lembrado."'},
+    ],
+  },
+
+  sanctum: {
+    name:'Câmara do Selo',
+    fill:'x', region:'undercroft', outdoor:false, encounter:null, bgm:'dungeon',
+    tint:'rgba(14,4,26,0.55)',
+    rows:[
+      '#####################',
+      '#####xxxxxSxxxxx#####',
+      '###xxxxxxxxxxxxxxx###',
+      '##xxxx^xxxxxxx^xxxx##',
+      '##xxxxxxxxxxxxxxxxx##',
+      '##xxxxxxxxxxxxxxxxx##',
+      '##xxxxxxxxxxxxxxxxx##',
+      '##xxxx^xxxxxxx^xxxx##',
+      '###xxxxxxxxxxxxxxx###',
+      '####xxxxx*xxxxxx#####',
+      '#########x+x#########',
+      '#####################',
+    ],
+    spawn:{x:10,y:9,dir:'up'},
+    warps:[
+      // 'S' (linha 1) vem antes do '+' (linha 10) na ordem de varredura
+      {to:'deepway', tx:4, ty:2, dir:'down', needFlag:'warden_defeated',
+       blockedMsg:'A escada desce para um breu que engole a luz da tocha. Algo ainda a guarda.'},
+      {to:'undercroft', tx:21, ty:19, dir:'up'},
+    ],
+    chests:[],
+    npcs:[],
+    signs:[],
+    boss:{id:'warden', x:10, y:4, flag:'warden_defeated',
+          intro:['Algo enorme se desdobra da parede. Não tem rosto — tem memória.',
+                 'O SELO QUEBRADO: "Vocês vieram lembrar. Que gentileza."'],
+          outro:['O Selo Quebrado se desfaz em cinzas de éter.',
+                 'Atrás de onde ele estava, uma escada continua descendo — agora aberta.']},
+  },
+
+  deepway: {
+    name:'Galeria Profunda',
+    fill:'x', region:'deepway', outdoor:false, encounter:[10, 20], bgm:'dungeon',
+    tint:'rgba(8,4,20,0.56)',
+    rows:[
+      '##############################',
+      '####S#########################',
+      '####xx########################',
+      '#####xxxxxxxxxxxxxxxxxxxx#####',
+      '#####x##################x#####',
+      '#####x##xxxxxxxxxxxx####x#####',
+      '#####x##xxxxx$xxxxxx####x#####',
+      '#####xxxxxxxxxxxxxxx####x#####',
+      '#####x##xxxxxxxxxBxx####x#####',
+      '#####x##xxxxxxxxxxxx####x#####',
+      '#####x##################x#####',
+      '#####xxxxxxxx*xxxxxxxxxxx#####',
+      '#####x##################x#####',
+      '#####x###xxxxxxxxxx#####x#####',
+      '#####x###xxxxxxxxxx#####x#####',
+      '####+xxxxxxxxxxxxxx#####x#####',
+      '#####x###xxxxxxxxxx#####x#####',
+      '#####x###xxxx$xxxxx#####x#####',
+      '#####x##################x#####',
+      '#####xxxxxxxxxxxxxxxxxxxx#####',
+      '###########xxxxxx#############',
+      '##############################',
+    ],
+    spawn:{x:4,y:2,dir:'down'},
+    /* O '+' da parede oeste é beco sem saída de propósito: uma porta no
+       meio de corredor faria o jogador teleportar só de passar por ele. */
+    warps:[
+      {to:'sanctum', tx:10, ty:2, dir:'down'},
+      {to:'lago', tx:2, ty:10, dir:'right'},   // '+' oeste → fenda do lago
+    ],
+    chests:[ {item:'hiether', qty:2}, {item:'a_coura', qty:1} ],
+    npcs:[
+      {x:12,y:8, name:'Mercador Errante', sheet:'npc_mercador', shop:'errante', quest:'q_mercador',
+       lines: G => G.flags.echo_defeated
+         ? ['Você matou o Eco. Agora eu vendo o que sobrou dele. Negócio é negócio.']
+         : ['Não pergunte como cheguei aqui. Pergunte o que eu tenho.',
+            'Preço de fim de mundo, mas você não tem concorrência.']},
+    ],
+    signs:[
+      {x:13,y:12, text:'INSCRIÇÃO — "O Primeiro não foi selado. Foi esquecido. É pior."'},
+    ],
+    boss:{id:'echo', x:13, y:20, flag:'echo_defeated',
+          intro:['A galeria termina num rosto que é só contorno — luz onde deveria haver alguém.',
+                 'O ECO DO PRIMEIRO: "Vocês lembraram de mim. Eu preferia o contrário."'],
+          outro:['O Eco se apaga como quem finalmente é permitido esquecer.',
+                 'A Galeria fica em silêncio. Pela primeira vez, um silêncio comum.']},
+  },
+
+  /* ===================================================================
+     v4.8 — AS TRÊS REGIÕES NOVAS
+     Cada uma é um par: um mapa de EXPLORAÇÃO (acampamento, missões,
+     loja, encontros) e uma sala de CHEFE isolada. O par existe porque
+     chefe com encontro aleatório na mesma sala é uma armadilha: o
+     jogador chega no chefe sem MP e culpa o jogo, com razão.
+
+     A corrente é: Pátio →(Eco morto)→ Mata Cindária → Clareira da Pira
+     →(Chama morta)→ Cisterna → Comporta →(Afogado morto)→ Coroa de
+     Vidro → Cume. Cada porta travada diz POR QUE está travada.
+     =================================================================== */
+
+  ashwood: {
+    name:'Mata Cindária',
+    onEnter:{scene:'chegada_mata', flag:'cena_mata'},
+    fill:'.', region:'ashwood', outdoor:true, encounter:[13, 24], bgm:'field',
+    tint:'rgba(60,24,10,0.22)',
+    rows:[
+      '##################################',
+      '#...........S....................#',
+      '#..TT.......,....TT..............#',
+      '#...........,....................#',
+      '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
+      '#,...BffffffffffffB..............#',
+      '#,...ff==ffff==fff...............#',
+      '#,...fffff$ffffffff..............#',
+      '#,...ffffffff*fffff..............#',
+      '#,...ffffffffffffff..............#',
+      '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
+      '#...TT...........T...........TT..#',
+      '#................,...............#',
+      '#..TT............,..........TT...#',
+      '#................,...............#',
+      '#...TT..T........,......T....T...#',
+      '#................,...............#',
+      '#....TT..........,.........TT....#',
+      '#................+.......S.......#',
+      '##################################',
+    ],
+    spawn:{x:12, y:2, dir:'down'},
+    warps:[
+      {to:'patio',   tx:19, ty:19, dir:'up'},    // 'S' (linha 1) → portão sul do pátio
+      {to:'ashpyre', tx:9,  ty:2,  dir:'down'},  // '+' (linha 18) → clareira da pira
+      /* v4.9 — trilha leste para o Ninhal. Entrou À DIREITA do '+' na
+         MESMA linha de propósito: a varredura de tiles é em ordem de
+         leitura, então esta é a única posição que acrescenta uma
+         passagem no fim da lista sem renumerar as duas antigas. */
+      {to:'nests',   tx:9,  ty:2,  dir:'down'},  // 'S' (linha 18, à direita) → Ninhal
+    ],
+    chests:[ {item:'a_casco', qty:1} ],
+    npcs:[
+      {x:6,y:9,  name:'Batedora', sheet:'npc_batedor', quest:'q_batedora',
+       lines:['Cinza no chão é pegada apagada. Ande pelo caminho batido se quiser voltar.']},
+      {x:9,y:9,  name:'Lenhador', sheet:'npc_ruivo', quest:'q_lenhador',
+       lines:['Trinta anos cortando lenha e foi aqui que a lenha resolveu revidar.']},
+      {x:13,y:9, name:'Guarda-Fogo', sheet:'npc_kael', portrait:'kael_archimedes_portrait', quest:'q_guardafogo',
+       lines:['Fogo não perdoa distração. Nem eu, mas eu pelo menos aviso antes.']},
+      {x:17,y:9, name:'Alquimista', sheet:'npc_escriba', shop:'acampamento', quest:'q_alquimista',
+       lines:['Bem-vindo ao acampamento. Preço de fim de mundo, mas o mundo é este aqui mesmo.']},
+      {x:20,y:6, name:'Enfermeira do Acampamento', sheet:'npc_serva', heal:true,
+       lines:['Sente-se antes de cair.', '...Pronto. Grupo inteiro de pé. Não abuse.']},
+    ],
+    signs:[
+      {x:4,y:11, text:'TÁBUA PREGADA NA ÁRVORE — "A mata não queimou. A mata AINDA está queimando. Não é a mesma coisa."'},
+    ],
+  },
+
+  ashpyre: {
+    name:'Clareira da Pira',
+    fill:'d', region:'ashwood', outdoor:true, encounter:null, bgm:'dungeon',
+    tint:'rgba(80,20,4,0.34)',
+    rows:[
+      '###################',
+      '#########+#########',
+      '#####ddddddddd#####',
+      '###ddddddddddddd###',
+      '##ddddddddddddddd##',
+      '#ddddddBdddBdddddd#',
+      '#ddddddddddddddddd#',
+      '#ddddddddddddddddd#',
+      '#ddddddddddddddddd#',
+      '#ddddddddd*dddddddd',
+      '##ddddddddddddddd##',
+      '###ddddddddddddd###',
+      '#####ddddSdddd#####',
+      '###################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[
+      {to:'ashwood', tx:17, ty:17, dir:'up'},     // '+' (linha 1) → volta à mata
+      {to:'cistern', tx:9,  ty:2,  dir:'down', needFlag:'cinder_defeated',
+       blockedMsg:'A pira ainda arde sobre o alçapão. Enquanto a Chama lembrar, ninguém desce.'},
+    ],
+    chests:[],
+    npcs:[],
+    signs:[
+      {x:7,y:5, text:'BRASEIRO — a lenha aqui nunca acaba. Alguém repõe, ou nada disso é lenha.'},
+    ],
+    triggers:[ {x:9, y:4, scene:'pira_antes', flag:'cena_pira'} ],
+    boss:{id:'cinder', x:9, y:6, flag:'cinder_defeated',
+          intro:['No meio da clareira, o fogo tem forma de gente sentada.',
+                 'A CHAMA QUE LEMBRA: "Eu queimo porque me pediram. Ninguém veio me dizer que parasse."'],
+          cena:'pira_depois'},
+  },
+
+  /* ===================================================================
+     v4.9 — NINHAL DE ÉTER
+     Região dos pets, pendurada na Mata Cindária em vez de no fim da
+     corrente: o jogador precisa de horas COM o bicho, e um sistema
+     desbloqueado no último mapa é um sistema que ninguém usa.
+
+     Desenhado LARGO desde o primeiro rascunho — dois pátios de criação
+     com quatro casas de folga em volta de cada NPC. É resposta direta
+     ao que quebrou no `spire`: lá os corredores tinham uma casa e os
+     NPCs viraram parede. Há teste travando a regra agora.
+     =================================================================== */
+  nests: {
+    name:'Ninhal de Éter',
+    onEnter:{scene:'chegada_ninhal', flag:'cena_ninhal'},
+    fill:'.', region:'nests', outdoor:true, encounter:[14, 26], bgm:'field',
+    tint:'rgba(20,40,30,0.20)',
+    rows:[
+      '##############################',
+      '#########S####################',
+      '#######pppppp#################',
+      '#####pppppppppp###############',
+      '###ppppppppppppppppppppp######',
+      '###ppfffffffpppfffffffpp######',
+      '###ppfff*fffpppff$ffffpp######',
+      '###ppfffffffpppfffffffpp######',
+      '###ppppppppppppppppppppp######',
+      '###ppTTpppppppppppppTTpp######',
+      '###ppppppppppppppppppppp######',
+      '###ppppppppppppppppppppp######',
+      '###ppTpppppppppppppppTpp######',
+      '###ppppppppppppppppppppp######',
+      '#####ppppppppppppppppp########',
+      '#########pppppppp#############',
+      '#########ppp+pppp#############',
+      '##############################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[
+      {to:'ashwood',    tx:17, ty:13, dir:'down'},  // 'S' (linha 1) → mata
+      {to:'nests_deep', tx:9,  ty:2,  dir:'down'},  // '+' (linha 16) → chocadeira
+    ],
+    chests:[ {item:'p_bolo', qty:2} ],
+    npcs:[
+      {x:6,y:6,  name:'Tratadora', sheet:'npc_serva', quest:'q_plumas',
+       lines:['Aqui a gente não doma nada. A gente cuida, e às vezes o bicho decide ficar.']},
+      /* Um NPC dá UMA missão (`npc.quest` é um id só), então cada missão
+         do Ninhal precisa de dono próprio. Há teste que pega missão
+         órfã — foi ele que cobrou estes dois. */
+      {x:5,y:6,  name:'Parteira de Ninho', sheet:'npc_bibliotecaria', quest:'q_casulos',
+       lines:['Um em cinco vinga. Todo ano é assim e todo ano eu me surpreendo.']},
+      {x:16,y:6, name:'Pastor de Cria', sheet:'npc_rapaz', quest:'q_cornudas',
+       lines:['Cria solta é cria morta. Eu conto de hora em hora e nunca bate.']},
+      {x:10,y:6, name:'Caçador de Ninho', sheet:'npc_arqueiro', quest:'q_presas',
+       lines:['Caçar pra alimentar ninho é a única caçada que eu ainda respeito.']},
+      {x:19,y:6, name:'Ferreiro do Ninhal', sheet:'npc_ferreiro', quest:'q_escamas',
+       lines:['Placa de cascudo fica mais dura depois de molhada. Ninguém sabe explicar.']},
+      {x:21,y:6, name:'Vigia do Ninhal', sheet:'npc_arqueiro', quest:'q_ladroes',
+       lines:['Nove anos vigiando. Sei diferenciar bicho com fome de bicho com plano.']},
+      {x:11,y:11, name:'Guardiã de Ninho', sheet:'npc_camponesa', quest:'q_dragao',
+       lines:['Tem um ovo aqui que não é daqui. Não pergunte agora — eu ainda não sei responder.']},
+      {x:15,y:11, name:'Mercador de Ninho', sheet:'npc_cigana', shop:'ninhal',
+       lines:['Petisco, ração e o que mais o bicho aceitar. Preço de quem tem monopólio.']},
+    ],
+    signs:[
+      {x:6,y:9, text:'TÁBUA — "Não corra perto do ninho. Cria não distingue pressa de ataque."'},
+    ],
+  },
+
+  nests_deep: {
+    name:'A Chocadeira',
+    fill:'.', region:'nests', outdoor:true, encounter:null, bgm:'dungeon',
+    tint:'rgba(16,32,24,0.34)',
+    rows:[
+      '###################',
+      '#########+#########',
+      '#####,,,,,,,,,#####',
+      '###,,,,,,,,,,,,,###',
+      '##,,,,,,,,,,,,,,,##',
+      '#,,,,,,TTT,,,,,,,,#',
+      '#,,,,,,,,,,,,,,,,,#',
+      '#,,,,,,,,,,,,,,,,,#',
+      '#,,,,,,,,,,,,,,,,,#',
+      '#,,,,,,,,*,,,,,,,,#',
+      '##,,,,,,,,,,,,,,,##',
+      '###,,,,,,,,,,,,,###',
+      '#####,,,,,,,,,#####',
+      '###################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[ {to:'nests', tx:12, ty:15, dir:'up'} ],
+    chests:[],
+    npcs:[],
+    signs:[
+      {x:8,y:5, text:'ÁRVORE MARCADA — dezenas de riscos. Alguém contou cada cria que saiu daqui.'},
+    ],
+    triggers:[ {x:9, y:4, scene:'chocadeira_antes', flag:'cena_chocadeira'} ],
+    boss:{id:'ninhomae', x:9, y:7, flag:'ninho_defeated',
+          intro:['O que parecia um monte de folhas se levanta, e continua se levantando.',
+                 'A QUE CHOCA: "Vocês levaram seis. Eu deixei. Este é meu."'],
+          cena:'chocadeira_depois'},
+  },
+
+  cistern: {
+    name:'Cisterna Afogada',
+    onEnter:{scene:'chegada_cisterna', flag:'cena_cisterna'},
+    fill:'x', region:'cistern', outdoor:false, encounter:[11, 21], bgm:'dungeon',
+    tint:'rgba(6,20,34,0.52)',
+    /* v4.8.1 — REDESENHADO pelo mesmo motivo do `spire`: quatro dos
+       cinco NPCs estavam parados em corredor de uma casa. Aqui não
+       chegava a trancar nada (havia desvio pelas fileiras paralelas),
+       mas andar era um jogo de esquiva. Agora é um salão largo com
+       entulho `r` como obstáculo — obstáculo que dá para contornar,
+       que é diferente de gargalo. */
+    rows:[
+      '################################',
+      '#########S######################',
+      '#######xxxxxxxxxx###############',
+      '#######xxxxxxxxxx###############',
+      '####xxxxxxxxxxxxxxxxxxxx########',
+      '####x~~~~xxxxxxxx~~~~~~x########',
+      '####x~~~~xxxxxxxx~~~~~~x########',
+      '####xxxxxxxxxxxxxxxxxxxx########',
+      '####xxxxrxxxxxxxxxxrxxxx########',
+      '####xxxxxxxx$xxxxxxxxxxx########',
+      '####xxxxxxxrxxxxrxxxxxxx########',
+      '####xxxxxxxxxxxxxxxxxxxx########',
+      '####xxxxxxx*xxxxxxxxxxxx########',
+      '####xxxxrxxxxxxxxxxrxxxx########',
+      '####x~~~~~~~~~~~~~~~~~~x########',
+      '####xxxxxxxxxxxxxxxxxxxx########',
+      '#########xxxxxxxx###############',
+      '#########xxxxxxxx###############',
+      '#########xxxx+xxx###############',
+      '################################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[
+      {to:'ashpyre',      tx:9, ty:11, dir:'up'},    // 'S' (linha 1) → clareira
+      {to:'cistern_deep', tx:9, ty:2,  dir:'down'},  // '+' (linha 18) → comporta
+    ],
+    chests:[ {item:'a_escama', qty:1} ],
+    npcs:[
+      {x:6,y:8,  name:'Engenheira', sheet:'npc_professor', quest:'q_comporta',
+       lines:['Esta cisterna foi feita para guardar água limpa. Alguém mudou o projeto no meio.']},
+      {x:6,y:10, name:'Escriturário', sheet:'npc_clerigo', quest:'q_contagem',
+       lines:['Eu não vim salvar ninguém. Eu vim anotar. É o que eu sei fazer.']},
+      {x:21,y:8, name:'Mergulhador', sheet:'npc_ruivo', quest:'q_canto',
+       lines:['Nunca mergulhe ouvindo. Quem ouve, desce e não sobe.']},
+      {x:21,y:10, name:'Enfermeira de Campo', sheet:'npc_anciana', quest:'q_aguaeter', heal:true,
+       lines:['Deite aí. Eu conserto o que der.', '...Pronto. Grupo restaurado. Vá com calma.']},
+      {x:13,y:11, name:'Contrabandista', sheet:'npc_encapuzado', shop:'cisterna',
+       lines:['Eu vendo o que a água devolve. E a água devolve muita coisa.']},
+    ],
+    signs:[
+      {x:3,y:9, text:'PLACA ENFERRUJADA — "Nível máximo permitido: 2 m. Assinado: Diretoria, há muito tempo."'},
+    ],
+  },
+
+  cistern_deep: {
+    name:'A Comporta',
+    fill:'x', region:'cistern', outdoor:false, encounter:null, bgm:'dungeon',
+    tint:'rgba(4,16,30,0.58)',
+    rows:[
+      '###################',
+      '#########+#########',
+      '#####xxxxxxxxx#####',
+      '###xxxxxxxxxxxxx###',
+      '##xxxxxxxxxxxxxxx##',
+      '#xxxxxxBxxxBxxxxxx#',
+      '#xxxxxxxxxxxxxxxxx#',
+      '#xxxx~~~~~~~~~xxxxx',
+      '#xxxxxxxxxxxxxxxxx#',
+      '#xxxxxxxxx*xxxxxxxx',
+      '##xxxxxxxxxxxxxxx##',
+      '###xxxxxxxxxxxxx###',
+      '#####xxxxSxxxx#####',
+      '###################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[
+      {to:'cistern', tx:13, ty:17, dir:'up'},     // '+' (linha 1) → volta à cisterna
+      {to:'spire',   tx:9,  ty:2,  dir:'down', needFlag:'deluge_defeated',
+       blockedMsg:'A comporta está fechada por dentro. Alguém a segura — e ainda respira.'},
+    ],
+    chests:[],
+    npcs:[],
+    signs:[
+      {x:7,y:5, text:'MARCA NA PAREDE — riscos de unha contando dias. Param no dia noventa e um.'},
+    ],
+    triggers:[ {x:9, y:4, scene:'comporta_antes', flag:'cena_comporta'} ],
+    /* v5.23: o Dono do Pântano assume a alcova. A flag continua sendo
+       `deluge_defeated` de propósito — é ela que o resto do capítulo
+       consulta, e trocar o nome apagaria o progresso de quem já venceu
+       aqui num save anterior. */
+    boss:{id:'swampking', x:9, y:6, flag:'deluge_defeated',
+          intro:['A lama se abre e o que sai dela não é água: é carapaça, e é antiga.',
+                 'O DONO DO PÂNTANO: "Tudo que afunda nestas águas é meu."',
+                 'O DONO DO PÂNTANO: "Saia."'],
+          cena:'comporta_depois'},
+  },
+
+  spire: {
+    name:'Coroa de Vidro',
+    onEnter:{scene:'chegada_coroa', flag:'cena_coroa'},
+    fill:'o', region:'spire', outdoor:false, encounter:[12, 22], bgm:'dungeon',
+    tint:'rgba(30,28,10,0.42)',
+    /* v4.8.1 — REDESENHADO. A versão anterior era um anel de corredores
+       de UMA casa, e NPC é sólido (`isSolid` conta npcs): a Astrônoma e
+       o Último Arauto viraram paredes literais e trancaram a porta do
+       chefe, o cristal de save e o Eremita. Passou de 113 para 231
+       tiles alcançáveis. Regra que ficou: corredor de mapa com NPC tem
+       de ter no mínimo DUAS casas de largura. Há teste travando isso. */
+    rows:[
+      '##############################',
+      '#########S####################',
+      '#######oooooo#################',
+      '#######oooooo#################',
+      '###oooooooooooooooooooo#######',
+      '###oooooooooooooooooooo#######',
+      '###ooo##oooooooo##ooooo#######',
+      '###ooo##o^oooo^o##ooooo#######',
+      '###ooo##oooooooo##ooooo#######',
+      '###ooo##oo$coooo##ooooo#######',
+      '###ooo##oooooooo##ooooo#######',
+      '###ooo##o^oooo^o##ooooo#######',
+      '###ooo##oooooooo##ooooo#######',
+      '###oooooooooooooooooooo#######',
+      '###oooooooooooooooooooo#######',
+      '###oooo*ooooooooooooooo#######',
+      '#########oooooooo#############',
+      '#########oooo+ooo#############',
+      '##############################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[
+      {to:'cistern_deep', tx:9, ty:11, dir:'up'},   // 'S' (linha 1) → comporta
+      {to:'spire_top',    tx:9, ty:2,  dir:'down'}, // '+' (linha 17) → cume
+    ],
+    chests:[ {item:'w_astro', qty:1} ],
+    npcs:[
+      {x:4,y:8,  name:'Vidraceiro', sheet:'npc_nobre', quest:'q_cacos',
+       lines:['Eu conserto vidro. Aqui o vidro conserta a si mesmo, e é isso que me assusta.']},
+      {x:5,y:14, name:'Astrônoma', sheet:'npc_bibliotecaria', quest:'q_reflexo',
+       lines:['Todo espelho aqui mostra uma versão que fez outra escolha. Nenhuma parece feliz.']},
+      {x:19,y:14, name:'Eremita', sheet:'npc_eremita', quest:'q_vazio',
+       lines:['Eu subi para ficar sozinho. Descobri que sozinho já estava ocupado.']},
+      {x:21,y:8, name:'Último Arauto', sheet:'npc_kael', portrait:'kael_archimedes_portrait', quest:'q_antescoroa',
+       lines:['Eu anunciei a Coroa. Passei o resto da vida tentando desanunciar.']},
+      {x:11,y:10, name:'Mercador de Vidro', sheet:'npc_cigana', shop:'coroa',
+       lines:['No fim do mundo o preço é honesto: caro. Não tem pra quem reclamar.']},
+    ],
+    signs:[
+      {x:2,y:8, text:'INSCRIÇÃO EM VIDRO — "A Coroa não coroou ninguém. Ela esperou, e esperar bastou."'},
+    ],
+  },
+
+  spire_top: {
+    name:'Coroa de Vidro — Cume',
+    fill:'f', region:'spire', outdoor:false, encounter:null, bgm:'dungeon',
+    tint:'rgba(40,36,12,0.44)',
+    rows:[
+      '###################',
+      '#########+#########',
+      '#####fffffffff#####',
+      '###fffffffffffff###',
+      '##fffffffffffffff##',
+      '#ffffff^fff^ffffff#',
+      '#fffffffffffffffff#',
+      '#fffffffffffffffff#',
+      '#fffffffffffffffff#',
+      '#ffffffff*ffffffff#',
+      '##fffffffffffffff##',
+      '###fffffffffffff###',
+      '#####ffffSfffS#####',
+      '###################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    /* A ordem importa: as passagens casam com as casas '+' e 'S' na
+       ordem de LEITURA do mapa. O '+' está na linha 1 e a escada nova na
+       linha 12, então ela entra depois. */
+    warps:[
+      {to:'spire', tx:13, ty:16, dir:'up'},
+      {to:'arquivo', tx:12, ty:2, dir:'down', needFlag:'crown_defeated',
+       blockedMsg:'O chão de vidro não abre. Ainda há uma coroa parada no ar acima de você.'},
+      /* v5.28 — a segunda escada do Cume, à direita da primeira. Mesma
+         trava: o vidro só se abre depois que a Coroa cai. Uma leva ao
+         Arquivo, embaixo; a outra ao Deserto, que é o que sobra do vidro
+         quando ele termina de virar areia. */
+      {to:'deserto', tx:16, ty:2, dir:'down', needFlag:'crown_defeated',
+       blockedMsg:'O vidro do chão range mas não cede. A coroa ainda está inteira lá em cima.'},
+    ],
+    chests:[],
+    npcs:[],
+    signs:[],
+    triggers:[ {x:9, y:4, scene:'coroa_antes', flag:'cena_coroa_antes'} ],
+    boss:{id:'crown', x:9, y:6, flag:'crown_defeated',
+          intro:['No topo não há trono. Há uma coroa parada no ar, na altura exata de uma cabeça que não existe.',
+                 'A COROA SEM CABEÇA: "Ninguém nunca me vestiu. Vocês também não vão."'],
+          cena:'final'},
+  },
+  /* ================= v5.24: O ARQUIVO ESQUECIDO ====================
+     Pós-Coroa. O piso de vidro do Cume cede e desce num depósito de
+     registros que a água tomou. Duas salas: o arquivo e a prateleira do
+     fundo, onde o Arquivista espera.
+
+     Reaproveita a gramática de tiles inteira — `b` (estante) e `~`
+     (água) fazem o cenário sozinhos, sem letra nova. ================ */
+  arquivo: {
+    name:'O Arquivo Esquecido',
+    fill:'o', region:'arquivo', outdoor:false, encounter:[11, 21], bgm:'dungeon',
+    tint:'rgba(10,14,38,0.52)',
+    decor:[
+      {x:3,  y:3,  s:'prop_estante',       solido:true},
+      {x:20, y:3,  s:'prop_estante',       solido:true},
+      {x:3,  y:13, s:'prop_estante_baixa', solido:true},
+      {x:20, y:13, s:'prop_estante_baixa', solido:true},
+      {x:11, y:2,  s:'prop_lampiao'},
+      {x:6,  y:9,  s:'prop_entulho_grande'},
+      {x:17, y:9,  s:'prop_entulho_grande'},
+    ],
+    rows:[
+      '########################',
+      '#oooooooooo++oooooooooo#',
+      '#obbbbooooooooooobbbboo#',
+      '#oooooooooooooooooooooo#',
+      '#obbooo~~~~~~~~~~ooobbo#',
+      '#oooooo~~~~~~~~~~oooooo#',
+      '#oo$ooo~~~~~~~~~~ooo$oo#',
+      '#oooooo~~~~~~~~~~oooooo#',
+      '#obbooo~~~~~~~~~~ooobbo#',
+      '#oooooooooo*ooooooooooo#',
+      '#oooooooooooooooooooooo#',
+      '#obbbboooooooooooobbbbo#',
+      '#oooooooooooooooooooooo#',
+      '#ooooooooooSoooooooooooo',
+      '########################',
+    ],
+    spawn:{x:12, y:2, dir:'down'},
+    warps:[
+      {to:'spire_top', tx:9, ty:11, dir:'up'},     // 1º '+' → volta ao Cume
+      {to:'spire_top', tx:9, ty:11, dir:'up'},     // 2º '+' → a mesma escada
+      {to:'arquivo_fundo', tx:9, ty:2, dir:'down'},// 'S' → última prateleira
+    ],
+    chests:[
+      {x:3,  y:6, item:'hiether'},
+      {x:20, y:6, item:'a_encader'},
+    ],
+    npcs:[
+      {x:14, y:11, name:'Arquivista Aposentado', sheet:'npc_clerigo', dir:'left', quest:'q_arquivo_indice',
+       lines:['Eu catalogava isto aqui. Antes de a água entrar.',
+              'Ainda catalogo. Só que agora o acervo se mexe.']},
+      {x:8,  y:11, name:'Copista', sheet:'npc_viajante', dir:'right', quest:'q_arquivo_lacre',
+       lines:['Copio o que sobrou. Não porque alguém vá ler.',
+              'Porque quando eu paro, some.']},
+      {x:18, y:12, name:'Mercadora de Margem', sheet:'npc_mercador', dir:'up', shop:'margem', quest:'q_ecos',
+       lines:['Vendo o que acho no chão. O chão aqui é generoso.']},
+    ],
+    signs:[
+      {x:2,  y:2,  text:'PLACA DE LATÃO — "Acervo Geral. Silêncio." Alguém riscou "Geral" e escreveu "Todo".'},
+      {x:21, y:11, text:'FICHA SOLTA — só o número. O verbete que ela apontava não está mais aqui.'},
+    ],
+  },
+
+  arquivo_fundo: {
+    name:'A Última Prateleira',
+    fill:'f', region:'arquivo', outdoor:false, encounter:null, bgm:'dungeon',
+    tint:'rgba(6,10,32,0.6)',
+    decor:[
+      {x:2,  y:4,  s:'prop_estante', solido:true},
+      {x:16, y:4,  s:'prop_estante', solido:true},
+      {x:9,  y:11, s:'prop_lampiao'},
+    ],
+    rows:[
+      '###################',
+      '#########+#########',
+      '#####fffffffff#####',
+      '###fffffffffffff###',
+      '##fffffffffffffff##',
+      '#ffff^fffffffffff##',
+      '#fffffffffffffffff#',
+      '#fffff~~~~~~~fffff#',
+      '#fffffffffffffffff#',
+      '#ffffffff*ffffffff#',
+      '##fffffffffffffff##',
+      '###fffffffffffff###',
+      '#####fffffffff#####',
+      '###################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[ {to:'arquivo', tx:11, ty:12, dir:'up'} ],
+    chests:[],
+    npcs:[],
+    signs:[
+      {x:5,  y:5, text:'ETIQUETA — "Vol. 1 de 1". Não havia segundo volume. Nunca houve.'},
+    ],
+    boss:{id:'arquivista', x:9, y:6, flag:'arquivista_defeated',
+          intro:['A prateleira do fundo não tem livro nenhum. Tem uma coisa dobrada no lugar deles.',
+                 'O ARQUIVISTA: "Nome, procedência, data de entrada."',
+                 'O ARQUIVISTA: "Você não consta."'],
+          outro:['O que estava dobrado se desdobra e não volta a caber.',
+                 'No lugar onde ele estava sobra uma ficha em branco. É a primeira coisa deste arquivo que ninguém escreveu.']},
+  },
+
+  /* ================= v5.28: AS QUATRO REGIÕES QUE FALTAVAM ==========
+     O pacote de arte trouxe criatura para dez regiões e o jogo só tinha
+     seis. Em vez de espalhar bicho de deserto pela Mata, as quatro
+     regiões foram escritas — e o lugar de cada uma na curva é o VÃO que
+     ela fecha, não um capricho:
+
+       Esgoto    nv  8-11   pendurado no Subterrâneo, fecha 7→12
+       Lago      nv 14-18   fenda oeste da Galeria, fecha 13→19
+       Podridão  nv 19-23   do outro lado do Lago, paralela à Mata
+       Deserto   nv 37-40   segunda escada do Cume, fecha 36→41
+
+     Cada região é um par: um mapa de EXPLORAÇÃO com cristal, loja e
+     missões, e um mapa de FUNDO sem encontro, que é onde mora o baú
+     bom. É a mesma gramática das regiões da v4.8 — sem chefe, porque
+     chefe novo pede fases, arte e revanche, e isso é outra entrega.
+     ================================================================= */
+
+  esgoto: {
+    name:'Galerias de Esgoto',
+    fill:'x', region:'esgoto', outdoor:false, encounter:[8, 16], bgm:'dungeon',
+    tint:'rgba(18,26,10,0.5)',
+    rows:[
+      '##############################',
+      '#Sxx##########################',
+      '#xxx##########################',
+      '#xxxxxxxxxxx##################',
+      '#xxx#######x##################',
+      '#xxx#######x#####xxxxxxxx#####',
+      '#xxx#######x#####x######x#####',
+      '#xxxxxxxxxxxxxxxxx######x#####',
+      '#xxx#######x#####x######x#####',
+      '#*xx#######x#####x###$xxx#####',
+      '#xxx#######x#####x######x#####',
+      '#xxxxxx####x#####xxxxxxxx#####',
+      '#####x####xx##################',
+      '#####xxxxxx###################',
+      '#####x########################',
+      '#####xxxxxxxxxxxxxxxx#########',
+      '#####x##############x#########',
+      '#####x####~~~~~~####x#########',
+      '#####x####~~~~~~####x#########',
+      '#####xxxxxxxxxxxxxxxx#########',
+      '###########+##################',
+      '##############################',
+    ],
+    spawn:{x:2, y:2, dir:'down'},
+    warps:[
+      {to:'undercroft', tx:22, ty:20, dir:'up'},   // 'S' → volta ao Subterrâneo
+      {to:'esgoto_fundo', tx:9, ty:2, dir:'down'}, // '+' → poço de decantação
+    ],
+    chests:[ {item:'hipot', qty:2} ],
+    npcs:[
+      {x:2,y:5, name:'Encanador Aposentado', sheet:'npc_anciana', quest:'q_valvulas',
+       lines:['Quarenta anos nestes canos. Nunca vi a água subir sozinha.',
+              'Se subir até aqui, corra. Eu não corro mais.']},
+      {x:3,y:9, name:'Cobradora de Fossa', sheet:'npc_capataz', quest:'q_coletores',
+       lines:['A Academia paga por metro de galeria limpa. Não paga bem, mas paga.']},
+      {x:2,y:11, name:'Ferreiro de Bueiro', sheet:'npc_ferreiro', shop:'bueiro',
+       lines:['Tudo que eu vendo já foi cano. Não pergunte de qual.']},
+    ],
+    signs:[
+      {x:6,y:4, text:'CHAPA REBITADA — "GALERIA 3. NÍVEL DA ÁGUA: SEGURO." O ponteiro está quebrado no vermelho.'},
+      {x:19,y:16, text:'PICHAÇÃO — "não beba / não toque / não conte a ninguém que você desceu"'},
+    ],
+  },
+
+  esgoto_fundo: {
+    name:'Poço de Decantação',
+    fill:'x', region:'esgoto', outdoor:false, encounter:null, bgm:'dungeon',
+    tint:'rgba(14,22,8,0.58)',
+    rows:[
+      '###################',
+      '#########+#########',
+      '#####xxxxxxxxx#####',
+      '###xxxxxxxxxxxxx###',
+      '##xxxx~~~~~~~xxxx##',
+      '##xxx~~~~~~~~~xxx##',
+      '##xxx~~~~~~~~~xxx##',
+      '##xxxx~~~~~~~xxxx##',
+      '###xxxxxxxxxxxxx###',
+      '####xxx$xxx$xxx####',
+      '#####xxxxxxxxx#####',
+      '###################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[ {to:'esgoto', tx:11, ty:19, dir:'up'} ],
+    chests:[ {item:'a_manto', qty:1}, {item:'t_vital', qty:1} ],
+    npcs:[],
+    signs:[
+      {x:4,y:2, text:'PLACA SUBMERSA — "AQUI A ÁGUA DESCANSA." Descansar não era o verbo que eles queriam.'},
+    ],
+  },
+
+  lago: {
+    name:'Lago Afogado',
+    fill:'.', region:'lago', outdoor:true, encounter:[12, 22], bgm:'field',
+    tint:'rgba(10,34,44,0.28)',
+    rows:[
+      '##################################',
+      '#..............T.................#',
+      '#..TT..........,.........TT......#',
+      '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
+      '#,...BffffffffffB................#',
+      '#,...ff==ffff==ff....~~~~~~~~....#',
+      '#,...fffff$ffffff...~~~~~~~~~~...#',
+      '#,...ffff*fffffff..~~~~~~~~~~~~..#',
+      '#,...ffffffffffff..~~~~~~~~~~~~..#',
+      '#,,,,,,,,,,,,,,,,,.~~~~~~~~~~~~..#',
+      '#+...............,..~~~~~~~~~~...#',
+      '#...TT...........,...~~~~~~~~....#',
+      '#................,...............#',
+      '#..TT............,..........TT...#',
+      '#................,...............#',
+      '#....TT..........,........TT.....#',
+      '#................,...............#',
+      '#................S...........+...#',
+      '##################################',
+    ],
+    spawn:{x:2, y:10, dir:'right'},
+    /* Ordem de leitura: o '+' oeste (linha 10) vem antes da escada e da
+       porta da linha 17. É por isso que a Galeria é a primeira da lista
+       mesmo sendo a passagem de VOLTA. */
+    warps:[
+      {to:'deepway',    tx:5,  ty:15, dir:'right'}, // '+' oeste → Galeria
+      {to:'lago_fundo', tx:9,  ty:2,  dir:'down'},  // 'S' → templo submerso
+      {to:'podridao',   tx:2,  ty:9,  dir:'down'},  // '+' leste → Baixios
+    ],
+    chests:[ {item:'a_bruma', qty:1} ],
+    npcs:[
+      {x:7,y:8,  name:'Pescadora Sem Rede', sheet:'npc_menina', quest:'q_juncos',
+       lines:['Rede não pega o que mora aqui. Pega o que já morreu, e isso não se come.']},
+      {x:11,y:8, name:'Barqueiro', sheet:'npc_rapaz', quest:'q_serpente',
+       lines:['Atravesso quem paga. Volto sozinho, se a serpente estiver com fome.']},
+      {x:14,y:8, name:'Trocadora da Margem', sheet:'npc_mercador', shop:'margem_lago',
+       lines:['Tudo aqui foi tirado do fundo. Tudo aqui foi de alguém. As duas coisas.']},
+      {x:6,y:5,  name:'Curandeira da Margem', sheet:'npc_camponesa', heal:true,
+       lines:['Sente. Você está com água nos pulmões e não percebeu.',
+              '...Pronto. Da próxima vez respire antes de mergulhar.']},
+    ],
+    signs:[
+      {x:4,y:13, text:'ESTACA DE MADEIRA — "NÍVEL DA ÁGUA EM 1104". A marca está três metros acima da sua cabeça.'},
+    ],
+  },
+
+  lago_fundo: {
+    name:'Templo Submerso',
+    fill:'f', region:'lago', outdoor:false, encounter:null, bgm:'dungeon',
+    tint:'rgba(6,28,40,0.55)',
+    rows:[
+      '#####################',
+      '#########S###########',
+      '#####fffffffff#######',
+      '###fffffffffffff#####',
+      '##ff^fffffffff^ff####',
+      '##fffff~~~~~fffff####',
+      '##fffff~~~~~fffff####',
+      '##ff^fffffffff^ff####',
+      '###fffff*ffffff######',
+      '####ff$fffff$ff######',
+      '#####fffffffff#######',
+      '#####################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[ {to:'lago', tx:17, ty:16, dir:'up'} ],
+    chests:[ {item:'w_mare', qty:1}, {item:'t_corda', qty:1} ],
+    npcs:[],
+    signs:[
+      {x:4,y:4, text:'BAIXO-RELEVO — uma cidade inteira desenhada de cabeça para baixo. O lago está no lugar do céu.'},
+    ],
+  },
+
+  podridao: {
+    name:'Baixios da Podridão',
+    fill:'d', region:'podridao', outdoor:true, encounter:[11, 21], bgm:'field',
+    tint:'rgba(34,40,8,0.34)',
+    rows:[
+      '##################################',
+      '#..d..T....d.......T.....d.......#',
+      '#dd..dd...ddd.....dd....ddd......#',
+      '#..ddddddddddddddddddddddddddd...#',
+      '#..d####################d........#',
+      '#..d#fBffffffBf#########d........#',
+      '#..d#ff==ff==ff#########d....TT..#',
+      '#..d#fff$ff*fff#########d........#',
+      '#..d#ffffffffff#########d........#',
+      '#+.dddddddddddddddddddddd........#',
+      '#..d##########d#########d........#',
+      '#..d##########d#########d........#',
+      '#..ddddddddddddddddddddddddd.....#',
+      '#..d#######d########d######d.....#',
+      '#..d#######d########d######d.....#',
+      '#..ddddddddddddddddddddddddd.....#',
+      '#..........d.......d.............#',
+      '#....TT....d.......d.....+.......#',
+      '##################################',
+    ],
+    spawn:{x:2, y:9, dir:'right'},
+    warps:[
+      {to:'lago',           tx:29, ty:17, dir:'left'},  // '+' oeste → Lago
+      {to:'podridao_fundo', tx:9,  ty:2,  dir:'down'},  // '+' sul → alagado
+    ],
+    chests:[ {item:'a_casco', qty:1} ],
+    npcs:[
+      {x:6,y:8,  name:'Coveiro de Turfa', sheet:'npc_viajante', quest:'q_esporos',
+       lines:['Cavo raso porque o fundo não segura. Sobe tudo de novo em três dias.']},
+      {x:10,y:8, name:'Herbolária Amarga', sheet:'npc_escriba', quest:'q_carnicais',
+       lines:['Tudo que cresce aqui cura alguma coisa e mata outra. O ofício é escolher qual.']},
+      {x:13,y:8, name:'Sucateiro do Brejo', sheet:'npc_capataz', shop:'brejo',
+       lines:['Se apodrece, eu não compro. Se enferruja, a gente conversa.']},
+    ],
+    signs:[
+      {x:5,y:17, text:'TÁBUA MEIO ENTERRADA — "ROÇA DA ACADEMIA — COLHEITA DE OUTONO". Não é outono há muito tempo.'},
+    ],
+  },
+
+  podridao_fundo: {
+    name:'Alagado de Esporos',
+    fill:'d', region:'podridao', outdoor:true, encounter:null, bgm:'dungeon',
+    tint:'rgba(28,36,6,0.44)',
+    rows:[
+      '#####################',
+      '#########+###########',
+      '#####ddddddddd#######',
+      '###ddddddddddddd#####',
+      '##ddTddddddddTddd####',
+      '##ddd~~~~~~~dddd#####',
+      '##ddd~~~~~~~dddd#####',
+      '##ddTddddddddTddd####',
+      '###dddd*dddddddd#####',
+      '####dd$ddddd$dd######',
+      '#####ddddddddd#######',
+      '#####################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[ {to:'podridao', tx:25, ty:17, dir:'up'} ],
+    chests:[ {item:'t_espelho', qty:1}, {item:'panacea', qty:3} ],
+    npcs:[],
+    signs:[
+      {x:4,y:4, text:'PLACA DE INTERDIÇÃO — "ÁREA FECHADA POR ORDEM DA DIRETORIA". A ordem apodreceu junto.'},
+    ],
+  },
+
+  deserto: {
+    name:'Deserto de Vidro Moído',
+    fill:'d', region:'deserto', outdoor:true, encounter:[13, 24], bgm:'field',
+    tint:'rgba(70,58,14,0.3)',
+    rows:[
+      '##################################',
+      '#.......S........................#',
+      '#.......,........................#',
+      '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
+      '#,...BffffffffffB................#',
+      '#,...ff==ffff==ff................#',
+      '#,...fff$ff*fffff................#',
+      '#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#',
+      '#................,...............#',
+      '#..^.............,......^........#',
+      '#................,...............#',
+      '#................,...............#',
+      '#.....^..........,.........^.....#',
+      '#................,...............#',
+      '#................,...............#',
+      '#..^.............,......^........#',
+      '#................,...............#',
+      '#................+...............#',
+      '##################################',
+    ],
+    spawn:{x:8, y:2, dir:'down'},
+    warps:[
+      {to:'spire_top', tx:11, ty:12, dir:'up'},     // 'S' → volta ao Cume
+      {to:'deserto_fundo', tx:9, ty:2, dir:'down'}, // '+' → tumba
+    ],
+    chests:[ {item:'t_olho', qty:1} ],
+    npcs:[
+      {x:6,y:6,  name:'Cartógrafa de Areia', sheet:'npc_nobre', quest:'q_carapacas',
+       lines:['Desenho o deserto toda manhã. Toda tarde ele desmente o desenho.']},
+      {x:10,y:6, name:'Caravaneiro Cego', sheet:'npc_encapuzado', quest:'q_mumias',
+       lines:['Não preciso enxergar. Aqui tudo tem a mesma cor de qualquer jeito.']},
+      {x:14,y:6, name:'Vidraceiro Errante', sheet:'npc_professor', shop:'duna',
+       lines:['Este chão foi uma coroa. Moída, ela vale mais — porque agora dá para carregar.']},
+      {x:6,y:4,  name:'Aguadeira', sheet:'npc_menina', heal:true,
+       lines:['Beba. Não pergunte de onde veio.',
+              '...Pronto. Grupo de pé. A água aqui é cara, então não desperdice o descanso.']},
+    ],
+    signs:[
+      {x:3,y:9, text:'MARCO DE PEDRA — "COROA DE VIDRO — 0 KM". Você está em cima dela. Ela é a areia.'},
+    ],
+  },
+
+  deserto_fundo: {
+    name:'Tumba de Cristal Fosco',
+    fill:'f', region:'deserto', outdoor:false, encounter:null, bgm:'dungeon',
+    tint:'rgba(48,40,10,0.5)',
+    /* Cinemática de revelação na primeira entrada — mesma gramática de
+       SCENES.abertura_patio, câmera+barras+tremor em vez de caixa de
+       texto parada. `onEnter` só toca uma vez (flag). */
+    onEnter:{scene:'vharok_reveal', flag:'viu_vharok_intro'},
+    rows:[
+      '#####################',
+      '#########+###########',
+      '#####fffffffff#######',
+      '###fffffffffffff#####',
+      '##ff^fffffffff^ff####',
+      '##fffffffffffffff####',
+      '##fffffB###Bfffff####',
+      '##ff^fffffffff^ff####',
+      '###fffff*ffffff######',
+      '####ff$fffff$ff######',
+      '#####fffffffff#######',
+      '#####################',
+    ],
+    spawn:{x:9, y:2, dir:'down'},
+    warps:[ {to:'deserto', tx:17, ty:16, dir:'up'} ],
+    chests:[ {item:'a_astral', qty:1}, {item:'t_coroa', qty:1} ],
+    npcs:[],
+    signs:[
+      {x:4,y:4, text:'LÁPIDE SEM NOME — só a data. É a mesma data em todas as outras vinte lápides.'},
+    ],
+    /* A cinemática de revelação já tocou (`onEnter`, acima) na primeira
+       vez que se entra na sala — `intro` aqui é só a fala curta bem
+       antes do combate, padrão de todo chefe. `cena` troca o outro de
+       texto simples por uma cutscene de vitória de verdade; o motor já
+       faz isso sozinho (ver Battle.onFinish em combat/27-controller.js,
+       "cena no chefe: em vez de despejar duas linhas de texto..."). */
+    boss:{id:'vharok', x:9, y:5, flag:'vharok_defeated',
+          intro:['Mostre-me até onde consegue fugir.'],
+          cena:'vharok_outro'},
+  },
+
+};

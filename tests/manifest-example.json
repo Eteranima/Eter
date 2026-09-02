@@ -1,0 +1,8 @@
+{
+  "archive_name": "eter-hml-public.tar.gz",
+  "archive_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "generated_at": "2026-09-01T00:00:00Z",
+  "public_tree_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "source_commit": "4ece39b33c68086a1e836e3a19ec0653ce9435f7",
+  "source_repository": "Eteranima/Eter"
+}

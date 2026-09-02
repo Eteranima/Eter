@@ -1,0 +1,3892 @@
+{
+  "source": "eter-anima.html",
+  "source_bytes": 39108725,
+  "source_sha256": "522e6772ca9ba07d0259ba6a210962887b0263113573c3803035da25949bb39f",
+  "version": "5.31.0",
+  "assets": [
+    {
+      "key": "gabriel_sheet",
+      "path": "assets/characters/gabriel_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 962320,
+      "sha256": "781b5377b75542fbab47c5a1a0c4d9b7ea91d07fff2c38052c55a786d694ce7a"
+    },
+    {
+      "key": "kael_archimedes_portrait",
+      "path": "assets/characters/kael_archimedes_portrait.webp",
+      "mime": "image/webp",
+      "bytes": 6480,
+      "sha256": "a0d5220e7bdf868ba1e6795e149891a0133af0450dc4d24218025457b3d823c4"
+    },
+    {
+      "key": "ava_outfit2_sheet",
+      "path": "assets/characters/ava_outfit2_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 770232,
+      "sha256": "e3039be66686323a170f3b9ebfaf8638a1428ba08f8a49003210d5ebddbe12da"
+    },
+    {
+      "key": "beatriz_sheet",
+      "path": "assets/characters/beatriz_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 751600,
+      "sha256": "17a7445e65effd9a5fdb4671bd9be99d76a420c801c858281feb00938187a698"
+    },
+    {
+      "key": "calderpell_sheet",
+      "path": "assets/characters/calderpell_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 708972,
+      "sha256": "222203ac2677f589ddb0eb59fb3128f94efe48a52827df27c984c9f2c78cfd76"
+    },
+    {
+      "key": "carmila_sheet",
+      "path": "assets/characters/carmila_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 967232,
+      "sha256": "21e2e0544e02417c9ff5149d1c711f30e06194b1192babd5d27ccc9c050fd998"
+    },
+    {
+      "key": "dlg_gabriel",
+      "path": "assets/characters/dlg_gabriel.webp",
+      "mime": "image/webp",
+      "bytes": 1699386,
+      "sha256": "c5ee526663882903c5891085289a1be2d707daf9895c85d8bcc789edf0590f0f"
+    },
+    {
+      "key": "dlg_ava",
+      "path": "assets/characters/dlg_ava.webp",
+      "mime": "image/webp",
+      "bytes": 1035540,
+      "sha256": "f3f1d1e23f2ad39cc39462b95f1b548180983edec26ea9eb881f68af668239d4"
+    },
+    {
+      "key": "dlg_ava_outfit2",
+      "path": "assets/characters/dlg_ava_outfit2.webp",
+      "mime": "image/webp",
+      "bytes": 703088,
+      "sha256": "55e39bdfa350442e3f058ed1de91fa2b891fbf001e51346d0f1b58d344ec6ff1"
+    },
+    {
+      "key": "dlg_ophelia",
+      "path": "assets/characters/dlg_ophelia.webp",
+      "mime": "image/webp",
+      "bytes": 1034116,
+      "sha256": "124627efa7203f71c0523cb3535b4fd594761c35020748a4e3de737d13503c9b"
+    },
+    {
+      "key": "dlg_orfeu",
+      "path": "assets/characters/dlg_orfeu.webp",
+      "mime": "image/webp",
+      "bytes": 569964,
+      "sha256": "1bf49ee198c2e2ef3d83391ab2a1041022329d92a8d1515eb1b818f64cbbe15b"
+    },
+    {
+      "key": "dlg_scythe",
+      "path": "assets/characters/dlg_scythe.webp",
+      "mime": "image/webp",
+      "bytes": 945864,
+      "sha256": "e73b758d7add53c6ac16ff8a2aa72fe95adb67640cb8d7864d52cf421f2dd7b4"
+    },
+    {
+      "key": "dlg_abel",
+      "path": "assets/characters/dlg_abel.webp",
+      "mime": "image/webp",
+      "bytes": 1255566,
+      "sha256": "33f64e2d20bc7223262810a547aeecceff33f89d4c110ce2ff8e8ea4c1c102f1"
+    },
+    {
+      "key": "dlg_kael",
+      "path": "assets/characters/dlg_kael.webp",
+      "mime": "image/webp",
+      "bytes": 754080,
+      "sha256": "efa78279203f4fe802b599f3ecdabb99f882c899b732ca264803d3d0e50d2a26"
+    },
+    {
+      "key": "dlg_seiji",
+      "path": "assets/characters/dlg_seiji.webp",
+      "mime": "image/webp",
+      "bytes": 953318,
+      "sha256": "61ee1f75e091ce2caa0ffce1742ad0fb77ce1e62dd2bf265386e125a32f4f2d2"
+    },
+    {
+      "key": "dlg_beatriz",
+      "path": "assets/characters/dlg_beatriz.webp",
+      "mime": "image/webp",
+      "bytes": 1170186,
+      "sha256": "648a5038c760b7d1db1ca37624980a595505d948a3fcd6e588aa82c98d83ceca"
+    },
+    {
+      "key": "dlg_calderpell",
+      "path": "assets/characters/dlg_calderpell.webp",
+      "mime": "image/webp",
+      "bytes": 478280,
+      "sha256": "555e207dd8f5e31a7f458b0bc325dc55f126bbdb71a16d296e2099d4bb19c963"
+    },
+    {
+      "key": "dlg_carmila",
+      "path": "assets/characters/dlg_carmila.webp",
+      "mime": "image/webp",
+      "bytes": 1086380,
+      "sha256": "f8ca4d2db36adc905bd960a0b2d17d8dde467747a1e46f7781486076eec6b02b"
+    },
+    {
+      "key": "dlg_farnese",
+      "path": "assets/characters/dlg_farnese.webp",
+      "mime": "image/webp",
+      "bytes": 701498,
+      "sha256": "0bec78c0bbb398e7e26f2efc6c75fe4cf7629d82d6a093400c77111e34ca465c"
+    },
+    {
+      "key": "dlg_malquior",
+      "path": "assets/characters/dlg_malquior.webp",
+      "mime": "image/webp",
+      "bytes": 722076,
+      "sha256": "a13d0b45c23d61dede835661da9dafb9dded4c1ea69d43433f873c61bb18e198"
+    },
+    {
+      "key": "dlg_sebastian",
+      "path": "assets/characters/dlg_sebastian.webp",
+      "mime": "image/webp",
+      "bytes": 956246,
+      "sha256": "4ddef4b6874bcfb182ca5d3bb0bd9eef4e5a9c79b19a5165732a1fe860b3818f"
+    },
+    {
+      "key": "ophelia_sheet",
+      "path": "assets/characters/ophelia_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 1110838,
+      "sha256": "0f38e7d01057c4c21895dc8528de859f7f1fd940758386af9ad1c4f9e1cedd4b"
+    },
+    {
+      "key": "kael_sheet",
+      "path": "assets/characters/kael_sheet.png",
+      "mime": "image/png",
+      "bytes": 320910,
+      "sha256": "b69fff6837a31f879aecef5978a1703db0717f54dea1b29d609f67ce0d77b30b"
+    },
+    {
+      "key": "seiji_portrait",
+      "path": "assets/characters/seiji_portrait.png",
+      "mime": "image/png",
+      "bytes": 9505,
+      "sha256": "cbced42e9fc74002b47c1de691ff17b8e5e738abe2a9651c34f70a76649c15b6"
+    },
+    {
+      "key": "gabriel_portrait",
+      "path": "assets/characters/gabriel_portrait.png",
+      "mime": "image/png",
+      "bytes": 7175,
+      "sha256": "1fa1bc30e64aae97fbd4364837c752c3d5c5ffa820e03412eb342fd929eaa192"
+    },
+    {
+      "key": "ophelia_portrait",
+      "path": "assets/characters/ophelia_portrait.png",
+      "mime": "image/png",
+      "bytes": 10311,
+      "sha256": "204f64bb8672716afbca80f88f2fe779157066079dbe5938aab8dfcbcd68c9bb"
+    },
+    {
+      "key": "kael_portrait",
+      "path": "assets/characters/kael_portrait.png",
+      "mime": "image/png",
+      "bytes": 10004,
+      "sha256": "8b2cb6e28c47351ae537b07a07ee94247e359dddff7d90c95695b5fc297daf29"
+    },
+    {
+      "key": "max_sheet",
+      "path": "assets/characters/max_sheet.png",
+      "mime": "image/png",
+      "bytes": 49689,
+      "sha256": "81105b3fb231f35a4bd777d4251f35554f180e8011787abf96233ccd283d3bce"
+    },
+    {
+      "key": "max_portrait",
+      "path": "assets/characters/max_portrait.png",
+      "mime": "image/png",
+      "bytes": 5684,
+      "sha256": "a4af7172a5fd172e07ab6db6baa87e305dddf03a16604fe82aa6432b455c44ad"
+    },
+    {
+      "key": "marin_portrait",
+      "path": "assets/characters/marin_portrait.png",
+      "mime": "image/png",
+      "bytes": 6559,
+      "sha256": "e6f493dacea7238251b3709caf4fd9df378d5b490a0cff4b4487ddba607df152"
+    },
+    {
+      "key": "marin_sheet",
+      "path": "assets/characters/marin_sheet.png",
+      "mime": "image/png",
+      "bytes": 223523,
+      "sha256": "0defa6ff97502378eff94c2ccc8b2ff487789d2487115e428865103e624128ee"
+    },
+    {
+      "key": "eden_sheet",
+      "path": "assets/characters/eden_sheet.png",
+      "mime": "image/png",
+      "bytes": 277500,
+      "sha256": "fe892b902c1af533b875959ffe1a7d2e0257efdaa32b659276e94ae20a0689cd"
+    },
+    {
+      "key": "eden_portrait",
+      "path": "assets/characters/eden_portrait.png",
+      "mime": "image/png",
+      "bytes": 7347,
+      "sha256": "0d6b62c1deb4b82730e93221b59d1c163e5b324a5f262d5da7f3fe116a3334ee"
+    },
+    {
+      "key": "mob_aranha",
+      "path": "assets/monsters/mob_aranha.png",
+      "mime": "image/png",
+      "bytes": 20080,
+      "sha256": "cd46dc666e7100d2b32a75a10ff545c31839568eaa9be2fd07bbc6e0ee83b932"
+    },
+    {
+      "key": "mob_cavaleiro",
+      "path": "assets/monsters/mob_cavaleiro.png",
+      "mime": "image/png",
+      "bytes": 18542,
+      "sha256": "8c4a47d1df238a55698e81377b73060171d04da6bc87cf4ceaf73e91c1fca15a"
+    },
+    {
+      "key": "mob_esqueleto",
+      "path": "assets/monsters/mob_esqueleto.png",
+      "mime": "image/png",
+      "bytes": 17107,
+      "sha256": "582edfb4540752c977f9bea2a8bb74c756adef9b13d33c9abbc8052821be03ed"
+    },
+    {
+      "key": "mob_fantasma",
+      "path": "assets/monsters/mob_fantasma.png",
+      "mime": "image/png",
+      "bytes": 20938,
+      "sha256": "8dc50912afab14de72ac4222088d686fdd1dc0f3298d6b2ca7eb292ec1fbe794"
+    },
+    {
+      "key": "mob_goblin",
+      "path": "assets/monsters/mob_goblin.png",
+      "mime": "image/png",
+      "bytes": 17288,
+      "sha256": "378c429bcd0657eeb1a4870bba133b6df2dc6ee4ad164eed62951d8669772e82"
+    },
+    {
+      "key": "mob_harpia",
+      "path": "assets/monsters/mob_harpia.png",
+      "mime": "image/png",
+      "bytes": 17389,
+      "sha256": "5407de7077c1ca833d9ef3d6d26501e90039f29cb541773227a909221dc4e55a"
+    },
+    {
+      "key": "mob_ladino",
+      "path": "assets/monsters/mob_ladino.png",
+      "mime": "image/png",
+      "bytes": 13276,
+      "sha256": "263ee1f52e3bda2781674b42f1358510fcdeb092075398b18fa66209cb3008db"
+    },
+    {
+      "key": "mob_lobo",
+      "path": "assets/monsters/mob_lobo.png",
+      "mime": "image/png",
+      "bytes": 16752,
+      "sha256": "bfbc83da3692543059f42ffe742de2648d930731ec209f1919e2328cedac5f24"
+    },
+    {
+      "key": "mob_mago",
+      "path": "assets/monsters/mob_mago.png",
+      "mime": "image/png",
+      "bytes": 15066,
+      "sha256": "058204c58ebbf53e0cc4850eefcf4e6b48123b4e89a38a0b6d96b81e2379f910"
+    },
+    {
+      "key": "mob_orc",
+      "path": "assets/monsters/mob_orc.png",
+      "mime": "image/png",
+      "bytes": 22845,
+      "sha256": "87556dbf508132859e9023818304cdd9bf526268b6b98e7d66efb0d093778ee8"
+    },
+    {
+      "key": "mob_slime",
+      "path": "assets/monsters/mob_slime.png",
+      "mime": "image/png",
+      "bytes": 20136,
+      "sha256": "bd0d12db3890ffc0f902d469b34f36cbfa7a89d95383e071c8c862118c0bdd0b"
+    },
+    {
+      "key": "mob_treant",
+      "path": "assets/monsters/mob_treant.png",
+      "mime": "image/png",
+      "bytes": 18804,
+      "sha256": "773594f9ebb3b6a008e59adde9f207c1da48c5430781bea2657bf7420b0effdc"
+    },
+    {
+      "key": "npc_aluno",
+      "path": "assets/world/npc_aluno.png",
+      "mime": "image/png",
+      "bytes": 97549,
+      "sha256": "d55137f4c29353a0a70e1de379454da053de2d18891da0f2e598294001fb90be"
+    },
+    {
+      "key": "npc_balconista",
+      "path": "assets/world/npc_balconista.png",
+      "mime": "image/png",
+      "bytes": 86986,
+      "sha256": "6b8f63bbb8a51f3df06a997b9fd54a60d8f6897d327f93885b40f4cd3380f6cb"
+    },
+    {
+      "key": "npc_bibliotecaria",
+      "path": "assets/world/npc_bibliotecaria.png",
+      "mime": "image/png",
+      "bytes": 92136,
+      "sha256": "3cff8064ecef6074bd2d8c46ec6bb94b8e78cc70a4506d5b8f04b8c8087b469e"
+    },
+    {
+      "key": "npc_enfermeira",
+      "path": "assets/world/npc_enfermeira.png",
+      "mime": "image/png",
+      "bytes": 91566,
+      "sha256": "1a83f757002ec680687847c722130b081fbcdba065211c2c93d34cb3ebdf2a1a"
+    },
+    {
+      "key": "npc_estudante",
+      "path": "assets/world/npc_estudante.png",
+      "mime": "image/png",
+      "bytes": 102332,
+      "sha256": "25f07b7d6bf2dee50dee82f5c5d7d65a21a694c992f0c8c3b0ede74b090599ef"
+    },
+    {
+      "key": "npc_kael",
+      "path": "assets/world/npc_kael.png",
+      "mime": "image/png",
+      "bytes": 97965,
+      "sha256": "d848435f8f1e5365072662a7a7d3cb64ee1e072fdcc5af195c361d3a84a80017"
+    },
+    {
+      "key": "npc_lina",
+      "path": "assets/world/npc_lina.png",
+      "mime": "image/png",
+      "bytes": 81239,
+      "sha256": "df2e56503e38071242b22f03507e70a91265cdf776faec86efe6b76ba859592b"
+    },
+    {
+      "key": "npc_mercador",
+      "path": "assets/world/npc_mercador.png",
+      "mime": "image/png",
+      "bytes": 90319,
+      "sha256": "626db8845885984267759d8924dce8d7b7ab5a2a30c052d29d526dd8c03e1c60"
+    },
+    {
+      "key": "npc_veterano",
+      "path": "assets/world/npc_veterano.png",
+      "mime": "image/png",
+      "bytes": 88820,
+      "sha256": "9625fc1de8012af38467787134a0b1e7c7efc4a6856f6a08c7fb1172ec3a0fe6"
+    },
+    {
+      "key": "npc_zelador",
+      "path": "assets/world/npc_zelador.png",
+      "mime": "image/png",
+      "bytes": 92096,
+      "sha256": "caccb2f1131726078ab7e3ff0026faaa20c5b6b3b655fc2075427812d2b4d876"
+    },
+    {
+      "key": "ava_sheet",
+      "path": "assets/characters/ava_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 1170100,
+      "sha256": "13c6fc2b388d73ddb586a55758d1b63725ee604343ca481deab10832fb22871b"
+    },
+    {
+      "key": "scythe_sheet",
+      "path": "assets/characters/scythe_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 1052316,
+      "sha256": "e8fdd887c9d3b3c8ca2dfada40f2566aaee3f3917bfd76e85c82b67736b59360"
+    },
+    {
+      "key": "ava_portrait",
+      "path": "assets/characters/ava_portrait.webp",
+      "mime": "image/webp",
+      "bytes": 5882,
+      "sha256": "207313984f30fed132708052ce3ce26275828d6ba57a2aa6875f6f89a7cbe5bb"
+    },
+    {
+      "key": "scythe_portrait",
+      "path": "assets/characters/scythe_portrait.webp",
+      "mime": "image/webp",
+      "bytes": 4680,
+      "sha256": "503429f65a1d1b9ee8d534dc0e7e382ded038ada2ba5257609e70287f3bde748"
+    },
+    {
+      "key": "icon_axe",
+      "path": "assets/ui/icon_axe.webp",
+      "mime": "image/webp",
+      "bytes": 822,
+      "sha256": "68c59afc9faef0ed225a6312a7871ecdb521861d978476b12c7b4b04446dd5b0"
+    },
+    {
+      "key": "icon_book",
+      "path": "assets/ui/icon_book.webp",
+      "mime": "image/webp",
+      "bytes": 1274,
+      "sha256": "9fe645fe52b92c7cea6c07a07c0c26a7ec90397b17e4340910f03e02079d06a5"
+    },
+    {
+      "key": "icon_bow",
+      "path": "assets/ui/icon_bow.webp",
+      "mime": "image/webp",
+      "bytes": 622,
+      "sha256": "ed15849faf03d6bb072d663345b7fa775d148573837bbe9d6bcc4e6b5a980c85"
+    },
+    {
+      "key": "icon_shuriken",
+      "path": "assets/ui/icon_shuriken.webp",
+      "mime": "image/webp",
+      "bytes": 638,
+      "sha256": "9bf12f0dd1b2988fc30cc3b6c8c302f19964d308460366ac54c760625ce2fee7"
+    },
+    {
+      "key": "icon_spear",
+      "path": "assets/ui/icon_spear.webp",
+      "mime": "image/webp",
+      "bytes": 482,
+      "sha256": "d22182e92deb8acb84012e5a372dadd9679a450ad12598474efcb07bb4b63607"
+    },
+    {
+      "key": "icon_spear_red",
+      "path": "assets/ui/icon_spear_red.webp",
+      "mime": "image/webp",
+      "bytes": 524,
+      "sha256": "20493718fa3afceaead3b7b745fae09b60402c925c9ff6951d74556799060835"
+    },
+    {
+      "key": "icon_staff",
+      "path": "assets/ui/icon_staff.webp",
+      "mime": "image/webp",
+      "bytes": 756,
+      "sha256": "494720fc905a63ee129092cf205296f2efff1f7da7e2dddd884fbaad5ab63d6b"
+    },
+    {
+      "key": "icon_sword",
+      "path": "assets/ui/icon_sword.webp",
+      "mime": "image/webp",
+      "bytes": 798,
+      "sha256": "3d80be48142274c019f4db8ef4d1f289a06297aad1e7d179b20367169d464cca"
+    },
+    {
+      "key": "icon_sword_red",
+      "path": "assets/ui/icon_sword_red.webp",
+      "mime": "image/webp",
+      "bytes": 704,
+      "sha256": "04bf71cc18e701f33d36591d40c463be1508956ab8321b576f5d99065b083a2f"
+    },
+    {
+      "key": "tile_agua_0",
+      "path": "assets/world/tile_agua_0.webp",
+      "mime": "image/webp",
+      "bytes": 860,
+      "sha256": "fdedd205b58c550f37f2f7ae7493bada9249ce9f8cf4a0ec121c965a80e41427"
+    },
+    {
+      "key": "tile_agua_1",
+      "path": "assets/world/tile_agua_1.webp",
+      "mime": "image/webp",
+      "bytes": 850,
+      "sha256": "9d5b068b432effed8285a3c0e4a2208c7889200905f77b7faecc2d3b43b6813b"
+    },
+    {
+      "key": "tile_agua_2",
+      "path": "assets/world/tile_agua_2.webp",
+      "mime": "image/webp",
+      "bytes": 868,
+      "sha256": "808e967b974e349d16a11343702525580ee44e74f88ed79a3c7304c3d2c151d7"
+    },
+    {
+      "key": "tile_brasa_0",
+      "path": "assets/world/tile_brasa_0.webp",
+      "mime": "image/webp",
+      "bytes": 2356,
+      "sha256": "0562b11c51d8e0fe956db8246eebf8df6551015a904eeecf8501611b86b76871"
+    },
+    {
+      "key": "tile_brasa_1",
+      "path": "assets/world/tile_brasa_1.webp",
+      "mime": "image/webp",
+      "bytes": 2080,
+      "sha256": "f2725abb39e4ab45d48d82a76c112180c55b90460235ef5fa605e9640b939564"
+    },
+    {
+      "key": "tile_brasa_2",
+      "path": "assets/world/tile_brasa_2.webp",
+      "mime": "image/webp",
+      "bytes": 1840,
+      "sha256": "ed5a6323f96d01fbb81fdd06c43e814c4fa9cfc4567b3c763a3d512827517275"
+    },
+    {
+      "key": "tile_grass",
+      "path": "assets/world/tile_grass.webp",
+      "mime": "image/webp",
+      "bytes": 1664,
+      "sha256": "1c814371eaa9c367352a5884f132a770d10ce4e5e20974688849a771b9c7f2d0"
+    },
+    {
+      "key": "tile_path",
+      "path": "assets/world/tile_path.webp",
+      "mime": "image/webp",
+      "bytes": 1750,
+      "sha256": "d218b18fac9edb3e548591044a9ab7a8d45fd020b6bc84a403be90f0d199decf"
+    },
+    {
+      "key": "tile_dirt",
+      "path": "assets/world/tile_dirt.webp",
+      "mime": "image/webp",
+      "bytes": 1512,
+      "sha256": "fc2a31f4bc3970e9da907ba95caa0d493d885c961555778539dd21a089c27682"
+    },
+    {
+      "key": "tile_crack",
+      "path": "assets/world/tile_crack.webp",
+      "mime": "image/webp",
+      "bytes": 1332,
+      "sha256": "f02ed8066a3335a3a4a176cf2003a87d62f2727b14378e6ebcf79d4672e44096"
+    },
+    {
+      "key": "tile_wall",
+      "path": "assets/world/tile_wall.webp",
+      "mime": "image/webp",
+      "bytes": 1576,
+      "sha256": "ae6f0c38061c531d86a4f4ac64dd6568bfa841c0f3e61790231609a5ae510d04"
+    },
+    {
+      "key": "tile_floor",
+      "path": "assets/world/tile_floor.webp",
+      "mime": "image/webp",
+      "bytes": 1064,
+      "sha256": "27b6286bcf916288047b7eb76ddee6b8ebf6e67841b09446bf6397ce89ad9ff4"
+    },
+    {
+      "key": "tile_carpet",
+      "path": "assets/world/tile_carpet.webp",
+      "mime": "image/webp",
+      "bytes": 1712,
+      "sha256": "e51dec61963635b78033e458bae74da68f6d013bf342059f788cca0aabf3734b"
+    },
+    {
+      "key": "tile_door",
+      "path": "assets/world/tile_door.webp",
+      "mime": "image/webp",
+      "bytes": 1820,
+      "sha256": "b003e2e9663015859192d23843f83f3f79e7097a5cfc94f5618083d1625e8a0a"
+    },
+    {
+      "key": "tile_stairs",
+      "path": "assets/world/tile_stairs.webp",
+      "mime": "image/webp",
+      "bytes": 1384,
+      "sha256": "c1ca95ab149b1111fb146ad80fcb28cd290426a912675244eae6bfa41a0338ad"
+    },
+    {
+      "key": "tile_chest",
+      "path": "assets/world/tile_chest.webp",
+      "mime": "image/webp",
+      "bytes": 1836,
+      "sha256": "4b0c21013c5a9cd7d6b37a0e163ad4a6c4e26837218dd13afff2c30d3c3b95da"
+    },
+    {
+      "key": "tile_chest_open",
+      "path": "assets/world/tile_chest_open.webp",
+      "mime": "image/webp",
+      "bytes": 1822,
+      "sha256": "6cc6ae88840f7770a8dc14114941ec867157aa09675d8608e6f8f871efd909f7"
+    },
+    {
+      "key": "ail_burn",
+      "path": "assets/ui/ail_burn.webp",
+      "mime": "image/webp",
+      "bytes": 648,
+      "sha256": "66d41eb75a925161eca9f2da87abafe899c70fd6487f14fb012b68ae11557245"
+    },
+    {
+      "key": "ail_shock",
+      "path": "assets/ui/ail_shock.webp",
+      "mime": "image/webp",
+      "bytes": 456,
+      "sha256": "8f6244b4398c5541d0adf5e3b50623dd1916124fb48a707f772cb7e90f321381"
+    },
+    {
+      "key": "ail_freeze",
+      "path": "assets/ui/ail_freeze.webp",
+      "mime": "image/webp",
+      "bytes": 620,
+      "sha256": "fb1014b1adeb1c83f6f8962c4c5593ab70fbec81381032e028f287ddcb0a9af5"
+    },
+    {
+      "key": "ail_rooted",
+      "path": "assets/ui/ail_rooted.webp",
+      "mime": "image/webp",
+      "bytes": 740,
+      "sha256": "0771f6c78766003985c0438b3304549212874caa36dbc1115cb05db2f68dedfb"
+    },
+    {
+      "key": "ail_terror",
+      "path": "assets/ui/ail_terror.webp",
+      "mime": "image/webp",
+      "bytes": 698,
+      "sha256": "dcfc9e7a68a20f99712cbad459266fca3808991aecb354f6a0bf8d16734d5a03"
+    },
+    {
+      "key": "ail_stun",
+      "path": "assets/ui/ail_stun.webp",
+      "mime": "image/webp",
+      "bytes": 622,
+      "sha256": "1e81acdcc7f99a98065cb82996a174374ba58db982fa92ad4756d32b0abf6cb1"
+    },
+    {
+      "key": "ui_canto_01",
+      "path": "assets/ui/ui_canto_01.webp",
+      "mime": "image/webp",
+      "bytes": 776,
+      "sha256": "e8efb939f58b7ca50ae7d55d7c8b6448382b5328239cdece3fad52fc9317aa85"
+    },
+    {
+      "key": "ui_embl_01",
+      "path": "assets/ui/ui_embl_01.webp",
+      "mime": "image/webp",
+      "bytes": 782,
+      "sha256": "98dc2ed34d6592874cc97485cd8d4a7831f0a32711a31ab487e4bc54a8bef72d"
+    },
+    {
+      "key": "ui_canto_02",
+      "path": "assets/ui/ui_canto_02.webp",
+      "mime": "image/webp",
+      "bytes": 836,
+      "sha256": "c49e5dae09c8df7ad59dde7e236d068bc8f7b64cfbe5e0560aeecdb289f774ca"
+    },
+    {
+      "key": "ui_embl_02",
+      "path": "assets/ui/ui_embl_02.webp",
+      "mime": "image/webp",
+      "bytes": 740,
+      "sha256": "c0e7fab3c57001f2e09bfed5ab9d936a20396e407f65a83a669fe1a734b172cf"
+    },
+    {
+      "key": "ui_canto_03",
+      "path": "assets/ui/ui_canto_03.webp",
+      "mime": "image/webp",
+      "bytes": 868,
+      "sha256": "600d850267f672072e667decbaf02b4768723f5efe1c839f201522f719b0f967"
+    },
+    {
+      "key": "ui_embl_03",
+      "path": "assets/ui/ui_embl_03.webp",
+      "mime": "image/webp",
+      "bytes": 732,
+      "sha256": "1fd92aed851e8a317358d9de6b2aed23b5d28af7ea7ee57b5b5069931268f53e"
+    },
+    {
+      "key": "ui_canto_04",
+      "path": "assets/ui/ui_canto_04.webp",
+      "mime": "image/webp",
+      "bytes": 1192,
+      "sha256": "6372e61bef528d02e98a4bcfd261d9c9df6709e638c298243483c62adb875ada"
+    },
+    {
+      "key": "ui_embl_04",
+      "path": "assets/ui/ui_embl_04.webp",
+      "mime": "image/webp",
+      "bytes": 812,
+      "sha256": "ccb20e1f12ba4acb67a8c8ed884a80d7a00aff766185a59aedc8069524a1220c"
+    },
+    {
+      "key": "ui_canto_05",
+      "path": "assets/ui/ui_canto_05.webp",
+      "mime": "image/webp",
+      "bytes": 960,
+      "sha256": "6147c43cc664387d0c993539298b96548287e826690068b018f61e40be2218af"
+    },
+    {
+      "key": "ui_embl_05",
+      "path": "assets/ui/ui_embl_05.webp",
+      "mime": "image/webp",
+      "bytes": 834,
+      "sha256": "57224acddf0dd8b80115fe1141e97c3bf4aae2329ecf415deef986cfa51f4fa5"
+    },
+    {
+      "key": "ui_canto_06",
+      "path": "assets/ui/ui_canto_06.webp",
+      "mime": "image/webp",
+      "bytes": 1200,
+      "sha256": "640e4a04fe4ad1e9d2663bdab996c81435c0ee3bd8e1f3bba90b8d6c3e1b7054"
+    },
+    {
+      "key": "ui_embl_06",
+      "path": "assets/ui/ui_embl_06.webp",
+      "mime": "image/webp",
+      "bytes": 938,
+      "sha256": "1b715e9ca0d5f0e8765d9debbdf576b9d198fe1048991993cf13743f4607e1ab"
+    },
+    {
+      "key": "ui_canto_07",
+      "path": "assets/ui/ui_canto_07.webp",
+      "mime": "image/webp",
+      "bytes": 956,
+      "sha256": "34dcbd5e6fea38c846fdfb9dcf0e29f16b2fc9d1e5d0c852548fa30f801a7628"
+    },
+    {
+      "key": "ui_embl_07",
+      "path": "assets/ui/ui_embl_07.webp",
+      "mime": "image/webp",
+      "bytes": 694,
+      "sha256": "a94ddc912e169a03ce4c69082dc8cfe15af328efd6cc091ca0194beeeeb1abd9"
+    },
+    {
+      "key": "ui_canto_08",
+      "path": "assets/ui/ui_canto_08.webp",
+      "mime": "image/webp",
+      "bytes": 972,
+      "sha256": "57f174f551f0cd34f2fa0aba733a5b53d8b2b95d5dea3a1f30c98f50053b8160"
+    },
+    {
+      "key": "ui_embl_08",
+      "path": "assets/ui/ui_embl_08.webp",
+      "mime": "image/webp",
+      "bytes": 890,
+      "sha256": "8128f60dd40caa21bc2f90466788513d3dd6e22893c9189847b89df4862b3995"
+    },
+    {
+      "key": "ui_canto_09",
+      "path": "assets/ui/ui_canto_09.webp",
+      "mime": "image/webp",
+      "bytes": 910,
+      "sha256": "5171ee0c0c9a374a78420fcbedcc13b2fb1b017777e00168c74cf790e81f5a4c"
+    },
+    {
+      "key": "ui_embl_09",
+      "path": "assets/ui/ui_embl_09.webp",
+      "mime": "image/webp",
+      "bytes": 870,
+      "sha256": "a01c48c4b5337122e5baa33263af0c027b2a06d2dea462c22a6ebeb3f06da3d8"
+    },
+    {
+      "key": "ui_canto_10",
+      "path": "assets/ui/ui_canto_10.webp",
+      "mime": "image/webp",
+      "bytes": 930,
+      "sha256": "79fcd68a44bbbf670619396e1086ddf754b9615dd3776d0d865ca05ae1710a29"
+    },
+    {
+      "key": "ui_embl_10",
+      "path": "assets/ui/ui_embl_10.webp",
+      "mime": "image/webp",
+      "bytes": 760,
+      "sha256": "fb5f6a7ff040777353e926124abd5562efc2499869ab5ddb43d29aa940ef31b3"
+    },
+    {
+      "key": "ui_canto_11",
+      "path": "assets/ui/ui_canto_11.webp",
+      "mime": "image/webp",
+      "bytes": 1028,
+      "sha256": "1651c2ea982c9a61bdd21ab049eb48a6223f7e2302bb54718e127febf1fb0539"
+    },
+    {
+      "key": "ui_embl_11",
+      "path": "assets/ui/ui_embl_11.webp",
+      "mime": "image/webp",
+      "bytes": 1134,
+      "sha256": "c563dbb2d36bf39bcf38e62752f772272268c55de2dabc5ec99721f64f45a07f"
+    },
+    {
+      "key": "ui_canto_12",
+      "path": "assets/ui/ui_canto_12.webp",
+      "mime": "image/webp",
+      "bytes": 862,
+      "sha256": "be2c3a8949ba753ef66fdb9d9413e5b4550dd1daa751ea987ed43ad2cb9e2207"
+    },
+    {
+      "key": "ui_embl_12",
+      "path": "assets/ui/ui_embl_12.webp",
+      "mime": "image/webp",
+      "bytes": 994,
+      "sha256": "1aafe6e7cf3b1b8150b3dfedd06e8951b996d360b71d1961471694c23adac001"
+    },
+    {
+      "key": "ui_canto_13",
+      "path": "assets/ui/ui_canto_13.webp",
+      "mime": "image/webp",
+      "bytes": 868,
+      "sha256": "b0fc2961363e439d9f08fc5fd83d883b97d567547d466a6092a48c316521bd4e"
+    },
+    {
+      "key": "ui_embl_13",
+      "path": "assets/ui/ui_embl_13.webp",
+      "mime": "image/webp",
+      "bytes": 956,
+      "sha256": "823e6ef1abc345404202be0e405b6acc2c6b36fd0d2849351908d116f689099d"
+    },
+    {
+      "key": "ui_canto_14",
+      "path": "assets/ui/ui_canto_14.webp",
+      "mime": "image/webp",
+      "bytes": 896,
+      "sha256": "55c9b15fe05812aeb0e869feba880000465efbbcd9077ab9d5acbfccb94199ff"
+    },
+    {
+      "key": "ui_embl_14",
+      "path": "assets/ui/ui_embl_14.webp",
+      "mime": "image/webp",
+      "bytes": 692,
+      "sha256": "0688a0af8cb24c57b3db8a168f234fc6de7f3076cf4804613d7cd1e894b1e253"
+    },
+    {
+      "key": "ui_canto_15",
+      "path": "assets/ui/ui_canto_15.webp",
+      "mime": "image/webp",
+      "bytes": 928,
+      "sha256": "e0ffd5b1a0c37d9284e546270e6aa77a750609807b55ab9966c314fe9525377d"
+    },
+    {
+      "key": "ui_embl_15",
+      "path": "assets/ui/ui_embl_15.webp",
+      "mime": "image/webp",
+      "bytes": 776,
+      "sha256": "f433f6875a1effb6f6e743450404859cda57a234ffadc39d8102fc51ba096dea"
+    },
+    {
+      "key": "ui_canto_16",
+      "path": "assets/ui/ui_canto_16.webp",
+      "mime": "image/webp",
+      "bytes": 932,
+      "sha256": "3f9a7e1f08a547b4545a3c7ea443323211ff2e9ddaeba8cbfd98918f9cd4c026"
+    },
+    {
+      "key": "ui_embl_16",
+      "path": "assets/ui/ui_embl_16.webp",
+      "mime": "image/webp",
+      "bytes": 598,
+      "sha256": "b7611fff62afbca86d1332dafaa33b5ee1998410aa4481d7f9a4c9986c3e2e88"
+    },
+    {
+      "key": "ui_canto_17",
+      "path": "assets/ui/ui_canto_17.webp",
+      "mime": "image/webp",
+      "bytes": 946,
+      "sha256": "41d59661e843c8d873ef6ac7934dad7fd477365e5fb3c248b228518ab6b71b04"
+    },
+    {
+      "key": "ui_embl_17",
+      "path": "assets/ui/ui_embl_17.webp",
+      "mime": "image/webp",
+      "bytes": 912,
+      "sha256": "c97bda6480ecf0f051993d10880f132daf16f8720322452a26751cdc2ce867ed"
+    },
+    {
+      "key": "ui_canto_18",
+      "path": "assets/ui/ui_canto_18.webp",
+      "mime": "image/webp",
+      "bytes": 1006,
+      "sha256": "67fb2dd9c6549bba49b9c16f3858d8059b8f0f35a398650776c9f9773c3aaa41"
+    },
+    {
+      "key": "ui_embl_18",
+      "path": "assets/ui/ui_embl_18.webp",
+      "mime": "image/webp",
+      "bytes": 1170,
+      "sha256": "fcafc8afccdb370d15f82a807f0f77893365d428eb355dc53391e73b2df3bcd7"
+    },
+    {
+      "key": "ui_canto_19",
+      "path": "assets/ui/ui_canto_19.webp",
+      "mime": "image/webp",
+      "bytes": 898,
+      "sha256": "8e9897865fddf54fe47ab612bf245855a691b967f7e707519a456735d1d55616"
+    },
+    {
+      "key": "ui_embl_19",
+      "path": "assets/ui/ui_embl_19.webp",
+      "mime": "image/webp",
+      "bytes": 1110,
+      "sha256": "7eb6ff53d742e4ca7579a1b672e5c1e116a0108ce6c0f301c5162e550ceb9024"
+    },
+    {
+      "key": "ui_canto_20",
+      "path": "assets/ui/ui_canto_20.webp",
+      "mime": "image/webp",
+      "bytes": 894,
+      "sha256": "59361a8c045f43ec1e1c45a08b7dcd492f7c7d02dcd76e7fd23a8aebb50c7120"
+    },
+    {
+      "key": "ui_embl_20",
+      "path": "assets/ui/ui_embl_20.webp",
+      "mime": "image/webp",
+      "bytes": 528,
+      "sha256": "c8c23e8529cab50e8783a6b5b39b8bfbe9518f37dcecbfea67b0bcc29ae59b0e"
+    },
+    {
+      "key": "ui_canto_21",
+      "path": "assets/ui/ui_canto_21.webp",
+      "mime": "image/webp",
+      "bytes": 896,
+      "sha256": "9dbbc1645beb6f752a87ed31b50180316bb5a254e6ca90521bdc6dcdb8752934"
+    },
+    {
+      "key": "ui_embl_21",
+      "path": "assets/ui/ui_embl_21.webp",
+      "mime": "image/webp",
+      "bytes": 936,
+      "sha256": "18c6c46038dc656c29bff1c751c072a09a52272497f4031c97ec8d993edfb307"
+    },
+    {
+      "key": "ui_canto_22",
+      "path": "assets/ui/ui_canto_22.webp",
+      "mime": "image/webp",
+      "bytes": 936,
+      "sha256": "6c020c121bf979749162c309fc9cc5a25924f8155595cfbc620a820a2f4e5611"
+    },
+    {
+      "key": "ui_embl_22",
+      "path": "assets/ui/ui_embl_22.webp",
+      "mime": "image/webp",
+      "bytes": 844,
+      "sha256": "939010610eb4a20ac69ef8cb5204554f31071d909810c0f56a7f8c4e439547a1"
+    },
+    {
+      "key": "ui_canto_23",
+      "path": "assets/ui/ui_canto_23.webp",
+      "mime": "image/webp",
+      "bytes": 900,
+      "sha256": "f49e47504e9b4ce2fb344c9b35251c9298303cf6de8a9a1def94b6a3ff37c30c"
+    },
+    {
+      "key": "ui_embl_23",
+      "path": "assets/ui/ui_embl_23.webp",
+      "mime": "image/webp",
+      "bytes": 680,
+      "sha256": "d4ea8b2fac0231789d5aadfaac3324404200d169c2d707f6b7240f2c613a127e"
+    },
+    {
+      "key": "ui_canto_24",
+      "path": "assets/ui/ui_canto_24.webp",
+      "mime": "image/webp",
+      "bytes": 858,
+      "sha256": "cbb818ba308f8cf6e07b67edbd9b27b42c14d1eca327962dbcb36a200f298f83"
+    },
+    {
+      "key": "ui_embl_24",
+      "path": "assets/ui/ui_embl_24.webp",
+      "mime": "image/webp",
+      "bytes": 688,
+      "sha256": "8b5dbc1746fadc09ab1853929c63e32ec304bbbb2f1abaa0561e0ccb125b8286"
+    },
+    {
+      "key": "ui_canto_25",
+      "path": "assets/ui/ui_canto_25.webp",
+      "mime": "image/webp",
+      "bytes": 800,
+      "sha256": "7f7e895da842d5ef36043c6e62c72b590285ea62b4224f4b87e88f25049a789e"
+    },
+    {
+      "key": "ui_embl_25",
+      "path": "assets/ui/ui_embl_25.webp",
+      "mime": "image/webp",
+      "bytes": 882,
+      "sha256": "3586948e9139a14b8491bf6729bce9ff5a5c96c790d152733096cd56898ff68e"
+    },
+    {
+      "key": "kael_portrait",
+      "path": "assets/characters/kael_portrait-2.webp",
+      "mime": "image/webp",
+      "bytes": 8508,
+      "sha256": "4f49fda5caaf119dfbf1eddb904c7862970943574f68668e8494b0569a577ef8"
+    },
+    {
+      "key": "ophelia_portrait",
+      "path": "assets/characters/ophelia_portrait-2.webp",
+      "mime": "image/webp",
+      "bytes": 10428,
+      "sha256": "ea0147b3575241ebe68d66feab8c75fa73572195b88dfa2be34d33f310df5b7c"
+    },
+    {
+      "key": "marin_portrait",
+      "path": "assets/characters/marin_portrait-2.webp",
+      "mime": "image/webp",
+      "bytes": 8072,
+      "sha256": "4dbc5d5c4037fc26c30fd233c131fa7940bda918b26d39fda50958eee90cf88a"
+    },
+    {
+      "key": "gabriel_portrait",
+      "path": "assets/characters/gabriel_portrait-2.webp",
+      "mime": "image/webp",
+      "bytes": 10608,
+      "sha256": "583f939eda5170d28fd5454fc64c8de1fbd14741224d10185ca1c5e6ab7396e8"
+    },
+    {
+      "key": "max_portrait",
+      "path": "assets/characters/max_portrait-2.webp",
+      "mime": "image/webp",
+      "bytes": 9294,
+      "sha256": "e6a16592840c84a81a988e426519a408f88179f55f5549901087408910813c33"
+    },
+    {
+      "key": "eden_portrait",
+      "path": "assets/characters/eden_portrait-2.webp",
+      "mime": "image/webp",
+      "bytes": 7012,
+      "sha256": "424d3f3fad25ac05d7adc727eeba977c0874907489823aed49cc757394eb0fb9"
+    },
+    {
+      "key": "ava_portrait",
+      "path": "assets/characters/ava_portrait-2.webp",
+      "mime": "image/webp",
+      "bytes": 9174,
+      "sha256": "ae8649f1230361eb542159092b6375404aac167c91505045295ea55981c6d2fa"
+    },
+    {
+      "key": "scythe_portrait",
+      "path": "assets/characters/scythe_portrait-2.webp",
+      "mime": "image/webp",
+      "bytes": 9480,
+      "sha256": "082907d27ab78efca614f257a14f364b52eb133de4b5a0e10993024fb56a09ee"
+    },
+    {
+      "key": "gabriel_lycan_sheet",
+      "path": "assets/characters/gabriel_lycan_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 49744,
+      "sha256": "df836e050b2bcc555bfae043668e2772f28af4dd3e8dabd4468f2f4b44da791f"
+    },
+    {
+      "key": "tree_bg_ice",
+      "path": "assets/ui/tree_bg_ice.webp",
+      "mime": "image/webp",
+      "bytes": 7150,
+      "sha256": "77c6083450df516ed0ffe05aca96ac6adf990e7ca7b44ded3bf7f994597d942c"
+    },
+    {
+      "key": "tree_bg_electricity",
+      "path": "assets/ui/tree_bg_electricity.webp",
+      "mime": "image/webp",
+      "bytes": 7970,
+      "sha256": "2695361b120076ce4d9e7329c5f23a40a8937410ce969db7e73bb083e342234f"
+    },
+    {
+      "key": "tree_bg_darkness",
+      "path": "assets/ui/tree_bg_darkness.webp",
+      "mime": "image/webp",
+      "bytes": 5268,
+      "sha256": "f2cc54bb7a54ee26332025ae5ada52c6e3f0aeac37383831a948d524bc979e61"
+    },
+    {
+      "key": "tree_bg_fire",
+      "path": "assets/ui/tree_bg_fire.webp",
+      "mime": "image/webp",
+      "bytes": 7420,
+      "sha256": "6812d2c740b5c2a7aa9fc1bad90b989f3728a331dabfdd32f71106972bcf747b"
+    },
+    {
+      "key": "tree_bg_earth",
+      "path": "assets/ui/tree_bg_earth.webp",
+      "mime": "image/webp",
+      "bytes": 6236,
+      "sha256": "c245f6efe8fafeb0198cd3a1565476b947dea43113065290b839ba9e092cdad8"
+    },
+    {
+      "key": "tree_bg_wind",
+      "path": "assets/ui/tree_bg_wind.webp",
+      "mime": "image/webp",
+      "bytes": 5916,
+      "sha256": "ef50addc5748ce15b2eb9f66647b46a074daa87ce7fa79714aab2c6d55871c9c"
+    },
+    {
+      "key": "madao_sheet",
+      "path": "assets/characters/madao_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 157334,
+      "sha256": "ba4c4664918b85479c6befa536981a89a5bb7932b5a57579f33e4013c33d3f51"
+    },
+    {
+      "key": "madao_papelao_sheet",
+      "path": "assets/characters/madao_papelao_sheet.png",
+      "mime": "image/png",
+      "bytes": 44866,
+      "sha256": "65ef625af7edfa654c4788dbfef6e326cf68e49d30bcc1c49569ab4f5d9f041c"
+    },
+    {
+      "key": "elijah_sheet",
+      "path": "assets/characters/elijah_sheet.png",
+      "mime": "image/png",
+      "bytes": 51120,
+      "sha256": "8fab43724e2b9f2fa82fa8d0bfe390ff5a07d465e09f7a84e6c39d560529ab30"
+    },
+    {
+      "key": "elijah_corrompido_sheet",
+      "path": "assets/characters/elijah_corrompido_sheet.png",
+      "mime": "image/png",
+      "bytes": 59012,
+      "sha256": "500031d566f78afc993e802f38114ca0d9a87126dcdcb82ecd99d6304d6721eb"
+    },
+    {
+      "key": "madao_portrait",
+      "path": "assets/characters/madao_portrait.webp",
+      "mime": "image/webp",
+      "bytes": 2790,
+      "sha256": "bb8dca68ab761ac67619622b9293e68b035f6204054f3299b3afb72e1721dd35"
+    },
+    {
+      "key": "pet_salamandra_1_batalha",
+      "path": "assets/pets/pet_salamandra_1_batalha.png",
+      "mime": "image/png",
+      "bytes": 16287,
+      "sha256": "e6f7a29fdb7b0f550b27a30e861ffb46a88806ba9f7fd9935babc25c0c26d5c1"
+    },
+    {
+      "key": "pet_salamandra_1",
+      "path": "assets/pets/pet_salamandra_1.png",
+      "mime": "image/png",
+      "bytes": 7144,
+      "sha256": "11e6157c7a039b4d65346552dcd9080f9d3aa8357017315d854b74afa53e20bf"
+    },
+    {
+      "key": "ui_canto_mock",
+      "path": "assets/ui/ui_canto_mock.webp",
+      "mime": "image/webp",
+      "bytes": 818,
+      "sha256": "247dc9c9470b69e9eb2a2f9a4ab48b3989e50f4f2b79a0f1933ea369caef8976"
+    },
+    {
+      "key": "ui_embl_mock",
+      "path": "assets/ui/ui_embl_mock.webp",
+      "mime": "image/webp",
+      "bytes": 844,
+      "sha256": "c5d5dd5fd423930919a493366fd50325d90af0084c823e57a788766d48e37d6b"
+    },
+    {
+      "key": "battle_bg_arquivo",
+      "path": "assets/world/battle_bg_arquivo.webp",
+      "mime": "image/webp",
+      "bytes": 772376,
+      "sha256": "f94f84eb17d21484134943256c0d5df0a8cbe1090b86da8afbc21282ce803575"
+    },
+    {
+      "key": "battle_bg_arquivo_fundo",
+      "path": "assets/world/battle_bg_arquivo_fundo.webp",
+      "mime": "image/webp",
+      "bytes": 835146,
+      "sha256": "15ce68d338057fff8a823d79a4c836eba26dc664fb20ba32a5d793932cdfd6db"
+    },
+    {
+      "key": "battle_bg_ashwood",
+      "path": "assets/world/battle_bg_ashwood.webp",
+      "mime": "image/webp",
+      "bytes": 926034,
+      "sha256": "a5e48aed55ecae308df68f48bc0b141355e3c0e6a3c29af3754f6c71e1fc4907"
+    },
+    {
+      "key": "battle_bg_cistern",
+      "path": "assets/world/battle_bg_cistern.webp",
+      "mime": "image/webp",
+      "bytes": 665386,
+      "sha256": "c9b056dd72bf566bc46446d5c53c990341f1796b080923e95badf448436871c3"
+    },
+    {
+      "key": "battle_bg_deepway",
+      "path": "assets/world/battle_bg_deepway.webp",
+      "mime": "image/webp",
+      "bytes": 952192,
+      "sha256": "31d3b4e7eb90855d8e4fd14640ea0085b1b1f767b741fd26e333d44b7439351c"
+    },
+    {
+      "key": "battle_bg_deserto",
+      "path": "assets/world/battle_bg_deserto.webp",
+      "mime": "image/webp",
+      "bytes": 767918,
+      "sha256": "7120a8e5cd37c4b3cb54f239e197d708f3eb4d2290dd4d7180b541c5b3fcde69"
+    },
+    {
+      "key": "battle_bg_esgoto",
+      "path": "assets/world/battle_bg_esgoto.webp",
+      "mime": "image/webp",
+      "bytes": 614476,
+      "sha256": "7abe24b755ee3c28e82f9c887e5257d75a11a7358e9732c768471ee51cdcf228"
+    },
+    {
+      "key": "battle_bg_lago",
+      "path": "assets/world/battle_bg_lago.webp",
+      "mime": "image/webp",
+      "bytes": 834910,
+      "sha256": "b8bc17de17363aa997e491b58e12e8969229ab2739e3de332dc0490c41b4e1fd"
+    },
+    {
+      "key": "battle_bg_nests",
+      "path": "assets/world/battle_bg_nests.webp",
+      "mime": "image/webp",
+      "bytes": 1539730,
+      "sha256": "9f91a0678a0493007d5a1b980ada4ddab8de1d77f2460eba19bdad51013b8732"
+    },
+    {
+      "key": "battle_bg_patio",
+      "path": "assets/world/battle_bg_patio.webp",
+      "mime": "image/webp",
+      "bytes": 948900,
+      "sha256": "1f5ed72040b71e85c44d5208f364d7eac72ecd31c22dc82ec9e4a60d7b8b2998"
+    },
+    {
+      "key": "battle_bg_podridao",
+      "path": "assets/world/battle_bg_podridao.webp",
+      "mime": "image/webp",
+      "bytes": 685198,
+      "sha256": "ff9f3c89bdede8632fba3b3c959af295826dd546df383199cd154ba6610c37c1"
+    },
+    {
+      "key": "battle_bg_spire",
+      "path": "assets/world/battle_bg_spire.webp",
+      "mime": "image/webp",
+      "bytes": 1046042,
+      "sha256": "693bee5e6dd3001e72457bde154c6db8d595b244c06d7100ac4e02b3822103dc"
+    },
+    {
+      "key": "battle_bg_undercroft",
+      "path": "assets/world/battle_bg_undercroft.webp",
+      "mime": "image/webp",
+      "bytes": 923064,
+      "sha256": "c9f0adafeb97a5001c446d09b6369c507b8c8558758bbb7d7a6ce96cde706ada"
+    },
+    {
+      "key": "boss_arquivo_f1",
+      "path": "assets/monsters/boss_arquivo_f1.webp",
+      "mime": "image/webp",
+      "bytes": 67232,
+      "sha256": "0ee1da903bc9e7ec8fcd1a9465325fd2edc68da78540b54699621fdf643ba410"
+    },
+    {
+      "key": "boss_arquivo_f2",
+      "path": "assets/monsters/boss_arquivo_f2.webp",
+      "mime": "image/webp",
+      "bytes": 91894,
+      "sha256": "d5721a29d976c2732505dda1850c5b7790f0b2a9bd6108a423e53705a6fce7fb"
+    },
+    {
+      "key": "boss_arquivo_f3",
+      "path": "assets/monsters/boss_arquivo_f3.webp",
+      "mime": "image/webp",
+      "bytes": 89492,
+      "sha256": "6a063793418313cfd385f2129144d52cf95dbbe2abdce430fac188cf3a1e4401"
+    },
+    {
+      "key": "boss_pantano_agarrar",
+      "path": "assets/monsters/boss_pantano_agarrar.webp",
+      "mime": "image/webp",
+      "bytes": 61872,
+      "sha256": "c56cdf2a5f74969432f837d5d6c1c99a0b8587a9712749f4926f5fccd124bfcd"
+    },
+    {
+      "key": "boss_pantano_cauda",
+      "path": "assets/monsters/boss_pantano_cauda.webp",
+      "mime": "image/webp",
+      "bytes": 68642,
+      "sha256": "8b678f982c9d1e2afa5447a44936e838984367f15144b7064949a2fbed9a8545"
+    },
+    {
+      "key": "boss_pantano_espinhos",
+      "path": "assets/monsters/boss_pantano_espinhos.webp",
+      "mime": "image/webp",
+      "bytes": 52112,
+      "sha256": "57398daca38f08516a03383be48ba4a0aee919f6198677bf9e01668ac1cbe6f9"
+    },
+    {
+      "key": "boss_pantano_f1",
+      "path": "assets/monsters/boss_pantano_f1.webp",
+      "mime": "image/webp",
+      "bytes": 97792,
+      "sha256": "9b3502bfa4e51741eeae82369ac94311b1a08efe4afb12d0fada15e9c93003e4"
+    },
+    {
+      "key": "boss_pantano_f2",
+      "path": "assets/monsters/boss_pantano_f2.webp",
+      "mime": "image/webp",
+      "bytes": 105954,
+      "sha256": "b128589c07e0e3f6b3e380b1b00cf4b9062b185837bc0db18dca0b6be7d8ddb6"
+    },
+    {
+      "key": "boss_pantano_f3",
+      "path": "assets/monsters/boss_pantano_f3.webp",
+      "mime": "image/webp",
+      "bytes": 111196,
+      "sha256": "10ab2aaf3a2fd39509a61cdf2b336bd3bbcc3806330393d840045bd770551579"
+    },
+    {
+      "key": "boss_pantano_f4",
+      "path": "assets/monsters/boss_pantano_f4.webp",
+      "mime": "image/webp",
+      "bytes": 125082,
+      "sha256": "5af130d79e9c4d3bb67086a1e15eb8c098dc7ab4f9ca8f6a4ac9792a51c6272c"
+    },
+    {
+      "key": "boss_pantano_fragmentos",
+      "path": "assets/monsters/boss_pantano_fragmentos.webp",
+      "mime": "image/webp",
+      "bytes": 58900,
+      "sha256": "a1299da31519b7b36fffcbd43666c81a9577a18841f2d5b0d5cfa234b106922c"
+    },
+    {
+      "key": "boss_pantano_furia",
+      "path": "assets/monsters/boss_pantano_furia.webp",
+      "mime": "image/webp",
+      "bytes": 76676,
+      "sha256": "7ff29e289f685631a86039717c47459a68f617be2f05d154b202caf7c198e646"
+    },
+    {
+      "key": "boss_pantano_investida",
+      "path": "assets/monsters/boss_pantano_investida.webp",
+      "mime": "image/webp",
+      "bytes": 86100,
+      "sha256": "0d04e591a4255f6e432434a6eea4d3d939fdbef4d1463b6f89a30a4bc8254287"
+    },
+    {
+      "key": "boss_pantano_mordida",
+      "path": "assets/monsters/boss_pantano_mordida.webp",
+      "mime": "image/webp",
+      "bytes": 65692,
+      "sha256": "bc3522864fda99d6b41b82b202cf9e548718814ca9024dd82f1539642f5abc1f"
+    },
+    {
+      "key": "boss_pantano_olhos",
+      "path": "assets/monsters/boss_pantano_olhos.webp",
+      "mime": "image/webp",
+      "bytes": 37528,
+      "sha256": "7df127329a10f2a6c20658982cbd0da14b8fa611765d2341c14a71117ec909fb"
+    },
+    {
+      "key": "boss_pantano_retrato",
+      "path": "assets/monsters/boss_pantano_retrato.webp",
+      "mime": "image/webp",
+      "bytes": 35254,
+      "sha256": "b5b7f88364ddc1f1a087adb6a9e0638825932be95da9ab8a8008480324adfd27"
+    },
+    {
+      "key": "busto_abel_nomikos",
+      "path": "assets/misc/busto_abel_nomikos.webp",
+      "mime": "image/webp",
+      "bytes": 15688,
+      "sha256": "0d4a29bdc6d6cea49bc7252fba8673dd9efe19b3b63ff98559f25f94c08a0e4f"
+    },
+    {
+      "key": "busto_amanda_felt",
+      "path": "assets/misc/busto_amanda_felt.webp",
+      "mime": "image/webp",
+      "bytes": 21474,
+      "sha256": "3741d103f0f4201f492d37d83d83d2e240e0c1ee90542d5e0c6e7c3240086994"
+    },
+    {
+      "key": "busto_eden",
+      "path": "assets/misc/busto_eden.webp",
+      "mime": "image/webp",
+      "bytes": 18004,
+      "sha256": "e9eec6796065ba2cf1ccfa7f62fec14b9a3a1a2a09b4cf29165c4eb1862db838"
+    },
+    {
+      "key": "busto_ophelia",
+      "path": "assets/misc/busto_ophelia.webp",
+      "mime": "image/webp",
+      "bytes": 21278,
+      "sha256": "1cddd096de048e21d134cee3401d9863086d58a8f85b3f07736fe0997eebb596"
+    },
+    {
+      "key": "busto_orfeu_bauss",
+      "path": "assets/misc/busto_orfeu_bauss.webp",
+      "mime": "image/webp",
+      "bytes": 20526,
+      "sha256": "7dfa2dd08807e6d3cb351b92f14e8fd41220663bce093b70b80e2430beaf207f"
+    },
+    {
+      "key": "busto_seiji",
+      "path": "assets/misc/busto_seiji.webp",
+      "mime": "image/webp",
+      "bytes": 19276,
+      "sha256": "b29e519860910bd3d5e3b16af2b64d392b265a51a1d283bb8777e316135672fb"
+    },
+    {
+      "key": "busto_snoopy",
+      "path": "assets/misc/busto_snoopy.webp",
+      "mime": "image/webp",
+      "bytes": 19602,
+      "sha256": "8c4e3a05b60edc0f83403e4f35b3e4aefdb3931804e853b6dd9082b5b34b8d73"
+    },
+    {
+      "key": "hab_abyss",
+      "path": "assets/ui/hab_abyss.webp",
+      "mime": "image/webp",
+      "bytes": 4846,
+      "sha256": "11ae1ede63e2d6c562e91a59f3d0202d524af8fa525e5e51d0cb5e00adacda0e"
+    },
+    {
+      "key": "hab_bark_ward",
+      "path": "assets/ui/hab_bark_ward.webp",
+      "mime": "image/webp",
+      "bytes": 4028,
+      "sha256": "855489f2d1852c5aaad28ac3d84542472771feb5a1e5ade2529f242b801d9a72"
+    },
+    {
+      "key": "hab_blaze",
+      "path": "assets/ui/hab_blaze.webp",
+      "mime": "image/webp",
+      "bytes": 3680,
+      "sha256": "f66f1febd3948d58778f9303cd9a226789b64a8e4afddf6c31c5d4b73fa8ed84"
+    },
+    {
+      "key": "hab_blitz",
+      "path": "assets/ui/hab_blitz.webp",
+      "mime": "image/webp",
+      "bytes": 7516,
+      "sha256": "72a190b9a0bc252856d51e9a07d95d9b2217372827fd5724755cb68a8f86ca74"
+    },
+    {
+      "key": "hab_bloom",
+      "path": "assets/ui/hab_bloom.webp",
+      "mime": "image/webp",
+      "bytes": 6196,
+      "sha256": "305d4b2fcf4581bf1404902b43b5dfa1c1972f5897b5bb0bc173c0b801fa7957"
+    },
+    {
+      "key": "hab_breath",
+      "path": "assets/ui/hab_breath.webp",
+      "mime": "image/webp",
+      "bytes": 4264,
+      "sha256": "cca1efb8971fa627d14d247c245b4df7d5244c426e6bba4053c1f9faaf21be70"
+    },
+    {
+      "key": "hab_bulwark",
+      "path": "assets/ui/hab_bulwark.webp",
+      "mime": "image/webp",
+      "bytes": 4560,
+      "sha256": "3caf05643493b9eaf93aa587459c1efa73c95cbc611db9ffac7a0a353c490922"
+    },
+    {
+      "key": "hab_cardboard",
+      "path": "assets/ui/hab_cardboard.webp",
+      "mime": "image/webp",
+      "bytes": 4088,
+      "sha256": "c0ca244de77bc488f2ab16d7b513ee3e52d0e24f970f76583315065b115cb9da"
+    },
+    {
+      "key": "hab_chain",
+      "path": "assets/ui/hab_chain.webp",
+      "mime": "image/webp",
+      "bytes": 6182,
+      "sha256": "6a228ebd4af1794309d4ff5b59a1aad66f162c6226a26143c888b6e660698139"
+    },
+    {
+      "key": "hab_cleanse",
+      "path": "assets/ui/hab_cleanse.webp",
+      "mime": "image/webp",
+      "bytes": 5052,
+      "sha256": "44c3241593543f73cd736a463284df52e457a335a47da24dc379321c13380937"
+    },
+    {
+      "key": "hab_cleanwind",
+      "path": "assets/ui/hab_cleanwind.webp",
+      "mime": "image/webp",
+      "bytes": 3868,
+      "sha256": "ce38c80a54d7576ddc267af13d4f29fd266d6e1c6a8666f76631b776fb6ffd6a"
+    },
+    {
+      "key": "hab_creeping",
+      "path": "assets/ui/hab_creeping.webp",
+      "mime": "image/webp",
+      "bytes": 4566,
+      "sha256": "b07c5061b3ea18cf50a7e0501c8fe2cd37555a5f7e7ef6d9ea7488ef63e5b3d0"
+    },
+    {
+      "key": "hab_cyclone",
+      "path": "assets/ui/hab_cyclone.webp",
+      "mime": "image/webp",
+      "bytes": 3664,
+      "sha256": "8e3b9aefb2eeba25394b359f1526040db0986e860bdd32bbe4a8f095946ec114"
+    },
+    {
+      "key": "hab_dark_veil",
+      "path": "assets/ui/hab_dark_veil.webp",
+      "mime": "image/webp",
+      "bytes": 5948,
+      "sha256": "3874b177a31930a4ac6997ecc7fb85cb5033287137b18e4311b4241536c1f878"
+    },
+    {
+      "key": "hab_darknight",
+      "path": "assets/ui/hab_darknight.webp",
+      "mime": "image/webp",
+      "bytes": 6048,
+      "sha256": "c4f741f183764e07a355bbd20fe8fc32c9e62ee060035d750d6e31406f37086a"
+    },
+    {
+      "key": "hab_deeproot",
+      "path": "assets/ui/hab_deeproot.webp",
+      "mime": "image/webp",
+      "bytes": 3956,
+      "sha256": "08114a6633c3412dea5635767c449526c02aec107e3534927e00f604a5858673"
+    },
+    {
+      "key": "hab_drain",
+      "path": "assets/ui/hab_drain.webp",
+      "mime": "image/webp",
+      "bytes": 4938,
+      "sha256": "1de11e62c9e3c3794eb1e0f5ec5c34921fa87bf750e32833b757c597fe1f1672"
+    },
+    {
+      "key": "hab_dreadcut",
+      "path": "assets/ui/hab_dreadcut.webp",
+      "mime": "image/webp",
+      "bytes": 5848,
+      "sha256": "d81e383deb1f6265e57994d519cbf7171431a5da3be5b1549213de9cdc57ebf8"
+    },
+    {
+      "key": "hab_eclipse",
+      "path": "assets/ui/hab_eclipse.webp",
+      "mime": "image/webp",
+      "bytes": 4620,
+      "sha256": "3725cfee79f0d714a263935c880cfc381be083f72cd3d24f07a6cfe27fcd5dbe"
+    },
+    {
+      "key": "hab_emberguard",
+      "path": "assets/ui/hab_emberguard.webp",
+      "mime": "image/webp",
+      "bytes": 4396,
+      "sha256": "c4ff501297a00622c27e155f0fb84329e5c04ffea7cd3f6b823b64f07855b74c"
+    },
+    {
+      "key": "hab_fire_fist",
+      "path": "assets/ui/hab_fire_fist.webp",
+      "mime": "image/webp",
+      "bytes": 5102,
+      "sha256": "e3a4ba934959414cc2da32264212a8f8fb7c67693ae5e6c00cf9c3a2d3258775"
+    },
+    {
+      "key": "hab_flamewall",
+      "path": "assets/ui/hab_flamewall.webp",
+      "mime": "image/webp",
+      "bytes": 3818,
+      "sha256": "85f598e71cce5a63e57775ea558c57cbf08a099ff4fa67ae101b414276b2e9ba"
+    },
+    {
+      "key": "hab_furnace",
+      "path": "assets/ui/hab_furnace.webp",
+      "mime": "image/webp",
+      "bytes": 5374,
+      "sha256": "0d13d2afdf50b89b67aeba3a99d9529827fc782683b68bc2117592b3de6186a7"
+    },
+    {
+      "key": "hab_gaia_wall",
+      "path": "assets/ui/hab_gaia_wall.webp",
+      "mime": "image/webp",
+      "bytes": 4350,
+      "sha256": "5fc2ac78c7019e8b6ee74718a39eaab2a70a7c2e5ab9966c5d6d4c1225e88567"
+    },
+    {
+      "key": "hab_gale_cut",
+      "path": "assets/ui/hab_gale_cut.webp",
+      "mime": "image/webp",
+      "bytes": 3764,
+      "sha256": "a7922249ad66047eb1f8e8c4245f92aa7d17fafa48f09f0b2bb526dbae6a8cb1"
+    },
+    {
+      "key": "hab_greenmend",
+      "path": "assets/ui/hab_greenmend.webp",
+      "mime": "image/webp",
+      "bytes": 5048,
+      "sha256": "dbadcddb2e7bb1b4ad0653d754149242a531c112e6a70649ab59abe6dd3c027e"
+    },
+    {
+      "key": "hab_hammer",
+      "path": "assets/ui/hab_hammer.webp",
+      "mime": "image/webp",
+      "bytes": 4874,
+      "sha256": "993ef4ea5bea9d229493f56d6647ec9c038bc2bc5775d1c827cefe8957848ea6"
+    },
+    {
+      "key": "hab_haste",
+      "path": "assets/ui/hab_haste.webp",
+      "mime": "image/webp",
+      "bytes": 4686,
+      "sha256": "43328232a8820e1580d1f4b6981c1fcf0a52cfb85b0ef92ef8e791dc9fa6847d"
+    },
+    {
+      "key": "hab_haste_all",
+      "path": "assets/ui/hab_haste_all.webp",
+      "mime": "image/webp",
+      "bytes": 7190,
+      "sha256": "ac62a8bf5b376dc8bb0646aa17d2963d99e5fb586c38ed863cdf6778e714f3e2"
+    },
+    {
+      "key": "hab_ice_deep",
+      "path": "assets/ui/hab_ice_deep.webp",
+      "mime": "image/webp",
+      "bytes": 4526,
+      "sha256": "50315f5ccb57da8621048a7c0e9adbc29fa59eb3a60b11939aee172504e93639"
+    },
+    {
+      "key": "hab_ice_grave",
+      "path": "assets/ui/hab_ice_grave.webp",
+      "mime": "image/webp",
+      "bytes": 5330,
+      "sha256": "d4a17aaa946e10a1f95a8c1306d3bb85b61453ea88d11f7ca8fb7940947d37dd"
+    },
+    {
+      "key": "hab_ice_lance",
+      "path": "assets/ui/hab_ice_lance.webp",
+      "mime": "image/webp",
+      "bytes": 2632,
+      "sha256": "0640ff52d24b5e4d5dd567180f355e8825f7ee4e39d115242cb5d877a5f8377c"
+    },
+    {
+      "key": "hab_ice_shard",
+      "path": "assets/ui/hab_ice_shard.webp",
+      "mime": "image/webp",
+      "bytes": 4686,
+      "sha256": "edefebae65b151859a764a8723ed85a2b8f1d62cf27761c05c34d730c0935257"
+    },
+    {
+      "key": "hab_ink_cut",
+      "path": "assets/ui/hab_ink_cut.webp",
+      "mime": "image/webp",
+      "bytes": 3854,
+      "sha256": "9bc2006da78fe36697defd7eef1070b24d36b38a3a6ac2a08a21ba99690862c0"
+    },
+    {
+      "key": "hab_ink_deluge",
+      "path": "assets/ui/hab_ink_deluge.webp",
+      "mime": "image/webp",
+      "bytes": 5610,
+      "sha256": "c5b1f9ac1967e49cb7e28b80b0f90384f1bcc3291b24cd50d31ca3df81328d39"
+    },
+    {
+      "key": "hab_ink_erase",
+      "path": "assets/ui/hab_ink_erase.webp",
+      "mime": "image/webp",
+      "bytes": 6674,
+      "sha256": "c2948eee0db009bc5d5e581e490acb40cbeeff6144bebec71db33f457984e01c"
+    },
+    {
+      "key": "hab_ink_flood",
+      "path": "assets/ui/hab_ink_flood.webp",
+      "mime": "image/webp",
+      "bytes": 7190,
+      "sha256": "d0165e76741e14cb06b52166fa7a49e58890536c7691610269c097f1c33ee8d3"
+    },
+    {
+      "key": "hab_ink_margin",
+      "path": "assets/ui/hab_ink_margin.webp",
+      "mime": "image/webp",
+      "bytes": 6044,
+      "sha256": "292b0cf9c70d1a574bbd685a2de6d140d243820548ae5fa8adcf211a482e64ed"
+    },
+    {
+      "key": "hab_ink_seal",
+      "path": "assets/ui/hab_ink_seal.webp",
+      "mime": "image/webp",
+      "bytes": 7800,
+      "sha256": "dd9ffa351dcd8b961c831b8e83c01b71c9f5499dbfe581fccee760fd9a5a68a2"
+    },
+    {
+      "key": "hab_ink_stain",
+      "path": "assets/ui/hab_ink_stain.webp",
+      "mime": "image/webp",
+      "bytes": 4948,
+      "sha256": "bbbbff0043627d9d116f74b489cd74206f0151e6fcc08ed5443440a788766b82"
+    },
+    {
+      "key": "hab_ink_verse",
+      "path": "assets/ui/hab_ink_verse.webp",
+      "mime": "image/webp",
+      "bytes": 2744,
+      "sha256": "6e75c57a2d2f23614057421653c5ad05607b8cc531f17465690ee8e24940783b"
+    },
+    {
+      "key": "hab_jolt",
+      "path": "assets/ui/hab_jolt.webp",
+      "mime": "image/webp",
+      "bytes": 6568,
+      "sha256": "1799f525eefa2a9c78da55a1f735efe30a95cbe6e75b1bd69cff6abe9cddf246"
+    },
+    {
+      "key": "hab_last_rites",
+      "path": "assets/ui/hab_last_rites.webp",
+      "mime": "image/webp",
+      "bytes": 6182,
+      "sha256": "c3ce0565d5e04bac3da1a809490c015a3f1d9a620fc5915f351f0a2ba1003c54"
+    },
+    {
+      "key": "hab_m_bonfire",
+      "path": "assets/ui/hab_m_bonfire.webp",
+      "mime": "image/webp",
+      "bytes": 4536,
+      "sha256": "b0d173e93d5990b359f246d1a2e08293e996d1d8cafbd53d4a7129c4c144ea80"
+    },
+    {
+      "key": "hab_m_box_all",
+      "path": "assets/ui/hab_m_box_all.webp",
+      "mime": "image/webp",
+      "bytes": 3930,
+      "sha256": "f1288144d4f4380883c9f587cf19226ba452c9284a254b08f4f7f5d228c5e12d"
+    },
+    {
+      "key": "hab_m_ember",
+      "path": "assets/ui/hab_m_ember.webp",
+      "mime": "image/webp",
+      "bytes": 3174,
+      "sha256": "2122f1451747525f584ccf0e6ce56775f5e4a4cb3c90b61f57819e418f2a7635"
+    },
+    {
+      "key": "hab_m_flare",
+      "path": "assets/ui/hab_m_flare.webp",
+      "mime": "image/webp",
+      "bytes": 3874,
+      "sha256": "f4f0a05f2b1616be7f4e924b289cf5b72100c8149be4e83b80b3a0312488691f"
+    },
+    {
+      "key": "hab_m_last",
+      "path": "assets/ui/hab_m_last.webp",
+      "mime": "image/webp",
+      "bytes": 4238,
+      "sha256": "6763a77c7d9f9279342a2736da5711630faaa81fa5192aca647b12271b7180d8"
+    },
+    {
+      "key": "hab_m_nap",
+      "path": "assets/ui/hab_m_nap.webp",
+      "mime": "image/webp",
+      "bytes": 3062,
+      "sha256": "aac411498dbe695bdcfc60a3c76bfcd6ae50d207b362155d4c5d81c51622c497"
+    },
+    {
+      "key": "hab_m_punch",
+      "path": "assets/ui/hab_m_punch.webp",
+      "mime": "image/webp",
+      "bytes": 4086,
+      "sha256": "17eabc12751e9c754059f09adbc83bcd746c7e3679641dc8fd5cb8bd2cfc0a8b"
+    },
+    {
+      "key": "hab_m_shrug",
+      "path": "assets/ui/hab_m_shrug.webp",
+      "mime": "image/webp",
+      "bytes": 4142,
+      "sha256": "513dbb3c14b962c948dc15e58067d575accd944bf9cdfe77695e239c1c2122e0"
+    },
+    {
+      "key": "hab_mend",
+      "path": "assets/ui/hab_mend.webp",
+      "mime": "image/webp",
+      "bytes": 3408,
+      "sha256": "f642e017e34d4a37446ec2981c9e8592497b14610b50a3b1f7a998eedd93bb8f"
+    },
+    {
+      "key": "hab_mend_all",
+      "path": "assets/ui/hab_mend_all.webp",
+      "mime": "image/webp",
+      "bytes": 4714,
+      "sha256": "b198338c7758d3d87cdad329cfc09043fb0999cf9a4dae815d8334c7f9853bcd"
+    },
+    {
+      "key": "hab_mend_deep",
+      "path": "assets/ui/hab_mend_deep.webp",
+      "mime": "image/webp",
+      "bytes": 5112,
+      "sha256": "5f93746224b538ed0a035d3843229194a55280d475eeb371d8ca34ca20b7e63b"
+    },
+    {
+      "key": "hab_overload",
+      "path": "assets/ui/hab_overload.webp",
+      "mime": "image/webp",
+      "bytes": 5746,
+      "sha256": "d6139b1ca7b8663d37f471c84eed3431197c546ba9d4953f0c09fb5fdb4d1411"
+    },
+    {
+      "key": "hab_quake",
+      "path": "assets/ui/hab_quake.webp",
+      "mime": "image/webp",
+      "bytes": 4476,
+      "sha256": "c7f613366465c6ad22720fe9b97aa455dafdabcd37a5d5dfd2e5ba2fd6f13c39"
+    },
+    {
+      "key": "hab_reaping",
+      "path": "assets/ui/hab_reaping.webp",
+      "mime": "image/webp",
+      "bytes": 6074,
+      "sha256": "f6fdfb6dd9d76faf5fc152ceb3b710883ab624ccaea04995cb0f28c31a7f2964"
+    },
+    {
+      "key": "hab_recall",
+      "path": "assets/ui/hab_recall.webp",
+      "mime": "image/webp",
+      "bytes": 3232,
+      "sha256": "9e32b2a65831bdf8eb8c630beb6fe91bbf980da67369a323441a7ecc1491fefb"
+    },
+    {
+      "key": "hab_regrowth",
+      "path": "assets/ui/hab_regrowth.webp",
+      "mime": "image/webp",
+      "bytes": 4450,
+      "sha256": "5b2037058f53c7c621be41ee9a6ed4af33a1605d0caf0252e330526d68c45d3a"
+    },
+    {
+      "key": "hab_rend",
+      "path": "assets/ui/hab_rend.webp",
+      "mime": "image/webp",
+      "bytes": 4558,
+      "sha256": "f61b2bb428e1d70d2af5d2808cbb003198d57fcdcafed51e3840b303d17893bd"
+    },
+    {
+      "key": "hab_root_lash",
+      "path": "assets/ui/hab_root_lash.webp",
+      "mime": "image/webp",
+      "bytes": 3946,
+      "sha256": "76e66321a59ccc78fcafc9a90e6e8fb9a91d3cb976e7d6d065511e3be9fccfe7"
+    },
+    {
+      "key": "hab_scythe_arc",
+      "path": "assets/ui/hab_scythe_arc.webp",
+      "mime": "image/webp",
+      "bytes": 6490,
+      "sha256": "1571662cf9515d059713eaf47dee0a5829ddacb2bb3ab234a02e455b6f1c96a4"
+    },
+    {
+      "key": "hab_shadowstep",
+      "path": "assets/ui/hab_shadowstep.webp",
+      "mime": "image/webp",
+      "bytes": 3282,
+      "sha256": "10e00b537887dd9d830831b9ace2237fdc39262fc6748def3969a1f609107614"
+    },
+    {
+      "key": "hab_souldrain",
+      "path": "assets/ui/hab_souldrain.webp",
+      "mime": "image/webp",
+      "bytes": 4980,
+      "sha256": "d0b2421a7e0e70490538597dd401979316f36e422b48867f560ed0e5445958ad"
+    },
+    {
+      "key": "hab_stonehide",
+      "path": "assets/ui/hab_stonehide.webp",
+      "mime": "image/webp",
+      "bytes": 3818,
+      "sha256": "bc549cac2ae4416fe222015e6ce9bdebed1276601f2487d3a2536096f53fc3f4"
+    },
+    {
+      "key": "hab_storm",
+      "path": "assets/ui/hab_storm.webp",
+      "mime": "image/webp",
+      "bytes": 6236,
+      "sha256": "1383820b0ffcb8f77508597fb96b997f4b7ea3913f2b948a7f4a066408353cb5"
+    },
+    {
+      "key": "hab_stormeye",
+      "path": "assets/ui/hab_stormeye.webp",
+      "mime": "image/webp",
+      "bytes": 3870,
+      "sha256": "a83f89bdba54bc028b137817328bebd9c47b42ecce5b41e6fa3bbd7df704bc94"
+    },
+    {
+      "key": "hab_tailwind",
+      "path": "assets/ui/hab_tailwind.webp",
+      "mime": "image/webp",
+      "bytes": 4238,
+      "sha256": "1fa76eba18f4bfc1d8e845d32f9a55527463a7581c6ffb54bc06c1ac56134bb9"
+    },
+    {
+      "key": "hab_taunt",
+      "path": "assets/ui/hab_taunt.webp",
+      "mime": "image/webp",
+      "bytes": 4204,
+      "sha256": "7d1e884f97da24354e054a63d93e0b83d5cd130c829d58da41e1b1e1d4f44bd4"
+    },
+    {
+      "key": "hab_thunderfall",
+      "path": "assets/ui/hab_thunderfall.webp",
+      "mime": "image/webp",
+      "bytes": 7660,
+      "sha256": "e039a36732d27ac100df8b8bc0bf03f58fd3c46dd311c953b9b392330a61db9c"
+    },
+    {
+      "key": "hab_toxin_cut",
+      "path": "assets/ui/hab_toxin_cut.webp",
+      "mime": "image/webp",
+      "bytes": 5754,
+      "sha256": "7df15e07d52d6c0c558c7fb7d135ec02fe42d1abdf95c0061c9f6dc3cbb10849"
+    },
+    {
+      "key": "hab_updraft",
+      "path": "assets/ui/hab_updraft.webp",
+      "mime": "image/webp",
+      "bytes": 3780,
+      "sha256": "d8ec975fa2404b67b34e994a55df5c9b4dd98a927eb5af87659d77301d981e97"
+    },
+    {
+      "key": "hab_venom_veil",
+      "path": "assets/ui/hab_venom_veil.webp",
+      "mime": "image/webp",
+      "bytes": 5634,
+      "sha256": "aecb44a4927e41db0a59dd5fd5be4a1604256f0bd064aa2a195cbf1303c2e940"
+    },
+    {
+      "key": "hab_windblade",
+      "path": "assets/ui/hab_windblade.webp",
+      "mime": "image/webp",
+      "bytes": 3752,
+      "sha256": "a9c79771cbdba65b5f7c7935241f5320d0297dd9990075fa29d775f4592ffcaa"
+    },
+    {
+      "key": "hab_wither",
+      "path": "assets/ui/hab_wither.webp",
+      "mime": "image/webp",
+      "bytes": 5644,
+      "sha256": "e7237d7b4ff09a76773479d6a6aa8628c8503b6d429731ca881b101c6c61ff0e"
+    },
+    {
+      "key": "hab_worldbreath",
+      "path": "assets/ui/hab_worldbreath.webp",
+      "mime": "image/webp",
+      "bytes": 4676,
+      "sha256": "92306c28c92059a13374292ff796e514845295c0c82796fc85afe7da2c6eedc4"
+    },
+    {
+      "key": "prop_arbusto",
+      "path": "assets/world/prop_arbusto.webp",
+      "mime": "image/webp",
+      "bytes": 5892,
+      "sha256": "f9bba3fd82b2f2c4e0a061711a3536f724ba42258cc4653326e0093cb686a580"
+    },
+    {
+      "key": "prop_bau_ferro",
+      "path": "assets/world/prop_bau_ferro.webp",
+      "mime": "image/webp",
+      "bytes": 4944,
+      "sha256": "9b904771469d0ace467f9ddbda6208098be7c2f78a23c9fedae4646e1088545a"
+    },
+    {
+      "key": "prop_bau_madeira",
+      "path": "assets/world/prop_bau_madeira.webp",
+      "mime": "image/webp",
+      "bytes": 3880,
+      "sha256": "20ce50cfdca2182f902a9b6ba1fbd4930f720a9a68eea2f3869d6586e2beb78e"
+    },
+    {
+      "key": "prop_bau_ouro",
+      "path": "assets/world/prop_bau_ouro.webp",
+      "mime": "image/webp",
+      "bytes": 5374,
+      "sha256": "3e9381aa89f124b907da93c06d37571b2d2b644a4463bdfe615ba2cbfade7219"
+    },
+    {
+      "key": "prop_biblioteca",
+      "path": "assets/world/prop_biblioteca.webp",
+      "mime": "image/webp",
+      "bytes": 51280,
+      "sha256": "c772779df2ce39069b41aba125817d211f9841f6aed6d2d2e4c87688ebd64d60"
+    },
+    {
+      "key": "prop_braseiro",
+      "path": "assets/world/prop_braseiro.webp",
+      "mime": "image/webp",
+      "bytes": 5514,
+      "sha256": "d3819ac942739dc1cc322fc214ef733e84ec8d15bad8e6bf81a49335266c1482"
+    },
+    {
+      "key": "prop_cachoeira",
+      "path": "assets/world/prop_cachoeira.webp",
+      "mime": "image/webp",
+      "bytes": 16774,
+      "sha256": "2e9c526ff5275f0723597e70a1cd0d6ba5b18f2d7a3f69486c5e0788e23f1feb"
+    },
+    {
+      "key": "prop_capim",
+      "path": "assets/world/prop_capim.webp",
+      "mime": "image/webp",
+      "bytes": 5974,
+      "sha256": "38ab2170a67612405177303dc59532ad458ea4422710034750406615f1a6d59b"
+    },
+    {
+      "key": "prop_capim_seco",
+      "path": "assets/world/prop_capim_seco.webp",
+      "mime": "image/webp",
+      "bytes": 4514,
+      "sha256": "3efa06bafd0251af37ca60310bce404e9b5eaf093e3bd208f7ce941d489c7a3b"
+    },
+    {
+      "key": "prop_casa_grande",
+      "path": "assets/world/prop_casa_grande.webp",
+      "mime": "image/webp",
+      "bytes": 59096,
+      "sha256": "db8e1a8875fd615f869cf170a17cf893fd67698cdbf36a615bc34eb0aa7c1b5e"
+    },
+    {
+      "key": "prop_casa_media",
+      "path": "assets/world/prop_casa_media.webp",
+      "mime": "image/webp",
+      "bytes": 35466,
+      "sha256": "673e6652393e61bbf4b7f366487ead0454623dc65405a9ce858c484b8e9496ad"
+    },
+    {
+      "key": "prop_casa_pequena",
+      "path": "assets/world/prop_casa_pequena.webp",
+      "mime": "image/webp",
+      "bytes": 22674,
+      "sha256": "dcf9fb78041ead8e1d2d2337ec996cb1e6646fbada052835f4b973955b24d453"
+    },
+    {
+      "key": "prop_entulho_grande",
+      "path": "assets/world/prop_entulho_grande.webp",
+      "mime": "image/webp",
+      "bytes": 4422,
+      "sha256": "b398fbae18eb1ac77d38cf985b73c2f245ecc29ebe81eda53f12df80229f50f4"
+    },
+    {
+      "key": "prop_estalagem",
+      "path": "assets/world/prop_estalagem.webp",
+      "mime": "image/webp",
+      "bytes": 36276,
+      "sha256": "27fe9f9ba62859388517818f9e4e22d9fbbf0e5e5a082076b7531cb1abd0b1ca"
+    },
+    {
+      "key": "prop_estante",
+      "path": "assets/world/prop_estante.webp",
+      "mime": "image/webp",
+      "bytes": 11754,
+      "sha256": "d4da93fceedcfd6997995cb77226a9984eec1360e6fd3da7bbdddbd761126489"
+    },
+    {
+      "key": "prop_estante_baixa",
+      "path": "assets/world/prop_estante_baixa.webp",
+      "mime": "image/webp",
+      "bytes": 11458,
+      "sha256": "792f3bf73cf0b3819020af029927b6785089f9a28545aefeb489bb67e406bf09"
+    },
+    {
+      "key": "prop_flores_campo",
+      "path": "assets/world/prop_flores_campo.webp",
+      "mime": "image/webp",
+      "bytes": 4456,
+      "sha256": "3be1e1ce0f3deac4a16404a70cbadc58f07d1c29140ddf7ecab58166313a0672"
+    },
+    {
+      "key": "prop_forja",
+      "path": "assets/world/prop_forja.webp",
+      "mime": "image/webp",
+      "bytes": 39430,
+      "sha256": "870b2376fc7e819db0cb57649a9233f308ef8b7bb501dad26782528b506e712c"
+    },
+    {
+      "key": "prop_igreja",
+      "path": "assets/world/prop_igreja.webp",
+      "mime": "image/webp",
+      "bytes": 36706,
+      "sha256": "2e0f8483bb23100569ebf0d27c07a4f21b2528713e817ced2cc0b680ec8a8838"
+    },
+    {
+      "key": "prop_junco",
+      "path": "assets/world/prop_junco.webp",
+      "mime": "image/webp",
+      "bytes": 9108,
+      "sha256": "c5c39aca9cc3f8d51de9e5dd16d00040d1927f99a34aba4da1b9253a2855e904"
+    },
+    {
+      "key": "prop_lampiao",
+      "path": "assets/world/prop_lampiao.webp",
+      "mime": "image/webp",
+      "bytes": 1588,
+      "sha256": "c755bd14d69aaff33f0a938c71decbaac6b4fb3677fe9cdf98157d4882792695"
+    },
+    {
+      "key": "prop_loja",
+      "path": "assets/world/prop_loja.webp",
+      "mime": "image/webp",
+      "bytes": 34926,
+      "sha256": "263037dae6fa4a59a3fd5f0d5a65a21035fe5e66738e627a4152c40e0fb46689"
+    },
+    {
+      "key": "prop_moinho",
+      "path": "assets/world/prop_moinho.webp",
+      "mime": "image/webp",
+      "bytes": 40544,
+      "sha256": "c12620c77655e16a84f5657d7aa82c8548605a6b5740a17fb923127b892342c9"
+    },
+    {
+      "key": "prop_muro_pedra",
+      "path": "assets/world/prop_muro_pedra.webp",
+      "mime": "image/webp",
+      "bytes": 26416,
+      "sha256": "658f368b3a7fe3adc829e8e0e641cacfb2e24df61eeb53fbd2d5bd3aaaa41038"
+    },
+    {
+      "key": "prop_muro_ruina",
+      "path": "assets/world/prop_muro_ruina.webp",
+      "mime": "image/webp",
+      "bytes": 18856,
+      "sha256": "dbc8bb2cabe66e5749aba995b93ed628280bd1a1d820bce5e99a863f6ebe4018"
+    },
+    {
+      "key": "prop_palicada",
+      "path": "assets/world/prop_palicada.webp",
+      "mime": "image/webp",
+      "bytes": 25212,
+      "sha256": "011da68b911ca02c3953fc533e5585a6c7f056d8bef4c1daf8da2452b833a574"
+    },
+    {
+      "key": "prop_portao",
+      "path": "assets/world/prop_portao.webp",
+      "mime": "image/webp",
+      "bytes": 59864,
+      "sha256": "e74dbf6376fe4fc65cdeb223aee8608fba17637d0a635d3bd080e3ef4b7d34d8"
+    },
+    {
+      "key": "prop_ruinas",
+      "path": "assets/world/prop_ruinas.webp",
+      "mime": "image/webp",
+      "bytes": 18936,
+      "sha256": "9f57c6bd42af089529d826372de0e7673d98081dc0ef1bace68d9f61413bbe98"
+    },
+    {
+      "key": "prop_sebe",
+      "path": "assets/world/prop_sebe.webp",
+      "mime": "image/webp",
+      "bytes": 5138,
+      "sha256": "7a6c302e7e7457c7d84cb6903f75bb58a8240a67e0289c0e31fb3cf993303670"
+    },
+    {
+      "key": "prop_taverna",
+      "path": "assets/world/prop_taverna.webp",
+      "mime": "image/webp",
+      "bytes": 39598,
+      "sha256": "80815f10f6df83d769f6eb41792ef2c4c58ac3db0ce13e22784c5a5aaf3e6c03"
+    },
+    {
+      "key": "prop_templo",
+      "path": "assets/world/prop_templo.webp",
+      "mime": "image/webp",
+      "bytes": 48970,
+      "sha256": "e9eed76353d4b06f25a86fb3d80abe46e36e836b220a4341e128ee11c328808f"
+    },
+    {
+      "key": "prop_tocha_azul",
+      "path": "assets/world/prop_tocha_azul.webp",
+      "mime": "image/webp",
+      "bytes": 4854,
+      "sha256": "b15531c611db1b77bd933734b420f0935e909ec56eb2fea23745641fd7abbb00"
+    },
+    {
+      "key": "prop_torre",
+      "path": "assets/world/prop_torre.webp",
+      "mime": "image/webp",
+      "bytes": 31586,
+      "sha256": "feb312b3c7797270bca7ebbb5dfd302bd29c468fd96e0dc1abc39c7becf9d6f7"
+    },
+    {
+      "key": "prop_vitorias_regias",
+      "path": "assets/world/prop_vitorias_regias.webp",
+      "mime": "image/webp",
+      "bytes": 1558,
+      "sha256": "df9e31a20b51538dc24ff19b3c44a546c3cbf17f20f17907325cc9991c0e3de2"
+    },
+    {
+      "key": "tile_carpet",
+      "path": "assets/world/tile_carpet-2.webp",
+      "mime": "image/webp",
+      "bytes": 8462,
+      "sha256": "5633dc89afa1b97f3aeda48bdaec32b06f371e3f83699a84c9f8a5737f2b8127"
+    },
+    {
+      "key": "tile_crack",
+      "path": "assets/world/tile_crack-2.webp",
+      "mime": "image/webp",
+      "bytes": 6412,
+      "sha256": "1088156ff9fa867c418ccff7c38e868f58265b9e876c34d9b53748aec2fd18d6"
+    },
+    {
+      "key": "tile_dirt",
+      "path": "assets/world/tile_dirt-2.webp",
+      "mime": "image/webp",
+      "bytes": 7750,
+      "sha256": "58addd6bf9f1b9f226d15d0d401206a7523b62b078ba09b0015edd563235e4bd"
+    },
+    {
+      "key": "tile_door",
+      "path": "assets/world/tile_door-2.webp",
+      "mime": "image/webp",
+      "bytes": 8540,
+      "sha256": "3d5e4f91ab83815445fe7b2d911b9c85f79c5f199d33436c8e68c49fc50e0ff4"
+    },
+    {
+      "key": "tile_floor",
+      "path": "assets/world/tile_floor-2.webp",
+      "mime": "image/webp",
+      "bytes": 5716,
+      "sha256": "dc7798e203ae1986b6fcf14d0273bfff5df3130e44313c76b3ee1aec495ab016"
+    },
+    {
+      "key": "tile_grass",
+      "path": "assets/world/tile_grass-2.webp",
+      "mime": "image/webp",
+      "bytes": 7786,
+      "sha256": "37f3331d39e80d080a99e00a0c27ce15f094be84e1da87132f6eadd03b839ef2"
+    },
+    {
+      "key": "tile_path",
+      "path": "assets/world/tile_path-2.webp",
+      "mime": "image/webp",
+      "bytes": 7906,
+      "sha256": "c164a4254110f2e71dd1bea6542014b184ca5aa54544702a572631a97c721bed"
+    },
+    {
+      "key": "tile_stairs",
+      "path": "assets/world/tile_stairs-2.webp",
+      "mime": "image/webp",
+      "bytes": 7084,
+      "sha256": "9c0542e4c616366fa9e8bd766489820e0dd9f0625a56d0e8ae84f399195056f0"
+    },
+    {
+      "key": "tile_wall",
+      "path": "assets/world/tile_wall-2.webp",
+      "mime": "image/webp",
+      "bytes": 6138,
+      "sha256": "6d35ba1c05181ee0f243c6123ad6bc5da25a097739a9ba39c36b49b041cdbc09"
+    },
+    {
+      "key": "tree_bg_darkness",
+      "path": "assets/ui/tree_bg_darkness-2.webp",
+      "mime": "image/webp",
+      "bytes": 247240,
+      "sha256": "7071a1d20e2ac4ea952fe4011ec4b9840a42c4da9e3d27ec1e3a2a0b22853da4"
+    },
+    {
+      "key": "tree_bg_earth",
+      "path": "assets/ui/tree_bg_earth-2.webp",
+      "mime": "image/webp",
+      "bytes": 300646,
+      "sha256": "fc49039e518018ebcba62bbcafc7b673d6c359f247858aba79feb61ddc46b28a"
+    },
+    {
+      "key": "tree_bg_electricity",
+      "path": "assets/ui/tree_bg_electricity-2.webp",
+      "mime": "image/webp",
+      "bytes": 298122,
+      "sha256": "86f44ef2b441c7a79845ccf242b415d98b0aa59c1f3da0aba3f7dc6706f994f4"
+    },
+    {
+      "key": "tree_bg_fire",
+      "path": "assets/ui/tree_bg_fire-2.webp",
+      "mime": "image/webp",
+      "bytes": 291348,
+      "sha256": "baa1b2d3991a6f9ec5b37dce6880abc0cddd309207ce825dee7f45595df9da11"
+    },
+    {
+      "key": "tree_bg_ice",
+      "path": "assets/ui/tree_bg_ice-2.webp",
+      "mime": "image/webp",
+      "bytes": 331962,
+      "sha256": "8e46d6249652c368fde3cd70c670cf63d45f1d7ce7a17b29fde8339af81fbf47"
+    },
+    {
+      "key": "tree_bg_ink",
+      "path": "assets/ui/tree_bg_ink.webp",
+      "mime": "image/webp",
+      "bytes": 324196,
+      "sha256": "5a08356002aeae692711f1758c111e7ce921a2257500eadf346878e552e8c9cf"
+    },
+    {
+      "key": "tree_bg_poison",
+      "path": "assets/ui/tree_bg_poison.webp",
+      "mime": "image/webp",
+      "bytes": 229598,
+      "sha256": "b307fb940f524362b8282dfff91e93a6fa462ad739a513d6f534d10e308774c5"
+    },
+    {
+      "key": "tree_bg_wind",
+      "path": "assets/ui/tree_bg_wind-2.webp",
+      "mime": "image/webp",
+      "bytes": 236046,
+      "sha256": "5982754b00b59124e8b4a17eb8cb14d767f2fc08c223a2bcc0fb702f3448d0ca"
+    },
+    {
+      "key": "ui_cmd_atacar",
+      "path": "assets/ui/ui_cmd_atacar.webp",
+      "mime": "image/webp",
+      "bytes": 1348,
+      "sha256": "06a6d555d144268215a35e90dc5198baae15a012cf583cd118ce148e9179e884"
+    },
+    {
+      "key": "ui_cmd_guardar",
+      "path": "assets/ui/ui_cmd_guardar.webp",
+      "mime": "image/webp",
+      "bytes": 1550,
+      "sha256": "41593ec7818a640a38ba0e4a18b23d80b1701fe262f8512e4c41cbd3651b72f1"
+    },
+    {
+      "key": "ui_cmd_habilidade",
+      "path": "assets/ui/ui_cmd_habilidade.webp",
+      "mime": "image/webp",
+      "bytes": 1448,
+      "sha256": "2d1cb776c32d29262fbdbfc7557dabf99d0cfe669b8da284e16323f94e316262"
+    },
+    {
+      "key": "ui_cmd_item",
+      "path": "assets/ui/ui_cmd_item.webp",
+      "mime": "image/webp",
+      "bytes": 888,
+      "sha256": "e41823a76d1ac175bd9f758ed78806e1ba43ba335d62fecfc7774db152ab7156"
+    },
+    {
+      "key": "ui_cursor",
+      "path": "assets/ui/ui_cursor.webp",
+      "mime": "image/webp",
+      "bytes": 1482,
+      "sha256": "199f214ce961040537e25d49e8222eec2b232c0420781949433d9350b15e8556"
+    },
+    {
+      "key": "ui_elem_darkness",
+      "path": "assets/ui/ui_elem_darkness.webp",
+      "mime": "image/webp",
+      "bytes": 714,
+      "sha256": "ee8251ed736be49729977f8504685a230cb40b7b91e417009b594ff4a8988e18"
+    },
+    {
+      "key": "ui_elem_ice",
+      "path": "assets/ui/ui_elem_ice.webp",
+      "mime": "image/webp",
+      "bytes": 808,
+      "sha256": "0b179961dc63e2a68aa4b7a582d880ee847ea461156bceb769b4ce49cdf32b9c"
+    },
+    {
+      "key": "ui_elem_wind",
+      "path": "assets/ui/ui_elem_wind.webp",
+      "mime": "image/webp",
+      "bytes": 668,
+      "sha256": "ac98114f689c96fea38753defa8f2563c9207257db59d9a34c74b4bdc0476160"
+    },
+    {
+      "key": "ui_emblema_local",
+      "path": "assets/ui/ui_emblema_local.webp",
+      "mime": "image/webp",
+      "bytes": 4436,
+      "sha256": "7de1b50041b5e64495573a76fc0050ab99159716ae88d7e45bc6e3654af4674b"
+    },
+    {
+      "key": "ui_icone_lua",
+      "path": "assets/ui/ui_icone_lua.webp",
+      "mime": "image/webp",
+      "bytes": 2268,
+      "sha256": "98b8a3a681bf2edfbe70ef9a417c6340d2fafda7739c01c6b48a81ab7c2741f6"
+    },
+    {
+      "key": "ui_icone_ouro",
+      "path": "assets/ui/ui_icone_ouro.webp",
+      "mime": "image/webp",
+      "bytes": 2402,
+      "sha256": "403ad0b4ce52f4d754fda4dc8d2e8f5529343ca3b10ad339536b742bb3388f3f"
+    },
+    {
+      "key": "ui_icone_sol",
+      "path": "assets/ui/ui_icone_sol.webp",
+      "mime": "image/webp",
+      "bytes": 2646,
+      "sha256": "cac964383966b2e0b90324f5c0483dd9f121241114bf6b52805e0fc1a5e2bedc"
+    },
+    {
+      "key": "ui_leg_evento",
+      "path": "assets/ui/ui_leg_evento.webp",
+      "mime": "image/webp",
+      "bytes": 968,
+      "sha256": "78652f101298b073f26361069c0bf7d14a77c8f5abfcccf27de9d20e868821cc"
+    },
+    {
+      "key": "ui_leg_loja",
+      "path": "assets/ui/ui_leg_loja.webp",
+      "mime": "image/webp",
+      "bytes": 994,
+      "sha256": "c7ba12e389f2b878968cb99d7bca9d85a29068f0262765ce1d28bb3e52f0b67b"
+    },
+    {
+      "key": "ui_leg_missao",
+      "path": "assets/ui/ui_leg_missao.webp",
+      "mime": "image/webp",
+      "bytes": 984,
+      "sha256": "34553d0bb4d9ecb96891f04766fc744ce82d87d622823d8ac7cee51d7a787e1e"
+    },
+    {
+      "key": "ui_leg_salvamento",
+      "path": "assets/ui/ui_leg_salvamento.webp",
+      "mime": "image/webp",
+      "bytes": 934,
+      "sha256": "062e50eeb8f3eb955313351154ac0337dad21cab31ba453628871de8bfecb006"
+    },
+    {
+      "key": "ui_leg_teleporte",
+      "path": "assets/ui/ui_leg_teleporte.webp",
+      "mime": "image/webp",
+      "bytes": 852,
+      "sha256": "b0c834d47afe5faa83bf64e636cf0f352b825a1b8281ac50816add576c0c7f63"
+    },
+    {
+      "key": "ui_marcador_missao",
+      "path": "assets/ui/ui_marcador_missao.webp",
+      "mime": "image/webp",
+      "bytes": 1336,
+      "sha256": "e2ca25b31bb6d3b515f3377b109d9b59b86ca14d881aeceeba3b05cf354e313c"
+    },
+    {
+      "key": "ui_menu_config",
+      "path": "assets/ui/ui_menu_config.webp",
+      "mime": "image/webp",
+      "bytes": 3350,
+      "sha256": "58dfa12e8732c7e622c4bed539b318899eb25be0c5ff488ef6b10d47697c37b3"
+    },
+    {
+      "key": "ui_menu_grupo",
+      "path": "assets/ui/ui_menu_grupo.webp",
+      "mime": "image/webp",
+      "bytes": 3636,
+      "sha256": "e6b1bc262811b3523626579304693f456ef7339dd12aab17a86973b9fe1a4225"
+    },
+    {
+      "key": "ui_menu_habilidades",
+      "path": "assets/ui/ui_menu_habilidades.webp",
+      "mime": "image/webp",
+      "bytes": 2996,
+      "sha256": "ca8ec94f2409632dd9432088efda24c3806677a3e5bf92fd7e88f30e2d95606a"
+    },
+    {
+      "key": "ui_menu_inventario",
+      "path": "assets/ui/ui_menu_inventario.webp",
+      "mime": "image/webp",
+      "bytes": 3336,
+      "sha256": "e07893c9407715c2fdec6e9a5a2853e1ef3b91a58d3819271a3c109e6348c427"
+    },
+    {
+      "key": "ui_menu_missoes",
+      "path": "assets/ui/ui_menu_missoes.webp",
+      "mime": "image/webp",
+      "bytes": 3494,
+      "sha256": "b0a341ba9ad8e722795f86b89c6cca913e5cea9bf20459de58b29338a54f8570"
+    },
+    {
+      "key": "ui_mira",
+      "path": "assets/ui/ui_mira.webp",
+      "mime": "image/webp",
+      "bytes": 1800,
+      "sha256": "af5abd7973aa469dc0e6796a124fb4fbcf347fc3ddbdde4a460243f554537b16"
+    },
+    {
+      "key": "ui_seta_aliado",
+      "path": "assets/ui/ui_seta_aliado.webp",
+      "mime": "image/webp",
+      "bytes": 1592,
+      "sha256": "565f0b32a292fcfb350345d7d95a13c952e8b158d145a37c6d4ffb818007516f"
+    },
+    {
+      "key": "ui_tecla",
+      "path": "assets/ui/ui_tecla.webp",
+      "mime": "image/webp",
+      "bytes": 1054,
+      "sha256": "6d86756adb857e5764e84d6c2db366f95cebff721680b8a1591c47ac0ff5386a"
+    },
+    {
+      "key": "prop_arvore",
+      "path": "assets/world/prop_arvore.webp",
+      "mime": "image/webp",
+      "bytes": 9370,
+      "sha256": "7151322705ed0f92a3cfdb059eed879a4e887e814048e123cfa5734114acd98d"
+    },
+    {
+      "key": "prop_arvore_escura",
+      "path": "assets/world/prop_arvore_escura.webp",
+      "mime": "image/webp",
+      "bytes": 9440,
+      "sha256": "3e7ba5d02a3ff234b8a179d709d70c56762bf5dfccb12479cc82e84a2414a578"
+    },
+    {
+      "key": "prop_barco",
+      "path": "assets/world/prop_barco.webp",
+      "mime": "image/webp",
+      "bytes": 6476,
+      "sha256": "fb0651ca6f74763fc8035a7fcd7f80efe92f8ef404e78537c7817df96b9de6ce"
+    },
+    {
+      "key": "prop_barril",
+      "path": "assets/world/prop_barril.webp",
+      "mime": "image/webp",
+      "bytes": 4766,
+      "sha256": "02e03a90595e534bb039d81b3cf3d338ae9b15ca06883ea520c1dcc4a2e275f0"
+    },
+    {
+      "key": "prop_caixa",
+      "path": "assets/world/prop_caixa.webp",
+      "mime": "image/webp",
+      "bytes": 3962,
+      "sha256": "43a3acbe64d472a0b49e32ae3bd6b2357f574e63d3777921cd6c1a0decbc4686"
+    },
+    {
+      "key": "prop_cerca",
+      "path": "assets/world/prop_cerca.webp",
+      "mime": "image/webp",
+      "bytes": 4816,
+      "sha256": "285ed7d0cb901b5baa2cf657a2446e6de27440d84ea0d9c84adef8b007eecfa8"
+    },
+    {
+      "key": "prop_cristal",
+      "path": "assets/world/prop_cristal.webp",
+      "mime": "image/webp",
+      "bytes": 6136,
+      "sha256": "6e1bc03e21fb0adcf669c06be8eff74b8192ee9c659bd61db28f6884688975f2"
+    },
+    {
+      "key": "prop_entulho",
+      "path": "assets/world/prop_entulho.webp",
+      "mime": "image/webp",
+      "bytes": 3020,
+      "sha256": "e4ea44c1a08732d57da4da9a5ce26cbf5253ce7fbd40f6f55d4026cb0413ab53"
+    },
+    {
+      "key": "prop_estandarte",
+      "path": "assets/world/prop_estandarte.webp",
+      "mime": "image/webp",
+      "bytes": 5398,
+      "sha256": "6ddcf6c4b0df09c98e63577250b085ce823700402fe5f6660576c691bc92c3a1"
+    },
+    {
+      "key": "prop_flores",
+      "path": "assets/world/prop_flores.webp",
+      "mime": "image/webp",
+      "bytes": 3978,
+      "sha256": "9f91c5c67eb43fbcf8be8a7a80b2154b6c9416abbeccd35a7a8445676938f707"
+    },
+    {
+      "key": "prop_flores_rosa",
+      "path": "assets/world/prop_flores_rosa.webp",
+      "mime": "image/webp",
+      "bytes": 4768,
+      "sha256": "b5abc2f5ea56c27928edac8afa29bf624a4eaf44e26c2cde369f1fcc9088a38a"
+    },
+    {
+      "key": "prop_fogueira",
+      "path": "assets/world/prop_fogueira.webp",
+      "mime": "image/webp",
+      "bytes": 3136,
+      "sha256": "f06e320ab01b0484794abb90cf6a40e1ed3a39d0a87dee317aca02583f53dbfa"
+    },
+    {
+      "key": "prop_gruta",
+      "path": "assets/world/prop_gruta.webp",
+      "mime": "image/webp",
+      "bytes": 11538,
+      "sha256": "c0d09d71aae36c4adca9aceaae6095629ee48f31aeff9c28edee1c631cbccf81"
+    },
+    {
+      "key": "prop_obelisco",
+      "path": "assets/world/prop_obelisco.webp",
+      "mime": "image/webp",
+      "bytes": 6674,
+      "sha256": "81a7bd8b64db2cbfe55ceb16147530801d22ad5c96425432eec1269d39789d90"
+    },
+    {
+      "key": "prop_pilar",
+      "path": "assets/world/prop_pilar.webp",
+      "mime": "image/webp",
+      "bytes": 5034,
+      "sha256": "e13996ee42d3af83540ef82972841a4edf8ef381b9c40833d3e6a261785803f0"
+    },
+    {
+      "key": "prop_placa",
+      "path": "assets/world/prop_placa.webp",
+      "mime": "image/webp",
+      "bytes": 3412,
+      "sha256": "2f4048e3e081f60e8591c9a7d73fe2b8c9fdf1088b6d5db5082ed209d9628d51"
+    },
+    {
+      "key": "prop_poco",
+      "path": "assets/world/prop_poco.webp",
+      "mime": "image/webp",
+      "bytes": 8574,
+      "sha256": "b0edff2db95ad4265b014491f2888bd9ec9e00bf826cfcdbca7ff76007c1c1c2"
+    },
+    {
+      "key": "prop_save",
+      "path": "assets/world/prop_save.webp",
+      "mime": "image/webp",
+      "bytes": 5760,
+      "sha256": "6f2fadaff0f1949fb0701a1c0ff40282895e8e0c3cbb0db1664df90c151ac35f"
+    },
+    {
+      "key": "prop_tocha",
+      "path": "assets/world/prop_tocha.webp",
+      "mime": "image/webp",
+      "bytes": 4800,
+      "sha256": "a49761c22933e59ba3fe39acaabb9380231e7d755f36c19055d2d1d1605bd065"
+    },
+    {
+      "key": "prop_tronco",
+      "path": "assets/world/prop_tronco.webp",
+      "mime": "image/webp",
+      "bytes": 4344,
+      "sha256": "8df13d77d7cb411460ee968dd93b2351e7afe11c01fda7f20cdaf3dd90ce6b12"
+    },
+    {
+      "key": "prop_tumulo",
+      "path": "assets/world/prop_tumulo.webp",
+      "mime": "image/webp",
+      "bytes": 13144,
+      "sha256": "aa77e9546d4c7f05a2721613e59585b1c7384ee0257c5dfddac48395de0f141e"
+    },
+    {
+      "key": "mob_ashknight",
+      "path": "assets/monsters/mob_ashknight.webp",
+      "mime": "image/webp",
+      "bytes": 65114,
+      "sha256": "b227916017be51cdbc3a7228dd16b1b9a2660c092846ee40115b2b574859ed25"
+    },
+    {
+      "key": "mob_ashwolf",
+      "path": "assets/monsters/mob_ashwolf.webp",
+      "mime": "image/webp",
+      "bytes": 62610,
+      "sha256": "ceddf67d71dd988ae2081bfffc8a69435fcaaf81e66ef98554b8feca219b6799"
+    },
+    {
+      "key": "mob_caranguejo",
+      "path": "assets/monsters/mob_caranguejo.webp",
+      "mime": "image/webp",
+      "bytes": 143514,
+      "sha256": "8169fb29ceca9da8ad70303304a138e5411a509a797b89c9e21ba74307887937"
+    },
+    {
+      "key": "mob_carnical",
+      "path": "assets/monsters/mob_carnical.webp",
+      "mime": "image/webp",
+      "bytes": 88144,
+      "sha256": "44e69b5f0f059b665253f4a1bc26cbefcfcc33c33e4207643f6cde4bda136951"
+    },
+    {
+      "key": "mob_cascudo",
+      "path": "assets/monsters/mob_cascudo.webp",
+      "mime": "image/webp",
+      "bytes": 64014,
+      "sha256": "685ed96b991d40c4861d245d29a38fa57568ed2455caeb8166b999b05a55e8b5"
+    },
+    {
+      "key": "mob_chacal",
+      "path": "assets/monsters/mob_chacal.webp",
+      "mime": "image/webp",
+      "bytes": 102546,
+      "sha256": "ba91bb3b904379b9ad51f13bd2ffec5a5f59e7d806d8c8d5d793b3ae32c8c09f"
+    },
+    {
+      "key": "mob_charwood",
+      "path": "assets/monsters/mob_charwood.webp",
+      "mime": "image/webp",
+      "bytes": 107828,
+      "sha256": "802557f05c40a24c56874ae05a88fb19441d32cedaca3b4424b5b699f2fee8e6"
+    },
+    {
+      "key": "mob_cinder",
+      "path": "assets/monsters/mob_cinder.webp",
+      "mime": "image/webp",
+      "bytes": 87010,
+      "sha256": "baa66b190d3766569dd06143221ddec0afc535baeb1b2fac942ed26b629251c4"
+    },
+    {
+      "key": "mob_cindermage",
+      "path": "assets/monsters/mob_cindermage.webp",
+      "mime": "image/webp",
+      "bytes": 66080,
+      "sha256": "d25422c423bf95fcb3c4525303ea4fc4094b928ede5cf3e9859c664bf1197892"
+    },
+    {
+      "key": "mob_codice",
+      "path": "assets/monsters/mob_codice.webp",
+      "mime": "image/webp",
+      "bytes": 97054,
+      "sha256": "4408c0f7b9386694b3d3ca076ee93f8ed283449ca99ebbdd58cbc2d4a66962d5"
+    },
+    {
+      "key": "mob_coletor",
+      "path": "assets/monsters/mob_coletor.webp",
+      "mime": "image/webp",
+      "bytes": 142204,
+      "sha256": "0210471f555ca1ccd832a15fa08519fb0a8cc61999bd7c2b9d5d09460ad13764"
+    },
+    {
+      "key": "mob_cornuda",
+      "path": "assets/monsters/mob_cornuda.webp",
+      "mime": "image/webp",
+      "bytes": 90050,
+      "sha256": "47a63f5a0c48393cbafa7353dcd144110b21d531973e796783d2acd443c149c9"
+    },
+    {
+      "key": "mob_coruja",
+      "path": "assets/monsters/mob_coruja.webp",
+      "mime": "image/webp",
+      "bytes": 45810,
+      "sha256": "f696b2d2921c1cee9b6de08f01982b89886575e3d464f807611585ac6559c305"
+    },
+    {
+      "key": "mob_crackmirror",
+      "path": "assets/monsters/mob_crackmirror.webp",
+      "mime": "image/webp",
+      "bytes": 59758,
+      "sha256": "d48247333b7f1b632459ed6ff2fa1db0b1f7225a944b76d455c69595ade019c0"
+    },
+    {
+      "key": "mob_crown",
+      "path": "assets/monsters/mob_crown.webp",
+      "mime": "image/webp",
+      "bytes": 76552,
+      "sha256": "050ef246b117a9b720d6bc1c9b8309fbc444ce643aa21c8fc6dce3ff0cfa88ec"
+    },
+    {
+      "key": "mob_deluge",
+      "path": "assets/monsters/mob_deluge.webp",
+      "mime": "image/webp",
+      "bytes": 57838,
+      "sha256": "003ffc205ae7565726d0b62e4c0cf0ec767714867457ae417f47b6646a1dbde2"
+    },
+    {
+      "key": "mob_drowned",
+      "path": "assets/monsters/mob_drowned.webp",
+      "mime": "image/webp",
+      "bytes": 85844,
+      "sha256": "45c6cfe9989ba2001d46e8cef7c19e9af602cd7f2c38ac8c8e17e051bcbf23aa"
+    },
+    {
+      "key": "mob_echo",
+      "path": "assets/monsters/mob_echo.webp",
+      "mime": "image/webp",
+      "bytes": 86136,
+      "sha256": "992f29822140c86fcef518f6db9ee3142e27b83a11fc1af7507e2d11f08f9bde"
+    },
+    {
+      "key": "mob_emberling",
+      "path": "assets/monsters/mob_emberling.webp",
+      "mime": "image/webp",
+      "bytes": 35520,
+      "sha256": "06ee8fa7a4efd05aacf5a5797f7adb8fbe9b816f47865a32d1e28738593bb799"
+    },
+    {
+      "key": "mob_ent_podre",
+      "path": "assets/monsters/mob_ent_podre.webp",
+      "mime": "image/webp",
+      "bytes": 129626,
+      "sha256": "cb2e738876071a7f41bd3bc724a474776c1d627f785cd0e96643ba48fcc7dee0"
+    },
+    {
+      "key": "mob_errata",
+      "path": "assets/monsters/mob_errata.webp",
+      "mime": "image/webp",
+      "bytes": 82102,
+      "sha256": "5f386bab33db4268c7e438e04900893c8215acb4ee0fb5d6d85899ec26c61369"
+    },
+    {
+      "key": "mob_escaravelho",
+      "path": "assets/monsters/mob_escaravelho.webp",
+      "mime": "image/webp",
+      "bytes": 116362,
+      "sha256": "f59de3ee288122dc461f4ad6ddafe783caeba8d7c013c164295394ba787703bb"
+    },
+    {
+      "key": "mob_escavador",
+      "path": "assets/monsters/mob_escavador.webp",
+      "mime": "image/webp",
+      "bytes": 108728,
+      "sha256": "e249f7212321903708c24501274f45b0cfecebad5e5cb747aacaf4604d8c2fab"
+    },
+    {
+      "key": "mob_espectro",
+      "path": "assets/monsters/mob_espectro.webp",
+      "mime": "image/webp",
+      "bytes": 53738,
+      "sha256": "132b5644a30111611c7ec106c402d07b150c911d041c604dffb75a4b1408b0c4"
+    },
+    {
+      "key": "mob_espirito",
+      "path": "assets/monsters/mob_espirito.webp",
+      "mime": "image/webp",
+      "bytes": 117764,
+      "sha256": "0326b3f23f50eb810e3679537a8e52fc15facd9b7a9a34e2efa22246127ec90f"
+    },
+    {
+      "key": "mob_estilhacado",
+      "path": "assets/monsters/mob_estilhacado.webp",
+      "mime": "image/webp",
+      "bytes": 128078,
+      "sha256": "b6238aa8acff7dccad435422f6843f9f66cc49d59bd68e634a23e79097a76d63"
+    },
+    {
+      "key": "mob_familiar",
+      "path": "assets/monsters/mob_familiar.webp",
+      "mime": "image/webp",
+      "bytes": 48148,
+      "sha256": "467cd6ae5cc1a8aedc4c9caaef7ad1a4b7d91cb55554ef3306609e7262526473"
+    },
+    {
+      "key": "mob_frost",
+      "path": "assets/monsters/mob_frost.webp",
+      "mime": "image/webp",
+      "bytes": 60622,
+      "sha256": "a38a4920158496eb3628008a6f6e041f01dbd9f4c057327de55340cce1760917"
+    },
+    {
+      "key": "mob_fungo",
+      "path": "assets/monsters/mob_fungo.webp",
+      "mime": "image/webp",
+      "bytes": 109478,
+      "sha256": "5ad674e554009366a770c983fdc93662f23a4a280a412f3caf0e7cc8c4ad7290"
+    },
+    {
+      "key": "mob_garca",
+      "path": "assets/monsters/mob_garca.webp",
+      "mime": "image/webp",
+      "bytes": 80906,
+      "sha256": "7147981bed320e761688ffc1a0d6a873da5b76286cffea9692273b9b0c2a56fb"
+    },
+    {
+      "key": "mob_geleia",
+      "path": "assets/monsters/mob_geleia.webp",
+      "mime": "image/webp",
+      "bytes": 73072,
+      "sha256": "59a46600e3b516bc8e77b3a1c89c9e96bca04658a0dea38d5e448a7f389dbdba"
+    },
+    {
+      "key": "mob_glasscolossus",
+      "path": "assets/monsters/mob_glasscolossus.webp",
+      "mime": "image/webp",
+      "bytes": 99784,
+      "sha256": "d38bd45f5b934e8e25eeab8dc8a17e3371388aa0c7969cffc93ddc3c14a68052"
+    },
+    {
+      "key": "mob_glasswing",
+      "path": "assets/monsters/mob_glasswing.webp",
+      "mime": "image/webp",
+      "bytes": 91534,
+      "sha256": "8eb32bf03c6236a4c30a516663ebf15439a6c1db62ad7e5c5996420c037fa4b9"
+    },
+    {
+      "key": "mob_goblin",
+      "path": "assets/monsters/mob_goblin-2.webp",
+      "mime": "image/webp",
+      "bytes": 55334,
+      "sha256": "e830ca9bc2eb6cedade463ce3ca4e4ae936a8709986b9299896bc59cee707fd2"
+    },
+    {
+      "key": "mob_golem",
+      "path": "assets/monsters/mob_golem.webp",
+      "mime": "image/webp",
+      "bytes": 62448,
+      "sha256": "59c1d6a61ae98898b2db5738fe36d35a1b3e11f79d0488f34a20f3ad9db870fb"
+    },
+    {
+      "key": "mob_gulper",
+      "path": "assets/monsters/mob_gulper.webp",
+      "mime": "image/webp",
+      "bytes": 63460,
+      "sha256": "ae79e856a2b40cf37fac3003ab642be0e0ba2d094187144ef00d54a538cd0d31"
+    },
+    {
+      "key": "mob_harpiavidro",
+      "path": "assets/monsters/mob_harpiavidro.webp",
+      "mime": "image/webp",
+      "bytes": 137194,
+      "sha256": "5181f0e8121e6e0750a92af11b452dcc486c5d48199b5b345cb5ba515ec9d5f3"
+    },
+    {
+      "key": "mob_harpy",
+      "path": "assets/monsters/mob_harpy.webp",
+      "mime": "image/webp",
+      "bytes": 87112,
+      "sha256": "3e1a245f8a704505a5e8daddaf21aa35f8f1d48ee41280f840d473b867df312b"
+    },
+    {
+      "key": "mob_hollow",
+      "path": "assets/monsters/mob_hollow.webp",
+      "mime": "image/webp",
+      "bytes": 11296,
+      "sha256": "92dd527f295a090b7ad0f3c1b003d89703bdffcd6619f4bbf7dbe8e72f76b1a7"
+    },
+    {
+      "key": "mob_homunculo",
+      "path": "assets/monsters/mob_homunculo.webp",
+      "mime": "image/webp",
+      "bytes": 40958,
+      "sha256": "369fb4a8a055bbfad23a500f0ccdc14159d1fc3603f30b9b7d0466d4853d336b"
+    },
+    {
+      "key": "mob_indice",
+      "path": "assets/monsters/mob_indice.webp",
+      "mime": "image/webp",
+      "bytes": 53940,
+      "sha256": "6714fcda7b91e743d5db9c582f5485d3c2f35e969db7013962115b420a866a97"
+    },
+    {
+      "key": "mob_javali",
+      "path": "assets/monsters/mob_javali.webp",
+      "mime": "image/webp",
+      "bytes": 51390,
+      "sha256": "ea17f31eb40bf37aa7b5684084a737db0dc00fff1715aea04abbbd61bbafed61"
+    },
+    {
+      "key": "mob_ladraninho",
+      "path": "assets/monsters/mob_ladraninho.webp",
+      "mime": "image/webp",
+      "bytes": 68704,
+      "sha256": "36d87106a02a0fa02e4657d0a68a93909e1dca53680bf1ac756b6d66fcae5db8"
+    },
+    {
+      "key": "mob_larva",
+      "path": "assets/monsters/mob_larva.webp",
+      "mime": "image/webp",
+      "bytes": 133706,
+      "sha256": "728e1c9a85912ce138bb3e0e4466f43f01122b7b408f469f2a285485792f7dd8"
+    },
+    {
+      "key": "mob_lesma",
+      "path": "assets/monsters/mob_lesma.webp",
+      "mime": "image/webp",
+      "bytes": 80880,
+      "sha256": "a5fcca0c66944670204c9ea599463ac0b2ec9371f85583682b91747e3d868798"
+    },
+    {
+      "key": "mob_lesserherald",
+      "path": "assets/monsters/mob_lesserherald.webp",
+      "mime": "image/webp",
+      "bytes": 87886,
+      "sha256": "b53e0924b259df32693a9d586fdc4a7c327e6ba98ab3e3ce64405e7964ae8480"
+    },
+    {
+      "key": "mob_limo",
+      "path": "assets/monsters/mob_limo.webp",
+      "mime": "image/webp",
+      "bytes": 100500,
+      "sha256": "d0537fd4996b093e2f90920f84b5172f970428f3d611b7a367db2200c8e959ae"
+    },
+    {
+      "key": "mob_livro",
+      "path": "assets/monsters/mob_livro.webp",
+      "mime": "image/webp",
+      "bytes": 50858,
+      "sha256": "6c352594a7318abd585b14ccab4a024f58b6e2b30aba182cb03fbfea4c86b0ef"
+    },
+    {
+      "key": "mob_marginalia",
+      "path": "assets/monsters/mob_marginalia.webp",
+      "mime": "image/webp",
+      "bytes": 59008,
+      "sha256": "ab6cfbb71e0dcb0e461bb9c68f505afeb9c4084656cf5fe60aeb674217c4a697"
+    },
+    {
+      "key": "mob_matriarca",
+      "path": "assets/monsters/mob_matriarca.webp",
+      "mime": "image/webp",
+      "bytes": 128938,
+      "sha256": "75e810d55f95d5d4eef600ba43b6d42a28c133ff95ef0e6d63b753c8966dd986"
+    },
+    {
+      "key": "mob_matriz",
+      "path": "assets/monsters/mob_matriz.webp",
+      "mime": "image/webp",
+      "bytes": 111724,
+      "sha256": "af9099ebb04344d7b440f64ae347f5dab4c66043e1be42292bfb3a3f36f639ba"
+    },
+    {
+      "key": "mob_minhoca",
+      "path": "assets/monsters/mob_minhoca.webp",
+      "mime": "image/webp",
+      "bytes": 91320,
+      "sha256": "add255ae26d7b2effbf193e91c5872f2d94f851130ce6afb7e8f4066e8e0e27e"
+    },
+    {
+      "key": "mob_mosca",
+      "path": "assets/monsters/mob_mosca.webp",
+      "mime": "image/webp",
+      "bytes": 133736,
+      "sha256": "2cb915c40486aae02d2fc7322598bd7652523ea64dcf8729912909e420ad3df6"
+    },
+    {
+      "key": "mob_mumia",
+      "path": "assets/monsters/mob_mumia.webp",
+      "mime": "image/webp",
+      "bytes": 119896,
+      "sha256": "000a8cd1d6785e039da5211381bd8d17088184f4083ec85fb08f9a979f2ea022"
+    },
+    {
+      "key": "mob_naiade",
+      "path": "assets/monsters/mob_naiade.webp",
+      "mime": "image/webp",
+      "bytes": 108696,
+      "sha256": "fcbd55e7fcdc461d453249cc9cbd19fdb85fa5683db4b2c77782ab6fcf847744"
+    },
+    {
+      "key": "mob_nightblade",
+      "path": "assets/monsters/mob_nightblade.webp",
+      "mime": "image/webp",
+      "bytes": 55426,
+      "sha256": "dbcc77093c4925ff444edf8effaa8331b336a99c01940ba162ab064c63660ce1"
+    },
+    {
+      "key": "mob_ninho",
+      "path": "assets/monsters/mob_ninho.webp",
+      "mime": "image/webp",
+      "bytes": 62154,
+      "sha256": "897b4f70ed1a8fae988d3e4ad02da8c6e414fabaf46bf8ab414610996569c9be"
+    },
+    {
+      "key": "mob_ninhomae",
+      "path": "assets/monsters/mob_ninhomae.webp",
+      "mime": "image/webp",
+      "bytes": 86882,
+      "sha256": "2c1cc85ecc656dcc5460fbfc591896fd43fbee84eacf4e86360a5ac3543a836b"
+    },
+    {
+      "key": "mob_nota",
+      "path": "assets/monsters/mob_nota.webp",
+      "mime": "image/webp",
+      "bytes": 54596,
+      "sha256": "674a8b3225e66f65214c0488bdc4fd4fa6e6fed0789aaf8187ad4df241ea47f6"
+    },
+    {
+      "key": "mob_paleleech",
+      "path": "assets/monsters/mob_paleleech.webp",
+      "mime": "image/webp",
+      "bytes": 44784,
+      "sha256": "21ce7a892526998dd397631fb0020c3822998677866fa26c95e2b275ce205d59"
+    },
+    {
+      "key": "mob_pilhador",
+      "path": "assets/monsters/mob_pilhador.webp",
+      "mime": "image/webp",
+      "bytes": 108110,
+      "sha256": "e81eb52460712dcddc4e8cf54028271f54e989442f166b1100be437ec3b5486f"
+    },
+    {
+      "key": "mob_prismatico",
+      "path": "assets/monsters/mob_prismatico.webp",
+      "mime": "image/webp",
+      "bytes": 99880,
+      "sha256": "d5c38162ecd13b229a929867204940abe4bd74f636de6d97b8f330400c29bae0"
+    },
+    {
+      "key": "mob_ra_imunda",
+      "path": "assets/monsters/mob_ra_imunda.webp",
+      "mime": "image/webp",
+      "bytes": 92380,
+      "sha256": "7c227b563f9cc7516df74d4b93d020de6274fa10231de849126d96c48b582060"
+    },
+    {
+      "key": "mob_racano",
+      "path": "assets/monsters/mob_racano.webp",
+      "mime": "image/webp",
+      "bytes": 118342,
+      "sha256": "37b6b3a7baed1bf99078eabab55e22ecfa2f08e9683b3b9fb340f5291ab996bb"
+    },
+    {
+      "key": "mob_rato_peste",
+      "path": "assets/monsters/mob_rato_peste.webp",
+      "mime": "image/webp",
+      "bytes": 74496,
+      "sha256": "108e918a15630f8e4cd2ef03bd0c6b1d2e2505ed5b2bad890e1684c394f1eaf8"
+    },
+    {
+      "key": "mob_redator",
+      "path": "assets/monsters/mob_redator.webp",
+      "mime": "image/webp",
+      "bytes": 159808,
+      "sha256": "f028ad3012760161faaa120309a6231a77519dc273d4863926e456b6228e48b2"
+    },
+    {
+      "key": "mob_revenant",
+      "path": "assets/monsters/mob_revenant.webp",
+      "mime": "image/webp",
+      "bytes": 74522,
+      "sha256": "1651ac549ab1e8c4b80909c0bb74ddb89930af4a98e4a90dda55952d647bb928"
+    },
+    {
+      "key": "mob_revisor",
+      "path": "assets/monsters/mob_revisor.webp",
+      "mime": "image/webp",
+      "bytes": 52902,
+      "sha256": "59f7c00905815bae16466e0998cdc9de1b7e3cf756593f32b36724147518939e"
+    },
+    {
+      "key": "mob_salamandra_areia",
+      "path": "assets/monsters/mob_salamandra_areia.webp",
+      "mime": "image/webp",
+      "bytes": 108840,
+      "sha256": "f84b4aacff7af9bd8e0f1f631123779029afb6c35492d8aa2e26bce811e647b6"
+    },
+    {
+      "key": "mob_sapo_lotus",
+      "path": "assets/monsters/mob_sapo_lotus.webp",
+      "mime": "image/webp",
+      "bytes": 134602,
+      "sha256": "7838359a45e736c55e33d272f41e12640452e7d83c1308a20a8edd92970f54d5"
+    },
+    {
+      "key": "mob_sentinel",
+      "path": "assets/monsters/mob_sentinel.webp",
+      "mime": "image/webp",
+      "bytes": 81618,
+      "sha256": "1b539d9ef3e1224f6a48e58029e5188eeaac7f1967aed38ac5ba74a6bfb1dd34"
+    },
+    {
+      "key": "mob_serpente_lago",
+      "path": "assets/monsters/mob_serpente_lago.webp",
+      "mime": "image/webp",
+      "bytes": 132542,
+      "sha256": "ff456c9340244c98eacf04f1fd7066b31530093d926e89b04196a7555ff93fec"
+    },
+    {
+      "key": "mob_shade",
+      "path": "assets/monsters/mob_shade.webp",
+      "mime": "image/webp",
+      "bytes": 48464,
+      "sha256": "af753f93fe88d9a30f79d403317cc1773cd05ece98fba2bcdd51d37afd2770bc"
+    },
+    {
+      "key": "mob_siren",
+      "path": "assets/monsters/mob_siren.webp",
+      "mime": "image/webp",
+      "bytes": 107244,
+      "sha256": "8b71d6b6560f039e85cfd184a778262c1e9cf779259de6aabc8a95bff3def89d"
+    },
+    {
+      "key": "mob_sluicewarden",
+      "path": "assets/monsters/mob_sluicewarden.webp",
+      "mime": "image/webp",
+      "bytes": 84538,
+      "sha256": "1dc39744da5ebe2aa5544a516789dd5b4d6817d742f514c025c2ea7753c8b60e"
+    },
+    {
+      "key": "mob_spark",
+      "path": "assets/monsters/mob_spark.webp",
+      "mime": "image/webp",
+      "bytes": 53216,
+      "sha256": "00979d0e58d10580d60fd52d9d8afc72f6591108988ab7c81e67114c53bfcde9"
+    },
+    {
+      "key": "mob_starmoth",
+      "path": "assets/monsters/mob_starmoth.webp",
+      "mime": "image/webp",
+      "bytes": 88630,
+      "sha256": "99731b15463168dfb1d36177a0766b085cfb227383bf606a973c0ce48fb550c0"
+    },
+    {
+      "key": "mob_thornling",
+      "path": "assets/monsters/mob_thornling.webp",
+      "mime": "image/webp",
+      "bytes": 53862,
+      "sha256": "736121b6681199bf2957ce7861fb7051b5f219c09f1e0cc69c74a060495f2fa7"
+    },
+    {
+      "key": "mob_tidewisp",
+      "path": "assets/monsters/mob_tidewisp.webp",
+      "mime": "image/webp",
+      "bytes": 69778,
+      "sha256": "9e1728cf4b217776fbf4862225cf0bc5e59098cb4c44edd3b45769e1f2282f87"
+    },
+    {
+      "key": "mob_troglodita",
+      "path": "assets/monsters/mob_troglodita.webp",
+      "mime": "image/webp",
+      "bytes": 72830,
+      "sha256": "8b9ed31fce3145ac1d0a9423967fe36bfe096af2f606b0d2ce5fc6bcf52f0c95"
+    },
+    {
+      "key": "mob_veado",
+      "path": "assets/monsters/mob_veado.webp",
+      "mime": "image/webp",
+      "bytes": 58624,
+      "sha256": "1f197e3345c6894fc997ac3e033b62e21d0e847e6d35f4e804c869696fb72a86"
+    },
+    {
+      "key": "mob_vespao",
+      "path": "assets/monsters/mob_vespao.webp",
+      "mime": "image/webp",
+      "bytes": 89756,
+      "sha256": "6b47291bf650eef4e7e065dbaf4e7fdc98e2f70c916819276d7ebb6f55ac3cc3"
+    },
+    {
+      "key": "mob_vigia",
+      "path": "assets/monsters/mob_vigia.webp",
+      "mime": "image/webp",
+      "bytes": 58196,
+      "sha256": "87ca9380bb2ff2eb2dfeb3a9495fcf4a947f663acfed2db5317303981da10f90"
+    },
+    {
+      "key": "mob_vitrea",
+      "path": "assets/monsters/mob_vitrea.webp",
+      "mime": "image/webp",
+      "bytes": 127678,
+      "sha256": "b791d3fdc56ace381f4156a3d9366fbbadbfbec5dee024ff8769c7567d517f9f"
+    },
+    {
+      "key": "mob_voidling",
+      "path": "assets/monsters/mob_voidling.webp",
+      "mime": "image/webp",
+      "bytes": 63370,
+      "sha256": "6e277c368d6e2c38cda536a58fe4dcec4e8640dbddc75229a128fc0937f18367"
+    },
+    {
+      "key": "mob_warden",
+      "path": "assets/monsters/mob_warden.webp",
+      "mime": "image/webp",
+      "bytes": 85974,
+      "sha256": "60ee322221f835cb248cbdea9a80215deffbe139d2279e754e16b375f475e73f"
+    },
+    {
+      "key": "mob_weaver",
+      "path": "assets/monsters/mob_weaver.webp",
+      "mime": "image/webp",
+      "bytes": 110438,
+      "sha256": "bfc3f31c50e11a0513a52b6aff40b8c8f9074406c88931172eda8d8af461059d"
+    },
+    {
+      "key": "mob_wolf",
+      "path": "assets/monsters/mob_wolf.webp",
+      "mime": "image/webp",
+      "bytes": 53974,
+      "sha256": "57100534d40f4211317886306fc335de32140c4996b93eba531792c19ebc172c"
+    },
+    {
+      "key": "mob_wraith",
+      "path": "assets/monsters/mob_wraith.webp",
+      "mime": "image/webp",
+      "bytes": 68964,
+      "sha256": "8d0043259ded03dae1bf09f316bc59e4fda80634360b3ef9ace728ddcc1a2af1"
+    },
+    {
+      "key": "pet_coelho_1",
+      "path": "assets/pets/pet_coelho_1.webp",
+      "mime": "image/webp",
+      "bytes": 36548,
+      "sha256": "f83d7e4f5202a2e10b96f331e4a2362e5f48d6ee3cdf62e2bad3a6a5e184717b"
+    },
+    {
+      "key": "pet_coelho_2",
+      "path": "assets/pets/pet_coelho_2.webp",
+      "mime": "image/webp",
+      "bytes": 101270,
+      "sha256": "0cf5bc9e041f66de1c9c33aba825642b91292ae9dc333e699ca761edf292110c"
+    },
+    {
+      "key": "pet_coelho_3",
+      "path": "assets/pets/pet_coelho_3.webp",
+      "mime": "image/webp",
+      "bytes": 71478,
+      "sha256": "3ada15d845f6cd27a364ff6738124d5a33acece6c3a7c89092676a312a097d30"
+    },
+    {
+      "key": "pet_corvo_1",
+      "path": "assets/pets/pet_corvo_1.webp",
+      "mime": "image/webp",
+      "bytes": 39612,
+      "sha256": "3a57bab853521c93eb0e928e8ea919ef08a683086e026a271088ad62af8315f8"
+    },
+    {
+      "key": "pet_corvo_2",
+      "path": "assets/pets/pet_corvo_2.webp",
+      "mime": "image/webp",
+      "bytes": 71138,
+      "sha256": "28f33a70df6fe192d843ca1cb77895faa93bf8e13175eaaeaf224ff6699bd30f"
+    },
+    {
+      "key": "pet_corvo_3",
+      "path": "assets/pets/pet_corvo_3.webp",
+      "mime": "image/webp",
+      "bytes": 104318,
+      "sha256": "7506d9b3fdb74f86ba9386406657d5668680b4efb0987d827f1fcea8b645d765"
+    },
+    {
+      "key": "pet_dragonete_1",
+      "path": "assets/pets/pet_dragonete_1.webp",
+      "mime": "image/webp",
+      "bytes": 43044,
+      "sha256": "54c182705ef95e6cff4fec8a60773408378af865c694183e8f2693c3add1c0aa"
+    },
+    {
+      "key": "pet_dragonete_2",
+      "path": "assets/pets/pet_dragonete_2.webp",
+      "mime": "image/webp",
+      "bytes": 67268,
+      "sha256": "eaf74dc3e7252842d05be972b700c30c91535522bc4e35aa5d606ccdc54d964d"
+    },
+    {
+      "key": "pet_dragonete_3",
+      "path": "assets/pets/pet_dragonete_3.webp",
+      "mime": "image/webp",
+      "bytes": 97678,
+      "sha256": "0b31f4abfa75cee6f45f425e57594b453d869d6fb90ea04cbe588e26e3a6c2f2"
+    },
+    {
+      "key": "pet_falcao_1",
+      "path": "assets/pets/pet_falcao_1.webp",
+      "mime": "image/webp",
+      "bytes": 49252,
+      "sha256": "39011d9e9703b9cc17e3e4d6abec89b540fc67db436285a5cda9280275b90de7"
+    },
+    {
+      "key": "pet_falcao_2",
+      "path": "assets/pets/pet_falcao_2.webp",
+      "mime": "image/webp",
+      "bytes": 75422,
+      "sha256": "c3f190498bff70d383f6f4f5e543b02c08b4d7558d84175a38f81581f4c6ce1e"
+    },
+    {
+      "key": "pet_falcao_3",
+      "path": "assets/pets/pet_falcao_3.webp",
+      "mime": "image/webp",
+      "bytes": 104442,
+      "sha256": "83ba9a104cbc0968756fcac4689de6580cf2e9849389530f525bc7f1c675d648"
+    },
+    {
+      "key": "pet_homunculo_1",
+      "path": "assets/pets/pet_homunculo_1.webp",
+      "mime": "image/webp",
+      "bytes": 31058,
+      "sha256": "344237e518e1787be63d0cc2bf56b12d120da81151928aa4b4c8b623f7bb99ca"
+    },
+    {
+      "key": "pet_homunculo_2",
+      "path": "assets/pets/pet_homunculo_2.webp",
+      "mime": "image/webp",
+      "bytes": 39790,
+      "sha256": "06482d1535a84cf035085f08e632cb98b2124a6fbd9760e34c2d85c74de87b4a"
+    },
+    {
+      "key": "pet_homunculo_3",
+      "path": "assets/pets/pet_homunculo_3.webp",
+      "mime": "image/webp",
+      "bytes": 75024,
+      "sha256": "b1916b3230acea3d75d841389501e38db91a869c6e6705ff8e07869100c9268a"
+    },
+    {
+      "key": "pet_lince_1",
+      "path": "assets/pets/pet_lince_1.webp",
+      "mime": "image/webp",
+      "bytes": 29426,
+      "sha256": "c13242770f39b86a5e7c71dc2b58017889b76f11bd1d9a241622fb50623f3905"
+    },
+    {
+      "key": "pet_lince_2",
+      "path": "assets/pets/pet_lince_2.webp",
+      "mime": "image/webp",
+      "bytes": 49774,
+      "sha256": "3e547a528b919ade13291c68d66250d9cbe4e92a1d6d1537bbfeea864bf99060"
+    },
+    {
+      "key": "pet_lince_3",
+      "path": "assets/pets/pet_lince_3.webp",
+      "mime": "image/webp",
+      "bytes": 101192,
+      "sha256": "b08190b31769a4742568983e931990f2baa54df9934262630e0b6a77aba2146f"
+    },
+    {
+      "key": "pet_morcego_1",
+      "path": "assets/pets/pet_morcego_1.webp",
+      "mime": "image/webp",
+      "bytes": 42012,
+      "sha256": "da7c621f97622e6b09c1c2f66fa98d5422a1b453312a9c79dab6f46cbd3ace43"
+    },
+    {
+      "key": "pet_morcego_2",
+      "path": "assets/pets/pet_morcego_2.webp",
+      "mime": "image/webp",
+      "bytes": 68076,
+      "sha256": "d03f5d7a1005fa2fdec637708f4c887813739f17fb07e78ffe40935bfc6429b7"
+    },
+    {
+      "key": "pet_morcego_3",
+      "path": "assets/pets/pet_morcego_3.webp",
+      "mime": "image/webp",
+      "bytes": 94546,
+      "sha256": "a91a319fc1770e09ca74f018d8f5751268fad19b98fd97d010b77eb9889a79d9"
+    },
+    {
+      "key": "pet_polvo_1",
+      "path": "assets/pets/pet_polvo_1.webp",
+      "mime": "image/webp",
+      "bytes": 47884,
+      "sha256": "6f97d5b27ba1c9866d75d0de91d65c59926de902071e4e13c432f6daf9603dc5"
+    },
+    {
+      "key": "pet_polvo_2",
+      "path": "assets/pets/pet_polvo_2.webp",
+      "mime": "image/webp",
+      "bytes": 70986,
+      "sha256": "d52565334fd0f1c185a086703d0881c883d298a3bdf8268fa8c2cda5c5be3a53"
+    },
+    {
+      "key": "pet_polvo_3",
+      "path": "assets/pets/pet_polvo_3.webp",
+      "mime": "image/webp",
+      "bytes": 106138,
+      "sha256": "67822cebe636ba458ba12c9bd0d6a51710fa4d97102f3dc461a8b4999f55b399"
+    },
+    {
+      "key": "pet_salamandra_1",
+      "path": "assets/pets/pet_salamandra_1-2.webp",
+      "mime": "image/webp",
+      "bytes": 84640,
+      "sha256": "4a32d78e4563f263513653c29b22ee8d3c1ea91b5ea5effe81733e84c675430b"
+    },
+    {
+      "key": "pet_salamandra_1_batalha",
+      "path": "assets/pets/pet_salamandra_1_batalha-2.webp",
+      "mime": "image/webp",
+      "bytes": 84640,
+      "sha256": "4a32d78e4563f263513653c29b22ee8d3c1ea91b5ea5effe81733e84c675430b"
+    },
+    {
+      "key": "pet_salamandra_2",
+      "path": "assets/pets/pet_salamandra_2.webp",
+      "mime": "image/webp",
+      "bytes": 111264,
+      "sha256": "22d498c5a0c1d45f25e4e6bf1d36dcf64ec40a13a22ffe6d3d66fa81337e4345"
+    },
+    {
+      "key": "pet_salamandra_3",
+      "path": "assets/pets/pet_salamandra_3.webp",
+      "mime": "image/webp",
+      "bytes": 120888,
+      "sha256": "5fee2794b46c04ab1028ae14f83709e16ab6924fa3aa030875fd77b59a663309"
+    },
+    {
+      "key": "pet_sapo_1",
+      "path": "assets/pets/pet_sapo_1.webp",
+      "mime": "image/webp",
+      "bytes": 26510,
+      "sha256": "e773569b99244e9809de9757fd53cc6af07b5d30170c05521312c78a8097054f"
+    },
+    {
+      "key": "pet_sapo_2",
+      "path": "assets/pets/pet_sapo_2.webp",
+      "mime": "image/webp",
+      "bytes": 54626,
+      "sha256": "87b43080dd2c809f9b8708a07913a1c8ae27870e1cf0440e12f55cc711ee4c8b"
+    },
+    {
+      "key": "pet_sapo_3",
+      "path": "assets/pets/pet_sapo_3.webp",
+      "mime": "image/webp",
+      "bytes": 111428,
+      "sha256": "d74eaedc6b4aca71becd067f5c43b09d6f8397221c0a3311891c25d073f2eedf"
+    },
+    {
+      "key": "abel_sheet",
+      "path": "assets/characters/abel_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 976516,
+      "sha256": "bab7f2e7695a2cdd598f1507008e72e4f96ca20e3b6764da7c18f97d6b4dfd5b"
+    },
+    {
+      "key": "amanda_sheet",
+      "path": "assets/characters/amanda_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 314940,
+      "sha256": "3496c84cb9c049c7af4ab4b751cb0260308990998ace6f999ab85ecf5ac9b5db"
+    },
+    {
+      "key": "orfeu_sheet",
+      "path": "assets/characters/orfeu_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 720114,
+      "sha256": "d777c861b8f20310d9916061001f538b16c79ac9ac805c604da3d09397805768"
+    },
+    {
+      "key": "snoopy_sheet",
+      "path": "assets/characters/snoopy_sheet.webp",
+      "mime": "image/webp",
+      "bytes": 231586,
+      "sha256": "59b94fa43fc0c38d64393e332feb2f71743cd3c150c10643a5150a85339ebac4"
+    },
+    {
+      "key": "npc_anciana",
+      "path": "assets/world/npc_anciana.webp",
+      "mime": "image/webp",
+      "bytes": 135444,
+      "sha256": "1729eac5f9869de3c1d416b2e9cd7a0faa65b98d14c5d90f6dcf8bbd5f0bdd85"
+    },
+    {
+      "key": "npc_arqueiro",
+      "path": "assets/world/npc_arqueiro.webp",
+      "mime": "image/webp",
+      "bytes": 99174,
+      "sha256": "c92066629f71d354d40551793c9927748f8450a0bf8a9029ed2146a3d1d405e3"
+    },
+    {
+      "key": "npc_batedor",
+      "path": "assets/world/npc_batedor.webp",
+      "mime": "image/webp",
+      "bytes": 128746,
+      "sha256": "fcd1ce83caf9b4a611c4a05e1c38319856a07d6858659174c5c62207daf814f1"
+    },
+    {
+      "key": "npc_camponesa",
+      "path": "assets/world/npc_camponesa.webp",
+      "mime": "image/webp",
+      "bytes": 111348,
+      "sha256": "f7d98e18e693934bd9322738109615d12d578a37f044e0f1f0c8cb14f7cb1e36"
+    },
+    {
+      "key": "npc_capataz",
+      "path": "assets/world/npc_capataz.webp",
+      "mime": "image/webp",
+      "bytes": 127158,
+      "sha256": "2ab4cd594c92d932897991f821e886f296a147f7b7d005b07c92faf3e61a47a0"
+    },
+    {
+      "key": "npc_cigana",
+      "path": "assets/world/npc_cigana.webp",
+      "mime": "image/webp",
+      "bytes": 141224,
+      "sha256": "612701f3d4ca76a8715964bf208666289d985bee88ad01be216c7998d3528f62"
+    },
+    {
+      "key": "npc_clerigo",
+      "path": "assets/world/npc_clerigo.webp",
+      "mime": "image/webp",
+      "bytes": 104686,
+      "sha256": "9dec872bb484d648feab267e0f408872251749b1b36b8772786e3bf178f715b4"
+    },
+    {
+      "key": "npc_encapuzado",
+      "path": "assets/world/npc_encapuzado.webp",
+      "mime": "image/webp",
+      "bytes": 133940,
+      "sha256": "ef7969dbcc7bf2e469df27bd8f799295090d4868c2f448dce453ce8250e5c4a8"
+    },
+    {
+      "key": "npc_eremita",
+      "path": "assets/world/npc_eremita.webp",
+      "mime": "image/webp",
+      "bytes": 106070,
+      "sha256": "c94cad1067ecb39912d9fcc6dc5696aedf7de5e78b51ec3d453b371a2091d9c6"
+    },
+    {
+      "key": "npc_escriba",
+      "path": "assets/world/npc_escriba.webp",
+      "mime": "image/webp",
+      "bytes": 134250,
+      "sha256": "f874038aa68a22ea5fd4d21e0c5532ae17c97c426bc7113b73acf29f8fbd8981"
+    },
+    {
+      "key": "npc_ferreiro",
+      "path": "assets/world/npc_ferreiro.webp",
+      "mime": "image/webp",
+      "bytes": 87182,
+      "sha256": "e3b045d146fb71efd894c75ff00c945b91e87035e7ba8b182d0b305c5e14f07b"
+    },
+    {
+      "key": "npc_menina",
+      "path": "assets/world/npc_menina.webp",
+      "mime": "image/webp",
+      "bytes": 110722,
+      "sha256": "94b67a9ffc858a1650c0b7fda1e4ba4294b588f9aba8f2b593bc599feb53b45f"
+    },
+    {
+      "key": "npc_nobre",
+      "path": "assets/world/npc_nobre.webp",
+      "mime": "image/webp",
+      "bytes": 135722,
+      "sha256": "806d25c07a524ca5d727f5cbec801577f8d285ad32d8f372b27d4130fedb2899"
+    },
+    {
+      "key": "npc_professor",
+      "path": "assets/world/npc_professor.webp",
+      "mime": "image/webp",
+      "bytes": 88276,
+      "sha256": "a05839e9a44cf47ecb86f8db38f5721adb3170a74e3efdc134f09768815e555d"
+    },
+    {
+      "key": "npc_rapaz",
+      "path": "assets/world/npc_rapaz.webp",
+      "mime": "image/webp",
+      "bytes": 93874,
+      "sha256": "1024836a11cadd3dba78424f72b1b23823817d8b271071b605740371e4534b84"
+    },
+    {
+      "key": "npc_ruivo",
+      "path": "assets/world/npc_ruivo.webp",
+      "mime": "image/webp",
+      "bytes": 134544,
+      "sha256": "af555e962da0c6cea35689adec7590305098a9e15d5a5036bfa618ffbaa40a23"
+    },
+    {
+      "key": "npc_serva",
+      "path": "assets/world/npc_serva.webp",
+      "mime": "image/webp",
+      "bytes": 144834,
+      "sha256": "5f55cea62f10339edaffa4b8a4643023dcc974918ff522f673d2f2b8af5cbebc"
+    },
+    {
+      "key": "npc_viajante",
+      "path": "assets/world/npc_viajante.webp",
+      "mime": "image/webp",
+      "bytes": 141672,
+      "sha256": "1ece808b90c38dd544a3fd0c81f494ae42b77ba2f1bd9dda136d2b239f001c0c"
+    },
+    {
+      "key": "amanda_battle",
+      "path": "assets/misc/amanda_battle.webp",
+      "mime": "image/webp",
+      "bytes": 15902,
+      "sha256": "1b2f504d94f97fe8c15fbe5a5f56153549c164d172f2057c4224449800ae080c"
+    },
+    {
+      "key": "amanda_portrait",
+      "path": "assets/characters/amanda_portrait.webp",
+      "mime": "image/webp",
+      "bytes": 6634,
+      "sha256": "308d9b262f46db78e68b834aa75ea76601718359eab0107f3c0ed5a966bf76d4"
+    },
+    {
+      "key": "abel_battle",
+      "path": "assets/misc/abel_battle.webp",
+      "mime": "image/webp",
+      "bytes": 12298,
+      "sha256": "071a43abb3eaf3c2fb52609440e1554e68a1e6b1c2964916a6693a455d21a9ce"
+    },
+    {
+      "key": "abel_portrait",
+      "path": "assets/characters/abel_portrait.webp",
+      "mime": "image/webp",
+      "bytes": 5346,
+      "sha256": "b5e27a6dbf7648f114fcc4d02ed698e510eb245a62c024d6a645d1ade1732aec"
+    },
+    {
+      "key": "orfeu_battle",
+      "path": "assets/misc/orfeu_battle.webp",
+      "mime": "image/webp",
+      "bytes": 12338,
+      "sha256": "c09d93a182f2fe1787a68cff113dbebcd3250cdbb9de00ceca5cc7af284fbe5d"
+    },
+    {
+      "key": "orfeu_portrait",
+      "path": "assets/characters/orfeu_portrait.webp",
+      "mime": "image/webp",
+      "bytes": 5922,
+      "sha256": "6b843f632772435f304bf5d0a4b8aa1daa28f1d15bff121aab60e58014cf570e"
+    },
+    {
+      "key": "snoopy_battle",
+      "path": "assets/misc/snoopy_battle.webp",
+      "mime": "image/webp",
+      "bytes": 14546,
+      "sha256": "dbee21c5a9b8cb2bbf16ff0dd4f9ec2255f8cf1158716843a9eab23b553d5d7e"
+    },
+    {
+      "key": "snoopy_portrait",
+      "path": "assets/characters/snoopy_portrait.webp",
+      "mime": "image/webp",
+      "bytes": 5360,
+      "sha256": "f18d6684889814078a6e67089b1c5a4fbadf92680505daac5e2c3313d4d0fa14"
+    },
+    {
+      "key": "Seiji-src",
+      "path": "assets/characters/seiji-src.webp",
+      "mime": "image/webp",
+      "bytes": 18788,
+      "sha256": "a2007826947c5330c26e5db2b589761397d330edde61781d7e3ac4093fd254fa"
+    },
+    {
+      "key": "Ophelia-src",
+      "path": "assets/characters/ophelia-src.webp",
+      "mime": "image/webp",
+      "bytes": 21570,
+      "sha256": "d7b7e7081a85141c2deac9738dd625efb6b3574cdd76a4fb7ec6985d89314486"
+    },
+    {
+      "key": "Marin-src",
+      "path": "assets/characters/marin-src.webp",
+      "mime": "image/webp",
+      "bytes": 9490,
+      "sha256": "1cc24e5e9c320dd3a644bbee056b3e6d787eec74325d7100eea70c23fc8d9bda"
+    },
+    {
+      "key": "Gabriel-src",
+      "path": "assets/characters/gabriel-src.webp",
+      "mime": "image/webp",
+      "bytes": 9642,
+      "sha256": "55f8bd6ed951956d7302fe34d3620b40d1224e924add1345501a8acf94675ace"
+    },
+    {
+      "key": "Max-src",
+      "path": "assets/characters/max-src.webp",
+      "mime": "image/webp",
+      "bytes": 10230,
+      "sha256": "44883c0ee55119ff9f4fdb8b75d36377f73972213bbf412fc89e8b40825b95e0"
+    },
+    {
+      "key": "Eden-src",
+      "path": "assets/characters/eden-src.webp",
+      "mime": "image/webp",
+      "bytes": 6962,
+      "sha256": "cda9a1de7a207c0ebfe8e04a983122be31c293da88a9bd363a5eeabfeae5570d"
+    },
+    {
+      "key": "Ava Rosa Groot-src",
+      "path": "assets/characters/ava-rosa-groot-src.webp",
+      "mime": "image/webp",
+      "bytes": 20856,
+      "sha256": "a1949dd2469ce3670a3ae384c4bb35e932ca2706d56d224237e7fa8cfa529c14"
+    },
+    {
+      "key": "Madao-src",
+      "path": "assets/characters/madao-src.webp",
+      "mime": "image/webp",
+      "bytes": 14798,
+      "sha256": "4f2d388ec29ff128aca7960936eb369b9a58e17c8dd98d2d3f5155abe46d4103"
+    },
+    {
+      "key": "Madao Papelão-src",
+      "path": "assets/characters/madao-papel-o-src.webp",
+      "mime": "image/webp",
+      "bytes": 14162,
+      "sha256": "eb09569367ba57b69ce91810a4ec1355e408b06033685062906f002f18e425ca"
+    },
+    {
+      "key": "Madao Vitória-src",
+      "path": "assets/characters/madao-vit-ria-src.webp",
+      "mime": "image/webp",
+      "bytes": 17190,
+      "sha256": "0bf1b1c84bea6a0e7bf3a9d528a5e8e4ec6eab6700c056582df83f1b6e3490a2"
+    },
+    {
+      "key": "Gabriel Lycan-src",
+      "path": "assets/characters/gabriel-lycan-src.webp",
+      "mime": "image/webp",
+      "bytes": 20690,
+      "sha256": "adfc9442b66135da76bd8dc2c5415adc013cffea1d214bc09b674657aaace51d"
+    },
+    {
+      "key": "Scythe-src",
+      "path": "assets/characters/scythe-src.webp",
+      "mime": "image/webp",
+      "bytes": 13362,
+      "sha256": "4211a0e793a8744bd0ed2fa880cf6e63b08cbbce3922013fba4ea47d808ea059"
+    },
+    {
+      "key": "boss_vharok_f1",
+      "path": "assets/monsters/boss_vharok_f1.webp",
+      "mime": "image/webp",
+      "bytes": 153946,
+      "sha256": "a3146a6cd6626d2d9a744a985affa93e6e3e537cdbf9ef0cc6e9f7b6944f507f"
+    },
+    {
+      "key": "boss_vharok_f2",
+      "path": "assets/monsters/boss_vharok_f2.webp",
+      "mime": "image/webp",
+      "bytes": 50320,
+      "sha256": "38fd33fb106f63d11cc48e6755e1b4039c4e973add6dbca76beac0ac6d6c8ea3"
+    },
+    {
+      "key": "boss_vharok_f3",
+      "path": "assets/monsters/boss_vharok_f3.webp",
+      "mime": "image/webp",
+      "bytes": 119674,
+      "sha256": "eabb52d3d891781f6b6ba341d438fc99cf321b59f21fc2aa6c5c4f35149877b1"
+    },
+    {
+      "key": "boss_vharok_f4",
+      "path": "assets/monsters/boss_vharok_f4.webp",
+      "mime": "image/webp",
+      "bytes": 121532,
+      "sha256": "ed459459f929ec147feef232461f5fb7f0297b254b59e820cf2fde25a5c13a51"
+    },
+    {
+      "key": "boss_vharok_f5",
+      "path": "assets/monsters/boss_vharok_f5.webp",
+      "mime": "image/webp",
+      "bytes": 137486,
+      "sha256": "f6e7d3bb1f5042888ba933c75cb5feba20915b38acfb48cfdd6ebfb488b44996"
+    },
+    {
+      "key": "boss_vharok_olhos",
+      "path": "assets/monsters/boss_vharok_olhos.webp",
+      "mime": "image/webp",
+      "bytes": 102160,
+      "sha256": "dfb238d911e1d4daf1ed4a4ed9c7a0228214a6dc2ef9d775730c4ee02af80d07"
+    },
+    {
+      "key": "boss_vharok_bote",
+      "path": "assets/monsters/boss_vharok_bote.webp",
+      "mime": "image/webp",
+      "bytes": 158724,
+      "sha256": "459c8596d6e566b9995bf7d9fc00c90fe7dd11419dc6a626914548e590af84f6"
+    },
+    {
+      "key": "boss_vharok_rodeio",
+      "path": "assets/monsters/boss_vharok_rodeio.webp",
+      "mime": "image/webp",
+      "bytes": 174954,
+      "sha256": "ae996abeab5ff8db979a9eca84932381ca2e3307e40e2299cd8bd2273149253f"
+    },
+    {
+      "key": "boss_vharok_marca",
+      "path": "assets/monsters/boss_vharok_marca.webp",
+      "mime": "image/webp",
+      "bytes": 112378,
+      "sha256": "576e52131258ce5338b69719c7fe7e59b7c46faac8c73d5bedc585f7358b7179"
+    },
+    {
+      "key": "boss_vharok_investida",
+      "path": "assets/monsters/boss_vharok_investida.webp",
+      "mime": "image/webp",
+      "bytes": 106094,
+      "sha256": "2256b85d0f195e310de01b230e1861566c27f4926d1a24254be75c2556bd0ed4"
+    },
+    {
+      "key": "boss_vharok_retrato",
+      "path": "assets/monsters/boss_vharok_retrato.webp",
+      "mime": "image/webp",
+      "bytes": 54142,
+      "sha256": "5017a8d57ba0cc0a2d64eeb79875b6748093694e5d9ecb4dc92c5d465f4fa108"
+    },
+    {
+      "key": "boss_vharok_retrato_calmo",
+      "path": "assets/monsters/boss_vharok_retrato_calmo.webp",
+      "mime": "image/webp",
+      "bytes": 45370,
+      "sha256": "0013e07879341cc3dfa69cd596573a248d70da7658814c7becee242cfb423441"
+    }
+  ],
+  "scripts": [
+    "scripts/00-assets.js",
+    "scripts/core/01-config.js",
+    "scripts/data/02-elements-status.js",
+    "scripts/data/03-items-shops.js",
+    "scripts/data/04-skills.js",
+    "scripts/data/05-ultimates-combos.js",
+    "scripts/data/06-pets.js",
+    "scripts/characters/07-characters.js",
+    "scripts/characters/08-progression-grimoire.js",
+    "scripts/monsters/09-bestiary.js",
+    "scripts/monsters/10-formations.js",
+    "scripts/world/11-quests.js",
+    "scripts/world/12-maps.js",
+    "scripts/engine/13-audio.js",
+    "scripts/engine/14-input.js",
+    "scripts/engine/15-render.js",
+    "scripts/engine/16-save-state.js",
+    "scripts/engine/17-world.js",
+    "scripts/engine/18-day-night.js",
+    "scripts/engine/19-world-map.js",
+    "scripts/engine/20-field-view.js",
+    "scripts/ui/21-field-hud.js",
+    "scripts/ui/22-dialogue.js",
+    "scripts/ui/23-navigation.js",
+    "scripts/ui/24-menu.js",
+    "scripts/ui/25-shop.js",
+    "scripts/combat/26-model.js",
+    "scripts/combat/27-controller.js",
+    "scripts/combat/28-view.js",
+    "scripts/engine/29-fx.js",
+    "scripts/ui/30-title.js",
+    "scripts/ui/31-character-select.js",
+    "scripts/scenes/32-engine.js",
+    "scripts/scenes/33-story.js",
+    "scripts/scenes/34-postgame.js",
+    "scripts/engine/35-loop.js",
+    "scripts/tests/36-self-test.js",
+    "scripts/tools/37-balance.js",
+    "scripts/data/38-skilltree-reservado.js"
+  ]
+}

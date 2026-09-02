@@ -1,0 +1,65 @@
+name: Validar e liberar HML estática
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Executar testes determinísticos
+        run: python3 -m unittest discover -s tests
+      - name: Materializar conteúdo estático
+        run: python3 tools/construir_modular.py --source src --public public
+      - name: Validar conteúdo público e contrato estático
+        run: |
+          python3 tests/validar_hml_estatica.py
+          python3 tests/validar_publicacao.py public
+      - name: Empacotar artefato imutável
+        run: |
+          python3 tools/empacotar_hml.py \
+            --public public \
+            --source-commit "$GITHUB_SHA" \
+            --output-dir dist \
+            --generated-at "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eter-hml-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+
+  liberar:
+    needs: verificar
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: eter-hml-${{ github.sha }}
+          path: dist
+      - name: Criar release sem sobrescrita
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: hml-${{ github.sha }}
+          RELEASE_TARGET: ${{ github.sha }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "release já existe: $RELEASE_TAG" >&2
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags "https://github.com/${GITHUB_REPOSITORY}.git" "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "tag já existe: $RELEASE_TAG" >&2
+            exit 1
+          fi
+          gh release create "$RELEASE_TAG" \
+            dist/eter-hml-public.tar.gz \
+            dist/eter-hml-manifest.json \
+            --target "$RELEASE_TARGET" \
+            --title "$RELEASE_TAG" \
+            --notes "Artefato estático imutável gerado para $RELEASE_TARGET."

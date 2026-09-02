@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<title>Éter Anima — Stone Reach Academy</title>
+<link rel="stylesheet" href="styles/game.css">
+</head>
+<body>
+<div id="stage"><canvas id="game-canvas" width="800" height="600"></canvas></div>
+<div id="hint">setas/WASD mover · Z confirmar · X cancelar · C menu · M mapa · TAB alternar time · N som</div>
+<div id="btn-full" title="Tela cheia">⛶</div>
+
+<div id="mobile-controls">
+  <div class="dpad">
+    <div class="pad blank"></div><div class="pad" data-dir="up" role="button" tabindex="0" aria-label="Mover para cima">▲</div><div class="pad blank"></div>
+    <div class="pad" data-dir="left" role="button" tabindex="0" aria-label="Mover para esquerda">◄</div><div class="pad blank"></div><div class="pad" data-dir="right" role="button" tabindex="0" aria-label="Mover para direita">►</div>
+    <div class="pad blank"></div><div class="pad" data-dir="down" role="button" tabindex="0" aria-label="Mover para baixo">▼</div><div class="pad blank"></div>
+  </div>
+  <div class="act-col">
+    <div class="act-row">
+      <div class="act sm" data-btn="menu" role="button" tabindex="0" aria-label="Abrir menu">MENU</div>
+      <div class="act sm" data-btn="swap" role="button" tabindex="0" aria-label="Alternar time">TROCA</div>
+    </div>
+    <div class="act-row">
+      <div class="act cancel sm" data-btn="cancel" role="button" tabindex="0" aria-label="Cancelar">X</div>
+      <div class="act confirm" data-btn="confirm" role="button" tabindex="0" aria-label="Confirmar">Z</div>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/00-assets.js"></script>
+<script src="scripts/core/01-config.js"></script>
+<script src="scripts/data/02-elements-status.js"></script>
+<script src="scripts/data/03-items-shops.js"></script>
+<script src="scripts/data/04-skills.js"></script>
+<script src="scripts/data/05-ultimates-combos.js"></script>
+<script src="scripts/data/06-pets.js"></script>
+<script src="scripts/characters/07-characters.js"></script>
+<script src="scripts/characters/08-progression-grimoire.js"></script>
+<script src="scripts/monsters/09-bestiary.js"></script>
+<script src="scripts/monsters/10-formations.js"></script>
+<script src="scripts/world/11-quests.js"></script>
+<script src="scripts/world/12-maps.js"></script>
+<script src="scripts/engine/13-audio.js"></script>
+<script src="scripts/engine/14-input.js"></script>
+<script src="scripts/engine/15-render.js"></script>
+<script src="scripts/engine/16-save-state.js"></script>
+<script src="scripts/engine/17-world.js"></script>
+<script src="scripts/engine/18-day-night.js"></script>
+<script src="scripts/engine/19-world-map.js"></script>
+<script src="scripts/engine/20-field-view.js"></script>
+<script src="scripts/ui/21-field-hud.js"></script>
+<script src="scripts/ui/22-dialogue.js"></script>
+<script src="scripts/ui/23-navigation.js"></script>
+<script src="scripts/ui/24-menu.js"></script>
+<script src="scripts/ui/25-shop.js"></script>
+<script src="scripts/combat/26-model.js"></script>
+<script src="scripts/combat/27-controller.js"></script>
+<script src="scripts/combat/28-view.js"></script>
+<script src="scripts/engine/29-fx.js"></script>
+<script src="scripts/ui/30-title.js"></script>
+<script src="scripts/ui/31-character-select.js"></script>
+<script src="scripts/scenes/32-engine.js"></script>
+<script src="scripts/scenes/33-story.js"></script>
+<script src="scripts/scenes/34-postgame.js"></script>
+<script src="scripts/engine/35-loop.js"></script>
+<script src="scripts/tests/36-self-test.js"></script>
+<script src="scripts/tools/37-balance.js"></script>
+<script src="scripts/data/38-skilltree-reservado.js"></script>
+</body>
+</html>
