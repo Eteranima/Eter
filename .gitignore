@@ -1,0 +1,10 @@
+# Produtos locais, sempre reconstruídos a partir de src/.
+/public/
+/public.new/
+/public.previous/
+/dist/
+/classification.json
+
+# Cache e arquivos temporários de ferramentas locais.
+__pycache__/
+*.py[cod]
