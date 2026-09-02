@@ -20,7 +20,7 @@ class ModularTest(unittest.TestCase):
     def test_arvore_modular_e_integra(self) -> None:
         catalog = carregar_build().validate(ROOT / "src")
         self.assertEqual(catalog["version"], "5.31.0")
-        self.assertEqual(len(catalog["assets"]), 549)
+        self.assertEqual(len(catalog["assets"]), 550)
         self.assertEqual(len(catalog["scripts"]), 39)
 
     def test_nenhum_arquivo_volta_a_ser_monolito(self) -> None:

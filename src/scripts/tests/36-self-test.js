@@ -512,8 +512,47 @@ function runSelfTests(){
     const flags = G.flags, cena = G.scene;
     G.flags = {};
     let rodou = false;
+    const cinematica = normalizeLine({
+      speaker:'X', text:'Nós dois.', dialogSprite:'dlg_teste',
+      participants:[
+        {speaker:'X', side:'left', mirror:false, focus:true},
+        {speaker:'Y', side:'right', mirror:true, focus:false},
+      ],
+    }, {name:'Ignorado'});
+    const dupla = dialogueParticipants(cinematica);
+    ok('normalização preserva a apresentação cinematográfica',
+       cinematica.dialogSprite === 'dlg_teste' && cinematica.participants.length === 2);
+    ok('diálogo aceita dois participantes, lados, espelho e foco',
+       dupla.length === 2 && dupla[0].side === 'left' && dupla[1].side === 'right' &&
+       dupla[1].mirror === true && dupla[0].focus && !dupla[1].focus &&
+       dupla[0].dialogSprite === 'dlg_teste');
+    ok('fala simultânea deixa os dois participantes claros',
+       dialogueParticipants({...cinematica, simultaneous:true}).every(p => p.focus));
+    ok('diálogo limita a cena a dois participantes',
+       dialogueParticipants({...cinematica, participants:[
+         ...cinematica.participants, {speaker:'Z', side:'right'},
+       ]}).length === 2);
+    ok('Max resolve a dialogue sprite própria',
+       dialogueSpriteKey({speaker:'Max'}) === 'dlg_max');
+    ok('sprite de diálogo rejeita sheet de mundo',
+       dialogueSpriteKey({speaker:'X', dialogSprite:'x_sheet'}) === null);
+    ok('todo mapeamento de diálogo aponta para asset carregado',
+       Object.values(DIALOGUE_SPRITES).every(k => !!SPRITE_DATA[k] && spriteImages[k]?.complete));
+    const cenaCinematica = {st:{}};
+    CUT_CMD.say.start.call(cenaCinematica, {
+      who:'X', speaker:'Ignorado', text:'Cena em dupla.', dialogSprite:'dlg_teste', simultaneous:true,
+      participants:[{speaker:'X', side:'left'}, {speaker:'Y', side:'right', mirror:true}],
+    });
+    ok('cutscene de uma linha preserva participantes e apresentação',
+       Msg.line.speaker === 'X' && Msg.line.dialogSprite === 'dlg_teste' &&
+       dialogueParticipants(Msg.line).length === 2 &&
+       dialogueParticipants(Msg.line).every(p => p.focus));
+    Msg.finish();
     Msg.start([{speaker:'X', text:'Aceita?', choices:[
-      {label:'Sim', set:{teste_ok:true}, then:['Combinado.']},
+      {label:'Sim', set:{teste_ok:true}, then:[{
+        text:'Combinado.', dialogSprite:'dlg_teste',
+        participants:[{speaker:'X', side:'left', focus:true}],
+      }]},
       {label:'Não', run:() => { rodou = true; return null; }},
     ]}]);
     Msg.shown = 999;
@@ -524,6 +563,8 @@ function runSelfTests(){
     Msg.choose(Msg.choices[0]);
     ok('escolha grava a flag', G.flags.teste_ok === true);
     ok('escolha emenda as falas de resposta', Msg.active && Msg.line.text === 'Combinado.');
+    ok('escolha preserva a apresentação da resposta',
+       Msg.line.dialogSprite === 'dlg_teste' && Msg.line.participants?.[0].focus === true);
     Msg.shown = 999; Msg.advance();
     ok('diálogo encerra depois da resposta', !Msg.active);
     // opção com `when` some quando a condição é falsa

@@ -256,6 +256,9 @@ Object.assign(SPRITE_DATA, {
   dlg_farnese: "assets/characters/dlg_farnese.webp",
   dlg_malquior: "assets/characters/dlg_malquior.webp",
   dlg_sebastian: "assets/characters/dlg_sebastian.webp",
+  /* Max olha para a direita; em cenas no lado esquerdo, encara o interlocutor.
+     A arte inclui o ratinho zumbi no ombro e tem alfa, nunca uma sheet 3×4. */
+  dlg_max: "assets/characters/dlg_max.webp",
 });
 /* PET_SPRITES_BLOCO — artes de pet, geradas fora e preparadas por
    ferramentas/preparar-pet.ps1. Entram no MESMO SPRITE_DATA para

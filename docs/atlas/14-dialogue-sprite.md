@@ -6,12 +6,23 @@
 
 Fonte: `DIALOGUE_SPRITES` + `Msg.draw()` em `src/scripts/ui/22-dialogue.js`.
 
-## Referência
+## Referência e participantes
 
 Layout inspirado na tela de diálogo do jogo Hades: o personagem
 aparece em corpo inteiro, ancorado no chão da tela, files atrás da
 caixa de texto — só a metade de cima (rosto, tronco) aparece por
 cima do balão, a caixa cobre a metade de baixo.
+
+Uma linha de diálogo pode declarar até dois `participants`, cada qual
+com `speaker`, `side` (`left` ou `right`), `mirror`, `focus` e,
+opcionalmente, `dialogSprite`. O integrante controlado fica à esquerda
+e o interlocutor à direita; use `mirror:true` somente quando a arte
+precisar encarar o centro. O falante recebe halo e o ouvinte fica
+escuro/dessaturado. `simultaneous:true` deixa os dois claros.
+
+Linhas sem `participants` continuam compatíveis: mostram apenas o
+falante à esquerda. Somente chaves que começam com `dlg_` são aceitas;
+nunca use uma sheet world inteira como substituta de uma arte de diálogo.
 
 ## Especificação
 
@@ -45,6 +56,7 @@ cima do balão, a caixa cobre a metade de baixo.
 | Abel Nomikos | `dlg_abel` |
 | Kael Archimedes | `dlg_kael` |
 | Seiji | `dlg_seiji` |
+| Max | `dlg_max` — inclui o ratinho zumbi no ombro |
 | Beatriz Demeter *(NPC novo, sem entrada de personagem ainda)* | `dlg_beatriz` |
 | Calder Pell *(NPC novo)* | `dlg_calderpell` |
 | Carmila Reachforth *(NPC novo)* | `dlg_carmila` |
