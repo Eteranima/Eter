@@ -6,20 +6,21 @@ nele — não mexer agora.
 
 ---
 
-## 1. Tirar monstros da Stone Reach Academy e do Pátio
+## 1. Tirar monstros da Stone Reach Academy e do Pátio — entregue no P0
 
-Decisão (2026-08-26): a Academia e o Pátio Central não devem ter
-NENHUM encontro de monstro daqui pra frente. Essas áreas passam a ser
-só de NPCs — sem combate ambiente.
+Decisão (2026-08-26), entregue no P0: a Academia e o Pátio Central não
+declaram encontros nem mobs hostis. Essas áreas são de convivência e
+NPCs — sem combate ambiente.
 
 Monstros continuam existindo normalmente nos mapas que fazem sentido
-ter criatura (masmorras, subterrâneo, deserto, pântano, etc.) — a
-mudança é só remover formações/spawns de mob dos mapas de academia.
+ter criatura (masmorras, subterrâneo, deserto, pântano, etc.). A missão
+do Zelador preserva o mesmo ID, alvo e progresso de save, mas rastreia
+Lobos de Éter no Subterrâneo Selado antes que cheguem ao pátio.
 
-Mapas afetados a levantar quando for fazer: todo `MAPS[...]` cujo
-`.zona` ou nome indique Stone Reach / Pátio (`abertura_patio` e afins
-em `12-maps.js`), removendo `formacoes`/spawns de mob desses mapas
-especificamente — não altera o resto do mundo.
+O fundo de batalha exclusivo do Pátio foi removido do catálogo porque
+não existe mais caminho de combate que o consuma. As formações históricas
+permanecem como catálogo de conteúdo, mas nenhum mapa da Academia ativa
+encontro para essa região.
 
 ## 2. Elenco de NPCs da Academia — todas as raças do livro, vivendo em harmonia
 

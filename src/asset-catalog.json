@@ -1223,13 +1223,6 @@
       "sha256": "9f91a0678a0493007d5a1b980ada4ddab8de1d77f2460eba19bdad51013b8732"
     },
     {
-      "key": "battle_bg_patio",
-      "path": "assets/world/battle_bg_patio.webp",
-      "mime": "image/webp",
-      "bytes": 948900,
-      "sha256": "1f5ed72040b71e85c44d5208f364d7eac72ecd31c22dc82ec9e4a60d7b8b2998"
-    },
-    {
       "key": "battle_bg_podridao",
       "path": "assets/world/battle_bg_podridao.webp",
       "mime": "image/webp",

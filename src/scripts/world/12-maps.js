@@ -47,7 +47,9 @@ const MAPS = {
   patio: {
     name:'Stone Reach — Pátio Central',
     onEnter:{scene:'abertura_patio', flag:'cena_abertura'},
-    fill:'.', region:'patio', outdoor:true, encounter:[14, 26], bgm:'field',
+    /* A Academia é área segura: a tensão começa na descida para o
+       Subterrâneo, nunca no espaço de convivência dos NPCs. */
+    fill:'.', region:'patio', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(30,20,60,0.18)',
     /* Decoração do pacote de props. Cada peça ocupa UMA casa e cresce
        para cima; `solido` só onde faz sentido esbarrar. Mover qualquer
@@ -144,7 +146,7 @@ const MAPS = {
               'Se vocês querem sobreviver ao que está vindo, vão precisar entender isso.',
               '...E não, eu não vou explicar de novo. Prestem atenção da próxima vez.']},
       {x:9,y:19,  name:'Zelador', sheet:'npc_zelador', wander:true, quest:'q_zelador',
-       lines:['Grama alta é ninho de bicho. Ande pelo calçamento se não quiser briga.']},
+       lines:['Cerca boa não deixa bicho subir. O problema é o que tem embaixo dela.']},
     ],
     signs:[
       {x:10,y:6, text:'PLACA — "Academia Stone Reach · Salão Principal. Mantenha o éter contido nos corredores."'},
@@ -295,7 +297,9 @@ const MAPS = {
     chests:[ {item:'ether', qty:3}, {item:'hipot', qty:2} ],
     npcs:[],
     mobs:[
-      {id:'sombras',       x:18, y:3,  visual:'shade', formation:[['shade', 2]], patrol:1},
+      /* Os lobos que o Zelador rastreia não entram mais na Academia:
+         formam a primeira patrulha hostil da descida. */
+      {id:'rastros_lobos', x:18, y:3,  visual:'wolf',  formation:[['wolf', 2]], patrol:1},
       {id:'golem_sombra',  x:21, y:7,  visual:'golem', formation:[['golem', 1], ['shade', 1]], patrol:1},
       {id:'servo_inverno', x:12, y:12, visual:'frost', formation:[['frost', 1]], patrol:1},
     ],

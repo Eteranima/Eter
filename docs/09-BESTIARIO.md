@@ -55,13 +55,16 @@ primeiro. É a primeira lição de **priorização de alvo**.
 Única criatura com **arte de sprite** em vez de desenho procedural. Aplica
 Pavor (DEF −25%), que amplifica tudo que vier depois.
 
-**Formações do pátio**: 1 Lobo · 2 Lobos · 1 Sombra · 1 Fátua + 1 Lobo.
+O Pátio Central não tem combate ambiente. Os Lobos de Éter aparecem como a
+primeira patrulha visível do Subterrâneo Selado, antes que consigam subir para
+a Academia.
 
 ---
 
 ## Região: Subterrâneo Selado
 
-Encontro a cada 9-18 passos. Mais denso que o pátio.
+Combates por mobs visíveis, não por passos. A primeira área hostil começa
+abaixo da Academia, não no Pátio.
 
 ### Espectro de Sangue
 | | |

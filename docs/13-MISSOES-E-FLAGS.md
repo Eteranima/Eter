@@ -123,7 +123,7 @@ Só a Profa. Lina usa escolhas hoje. O sistema comporta muito mais.
 A versão 4.0.1 implementa ofertas contextuais por NPC, acompanhamento no menu,
 progresso, entrega e recompensas. O catálogo inicial contém:
 
-- **Ninho na Grama:** abater 6 Lobos de Éter para o Zelador;
+- **Rastros sob a Pedra:** abater 6 Lobos de Éter no Subterrâneo para o Zelador;
 - **Reserva da Enfermaria:** entregar 4 Elixires de Éter;
 - **Prova de Pedra:** abater 3 Golems de Pedra para o Veterano;
 - **O Que Não Se Anota:** abater 5 Sombras Corrompidas;

@@ -42,11 +42,14 @@ function nearestFree(x, y){
 function worldMobAt(x, y){
   return G.map?.mobs?.find(m => !m.defeated && m.tx === x && m.ty === y) || null;
 }
-function isSafeWorldMobTile(x, y, self = null){
+/* Casa onde uma entidade autônoma pode ficar. Portas, escadas, baús,
+   cristais, placas e gatilhos pertencem à pessoa jogadora: NPC ou mob
+   que ocupa um deles pode travar uma transição ou esconder uma interação. */
+function isSafeWorldActorTile(x, y, self = null){
   const m = G.map, t = tileAt(x, y);
   if (!m || !t || t.solid || t.warp || t.chest || t.save) return false;
   if (m.decorSolido?.has(x + ',' + y)) return false;
-  if (m.npcs.some(n => n.tx === x && n.ty === y)) return false;
+  if (m.npcs.some(n => n !== self && n.tx === x && n.ty === y)) return false;
   if (m.boss && m.boss.tx === x && m.boss.ty === y) return false;
   if (m.mobs?.some(n => n !== self && !n.defeated && n.tx === x && n.ty === y)) return false;
   if ((m.signs || []).some(s => s.x === x && s.y === y)) return false;
@@ -55,6 +58,7 @@ function isSafeWorldMobTile(x, y, self = null){
   if (G.followers?.some(f => f.tx === x && f.ty === y)) return false;
   return true;
 }
+function isSafeWorldMobTile(x, y, self = null){ return isSafeWorldActorTile(x, y, self); }
 function nearestSafeWorldMobTile(x, y){
   if (isSafeWorldMobTile(x, y)) return {x, y};
   for (let r = 1; r < 8; r++)

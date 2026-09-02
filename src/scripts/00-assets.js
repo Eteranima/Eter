@@ -292,7 +292,6 @@ Object.assign(SPRITE_DATA, {
   "battle_bg_esgoto": "assets/world/battle_bg_esgoto.webp",
   "battle_bg_lago": "assets/world/battle_bg_lago.webp",
   "battle_bg_nests": "assets/world/battle_bg_nests.webp",
-  "battle_bg_patio": "assets/world/battle_bg_patio.webp",
   "battle_bg_podridao": "assets/world/battle_bg_podridao.webp",
   "battle_bg_spire": "assets/world/battle_bg_spire.webp",
   "battle_bg_undercroft": "assets/world/battle_bg_undercroft.webp",

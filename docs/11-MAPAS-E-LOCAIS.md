@@ -30,8 +30,8 @@ Ponto de partida. Grama, calçamento, uma fonte de água e árvores.
 
 | | |
 |---|---|
-| **Encontros** | Sim, a cada 14-26 passos — **só na grama** |
-| **Criaturas** | Lobo de Éter, Fátua Voltaica, Sombra Corrompida |
+| **Encontros** | Não — área segura |
+| **Criaturas** | Nenhuma hostil |
 | **Cristal de save** | Sim |
 | **Baú** | Poção ×2 |
 | **Saídas** | Salão Principal (porta grande) · Anexo Oeste |
@@ -42,8 +42,8 @@ Zelador (perambula).
 **Placa**: *"Academia Stone Reach · Salão Principal. Mantenha o éter contido
 nos corredores."*
 
-> O calçamento é seguro e a grama não — e o Zelador diz isso explicitamente.
-> É o tutorial de encontro aleatório, dado em fala comum.
+> A Academia é área de convivência: nem a grama aciona combate. O Zelador
+> aponta rastros que descem para o Subterrâneo, onde a ameaça começa.
 
 ---
 
@@ -113,8 +113,8 @@ Primeiro ambiente hostil. Corredores estreitos, entulho, braseiros isolados.
 
 | | |
 |---|---|
-| **Encontros** | Sim, a cada 9-18 passos — em todo o piso |
-| **Criaturas** | Sombra, Golem, Espectro, Servo do Inverno, Fátua |
+| **Encontros** | Mobs visíveis — sem rolagem por passos |
+| **Criaturas** | Lobos de Éter, Sombra, Golem e Servo do Inverno |
 | **Cristal de save** | Sim (canto sudoeste) |
 | **Baús** | Elixir de Éter ×3 · Poção Maior ×2 |
 | **Saídas** | Salão Principal (escada) · Câmara do Selo |
@@ -177,9 +177,10 @@ Conteúdo pós-chefe. Estrutura em anel com duas salas laterais.
 
 ## Regras de exploração
 
-- **Encontros por contagem de passos**, não por sorteio a cada passo. O
-  contador é re-sorteado a cada encontro. Isso evita a sensação de
-  perseguição e dá um ritmo previsível.
+- Mapas que ainda declaram encontro usam **contagem de passos**, não sorteio a
+  cada passo. O contador é re-sorteado a cada encontro.
+- No Subterrâneo Selado, os combates vêm de mobs visíveis: bloqueiam a casa,
+  patrulham pouco e retornam após a vitória sem entrar no save.
 - Portas e escadas ativam **ao pisar**, com transição de fade.
 - Baús e placas ativam **ao interagir de frente**.
 - Cristais podem ser pisados e ativados de cima.

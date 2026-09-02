@@ -2045,6 +2045,8 @@ function runSelfTests(){
       .map(([id]) => id);
     ok('todo mapa com encontro aleatório tem formação para a região dele',
        semForm.length === 0, semForm.join(','));
+    ok('o Pátio Central é seguro e não declara mob hostil',
+       MAPS.patio?.encounter === null && !(MAPS.patio.mobs || []).length);
     // e nenhum NPC novo em cima de parede
     const npcPresos = [];
     for (const [id, m] of Object.entries(MAPS)){
@@ -2101,6 +2103,27 @@ function runSelfTests(){
         ok('mob reaparece na origem sem gravar estado de mapa',
            !vivo.defeated && vivo.tx === vivo.homeX && vivo.ty === vivo.homeY);
       }
+      if (mapaAnterior) loadMap(mapaAnterior);
+    }
+
+    /* Quem perambula não pode parar em cima de uma interação. A regra é
+       compartilhada com mobs para que uma porta, escada, baú ou gatilho
+       não pare de responder só porque uma entidade escolheu aquela casa. */
+    {
+      const mapaAnterior = G.mapId, riscos = [];
+      const lados = Object.values(DIRV);
+      for (const [id, def] of Object.entries(MAPS)){
+        if (!(def.npcs || []).some(n => n.wander)) continue;
+        loadMap(id);
+        for (const npc of G.map.npcs.filter(n => n.wander)) for (const [dx, dy] of lados){
+          const x = npc.tx + dx, y = npc.ty + dy, t = tileAt(x, y);
+          const interage = t?.warp || t?.chest || t?.save ||
+            G.map.signs.some(s => s.x === x && s.y === y) ||
+            (G.map.def.triggers || []).some(g => g.x === x && g.y === y);
+          if (interage && isSafeWorldActorTile(x, y, npc)) riscos.push(`${id}/${npc.name}@${x},${y}`);
+        }
+      }
+      ok('NPC que perambula evita portas, escadas e interações', riscos.length === 0, riscos.join(' '));
       if (mapaAnterior) loadMap(mapaAnterior);
     }
 
@@ -2873,13 +2896,22 @@ function runSelfTests(){
 
       /* Indivíduos por encontro, por região. Uma formação que traz três
          de uma espécie vale três — é o que o contador de abates vê. */
-      const porEncontro = {};
+      const porConfronto = [];
       for (const [reg, fs] of Object.entries(FORMATIONS)){
         if (!comEncontro.has(reg) || !fs.length) continue;
         const acc = {};
         for (const f of fs) for (const [id, n] of f) acc[id] = (acc[id] || 0) + n;
-        porEncontro[reg] = {};
-        for (const k in acc) porEncontro[reg][k] = acc[k] / fs.length;
+        const medio = {};
+        for (const k in acc) medio[k] = acc[k] / fs.length;
+        porConfronto.push(medio);
+      }
+      /* Mob visível é uma fonte de combate tão real quanto uma formação
+         aleatória. Como a formação dele é fixa, conta a quantidade que
+         aparece quando ele é enfrentado, não uma média de rolagens. */
+      for (const m of Object.values(MAPS)) for (const mob of (m.mobs || [])){
+        const fixo = {};
+        for (const [id, n] of (mob.formation || [])) fixo[id] = (fixo[id] || 0) + n;
+        if (Object.keys(fixo).length) porConfronto.push(fixo);
       }
 
       const semAlvo = [], pesadas = [];
@@ -2893,7 +2925,7 @@ function runSelfTests(){
         if (q.tipo === 'collect' && emLoja.has(q.item)) continue;
 
         let melhor = 0;
-        for (const tab of Object.values(porEncontro)){
+        for (const tab of porConfronto){
           let taxa = 0;
           if (q.tipo === 'hunt') taxa = tab[q.alvo] || 0;
           else for (const [k, pr] of (dropDe[q.item] || [])) taxa += (tab[k] || 0) * pr;
@@ -2901,12 +2933,12 @@ function runSelfTests(){
         }
         if (!melhor){ semAlvo.push(`${qid}(${q.alvo || q.item})`); continue; }
         const enc = Math.ceil(q.qtd / melhor);
-        if (enc > TETO_ENCONTROS) pesadas.push(`${qid}: ${enc} encontros`);
+        if (enc > TETO_ENCONTROS) pesadas.push(`${qid}: ${enc} confrontos`);
       }
 
-      ok('toda missão tem alvo que aparece em alguma região com encontro',
+      ok('toda missão tem alvo em algum combate disponível',
          semAlvo.length === 0, semAlvo.join(' · '));
-      ok(`nenhuma missão passa de ${TETO_ENCONTROS} encontros`,
+      ok(`nenhuma missão passa de ${TETO_ENCONTROS} confrontos`,
          pesadas.length === 0, pesadas.join(' · '));
 
       /* O contador de abates é o que alimenta as missões de caça. Se
@@ -3100,13 +3132,14 @@ function runSelfTests(){
       const brigam = new Set();
       for (const m of Object.values(MAPS)){
         if (!m.region) continue;
-        if (m.encounter || m.boss) brigam.add(m.region);
+        if (m.encounter || m.boss || (m.mobs || []).length) brigam.add(m.region);
       }
       /* v5.29 — a chave também pode ser de um MAPA, que ganha da região.
          Vale a mesma exigência: o mapa tem de poder brigar, senão a
          folha nunca aparece. `arquivo_fundo` é a sala do Arquivista. */
       const comFolha = new Set(brigam);
-      for (const [id, m] of Object.entries(MAPS)) if (m.encounter || m.boss) comFolha.add(id);
+      for (const [id, m] of Object.entries(MAPS))
+        if (m.encounter || m.boss || (m.mobs || []).length) comFolha.add(id);
       const orfaos = Object.keys(SPRITE_DATA)
         .filter(k => k.startsWith('battle_bg_') && !comFolha.has(k.slice(10)));
       ok('todo battle_bg_* embutido é de região ou mapa onde há batalha',
@@ -4058,9 +4091,10 @@ function runSelfTests(){
          não muda nada, e o mapa fechado tem que sortear igual. */
       {
         const antes = G.stepsToEnc;
-        loadMap('patio');
+        const aberto = Object.keys(MAPS).find(id => MAPS[id].outdoor && MAPS[id].encounter);
+        loadMap(aberto);
         const fora = G.map.def.outdoor, faixa = G.map.def.encounter;
-        ok('o pátio é a céu aberto e tem encontro (base do teste)', !!fora && !!faixa);
+        ok('há mapa externo com encontro para testar a noite', !!aberto && !!fora && !!faixa, aberto);
 
         const amostra = (passos, n = 400) => {
           G.steps = passos;

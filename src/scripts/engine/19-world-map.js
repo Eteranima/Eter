@@ -374,7 +374,7 @@ function updateNPCs(dt){
     const nx = n.tx + dx, ny = n.ty + dy;
     n.dir = dir;
     if (Math.abs(nx - n.homeX) > 3 || Math.abs(ny - n.homeY) > 3) continue;
-    if (isSolid(nx, ny) || (G.player.tx === nx && G.player.ty === ny)) continue;
+    if (!isSafeWorldActorTile(nx, ny, n)) continue;
     n.fromX = n.tx; n.fromY = n.ty; n.tx = nx; n.ty = ny; n.moving = true; n.moveT = 0;
   }
 }

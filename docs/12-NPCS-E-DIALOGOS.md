@@ -100,9 +100,11 @@ antagonista futuro. ⬜
 ### Zelador
 *Perambula*
 
-> Grama alta é ninho de bicho. Ande pelo calçamento se não quiser briga.
+> Cerca boa não deixa bicho subir. O problema é o que tem embaixo dela.
 
-**Função**: tutorial de encontro aleatório em uma linha, sem caixa de tutorial.
+**Função**: oferece **Rastros sob a Pedra**, uma caçada aos Lobos de Éter no
+Subterrâneo Selado. O Pátio continua seguro; a fala aponta para a ameaça sem
+transformar a Academia em área de combate.
 
 ---
 

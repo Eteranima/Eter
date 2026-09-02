@@ -55,7 +55,7 @@ SCENES.entrega_zelador = {
     {do:'face',  who:'Zelador', dir:'player'},
     {do:'say',   who:'Zelador', lines:[
       'Espera aí. Antes de você sair correndo.',
-      'Seis lobos no pátio não é ninho. Ninho é dois, três. Seis é alguma coisa empurrando eles pra cima.',
+      'Seis lobos na passagem não é acaso. Dois, três, eu entendo. Seis é alguma coisa empurrando eles lá de baixo.',
     ]},
     {do:'shake', mag:4, s:0.5},
     {do:'wait',  s:0.4},
