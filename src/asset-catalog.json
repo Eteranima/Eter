@@ -152,6 +152,13 @@
       "sha256": "4ddef4b6874bcfb182ca5d3bb0bd9eef4e5a9c79b19a5165732a1fe860b3818f"
     },
     {
+      "key": "dlg_max",
+      "path": "assets/characters/dlg_max.webp",
+      "mime": "image/webp",
+      "bytes": 286886,
+      "sha256": "1dac1d7845d702900e43ad2ef6ec071a8186198004f87372f0284a354b3c1b4d"
+    },
+    {
       "key": "ophelia_sheet",
       "path": "assets/characters/ophelia_sheet.webp",
       "mime": "image/webp",

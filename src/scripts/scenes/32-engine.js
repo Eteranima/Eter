@@ -95,7 +95,11 @@ const CUT_CMD = {
       this.st.pronto = false;
       const linhas = c.lines
         ? c.lines.map(l => normalizeLine(l, {name:c.who, portrait:c.portrait}))
-        : [normalizeLine({text:c.text || '', speaker:c.who ?? '', portrait:c.portrait}, null)];
+        /* Copia o comando inteiro antes de normalizar: uma cena de uma
+           linha também pode declarar `participants`, `simultaneous` ou
+           `dialogSprite`, sem perder a apresentação cinematográfica. */
+        : [normalizeLine({...c, text:c.text || '', speaker:c.who ?? c.speaker ?? '',
+                          portrait:c.portrait}, null)];
       Msg.start(linhas, () => { this.st.pronto = true; });
     },
     update(){ return this.st.pronto; },

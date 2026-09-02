@@ -9,6 +9,7 @@
    que tem prioridade sobre a busca por nome. */
 const DIALOGUE_SPRITES = {
   'Gabriel':              'dlg_gabriel',
+  'Max':                  'dlg_max',
   'Ava Rosa Groot':       'dlg_ava',
   'Ophelia':              'dlg_ophelia',
   'Orfeu Bauss':          'dlg_orfeu',
@@ -23,6 +24,70 @@ const DIALOGUE_SPRITES = {
   'Malquior Morningstar': 'dlg_malquior',
   'Sebastian Crowley':    'dlg_sebastian',
 };
+
+/* Uma linha aceita `participants` com no máximo duas presenças:
+   {speaker, dialogSprite, side:'left'|'right', mirror, focus}. O campo
+   `speaker` da linha continua sendo o falante ativo; portanto, linhas
+   antigas, que só têm speaker/text, conservam exatamente a apresentação
+   de antes. `simultaneous:true` ou `focus:'all'` deixam a dupla clara. */
+function dialogueParticipants(line){
+  const raw = Array.isArray(line.participants) && line.participants.length
+    ? line.participants.slice(0, 2)
+    : [{speaker:line.speaker, dialogSprite:line.dialogSprite,
+        side:line.side, mirror:line.mirror, focus:line.focus}];
+  const allFocused = line.simultaneous || line.focus === 'all' || line.focus === 'both';
+
+  return raw.map((entry, index) => {
+    const participant = typeof entry === 'string' ? {speaker:entry} : {...entry};
+    const side = participant.side === 'right' ? 'right'
+      : participant.side === 'left' ? 'left'
+      : raw.length > 1 && index === 1 ? 'right' : 'left';
+    const lineFocus = typeof line.focus === 'string' && !allFocused
+      ? line.focus === side || line.focus === participant.speaker
+      : null;
+    const focus = allFocused ? true
+      : participant.focus ?? lineFocus ?? participant.speaker === line.speaker;
+    const dialogSprite = participant.dialogSprite ??
+      (participant.speaker === line.speaker ? line.dialogSprite : undefined);
+    return {...participant, dialogSprite, side, focus:!!focus};
+  });
+}
+
+/* Só assets dedicados `dlg_*` podem entrar nesta camada. Isso impede que
+   uma sheet de mundo (mesmo carregada em `spriteImages`) seja ampliada
+   inteira por engano na caixa de diálogo. */
+function dialogueSpriteKey(participant){
+  const key = participant.dialogSprite || DIALOGUE_SPRITES[participant.speaker];
+  return typeof key === 'string' && key.startsWith('dlg_') ? key : null;
+}
+
+function drawDialogueSprite(participant){
+  const key = dialogueSpriteKey(participant);
+  const img = key && spriteImages[key];
+  const sourceW = img?.naturalWidth || img?.width;
+  const sourceH = img?.naturalHeight || img?.height;
+  if (!img?.complete || !sourceW || !sourceH) return;
+
+  const ih = H * 0.92;
+  const iw = sourceW / sourceH * ih;
+  const x = participant.side === 'right' ? W - 18 - iw : 18;
+  const y = H - ih;
+  ctx.save();
+  if (participant.focus){
+    ctx.shadowColor = 'rgba(230,216,255,.82)';
+    ctx.shadowBlur = 20;
+  } else {
+    ctx.filter = 'brightness(.48) saturate(.32)';
+    ctx.globalAlpha = .86;
+  }
+  if (participant.mirror){
+    ctx.translate(x + iw, y);
+    ctx.scale(-1, 1);
+    ctx.drawImage(img, 0, 0, iw, ih);
+  } else ctx.drawImage(img, x, y, iw, ih);
+  ctx.restore();
+}
+
 const Msg = {
   active:false, lines:[], i:0, shown:0, onEnd:null, prev:null,
   cur:{i:0},                     // cursor da escolha
@@ -86,17 +151,11 @@ const Msg = {
   draw(){
     if (!this.active) return;
     const L = this.line;
-    /* Sprite grande de corpo inteiro, ANCORADO no chão da tela, atrás
-       da caixa — a caixa (desenhada depois) cobre a metade de baixo
-       dele, igual à referência: personagem "atrás" do balão, só o
-       tronco/cabeça aparecendo por cima. */
-    const dlgKey = L.dialogSprite || DIALOGUE_SPRITES[L.speaker];
-    const dlgImg = dlgKey && spriteImages[dlgKey];
-    if (dlgImg?.complete && (dlgImg.naturalWidth || dlgImg.width)){
-      const ih = H * 0.92;
-      const iw = (dlgImg.naturalWidth || dlgImg.width) / (dlgImg.naturalHeight || dlgImg.height) * ih;
-      ctx.drawImage(dlgImg, 18, H - ih, iw, ih);
-    }
+    /* Sprites inteiros ancorados no chão, atrás da caixa. O ouvinte vai
+       primeiro para que o falante claro fique visualmente em foco. */
+    dialogueParticipants(L)
+      .sort((a, b) => Number(a.focus) - Number(b.focus))
+      .forEach(drawDialogueSprite);
     /* Retrato DENTRO do balão foi removido de propósito (v5.32): quem
        identifica quem fala agora é o Dialogue Sprite de corpo inteiro
        desenhado acima. `L.portrait` continua existindo nos dados (menu,

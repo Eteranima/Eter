@@ -251,10 +251,10 @@ function npcLines(npc){
 function normalizeLine(l, npc){
   const base = typeof l === 'string' ? {text:l} : {...l};
   return {
+    ...base,
     speaker: base.speaker ?? npc?.name ?? '',
     portrait: base.portrait ?? npc?.portrait,
     text: base.text || '',
-    choices: base.choices,
   };
 }
 /** Ajuda a escrever falas ramificadas nos dados dos mapas. */
