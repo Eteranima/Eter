@@ -66,6 +66,10 @@ const MAPS = {
       {x:1,  y:6,  s:'prop_placa'},
       {x:10, y:6,  s:'prop_placa'},
       {x:38, y:6,  s:'prop_fogueira', text:'O fogo arde estável, sem fumaça. Éter, de novo.'},
+      {x:13, y:3,  s:'prop_academia_stone_reach', solido:true,
+       text:'A fachada da Academia ainda ostenta o brasão original, gasto pelo tempo mas legível.'},
+      {x:18, y:20, s:'prop_portao_stone_reach',
+       text:'O portão sul de Stone Reach — pedra maciça, gravada com o mesmo selo que mantém o Subterrâneo fechado.'},
     ],
     rows:[
       '########################################',
@@ -516,6 +520,10 @@ const MAPS = {
     ],
     chests:[],
     npcs:[],
+    decor:[
+      {x:10, y:3, s:'prop_altar_selo', solido:true,
+       text:'O altar rachado ainda pulsa com o resto de um selo antigo. É daqui que ele nunca deveria ter saído.'},
+    ],
     signs:[
       {x:6, y:2, text:'INSCRIÇÃO NA PEDRA — "O que se sela, também se lembra."'},
     ],
@@ -908,10 +916,13 @@ const MAPS = {
        `deluge_defeated` de propósito — é ela que o resto do capítulo
        consulta, e trocar o nome apagaria o progresso de quem já venceu
        aqui num save anterior. */
-    boss:{id:'swampking', x:9, y:6, flag:'deluge_defeated',
+    /* v-atual: retrato calmo próprio (boss_pantano_retrato) — antes o
+       nome vinha cru dentro do texto porque não havia arte para o
+       speaker acender de verdade (ver Msg.draw() em 22-dialogue.js). */
+    boss:{id:'swampking', x:9, y:6, flag:'deluge_defeated', retrato:'boss_pantano_retrato',
           intro:['A lama se abre e o que sai dela não é água: é carapaça, e é antiga.',
-                 'O DONO DO PÂNTANO: "Tudo que afunda nestas águas é meu."',
-                 'O DONO DO PÂNTANO: "Saia."'],
+                 '"Tudo que afunda nestas águas é meu."',
+                 '"Saia."'],
           cena:'comporta_depois'},
   },
 
