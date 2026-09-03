@@ -8,3 +8,10 @@
 # Cache e arquivos temporários de ferramentas locais.
 __pycache__/
 *.py[cod]
+
+# Coordenação local entre agentes (não é conteúdo do jogo nem parte do
+# contrato static-v1; nunca deve ir a um commit/PR).
+/.agentes/
+
+# Material de referência solto no repo pelo usuário, fora do contrato.
+/Docs-referencia-nao-commitar/
