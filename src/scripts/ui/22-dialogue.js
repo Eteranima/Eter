@@ -25,11 +25,30 @@ const DIALOGUE_SPRITES = {
   'Sebastian Crowley':    'dlg_sebastian',
 };
 
+/* Direção NATIVA de cada arte de diálogo. Em uma conversa automática a
+   composição leva o líder para a esquerda e o NPC para a direita; esta tabela
+   vira somente a arte que estiver olhando para fora. Não use um espelho
+   genérico: Ava, Abel, Orfeu e Seiji já olham para a direita, enquanto Max,
+   Gabriel, Calder, Carmila e Sebastian olham para a esquerda. */
+const DIALOGUE_SPRITE_FACING = {
+  'Gabriel':'left', 'Max':'left', 'Ava Rosa Groot':'right', 'Ophelia':'left',
+  'Orfeu Bauss':'right', 'Scythe':'left', 'Abel Nomikos':'right',
+  'Kael Archimedes':'left', 'Seiji':'right', 'Beatriz Demeter':'left',
+  'Calder Pell':'left', 'Carmila Reachforth':'left', 'Farnese':'left',
+  'Malquior Morningstar':'left', 'Sebastian Crowley':'left',
+};
+
+function dialogueMirrorForCenter(speaker, side){
+  const facing = DIALOGUE_SPRITE_FACING[speaker];
+  return (side === 'left' && facing === 'left') || (side === 'right' && facing === 'right');
+}
+
 /* Uma linha aceita `participants` com no máximo duas presenças:
-   {speaker, dialogSprite, side:'left'|'right', mirror, focus}. O campo
-   `speaker` da linha continua sendo o falante ativo; portanto, linhas
-   antigas, que só têm speaker/text, conservam exatamente a apresentação
-   de antes. `simultaneous:true` ou `focus:'all'` deixam a dupla clara. */
+   {speaker, dialogSprite, sheet, side:'left'|'right', mirror, focus}. O campo
+   `speaker` da linha continua sendo o falante ativo. Em duplas, artes `dlg_*`
+   conhecidas se voltam automaticamente para o centro; `mirror` ainda pode
+   sobrescrever esse padrão. `simultaneous:true` ou `focus:'all'` deixam a
+   dupla clara. */
 function dialogueParticipants(line){
   const raw = Array.isArray(line.participants) && line.participants.length
     ? line.participants.slice(0, 2)
@@ -49,7 +68,11 @@ function dialogueParticipants(line){
       : participant.focus ?? lineFocus ?? participant.speaker === line.speaker;
     const dialogSprite = participant.dialogSprite ??
       (participant.speaker === line.speaker ? line.dialogSprite : undefined);
-    return {...participant, dialogSprite, side, focus:!!focus};
+    const hasDedicatedSprite = !!dialogueSpriteKey({...participant, dialogSprite});
+    const mirror = participant.mirror ?? (raw.length === 2 && hasDedicatedSprite
+      ? dialogueMirrorForCenter(participant.speaker, side)
+      : false);
+    return {...participant, dialogSprite, side, mirror, focus:!!focus};
   });
 }
 
@@ -61,17 +84,46 @@ function dialogueSpriteKey(participant){
   return typeof key === 'string' && key.startsWith('dlg_') ? key : null;
 }
 
-function drawDialogueSprite(participant){
-  const key = dialogueSpriteKey(participant);
-  const img = key && spriteImages[key];
-  const sourceW = img?.naturalWidth || img?.width;
-  const sourceH = img?.naturalHeight || img?.height;
-  if (!img?.complete || !sourceW || !sourceH) return;
+/* Quando alguém ainda não tem arte de diálogo, a conversa continua legível:
+   recortamos SOMENTE o quadro parado da direção voltada ao centro. A sheet
+   inteira nunca entra no balão, e uma `dialogSprite` inválida não consegue
+   burlar essa regra. */
+function dialogueFallbackSheet(participant){
+  if (participant.sheet && FRAME_INFO[participant.sheet]) return participant.sheet;
+  return PARTY_DEFS.find(c => c.name === participant.speaker)?.sheet || null;
+}
 
-  const ih = H * 0.92;
-  const iw = sourceW / sourceH * ih;
+function dialogueSpriteSource(participant){
+  const key = dialogueSpriteKey(participant);
+  const dialog = key && spriteImages[key];
+  const dialogW = dialog?.naturalWidth || dialog?.width;
+  const dialogH = dialog?.naturalHeight || dialog?.height;
+  if (dialog?.complete && dialogW && dialogH)
+    return {kind:'dialogue', img:dialog, sx:0, sy:0, sw:dialogW, sh:dialogH};
+
+  const sheet = dialogueFallbackSheet(participant);
+  if (!hasSheet(sheet)) return null;
+  const info = FRAME_INFO[sheet];
+  const dir = participant.dir || (participant.side === 'right' ? 'left' : 'right');
+  return {
+    kind:'sheet', img:spriteImages[sheet],
+    sx:Math.min(1, info.cols - 1) * info.fw,
+    sy:(DIR_ROW[dir] ?? DIR_ROW.down) * info.fh,
+    sw:info.fw, sh:info.fh,
+  };
+}
+
+function drawDialogueSprite(participant){
+  const source = dialogueSpriteSource(participant);
+  if (!source) return;
+
+  const ih = H * (source.kind === 'sheet' ? 0.64 : 0.92);
+  const iw = source.sw / source.sh * ih;
   const x = participant.side === 'right' ? W - 18 - iw : 18;
   const y = H - ih;
+  /* A orientação de uma sheet vem da sua linha direcional, nunca de espelho:
+     assim um fallback não altera o quadro correto do personagem. */
+  const mirror = source.kind === 'dialogue' && participant.mirror;
   ctx.save();
   if (participant.focus){
     ctx.shadowColor = 'rgba(230,216,255,.82)';
@@ -80,11 +132,11 @@ function drawDialogueSprite(participant){
     ctx.filter = 'brightness(.48) saturate(.32)';
     ctx.globalAlpha = .86;
   }
-  if (participant.mirror){
+  if (mirror){
     ctx.translate(x + iw, y);
     ctx.scale(-1, 1);
-    ctx.drawImage(img, 0, 0, iw, ih);
-  } else ctx.drawImage(img, x, y, iw, ih);
+    ctx.drawImage(source.img, source.sx, source.sy, source.sw, source.sh, 0, 0, iw, ih);
+  } else ctx.drawImage(source.img, source.sx, source.sy, source.sw, source.sh, x, y, iw, ih);
   ctx.restore();
 }
 
@@ -126,7 +178,10 @@ const Msg = {
     const seguintes = opt.then || extra;
     this.i++; this.shown = 0; this.cur.i = 0;
     if (Array.isArray(seguintes) && seguintes.length){
-      const norm = seguintes.map(l => normalizeLine(l, {name:this.lines[this.i - 1]?.speaker}));
+      const anterior = this.lines[this.i - 1];
+      const norm = seguintes.map(l => normalizeLine(l, {name:anterior?.speaker}, {
+        participants:anterior?.participants,
+      }));
       this.lines.splice(this.i, 0, ...norm);
     }
     if (this.i >= this.lines.length) this.finish();

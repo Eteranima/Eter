@@ -242,16 +242,27 @@ function startWorldMobBattle(mob){
  *   - função (G) => qualquer um dos acima    → fala condicional a flags
  *  Normaliza tudo para o formato que o Msg consome. */
 function npcLines(npc){
+  const context = {participants:npcDialogueParticipants(npc)};
   // NPC com missão: a fala dela tem prioridade sobre a fala solta
-  if (npc.quest && QUESTS[npc.quest]) return questLines(npc).map(l => normalizeLine(l, npc));
+  if (npc.quest && QUESTS[npc.quest]) return questLines(npc).map(l => normalizeLine(l, npc, context));
   let raw = typeof npc.lines === 'function' ? npc.lines(G) : npc.lines;
   if (!Array.isArray(raw)) raw = [raw];
-  return raw.map(l => normalizeLine(l, npc));
+  return raw.map(l => normalizeLine(l, npc, context));
 }
-function normalizeLine(l, npc){
+function npcDialogueParticipants(npc){
+  const leader = leaderChar();
+  if (!leader || !npc) return [];
+  return [
+    {speaker:leader.name, sheet:leader.sheet, side:'left', dir:'right'},
+    {speaker:npc.name, sheet:npc.sheet, side:'right', dir:'left'},
+  ];
+}
+function normalizeLine(l, npc, context = {}){
   const base = typeof l === 'string' ? {text:l} : {...l};
+  const participants = base.participants ?? context.participants;
   return {
     ...base,
+    ...(participants !== undefined ? {participants} : {}),
     speaker: base.speaker ?? npc?.name ?? '',
     portrait: base.portrait ?? npc?.portrait,
     text: base.text || '',
