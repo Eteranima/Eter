@@ -629,7 +629,18 @@ const Battle = {
     }
 
     if (s.cost) u.mp = Math.max(gmInfinito(u) ? gmPisoMp(u) : 0, u.mp - s.cost);
-    if (this.pendingIsUlt){ u.reso = 0; Sound.sfx('ult'); FX.flash(ELEM[s.elem].glow, 0.35); FX.shake(9, 0.5); }
+    if (this.pendingIsUlt){
+      u.reso = 0; Sound.sfx('ult'); FX.flash(ELEM[s.elem].glow, 0.35); FX.shake(9, 0.5);
+      /* Corte dramático da Ressonância: um instante de respiro antes do
+         golpe (hitstop), o nome da própria ultimate como cartela — até
+         aqui toda Ressonância só se distinguia da Conjunta pelo flash
+         maior — e uma explosão de partículas do elemento no corpo de
+         quem golpeia, não no alvo (o alvo já ganha a dele no impacto,
+         ver `FX.burst` mais abaixo). */
+      FX.hitstop(0.12);
+      FX.popup(W / 2, 140, s.name.toUpperCase(), ELEM[s.elem].glow, true);
+      FX.burst(u.bx, u.by - 40, s.elem, 26);
+    }
     else if (s.combo){ Sound.sfx('ult'); FX.flash(ELEM[s.elem].glow, 0.28); FX.shake(7, 0.42); }
     this.pushLog(`${u.name} usa ${s.name}!`);
 
