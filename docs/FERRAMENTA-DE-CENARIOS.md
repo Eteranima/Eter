@@ -23,11 +23,16 @@ priorizar pedra quente, verde, teal, azul, âmbar e acentos regionais.
 - WebP novo requer chave em `00-assets.js` e tamanho/hash no catálogo.
 - A ordem de `warps` e `chests` acompanha a leitura dos marcadores da grade.
 - **100% interativo (requisito do jogo, não só desta ferramenta):** todo
-  prop de `decor` sai da ferramenta com `text` (reage ao interagir,
-  mostrado via `G.map.decor[].text` em `interact()`) ou foi marcado
-  deliberadamente mudo — nunca por esquecimento. `prop_placa` é a
-  exceção: o texto dela vai em `signs`, **na mesma coordenada exata** do
-  sprite — sprite e texto em coordenadas diferentes é o bug real que já
-  aconteceu no Pátio (placa visível em `(1,6)`, texto funcional em
-  `(10,6)`, um nunca encontrava o outro). A ferramenta valida os dois
-  casos e avisa antes de copiar a definição.
+  prop de `decor` — `prop_placa` incluído — sai da ferramenta com `text`
+  (reage ao interagir, mostrado via `G.map.decor[].text` em `interact()`)
+  ou foi marcado deliberadamente mudo — nunca por esquecimento.
+- **`decor` só entra em tile de base NÃO sólido; `signs` só entra em tile
+  de base SÓLIDO** (parede, água, árvore, estante, mesa, pilar, braseiro,
+  entulho, baú) — são regras opostas, então as duas nunca compartilham
+  coordenada. O autoteste (`36-self-test.js`) trava as duas: decor sobre
+  tile sólido vira "dentro de parede"; sign fora de tile sólido some sem
+  ninguém notar (o motor lê `signs` pela coordenada exata, sem checar
+  solidez em runtime). Uma placa MUDA embutida na parede é só `signs`,
+  sem `decor` nenhum; um letreiro visível e examinável em chão aberto é
+  só `decor.text`, sem `signs`. A ferramenta valida as duas regras e
+  bloqueia a definição se alguma quebrar.

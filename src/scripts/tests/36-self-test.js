@@ -4237,9 +4237,13 @@ function runSelfTests(){
       ok('todo ícone de arma existe em SPRITE_DATA',
          armas.every(([, i]) => !!SPRITE_DATA[i.icon]),
          armas.filter(([, i]) => !SPRITE_DATA[i.icon]).map(([k]) => k).join(','));
-      ok('nenhum item que NÃO é arma ganhou ícone por engano',
-         Object.values(ITEMS).every(i => !i.icon || i.slot === 'weapon'),
-         Object.entries(ITEMS).filter(([, i]) => i.icon && i.slot !== 'weapon').map(([k]) => k).join(','));
+      /* v-atual: consumíveis e materiais também podem ter ícone próprio
+         (poção, éter, materiais de drop...), não só arma — a restrição
+         a `slot === 'weapon'` valia quando só a família de arma tinha
+         arte. O que continua valendo é o ícone apontar pra algo real. */
+      ok('todo item com ícone aponta para arte que existe em SPRITE_DATA',
+         Object.values(ITEMS).every(i => !i.icon || !!SPRITE_DATA[i.icon]),
+         Object.entries(ITEMS).filter(([, i]) => i.icon && !SPRITE_DATA[i.icon]).map(([k]) => k).join(','));
       /* Nove ícones para dezoito armas: a marca é por FAMÍLIA DE FORMA,
          não uma por arma. O teste trava que a divisão não degenerou em
          "tudo é espada", que apagaria a leitura. */

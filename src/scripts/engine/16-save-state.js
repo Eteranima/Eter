@@ -36,6 +36,7 @@ const Save = {
       v: APP_VERSION, at: Date.now(), playtime: G.playtime,
       map: G.mapId, x: G.player.tx, y: G.player.ty, dir: G.player.dir,
       leader: G.leader, gold: G.gold, items: G.items, flags: G.flags,
+      pinnedItems: G.pinnedItems,
       steps: G.steps,
       squad: G.squad.slice(),   // lista de nomes em campo (v4.3+)
       recruits: {...G.recruits}, // missão → quem ela ainda vai trazer (v4.4+)
@@ -93,6 +94,7 @@ const G = {
   squad:[],               // nomes em campo, na ordem da formação (até 5)
   leader:0,               // quem anda na frente, índice dentro do grupo
   gold:120, items:{potion:3, ether:1}, flags:{},
+  pinnedItems:[],         // favoritos da loja, para a aba de compra rápida (v-atual)
   difficulty:'normal',
   quests:{},              // id da missão → {estado, progresso}
   kills:{},               // chave da criatura → total abatido
@@ -553,6 +555,7 @@ function newGame(inicial){
   G.recruits = montarRecrutas(def.name);
   G.leader = 0;
   G.gold = 120; G.items = {potion:3, ether:1}; G.flags = {};
+  G.pinnedItems = [];
   G.difficulty = 'normal';
   G.quests = {}; G.kills = {}; G.cacada = {}; G.vistos = {};
   G.cristais = {}; G.visitados = {};   // rede e nevoeiro (v5.22)
@@ -666,6 +669,9 @@ function loadFromSave(s){
   G.petAtivo = (ativoRenomeado && G.pets[ativoRenomeado]) ? ativoRenomeado : null;
   G.gold = s.gold ?? 0;
   G.items = s.items || {}; G.flags = s.flags || {}; G.playtime = s.playtime || 0;
+  /* Save de antes desta versão não tem favoritos de loja: entra vazio,
+     que é o estado correto (nunca inventar pin que o jogador não fez). */
+  G.pinnedItems = Array.isArray(s.pinnedItems) ? s.pinnedItems.filter(id => ITEMS[id]) : [];
   sanitizeSquad();
 
   // posição: v4.1-2 guardava por time, os demais na raiz do save

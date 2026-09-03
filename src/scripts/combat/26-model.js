@@ -258,6 +258,22 @@ function makeEnemyUnit(id, idx, n = null){
   }
   return u;
 }
+/** Convidado de 1 luta (Malquior/Sebastian, GUEST_ALLIES): estatística
+    fixa, sem base/grow/learn — nunca ganha EXP (ver exclusão em
+    `survivors`, finish()) nem existe fora desta luta, então recalcStats
+    nunca precisa rodar nele. `guestAI` é o que beginActorTurn() usa pra
+    pular a fase de INPUT e chamar guestAct() sozinho. */
+function makeGuestAlly(spec){
+  return prepAlly({
+    name:spec.name, element:spec.element, role:spec.role,
+    sheet:spec.sheet, portrait:spec.portrait, lvl:5, exp:0,
+    hp:spec.hp, maxHp:spec.hp, mp:spec.mp, maxMp:spec.mp,
+    atk:spec.atk, def:spec.def, spd:spec.spd,
+    skills:[spec.guestSkill], tree:[], ult:null,
+    gear:{weapon:null, armor:null, accessory:null},
+    ail:[], guestAI:true, guestSkill:spec.guestSkill,
+  });
+}
 function prepAlly(c){
   c.side = 'ally'; c.ail = c.ail || []; c.buffs = []; c.guarding = false;
   c.lungeT = 0; c.hurtT = 0; c.dieT = 0;

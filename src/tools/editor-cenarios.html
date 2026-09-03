@@ -53,9 +53,10 @@
       <label class="check"><input id="prop-solid" type="checkbox" checked> Prop bloqueia a célula</label>
       <label>Texto ao examinar <input id="prop-text" type="text" placeholder='Ex.: "Barril de água limpa."'></label>
       <label class="check"><input id="prop-mute" type="checkbox"> Decoração muda (sem texto, decisão deliberada)</label>
-      <p class="small">Requisito do jogo: todo prop reage ao interagir (texto) ou é declarado mudo de propósito —
-        nunca fica sem nenhum dos dois. Placa (<code>prop_placa</code>) é exceção: o texto dela vai no campo
-        <strong>Placas / signs</strong> ao lado, na mesma coordenada do sprite.</p>
+      <p class="small">Requisito do jogo: todo prop, placa (<code>prop_placa</code>) incluída, reage ao interagir
+        (texto aqui) ou é declarado mudo de propósito — nunca fica sem nenhum dos dois. Só entra num tile ABERTO
+        (não sólido) — para uma placa muda embutida na parede, use <strong>Placas / signs</strong> ao lado, nunca
+        os dois na mesma coordenada.</p>
       <p class="small">Clique em um prop e depois na grade. Clique numa célula já decorada para removê-la.</p>
     </aside>
 
@@ -76,9 +77,10 @@
       <label>Baús (JSON)<textarea id="chests" spellcheck="false">[]</textarea></label>
       <p class="small">A ordem de <code>warps</code> e <code>chests</code> precisa seguir os marcadores <code>+</code>/<code>S</code> e <code>$</code> na leitura, como em <code>12-maps.js</code>.</p>
       <label>Placas / signs (JSON)<textarea id="signs" spellcheck="false">[]</textarea></label>
-      <p class="small">Cada placa (<code>prop_placa</code> na camada de props) precisa de uma entrada aqui
-        <strong>na mesma coordenada</strong>: <code>{"x":0,"y":0,"text":"..."}</code>. Sprite sem texto ou texto sem
-        sprite quebra a interação — já aconteceu no Pátio.</p>
+      <p class="small">Placa MUDA, sem sprite visível, embutida num tile de base sólido (parede, água, árvore,
+        estante, mesa, pilar, braseiro, entulho, baú): <code>{"x":0,"y":0,"text":"..."}</code>. Nunca na mesma
+        coordenada de um prop de <code>decor</code> — decor exige tile aberto, sign exige tile sólido; os dois só
+        convivem em coordenadas diferentes do mesmo mapa.</p>
 
       <h2>Prioridade de arte</h2>
       <ol class="priority">
