@@ -538,6 +538,37 @@ function runSelfTests(){
        dialogueSpriteKey({speaker:'X', dialogSprite:'x_sheet'}) === null);
     ok('todo mapeamento de diálogo aponta para asset carregado',
        Object.values(DIALOGUE_SPRITES).every(k => !!SPRITE_DATA[k] && spriteImages[k]?.complete));
+    const party = G.party, squad = G.squad, leader = G.leader;
+    const map = G.map, followers = G.followers;
+    G.party = [makeChar(PARTY_DEFS.find(c => c.name === 'Max'), 1)];
+    G.squad = ['Max']; G.leader = 0; G.followers = [];
+    const automaticas = npcLines({name:'Aluno de teste', sheet:'npc_aluno', lines:[{
+      text:'Fala com resposta.', choices:[{label:'Seguir', then:['Continuamos.']}],
+    }]});
+    const duplaAutomatica = dialogueParticipants(automaticas[0]);
+    const fallbackNpc = dialogueSpriteSource(duplaAutomatica[1]);
+    ok('interação de NPC inclui líder e interlocutor',
+       duplaAutomatica.length === 2 && duplaAutomatica[0].speaker === 'Max' &&
+       duplaAutomatica[0].side === 'left' && duplaAutomatica[1].speaker === 'Aluno de teste' &&
+       duplaAutomatica[1].side === 'right' && duplaAutomatica[0].mirror &&
+       !duplaAutomatica[0].focus && duplaAutomatica[1].focus);
+    ok('NPC sem dlg recorta só o quadro central voltado ao líder',
+       fallbackNpc?.kind === 'sheet' && fallbackNpc.sx === FRAME_INFO.npc_aluno.fw &&
+       fallbackNpc.sy === FRAME_INFO.npc_aluno.fh &&
+       fallbackNpc.sw < (spriteImages.npc_aluno.naturalWidth || spriteImages.npc_aluno.width));
+    Msg.start(automaticas); Msg.shown = 999; Msg.choose(Msg.choices[0]);
+    ok('resposta de escolha de NPC conserva a dupla automática',
+       Msg.line.participants?.length === 2 && dialogueParticipants(Msg.line)[1].focus);
+    Msg.finish();
+    G.map = {npcs:[{name:'NPC de cena', sheet:'npc_aluno'}]};
+    CUT_CMD.say.start.call({st:{}}, {who:'NPC de cena', text:'Fala roteirizada.'});
+    const duplaDeCena = dialogueParticipants(Msg.line);
+    ok('cena roteirizada de NPC também monta a dupla',
+       duplaDeCena.length === 2 && duplaDeCena[0].speaker === 'Max' &&
+       duplaDeCena[1].speaker === 'NPC de cena' && duplaDeCena[1].focus);
+    Msg.finish();
+    G.party = party; G.squad = squad; G.leader = leader;
+    G.map = map; G.followers = followers;
     const cenaCinematica = {st:{}};
     CUT_CMD.say.start.call(cenaCinematica, {
       who:'X', speaker:'Ignorado', text:'Cena em dupla.', dialogSprite:'dlg_teste', simultaneous:true,

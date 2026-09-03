@@ -22,6 +22,11 @@ motor apenas quando necessário para encarar o centro; `mirror` explícito
 continua sendo a exceção manual. O falante recebe halo e o ouvinte fica
 escuro/dessaturado. `simultaneous:true` deixa os dois claros.
 
+O mesmo vale para `say` de uma cena roteirizada quando `who` resolve para um
+NPC com sheet. Narrações, falas do jogador e cenas que declaram
+`participants` (inclusive uma lista vazia deliberada) mantêm a composição que
+o roteiro especificar.
+
 Linhas avulsas sem `participants` continuam compatíveis: mostram apenas o
 falante à esquerda. Se um participante automático não tiver `dlg_*`, o motor
 recorta o quadro parado central da sheet de campo, na direção voltada ao
