@@ -4048,6 +4048,7 @@
     "scripts/engine/35-loop.js",
     "scripts/tests/36-self-test.js",
     "scripts/tools/37-balance.js",
-    "scripts/data/38-skilltree-reservado.js"
+    "scripts/data/38-skilltree-reservado.js",
+    "scripts/39-build-badge.js"
   ]
 }
