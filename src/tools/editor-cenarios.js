@@ -9,11 +9,17 @@ const TILES = {
 };
 const PROPS = [
   ['prop_academia_stone_reach','Academia',true],['prop_portao_stone_reach','Portão',true],['prop_altar_selo','Altar do Selo',true],
-  ['prop_casa_grande','Casa grande',true],['prop_estalagem','Estalagem',true],['prop_templo','Templo',true],['prop_torre','Torre',true],
+  ['prop_casa_grande','Casa grande',true,4],['prop_estalagem','Estalagem',true,4],['prop_templo','Templo',true,4],['prop_torre','Torre',true,4],
   ['prop_ruinas','Ruínas',true],['prop_muro_pedra','Muro',true],['prop_poco','Poço',true],['prop_arvore','Árvore',true],
   ['prop_arbusto','Arbusto',true],['prop_flores','Flores',false],['prop_lampiao','Lampião',false],['prop_barril','Barril',true],
   ['prop_caixa','Caixa',true],['prop_forja','Forja',true],['prop_estante','Estante',true],['prop_tocha','Tocha',false],
-  ['prop_placa','Placa',false],
+  ['prop_placa','Placa',false,2],
+  /* Porto Lúmina: cada prop usa altura de prévia aproximada à sua arte
+     real e é ancorado pelo pé, igual ao runtime do campo. */
+  ['prop_barco_lumina','Barco Vento de Coral',true,3.2],
+  ['prop_barco_pesca_lumina','Barco de pesca Lúmina',true,2.4],
+  ['prop_taverna_lumina','Taverna Mesa de Âmbar',true,4.25],
+  ['prop_loja_lumina','Loja Mercado da Maré',true,4],
 ];
 const $ = id => document.getElementById(id), canvas = $('map-canvas'), ctx = canvas.getContext('2d');
 let state = {w:24,h:16,fill:'.',grid:[],decor:[],selectedTile:'.',selectedProp:PROPS[0][0],mode:'tile'};
@@ -29,7 +35,13 @@ function render(){
     const [,,solid]=TILES[state.grid[y][x]]||TILES['#']; ctx.fillStyle=TILES[state.grid[y][x]]?.[1]||'#333';ctx.fillRect(x*CELL,y*CELL,CELL,CELL);
     ctx.strokeStyle=solid?'#0005':'#fff1';ctx.strokeRect(x*CELL+.5,y*CELL+.5,CELL-1,CELL-1);if(state.grid[y][x]!=='.'){ctx.fillStyle='#fffb';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText(state.grid[y][x],x*CELL+CELL/2,y*CELL+16);}
   }
-  state.decor.forEach(d=>{ const image=images[d.s], x=d.x*CELL,y=d.y*CELL;if(image?.complete)ctx.drawImage(image,x-CELL*.75,y-CELL*3.8,CELL*2.5,CELL*4);else{ctx.fillStyle='#00a8a8';ctx.fillRect(x+7,y+7,10,10);}});
+  state.decor.forEach(d=>{
+    const image=images[d.s], x=d.x*CELL,y=d.y*CELL, prop=PROPS.find(([key])=>key===d.s);
+    if(image?.complete && image.naturalWidth){
+      const h=(prop?.[3]||3)*CELL, w=Math.min(h*(image.naturalWidth/image.naturalHeight),CELL*5);
+      ctx.drawImage(image,Math.round(x+CELL/2-w/2),Math.round(y+CELL-h+CELL-2),Math.round(w),Math.round(h));
+    }else{ctx.fillStyle='#00a8a8';ctx.fillRect(x+7,y+7,10,10);}
+  });
   const x=Number($('spawn-x').value),y=Number($('spawn-y').value);if(Number.isInteger(x)&&Number.isInteger(y)&&x>=0&&y>=0&&x<state.w&&y<state.h){ctx.fillStyle='#ffcf4f';ctx.beginPath();ctx.moveTo((x+.5)*CELL,(y+.14)*CELL);ctx.lineTo((x+.82)*CELL,(y+.82)*CELL);ctx.lineTo((x+.18)*CELL,(y+.82)*CELL);ctx.closePath();ctx.fill();}
 }
 function choose(){

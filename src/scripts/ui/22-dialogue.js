@@ -217,28 +217,34 @@ const Msg = {
        bestiário, etc. usam), só não é mais desenhado aqui. */
     const bh = 116, by = H - bh - 12;
     panel(12, by, W - 24, bh);
-    let tx = 28, ty = by + 30;
+    const moldura = spriteImages.ui_moldura_dialogo;
+    if (moldura && (moldura.complete ?? true) && (moldura.naturalWidth || moldura.width)){
+      ctx.save(); ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(moldura, 8, by - 6, W - 16, bh + 12);
+      ctx.restore();
+    }
+    let tx = 42, ty = by + 30;
     if (L.speaker){
-      pxText(L.speaker, tx, by + 26, {size:9, color:'#b89aff'});
+      pxText(L.speaker, tx, by + 26, {size:9, color:'#73dbe2'});
       ty = by + 52;
     } else ty = by + 34;
     const text = L.text.slice(0, Math.floor(this.shown));
-    wrapUI(text, W - tx - 44, 15).forEach((ln, k) => uiText(ln, tx, ty + k * 22, {size:15}));
+    wrapUI(text, W - tx - 54, 15).forEach((ln, k) => uiText(ln, tx, ty + k * 22, {size:15}));
 
     const ch = this.choices;
     if (ch){
       const cw = 340, cy = by - ch.length * 30 - 20;
-      panel(W - cw - 22, cy, cw, ch.length * 30 + 18, {accent:'#7a5aba'});
+      panel(W - cw - 22, cy, cw, ch.length * 30 + 18, {accent:'#2896a6'});
       ch.forEach((o, k) => {
         const on = this.cur.i % ch.length === k, y = cy + 28 + k * 30;
-        if (on){ ctx.fillStyle = 'rgba(120,86,200,.26)'; ctx.fillRect(W - cw - 12, y - 17, cw - 20, 26); }
-        pxText((on ? '▸ ' : '  ') + o.label, W - cw - 2, y, {size:8, color:on ? '#fff' : '#9a8ab0'});
+        if (on){ ctx.fillStyle = 'rgba(40,150,166,.26)'; ctx.fillRect(W - cw - 12, y - 17, cw - 20, 26); }
+        pxText((on ? '▸ ' : '  ') + o.label, W - cw - 2, y, {size:8, color:on ? '#fff' : '#a6c3c8'});
       });
     } else if (this.complete){
       const bl = Math.sin(Date.now() / 260) > 0 ? 1 : .25;
-      pxText('▼', W - 34, by + bh - 14, {size:8, color:`rgba(184,154,255,${bl})`, align:'right'});
+      pxText('▼', W - 34, by + bh - 14, {size:8, color:`rgba(231,195,106,${bl})`, align:'right'});
     }
     if (this.lines.length > 1)
-      pxText(`${this.i + 1}/${this.lines.length}`, W - 34, by + 24, {size:7, color:'#5a4a7a', align:'right'});
+      pxText(`${this.i + 1}/${this.lines.length}`, W - 34, by + 24, {size:7, color:'#678e9d', align:'right'});
   },
 };

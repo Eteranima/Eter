@@ -472,16 +472,17 @@ const Menu = {
 
     // coluna esquerda: comandos
     panel(24, 24, 190, H - 48);
-    pxText('MENU', 44, 58, {size:11, color:'#b89aff'});
+    this.drawMolduraMenu(18, 18, 202, H - 36);
+    pxText('MENU', 44, 58, {size:11, color:'#73dbe2'});
     this.ROOT.forEach((o, i) => {
       const y = 100 + i * 34, on = this.page === 'root' && this.cur.root.i === i;
       if (this.page === 'root') Clique.add(34, y - 16, 170, 26, Clique.escolher(this.cur.root, i));
       const sob = this.page === 'root' && Clique.emCima(34, y - 16, 170, 26);
       if (on || sob){
-        ctx.fillStyle = on ? 'rgba(120,86,200,.24)' : 'rgba(120,86,200,.12)';
+        ctx.fillStyle = on ? 'rgba(40,150,166,.28)' : 'rgba(40,150,166,.14)';
         ctx.fillRect(34, y - 16, 170, 26);
       }
-      pxText((on ? '▸ ' : '  ') + o.label, 44, y, {size:9, color:on ? '#fff' : '#8a7aaa'});
+      pxText((on ? '▸ ' : '  ') + o.label, 44, y, {size:9, color:on ? '#fff7df' : '#a6c3c8'});
     });
     pxText(`${G.gold}₢`, 44, H - 74, {size:9, color:'#eaca3a'});
     pxText(fmtTime(G.playtime), 44, H - 48, {size:8, color:'#6a5a8a'});
@@ -501,6 +502,16 @@ const Menu = {
     else if (P === 'bestia') this.drawBestiario(px, pw);
 
     if (this.msgT > 0) this.drawToast();
+  },
+
+  /* A moldura é decorativa e tem centro transparente. O painel abaixo
+     continua sendo a área semântica de foco, clique e contraste. */
+  drawMolduraMenu(x, y, w, h){
+    const moldura = spriteImages.ui_moldura_menu;
+    if (!moldura || !(moldura.complete ?? true) || !(moldura.naturalWidth || moldura.width)) return;
+    ctx.save(); ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(moldura, x, y, w, h);
+    ctx.restore();
   },
 
   drawToast(){
@@ -973,30 +984,58 @@ const Menu = {
 
   drawStatus(px, pw){
     const sel = this.cur.status.i;
+    const alto = Math.min(124, Math.floor((H - 120) / Math.max(1, G.party.length)));
     G.party.forEach((c, i) => {
-      const y = 52 + i * 92, on = (this.page !== 'root') && sel === i;
-      if (on){ ctx.fillStyle = 'rgba(120,86,200,.16)'; ctx.fillRect(px + 10, y - 22, pw - 20, 86); }
+      const y = 54 + i * alto, on = (this.page !== 'root') && sel === i;
       const E = ELEM[c.element];
-      drawActor({sheet:c.sheet, dir:'down', moving:false, animT:0, color:E.main},
-                px + 44, y + 52, {scale:.78, alpha:c.hp > 0 ? 1 : .4});
-      pxText(`${c.name}`, px + 84, y, {size:10, color:E.glow});
-      pxText(`Nv${c.lvl} ${c.role}`, px + 84, y + 18, {size:7, color:'#7a6a9a'});
-      pxText(`${E.icon} ${E.name}`, px + 250, y, {size:7, color:E.main});
-      bar(px + 84, y + 26, 150, 8, c.hp / c.maxHp, '#3a8a3a', '#5aba5a');
-      pxText(`${c.hp}/${c.maxHp}`, px + 242, y + 34, {size:7, color:'#9ada9a'});
-      bar(px + 84, y + 38, 150, 6, c.mp / c.maxMp, '#3a5a9a', '#5a8afa');
-      pxText(`${c.mp}/${c.maxMp}`, px + 242, y + 45, {size:7, color:'#8ab0fa'});
+      ctx.save();
+      ctx.globalAlpha = on ? .24 : .11;
+      ctx.fillStyle = E.main; ctx.fillRect(px + 12, y - 24, pw - 24, alto - 10);
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = on ? E.glow : 'rgba(255,255,255,.10)';
+      ctx.strokeRect(px + 12.5, y - 23.5, pw - 25, alto - 11);
+      ctx.restore();
+      this.drawStatusPortrait(c, px + 22, y - 14, 64, alto - 30, E);
+      pxText(`${c.name}`, px + 100, y, {size:10, color:E.glow});
+      pxText(`Nv${c.lvl}  ${c.role}`, px + 100, y + 18, {size:7, color:'#b8afc8'});
+      pxText(`${E.icon} ${E.name}`, px + pw - 24, y, {size:7, color:E.main, align:'right'});
+      bar(px + 100, y + 28, 154, 8, c.hp / c.maxHp, '#3a8a3a', '#5aba5a');
+      pxText(`${c.hp}/${c.maxHp}`, px + 262, y + 35, {size:7, color:'#9ada9a'});
+      bar(px + 100, y + 42, 154, 6, c.mp / c.maxMp, '#3a5a9a', '#5a8afa');
+      pxText(`${c.mp}/${c.maxMp}`, px + 262, y + 48, {size:7, color:'#8ab0fa'});
       const need = expToNext(c.lvl);
-      bar(px + 84, y + 50, 150, 4, c.exp / need, '#7a6a2a', '#eaca3a');
-      pxText(`EXP ${c.exp}/${need}`, px + 242, y + 55, {size:6, color:'#bba85a'});
-      pxText(`ATK ${c.atk}  DEF ${c.def}  SPD ${c.spd}`, px + 320, y + 20, {size:7, color:'#8a8a9a'});
+      bar(px + 100, y + 54, 154, 4, c.exp / need, '#7a6a2a', '#eaca3a');
+      pxText(`EXP ${c.exp}/${need}`, px + 262, y + 59, {size:6, color:'#bba85a'});
+      pxText(`ATK ${c.atk}  DEF ${c.def}  SPD ${c.spd}`, px + 324, y + 20, {size:7, color:'#c4b9a6'});
       // ressonância
-      bar(px + 320, y + 30, 110, 6, (c.reso || 0) / 100, '#6a3a9a', c.reso >= 100 ? '#ffe44a' : '#b89aff');
+      bar(px + 324, y + 32, 108, 6, (c.reso || 0) / 100, '#6a3a9a', c.reso >= 100 ? '#ffe44a' : E.glow);
       pxText(c.reso >= 100 ? 'RESSONÂNCIA PRONTA' : `Ressonância ${Math.floor(c.reso || 0)}%`,
-             px + 320, y + 48, {size:6, color:c.reso >= 100 ? '#ffe44a' : '#7a6a9a'});
+             px + 324, y + 49, {size:6, color:c.reso >= 100 ? '#ffe44a' : '#b8afc8'});
       if (c.ail.length)
-        drawAilments(c.ail, px + 320, y + 58, {lado:14, color:'#da6a6a'});
+        drawAilments(c.ail, px + 324, y + 62, {lado:14, color:'#da6a6a'});
     });
+  },
+
+  /* O cartão usa o retrato canônico quando ele já existe. O recorte é
+     calculado no desenho, portanto fotos de alturas diferentes não
+     deformam, e a folha de campo continua como alternativa segura. */
+  drawStatusPortrait(c, x, y, w, h, E){
+    const art = spriteImages[c.portrait];
+    ctx.save();
+    ctx.fillStyle = '#111a25'; ctx.fillRect(x - 2, y - 2, w + 4, h + 4);
+    ctx.strokeStyle = E.glow; ctx.strokeRect(x - 1.5, y - 1.5, w + 3, h + 3);
+    if (art && (art.complete ?? true) && (art.naturalWidth || art.width)){
+      const iw = art.naturalWidth || art.width, ih = art.naturalHeight || art.height;
+      const corte = Math.min(iw, ih * w / h), sx = Math.round((iw - corte) / 2);
+      ctx.drawImage(art, sx, 0, corte, ih, x, y, w, h);
+    } else {
+      drawActor({sheet:c.sheet, dir:'down', moving:false, animT:0, color:E.main},
+                x + w / 2, y + h - 2, {scale:1.1, alpha:c.hp > 0 ? 1 : .4});
+    }
+    const orn = spriteImages.ui_status_ornamento;
+    if (orn && (orn.complete ?? true) && (orn.naturalWidth || orn.width))
+      ctx.drawImage(orn, x + w - 24, y - 13, 30, 30);
+    ctx.restore();
   },
 
   drawEquip(px, pw){

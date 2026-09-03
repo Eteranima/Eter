@@ -65,6 +65,22 @@ Object.assign(SPRITE_DATA, {
   icon_material_seiva: "assets/ui/icon_material_seiva.webp",
   icon_material_escama: "assets/ui/icon_material_escama.webp",
   icon_material_caco: "assets/ui/icon_material_caco.webp",
+  icon_armadura_tunica: "assets/ui/icon_armadura_tunica.webp",
+  icon_armadura_manto: "assets/ui/icon_armadura_manto.webp",
+  icon_armadura_couraca: "assets/ui/icon_armadura_couraca.webp",
+  icon_armadura_vidro: "assets/ui/icon_armadura_vidro.webp",
+  icon_talisma_anel: "assets/ui/icon_talisma_anel.webp",
+  icon_talisma_broche: "assets/ui/icon_talisma_broche.webp",
+  icon_talisma_amuleto: "assets/ui/icon_talisma_amuleto.webp",
+  icon_talisma_selo: "assets/ui/icon_talisma_selo.webp",
+  icon_material_casulo: "assets/ui/icon_material_casulo.webp",
+  icon_material_folha: "assets/ui/icon_material_folha.webp",
+  icon_material_lacre: "assets/ui/icon_material_lacre.webp",
+  icon_material_valvula: "assets/ui/icon_material_valvula.webp",
+  icon_material_junco: "assets/ui/icon_material_junco.webp",
+  icon_material_esporo: "assets/ui/icon_material_esporo.webp",
+  icon_material_carapaca: "assets/ui/icon_material_carapaca.webp",
+  icon_talisma_marcador: "assets/ui/icon_talisma_marcador.webp",
 });
 /* TILES_ANIMADOS_BLOCO — 3 quadros de água (32x32, opacos e tileáveis)
    e 3 de braseiro (32x96, com alfa). Os dois tiles eram desenhados
@@ -87,6 +103,9 @@ Object.assign(SPRITE_DATA, {
 Object.assign(SPRITE_DATA, {
   tile_grass: "assets/world/tile_grass.webp",
   tile_path: "assets/world/tile_path.webp",
+  /* Variante local do caminho: Porto Lúmina troca pedra por tábuas,
+     sem inventar uma letra de tile ou alterar colisão. */
+  tile_cais_lumina: "assets/world/tile_cais_lumina.webp",
   tile_dirt: "assets/world/tile_dirt.webp",
   tile_crack: "assets/world/tile_crack.webp",
   tile_wall: "assets/world/tile_wall.webp",
@@ -97,11 +116,8 @@ Object.assign(SPRITE_DATA, {
   tile_chest: "assets/world/tile_chest.webp",
   tile_chest_open: "assets/world/tile_chest_open.webp",
 });
-/* ICONES_CONDICAO_BLOCO — 16x16 para as condições que ganharam arte.
-   Só entram as que o desenho LÊ como a condição certa; Sangramento,
-   Cegueira, Assombro e Exposto continuam no glifo unicode porque o
-   pacote não trouxe nada que se pareça com elas, e um ícone errado
-   é pior que um símbolo. */
+/* ÍCONES_CONDIÇÃO — cada estado publicado de combate tem sprite
+   próprio; assim a fila não alterna entre pixel art e glifo textual. */
 Object.assign(SPRITE_DATA, {
   ail_burn: "assets/ui/ail_burn.webp",
   ail_shock: "assets/ui/ail_shock.webp",
@@ -109,6 +125,11 @@ Object.assign(SPRITE_DATA, {
   ail_rooted: "assets/ui/ail_rooted.webp",
   ail_terror: "assets/ui/ail_terror.webp",
   ail_stun: "assets/ui/ail_stun.webp",
+  ail_bleed: "assets/ui/ail_bleed.webp",
+  ail_blind: "assets/ui/ail_blind.webp",
+  ail_dread: "assets/ui/ail_dread.webp",
+  ail_exposed: "assets/ui/ail_exposed.webp",
+  ail_marked: "assets/ui/ail_marked.webp",
 });
 /* MOLDURAS_BLOCO — 25 pares canto+emblema. Cada arquivo de origem
    trazia os dois JUNTOS; a separação é geométrica: o canto encosta na
@@ -533,12 +554,33 @@ Object.assign(SPRITE_DATA, {
   prop_portao_stone_reach: "assets/world/prop_portao_stone_reach.webp",
   prop_altar_selo: "assets/world/prop_altar_selo.webp",
   prop_barco_lumina: "assets/world/prop_barco_lumina.webp",
+  /* Barco de pesca exclusivo do Porto Lúmina: mantém a paleta de
+     teal/coral e a escala dos barcos atracados sem alterar outras regiões. */
+  prop_barco_pesca_lumina: "assets/world/prop_barco_pesca_lumina.webp",
+  /* Fachadas exclusivas do porto. A taverna privilegia coral e âmbar;
+     o mercado privilegia teal, mas ambas usam a mesma madeira e contorno. */
+  prop_taverna_lumina: "assets/world/prop_taverna_lumina.webp",
+  prop_loja_lumina: "assets/world/prop_loja_lumina.webp",
   /* Interiores compartilham o mesmo pixel art de 32px: mesa neutra
      para salas gerais, balcão colorido somente no Mercado da Maré e
      estante alta no lugar do desenho procedural. */
   prop_mesa_interior: "assets/world/prop_mesa_interior.webp",
   prop_mesa_mercado: "assets/world/prop_mesa_mercado.webp",
   prop_estante_interior: "assets/world/prop_estante_interior.webp",
+  /* Marcos regionais: cada um é uma peça alta, ancorada no chão, e
+     evita que acampamento, cisterna e Coroa dependam só da gramática
+     genérica de tiles. A cor é material/local, não um filtro violeta. */
+  prop_acampamento_cinzas: "assets/world/prop_acampamento_cinzas.webp",
+  prop_comporta_eter: "assets/world/prop_comporta_eter.webp",
+  prop_cristal_vidro: "assets/world/prop_cristal_vidro.webp",
+  prop_estante_arquivo: "assets/world/prop_estante_arquivo.webp",
+  /* Molduras de UI são sobrepostas ao painel programático: o centro com
+     alfa preserva a legibilidade e os controles em qualquer resolução. */
+  ui_moldura_dialogo: "assets/ui/ui_moldura_dialogo.webp",
+  ui_moldura_menu: "assets/ui/ui_moldura_menu.webp",
+  /* Ornamento compacto da ficha de personagem: o retrato continua
+     sendo da pessoa, o símbolo só organiza a informação do cartão. */
+  ui_status_ornamento: "assets/ui/ui_status_ornamento.webp",
 });
 /* <<< FIM DOS PROPS */
 

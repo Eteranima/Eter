@@ -1159,7 +1159,13 @@ function runSelfTests(){
          (estreita) e a barriga aparece mais abaixo. Mede-se a largura
          pintada na coluna central, longe dos cantos em L. */
       tg.clearRect(0, 0, W, H);
-      panel(0, 0, 200, 60);
+      /* `gem` fixo: desde que temaAtual() passou a poder sobrepor a cor
+         da gema (v-atual, tema "relógio" por padrão fora do ciano), este
+         teste geométrico — a gema não pode cortar na borda — não pode
+         mais confiar na cor PADRÃO do tema ativo. O que se mede aqui é
+         posição, a cor só marca o pixel; fixá-la mantém o teste válido
+         em qualquer tema. */
+      panel(0, 0, 200, 60, {gem: UI.gema});
       // conta só o pixel CIANO da gema: o corpo do painel é azul-escuro,
       // então o canal azul separa os dois sem ambiguidade
       const largura = (linhaY) => {
@@ -2765,6 +2771,21 @@ function runSelfTests(){
       ok('toda decoração usa prop existente e cai dentro do mapa',
          ruins.length === 0, ruins.join(' · '));
 
+      /* Porto Lúmina não pode voltar a uma colagem de props genéricos.
+         A regra registra os elementos que definem a área: cais, barcos,
+         comércio, taverna e luz. O detalhe decorativo ainda pode variar
+         sem enfraquecer a leitura do lugar. */
+      const lumina = MAPS.porto_lumina;
+      const luminaProps = new Set((lumina?.decor || []).map(d => d.s));
+      const luminaObrigatorios = [
+        'prop_barco_lumina', 'prop_barco_pesca_lumina',
+        'prop_taverna_lumina', 'prop_loja_lumina', 'prop_lampiao',
+      ];
+      ok('Porto Lúmina preserva seus props de cenário exclusivos',
+         !!lumina && lumina.tileArt?.[','] === 'tile_cais_lumina' &&
+         luminaObrigatorios.every(k => luminaProps.has(k)),
+         lumina ? [...luminaProps].join(',') : 'mapa ausente');
+
       /* Decoração SÓLIDA em cima de porta, escada, baú, save ou do ponto
          de entrada tranca o jogador ou esconde a saída. É o erro caro
          deste sistema, e é invisível até alguém tentar passar. */
@@ -3087,6 +3108,16 @@ function runSelfTests(){
       ok('a tela do mapa cabe no canvas',
          MAPA_TELA.lista.x + MAPA_TELA.lista.w <= W &&
          MAPA_TELA.quadro.y + MAPA_TELA.quadro.h <= H);
+      ok('o atlas integra toda entrada de MAPS, não só as visitadas',
+         Mapa.areas().length === Object.keys(MAPS).length,
+         `${Mapa.areas().length}/${Object.keys(MAPS).length}`);
+      const areaAntesAtlas = Mapa.area;
+      Mapa.selecionar('porto_lumina');
+      ok('clicar/selecionar uma área troca a ficha do atlas', Mapa.area === 'porto_lumina');
+      Mapa.enquadrar(['porto_lumina']);
+      ok('foco do atlas mantém escala utilizável', Mapa.esc >= .22 && Mapa.esc <= 9,
+         String(Mapa.esc));
+      Mapa.area = areaAntesAtlas;
 
       /* --- rede de cristais ---------------------------------------- */
       {
@@ -3106,6 +3137,8 @@ function runSelfTests(){
         G.visitados = {patio:true};
         ok('o mapa filtra cristal de sala não visitada',
            Mapa.destinos().length === 1, `${Mapa.destinos().length}`);
+        ok('selecionar área sem cristal não cria viagem rápida',
+           Mapa.destinoDaArea('undercroft') === null);
 
         /* Desenhar o mapa com e sem rede não pode estourar. */
         let erroM = null;
@@ -3188,6 +3221,29 @@ function runSelfTests(){
       ok('a água animada continua com os três quadros',
          TILE_AGUA.every(k => SPRITE_DATA[k]), TILE_AGUA.join(','));
 
+      /* O switch de `drawTileArt` conserva uma defesa para imagem que
+         falhe durante desenvolvimento, mas nenhum id que os MAPS usam
+         pode depender dela em publicação. Os especiais têm arte própria
+         fora de TILE_ART; o restante precisa estar nas duas tabelas. */
+      const idsDeMapa = [...new Set(Object.values(TILEDEF).map(t => t.id))];
+      const semArtePublicada = idsDeMapa.filter(id => {
+        if (id === 'water') return !TILE_AGUA.every(k => SPRITE_DATA[k]);
+        if (id === 'chest') return !SPRITE_DATA.tile_chest || !SPRITE_DATA.tile_chest_open;
+        if (id === 'brazier') return !TILE_BRASA.every(k => SPRITE_DATA[k]);
+        return !(SPRITE_DATA[TILE_ART[id]] || SPRITE_DATA[TALL_ART[id]]);
+      });
+      ok('nenhum tile de mapa publicado depende do desenho procedural',
+         semArtePublicada.length === 0, semArtePublicada.join(','));
+
+      const variantesRuins = [];
+      for (const [mapaId, mapa] of Object.entries(MAPS))
+        for (const [caractere, chave] of Object.entries(mapa.tileArt || {})){
+          if (!TILEDEF[caractere]) variantesRuins.push(`${mapaId}: tile ${caractere} desconhecido`);
+          else if (!SPRITE_DATA[chave]) variantesRuins.push(`${mapaId}: arte ${chave} ausente`);
+        }
+      ok('toda variante local de tile usa gramática e sprite válidos',
+         variantesRuins.length === 0, variantesRuins.join(' · '));
+
       /* Peça de cenário sem altura não desenha nada e não avisa. */
       const chatas = Object.keys(SPRITE_DATA)
         .filter(k => k.startsWith('prop_'))
@@ -3195,6 +3251,16 @@ function runSelfTests(){
                        return i && (i.naturalHeight || i.height) < 12; });
       ok('nenhuma peça de cenário ficou achatada', chatas.length === 0,
          chatas.join(','));
+
+      /* O lampião é uma peça vertical de cais/interior: largura de tile
+         e altura alta, mas sem virar uma faixa gigante nem um fragmento
+         de arquivo mal recortado. Porto Lúmina usa três dele. */
+      const lampiao = spriteImages.prop_lampiao;
+      const lw = lampiao && (lampiao.naturalWidth || lampiao.width);
+      const lh = lampiao && (lampiao.naturalHeight || lampiao.height);
+      ok('o lampião de cenário preserva proporção de prop vertical',
+         !!lw && !!lh && lw >= 32 && lw <= 64 && lh >= 64 && lh <= 112,
+         `${lw || 0}×${lh || 0}`);
     }
 
     /* --- v5.17: fundo de batalha em arte ---------------------------- */
@@ -4073,7 +4139,7 @@ function runSelfTests(){
       try { loadFromSave(s3); } catch(e){ erroS = e.message; }
       ok('o tema escolhido sobrevive ao save', !erroS && G.tema === 'abissal', erroS || G.tema);
       loadFromSave(JSON.parse(JSON.stringify({...s3, tema:undefined})));
-      ok('save sem tema entra no Éter', G.tema === 'eter', G.tema);
+      ok('save sem tema acompanha o relógio', G.tema === 'relogio', G.tema);
 
       G.tema = temaSalvo;
     }
@@ -4244,6 +4310,12 @@ function runSelfTests(){
       ok('todo item com ícone aponta para arte que existe em SPRITE_DATA',
          Object.values(ITEMS).every(i => !i.icon || !!SPRITE_DATA[i.icon]),
          Object.entries(ITEMS).filter(([, i]) => i.icon && !SPRITE_DATA[i.icon]).map(([k]) => k).join(','));
+      ok('nenhum item publicado recorre ao marcador de cor',
+         Object.values(ITEMS).every(i => !!i.icon),
+         Object.entries(ITEMS).filter(([, i]) => !i.icon).map(([k]) => k).join(','));
+      ok('toda condição de combate tem sprite próprio',
+         Object.keys(AILMENTS).every(id => !!SPRITE_DATA['ail_' + id]),
+         Object.keys(AILMENTS).filter(id => !SPRITE_DATA['ail_' + id]).join(','));
       /* Nove ícones para dezoito armas: a marca é por FAMÍLIA DE FORMA,
          não uma por arma. O teste trava que a divisão não degenerou em
          "tudo é espada", que apagaria a leitura. */
@@ -4251,7 +4323,7 @@ function runSelfTests(){
       ok('as armas usam ao menos 6 famílias de ícone diferentes',
          familias.size >= 6, [...familias].join(','));
 
-      // o fallback continua vivo para os itens sem ícone
+      // Fallback de defesa: o conteúdo publicado acima não chega aqui.
       let erro = null;
       try {
         drawItemMark(ITEMS.potion, 10, 10);
@@ -4259,7 +4331,7 @@ function runSelfTests(){
         drawItemMark(null, 10, 70);
         drawItemMark({icon:'nao_existe', color:'#fff'}, 10, 100);
       } catch(e){ erro = e.message; }
-      ok('desenhar a marca não estoura, com ícone, sem ícone ou com item nulo',
+      ok('desenhar a marca não estoura, inclusive com dado inválido ou nulo',
          !erro, erro || 'ok');
       ctx.clearRect(0, 0, W, H);
     }

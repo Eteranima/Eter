@@ -176,6 +176,9 @@ const MAPS = {
   porto_lumina: {
     name:'Porto Lúmina', fill:'.', region:'porto_lumina', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(18,72,84,0.14)',
+    /* Mantém `,` passável como caminho em toda a gramática de MAPS,
+       mas aqui o chão é um cais de cedro, não calçamento de Stone Reach. */
+    tileArt:{',':'tile_cais_lumina'},
     rows:[
       '######################################',
       '#....................................#',
@@ -212,13 +215,13 @@ const MAPS = {
     decor:[
       {x:7, y:8, s:'prop_barco_lumina', solido:true,
        text:'O Vento de Coral range contra as cordas. A vela turquesa está recolhida, mas o casco parece pronto para partir.'},
-      {x:10, y:13, s:'prop_barco', solido:true,
+      {x:10, y:13, s:'prop_barco_pesca_lumina', solido:true,
        text:'Um barco de pesca traz redes secando ao sol. Alguém deixou uma concha azul no banco do remo.'},
-      {x:7, y:18, s:'prop_barco', solido:true,
+      {x:7, y:18, s:'prop_barco_pesca_lumina', solido:true,
        text:'O pequeno casco balança vazio. Na popa, uma placa pintada diz apenas: "volto com a maré".'},
-      {x:25,y:7, s:'prop_taverna', solido:true,
+      {x:25,y:7, s:'prop_taverna_lumina', solido:true,
        text:'A taverna do cais ainda não abriu. Uma placa na porta promete: "Ao anoitecer, com a maré."'},
-      {x:30,y:12,s:'prop_loja',solido:true,
+      {x:30,y:12,s:'prop_loja_lumina',solido:true,
        text:'A loja está fechada por hoje. As redes na vitrine secam mais devagar do que o dono promete.'},
       {x:20,y:4, s:'prop_placa',
        text:'PLACA — "PORTO LÚMINA · Cais do Sol, Mercado da Maré, Mesa de Âmbar".'},
@@ -676,6 +679,10 @@ const MAPS = {
       {to:'nests',   tx:9,  ty:2,  dir:'down'},  // 'S' (linha 18, à direita) → Ninhal
     ],
     chests:[ {item:'a_casco', qty:1} ],
+    decor:[
+      {x:4,y:8,s:'prop_acampamento_cinzas',solido:true,
+       text:'O acampamento foi montado entre troncos que ainda soltam cinza. A lona teal e o braseiro de cobre mantêm a vigília em cores de gente viva.'},
+    ],
     npcs:[
       {x:6,y:9,  name:'Batedora', sheet:'npc_batedor', quest:'q_batedora',
        lines:['Cinza no chão é pegada apagada. Ande pelo caminho batido se quiser voltar.']},
@@ -886,6 +893,10 @@ const MAPS = {
       {to:'cistern_deep', tx:9, ty:2,  dir:'down'},  // '+' (linha 18) → comporta
     ],
     chests:[ {item:'a_escama', qty:1} ],
+    decor:[
+      {x:23,y:15,s:'prop_comporta_eter',solido:true,
+       text:'Uma comporta de latão, pedra molhada e vidro teal regula a água com a paciência de uma máquina antiga. A luz âmbar indica que ainda há pressão.'},
+    ],
     npcs:[
       {x:6,y:8,  name:'Engenheira', sheet:'npc_professor', quest:'q_comporta',
        lines:['Esta cisterna foi feita para guardar água limpa. Alguém mudou o projeto no meio.']},
@@ -995,6 +1006,12 @@ const MAPS = {
       {to:'spire_top',    tx:9, ty:2,  dir:'down'}, // '+' (linha 17) → cume
     ],
     chests:[ {item:'w_astro', qty:1} ],
+    decor:[
+      {x:7,y:13,s:'prop_cristal_vidro',solido:true,
+       text:'O fragmento de vidro pálido reflete uma coroa que não está no teto. As pequenas incrustações douradas continuam mornas.'},
+      {x:22,y:14,s:'prop_cristal_vidro',solido:true,
+       text:'Uma lâmina de cristal cresce da pedra como se tivesse escolhido sozinha onde ficar.'},
+    ],
     npcs:[
       {x:4,y:8,  name:'Vidraceiro', sheet:'npc_nobre', quest:'q_cacos',
        lines:['Eu conserto vidro. Aqui o vidro conserta a si mesmo, e é isso que me assusta.']},
@@ -1079,9 +1096,9 @@ const MAPS = {
     fill:'o', region:'arquivo', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(10,14,38,0.52)',
     decor:[
-      {x:3,  y:3,  s:'prop_estante',       solido:true,
+      {x:3,  y:3,  s:'prop_estante_arquivo', solido:true,
        text:'Estante alta, lotada até o teto. Ninguém arruma isso há anos.'},
-      {x:20, y:3,  s:'prop_estante',       solido:true,
+      {x:20, y:3,  s:'prop_estante_arquivo', solido:true,
        text:'Os lombos estão úmidos, mas o texto ainda segura.'},
       {x:3,  y:13, s:'prop_estante_baixa', solido:true,
        text:'Estante baixa, meio vazia. Os livros que sobraram estão emprestados a si mesmos.'},
@@ -1147,9 +1164,9 @@ const MAPS = {
     fill:'f', region:'arquivo', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(6,10,32,0.6)',
     decor:[
-      {x:2,  y:4,  s:'prop_estante', solido:true,
+      {x:2,  y:4,  s:'prop_estante_arquivo', solido:true,
        text:'Prateleira vazia. A poeira aqui é mais funda que a de cima.'},
-      {x:16, y:4,  s:'prop_estante', solido:true,
+      {x:16, y:4,  s:'prop_estante_arquivo', solido:true,
        text:'Um único livro, sem título na lombada. Ninguém o abriu ainda.'},
       {x:9,  y:11, s:'prop_lampiao', text:'A luz mal alcança a prateleira do fundo. Foi feito assim de propósito.'},
     ],

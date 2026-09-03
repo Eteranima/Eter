@@ -1,7 +1,20 @@
 # 11 — Mapas e Locais
 
-Sete áreas. Todas verificadas como **totalmente percorríveis a pé** — cada baú,
-placa, NPC e passagem é alcançável.
+As áreas do jogo são verificadas como **totalmente percorríveis a pé** — cada
+baú, placa, NPC e passagem é alcançável.
+
+## Atlas interativo
+
+`M` abre o atlas do mundo. Ele é derivado de todas as entradas de `MAPS`,
+portanto integra automaticamente áreas novas, interiores e masmorras sem uma
+lista paralela para manter. Conexões ainda não percorridas aparecem discretas;
+áreas visitadas mostram seu terreno. Clique numa área para inspecioná-la,
+use a roda para aproximar, `TUDO` para ver o conjunto e `FOCO` para centralizar
+a área selecionada.
+
+A viagem rápida permanece deliberadamente limitada: só funciona para cristais
+de éter já descobertos. Ver uma área no atlas nunca desbloqueia passagem,
+quest, chefe ou atalho.
 
 ## Mapa de conexões
 

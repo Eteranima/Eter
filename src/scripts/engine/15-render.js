@@ -689,11 +689,9 @@ const TILE_ART = {
      (`TILE_AGUA`), e o atalho de `drawTileArt` roda antes do switch —
      pôr uma imagem estática nesta tabela congelaria a água. */
 };
-/* Fila de ícones de condição. Cada uma que tem arte vira um desenho de
-   16px; as que não têm continuam no glifo unicode, no MESMO lugar da
-   fila. Misturar os dois é feio, mas é honesto — e é melhor que inventar
-   um ícone que não quer dizer aquela condição. Devolve a largura usada,
-   para quem chama seguir escrevendo depois. */
+/* Fila de ícones de condição. Todo estado publicado tem arte em 16px;
+   o glifo abaixo é só defesa para dados inválidos em desenvolvimento.
+   Devolve a largura usada, para quem chama seguir escrevendo depois. */
 function drawAilments(lista, x, y, o = {}){
   const lado = o.lado || 14, gap = 2;
   let cx = x;
@@ -721,11 +719,8 @@ function arteTile(chave){
 }
 const TILE_BRASA = ['tile_brasa_0','tile_brasa_1','tile_brasa_2'];
 
-/** Marca de um item numa lista. Com `icon` cadastrado desenha o ícone;
- *  sem ele, cai no quadradinho da cor do item — que era o único visual
- *  que existia antes. Os dois caminhos convivem de propósito: só as 18
- *  armas têm ícone, e os ~60 consumíveis e acessórios não podem ficar
- *  sem marca nenhuma por causa disso. */
+/** Marca de um item numa lista. Todo item publicado tem `icon`; o pequeno
+ *  quadrado de cor é apenas defesa para dados incompletos no editor. */
 function drawItemMark(it, x, y, lado = 20){
   const img = it && it.icon && spriteImages[it.icon];
   if (img && (img.complete ?? true) && (img.naturalWidth || img.width)){
