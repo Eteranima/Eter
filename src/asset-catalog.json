@@ -152,6 +152,13 @@
       "sha256": "4ddef4b6874bcfb182ca5d3bb0bd9eef4e5a9c79b19a5165732a1fe860b3818f"
     },
     {
+      "key": "dlg_max",
+      "path": "assets/characters/dlg_max.webp",
+      "mime": "image/webp",
+      "bytes": 286886,
+      "sha256": "1dac1d7845d702900e43ad2ef6ec071a8186198004f87372f0284a354b3c1b4d"
+    },
+    {
       "key": "ophelia_sheet",
       "path": "assets/characters/ophelia_sheet.webp",
       "mime": "image/webp",
@@ -1223,13 +1230,6 @@
       "sha256": "9f91a0678a0493007d5a1b980ada4ddab8de1d77f2460eba19bdad51013b8732"
     },
     {
-      "key": "battle_bg_patio",
-      "path": "assets/world/battle_bg_patio.webp",
-      "mime": "image/webp",
-      "bytes": 948900,
-      "sha256": "1f5ed72040b71e85c44d5208f364d7eac72ecd31c22dc82ec9e4a60d7b8b2998"
-    },
-    {
       "key": "battle_bg_podridao",
       "path": "assets/world/battle_bg_podridao.webp",
       "mime": "image/webp",
@@ -2182,6 +2182,27 @@
       "sha256": "df9e31a20b51538dc24ff19b3c44a546c3cbf17f20f17907325cc9991c0e3de2"
     },
     {
+      "key": "prop_academia_stone_reach",
+      "path": "assets/world/prop_academia_stone_reach.webp",
+      "mime": "image/webp",
+      "bytes": 13382,
+      "sha256": "fa2485ed7193247751158dfd80d8e13c08345fd2dec7feb22f4eb7a873df7c10"
+    },
+    {
+      "key": "prop_portao_stone_reach",
+      "path": "assets/world/prop_portao_stone_reach.webp",
+      "mime": "image/webp",
+      "bytes": 11138,
+      "sha256": "b29ae5f107a7dbfa605ebc7c01fdc85258c9ef16527a1b3d821800876d8a942e"
+    },
+    {
+      "key": "prop_altar_selo",
+      "path": "assets/world/prop_altar_selo.webp",
+      "mime": "image/webp",
+      "bytes": 8192,
+      "sha256": "fed6483328a3020560f720a380ba02337a515433e09a343d332a6c1f068ad838"
+    },
+    {
       "key": "tile_carpet",
       "path": "assets/world/tile_carpet-2.webp",
       "mime": "image/webp",
@@ -2502,6 +2523,34 @@
       "mime": "image/webp",
       "bytes": 6476,
       "sha256": "fb0651ca6f74763fc8035a7fcd7f80efe92f8ef404e78537c7817df96b9de6ce"
+    },
+    {
+      "key": "prop_barco_lumina",
+      "path": "assets/world/prop_barco_lumina.webp",
+      "mime": "image/webp",
+      "bytes": 9588,
+      "sha256": "c6fa7fe0e56209859cd8d0c2282d3775d1ed039ed4b0ad4c23ded98dcb4eb3d6"
+    },
+    {
+      "key": "prop_mesa_interior",
+      "path": "assets/world/prop_mesa_interior.webp",
+      "mime": "image/webp",
+      "bytes": 1780,
+      "sha256": "5a67b0fe2aaf2173614642a1dffcdcd17d7658847ef5c4625263392b4c5b90b4"
+    },
+    {
+      "key": "prop_mesa_mercado",
+      "path": "assets/world/prop_mesa_mercado.webp",
+      "mime": "image/webp",
+      "bytes": 2146,
+      "sha256": "136889f7f6db0e22a27fb0ba53f4bf1887f5b82c6a547ebee4549e3056940791"
+    },
+    {
+      "key": "prop_estante_interior",
+      "path": "assets/world/prop_estante_interior.webp",
+      "mime": "image/webp",
+      "bytes": 2790,
+      "sha256": "88e1003bf79d8bc9edfde6fa7744eb9de46cea1d9f5f0f85885aa3b462d7dd0f"
     },
     {
       "key": "prop_barril",

@@ -8,3 +8,15 @@
 # Cache e arquivos temporários de ferramentas locais.
 __pycache__/
 *.py[cod]
+
+# Coordenação local entre agentes (não é conteúdo do jogo nem parte do
+# contrato static-v1; nunca deve ir a um commit/PR).
+/.agentes/
+
+# Skills locais do Claude Code para trabalhar neste repo (tooling do agente,
+# não conteúdo do jogo nem parte do contrato static-v1; fora de
+# allowed_roots em .denverso/eter-project.yaml).
+/.claude/
+
+# Material de referência solto no repo pelo usuário, fora do contrato.
+/Docs-referencia-nao-commitar/

@@ -93,9 +93,23 @@ const CUT_CMD = {
   say:{
     start(c){
       this.st.pronto = false;
+      const ator = cutActor(c.who);
+      /* Uma fala roteirizada de NPC segue a mesma composição da interação
+         livre: líder à esquerda, interlocutor à direita. Cenas que já
+         declararam participantes (inclusive `[]` deliberado) continuam
+         soberanas, assim como falas do próprio jogador e narração. */
+      const participants = c.participants !== undefined ? c.participants
+        : ator && ator !== G.player && !G.followers.includes(ator) && ator.sheet
+          ? npcDialogueParticipants(ator)
+          : undefined;
+      const context = participants !== undefined ? {participants} : {};
       const linhas = c.lines
-        ? c.lines.map(l => normalizeLine(l, {name:c.who, portrait:c.portrait}))
-        : [normalizeLine({text:c.text || '', speaker:c.who ?? '', portrait:c.portrait}, null)];
+        ? c.lines.map(l => normalizeLine(l, {name:c.who, portrait:c.portrait}, context))
+        /* Copia o comando inteiro antes de normalizar: uma cena de uma
+           linha também pode declarar `participants`, `simultaneous` ou
+           `dialogSprite`, sem perder a apresentação cinematográfica. */
+        : [normalizeLine({...c, text:c.text || '', speaker:c.who ?? c.speaker ?? '',
+                          portrait:c.portrait}, null, context)];
       Msg.start(linhas, () => { this.st.pronto = true; });
     },
     update(){ return this.st.pronto; },

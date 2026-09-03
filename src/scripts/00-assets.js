@@ -256,6 +256,9 @@ Object.assign(SPRITE_DATA, {
   dlg_farnese: "assets/characters/dlg_farnese.webp",
   dlg_malquior: "assets/characters/dlg_malquior.webp",
   dlg_sebastian: "assets/characters/dlg_sebastian.webp",
+  /* Max olha para a direita; em cenas no lado esquerdo, encara o interlocutor.
+     A arte inclui o ratinho zumbi no ombro e tem alfa, nunca uma sheet 3×4. */
+  dlg_max: "assets/characters/dlg_max.webp",
 });
 /* PET_SPRITES_BLOCO — artes de pet, geradas fora e preparadas por
    ferramentas/preparar-pet.ps1. Entram no MESMO SPRITE_DATA para
@@ -292,7 +295,6 @@ Object.assign(SPRITE_DATA, {
   "battle_bg_esgoto": "assets/world/battle_bg_esgoto.webp",
   "battle_bg_lago": "assets/world/battle_bg_lago.webp",
   "battle_bg_nests": "assets/world/battle_bg_nests.webp",
-  "battle_bg_patio": "assets/world/battle_bg_patio.webp",
   "battle_bg_podridao": "assets/world/battle_bg_podridao.webp",
   "battle_bg_spire": "assets/world/battle_bg_spire.webp",
   "battle_bg_undercroft": "assets/world/battle_bg_undercroft.webp",
@@ -500,6 +502,21 @@ Object.assign(SPRITE_DATA, {
   "prop_tocha": "assets/world/prop_tocha.webp",
   "prop_tronco": "assets/world/prop_tronco.webp",
   "prop_tumulo": "assets/world/prop_tumulo.webp",
+});
+/* CENÁRIOS_STONE_REACH — props com base ancorada ao pé da célula. O
+   editor estático usa estas chaves, para que sua exportação não dependa
+   de caminho solto nem de imagem remota. */
+Object.assign(SPRITE_DATA, {
+  prop_academia_stone_reach: "assets/world/prop_academia_stone_reach.webp",
+  prop_portao_stone_reach: "assets/world/prop_portao_stone_reach.webp",
+  prop_altar_selo: "assets/world/prop_altar_selo.webp",
+  prop_barco_lumina: "assets/world/prop_barco_lumina.webp",
+  /* Interiores compartilham o mesmo pixel art de 32px: mesa neutra
+     para salas gerais, balcão colorido somente no Mercado da Maré e
+     estante alta no lugar do desenho procedural. */
+  prop_mesa_interior: "assets/world/prop_mesa_interior.webp",
+  prop_mesa_mercado: "assets/world/prop_mesa_mercado.webp",
+  prop_estante_interior: "assets/world/prop_estante_interior.webp",
 });
 /* <<< FIM DOS PROPS */
 

@@ -104,6 +104,16 @@ Túnica de Aluno, Anel de Foco, Broche Ágil.
 **Destravado após derrotar O Selo Quebrado**: Estilete de Nanquim, Foice de
 Geada, Manto Reforçado, Amuleto Vital.
 
+### Mercado da Maré — Porto Lúmina
+
+Maira vende Poção, Poção Maior, Elixir de Éter, Sal Purificador, Tenda de
+Campo, Fumaça Cinzenta, Frasco de Vendaval, Estilhaço Polar, Bandagem Rúnica,
+Ração de Ninho, Corda de Prata e Pluma de Vento.
+
+O mercado existe para preparar exploração e companhia sem vender armas ou
+armaduras antes da curva de chefes. Assim o porto adiciona comércio desde o
+início sem substituir o Empório da Academia.
+
 ### Mercador Errante — Galeria Profunda
 
 Só acessível depois do primeiro chefe. Não explica como chegou ali.

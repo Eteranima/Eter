@@ -136,11 +136,13 @@ function desenharProp(chave, sx, sy, o = {}){
   return true;
 }
 
-/* Tile alto -> peça do pacote. O que não estiver aqui continua sendo
-   desenhado a traço, como sempre foi: estante e mesa não têm
-   equivalente no pacote, e um substituto errado é pior que o traço. */
+/* Tile alto -> peça de cenário. Todo tipo alto usado nos mapas tem arte
+   própria; o renderizador não deve voltar ao traço procedural em uma sala
+   publicada. Mesa e estante usam peças geradas para a grade de 32px. */
 const TALL_ART = {
   tree:   'prop_arvore',
+  shelf:  'prop_estante_interior',
+  table:  'prop_mesa_interior',
   pillar: 'prop_pilar',
   rubble: 'prop_entulho',
   save:   'prop_save',
@@ -250,6 +252,8 @@ function drawField(){
   for (const d of m.decor)
     drawables.push({y:d.y * TILE + TILE, fn:() =>
       desenharProp(d.s, Math.round(d.x * TILE - cam.x), Math.round(d.y * TILE - cam.y), d)});
+  for (const mob of (m.mobs || [])) if (!mob.defeated) drawables.push({y:mob.py + TILE, fn:() =>
+    drawFieldMob(mob, cam)});
   for (const n of m.npcs) drawables.push({y:n.py + TILE, fn:() =>
     drawActor(n, n.px - cam.x + TILE / 2, n.py - cam.y + TILE, {})});
 
@@ -362,4 +366,31 @@ function drawFieldBoss(b, cam){
   } else {
     pxText('!', sx, sy - 104 + fl, {size:14, color:'#ff6a6a', align:'center', glow:'#ff2a2a'});
   }
+}
+
+/* As artes de criatura existentes são imagens únicas, não sheets 3×4.
+   Mantemos a altura de 84 px prevista para mob estático e só animamos a
+   posição da entidade; se uma arte falhar, o marcador procedural deixa
+   o encontro utilizável em vez de sumir ou quebrar o campo. */
+function drawFieldMob(mob, cam){
+  const sx = mob.px - cam.x + TILE / 2, sy = mob.py - cam.y + TILE;
+  const fl = Math.sin(Date.now() / 640 + mob.homeX * .7 + mob.homeY) * 2;
+  const img = mob.sprite && spriteImages[mob.sprite];
+  const pronta = img?.complete && (img.naturalWidth || img.width);
+  ctx.save();
+  ctx.fillStyle = 'rgba(0,0,0,.38)'; ctx.beginPath();
+  ctx.ellipse(sx, sy + 1, 16, 5, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowColor = mob.accent || '#b89aff'; ctx.shadowBlur = 16;
+  if (pronta){
+    const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+    const dh = 84, dw = iw / ih * dh;
+    ctx.drawImage(img, sx - dw / 2, sy - dh + fl, dw, dh);
+  } else {
+    ctx.fillStyle = mob.color || '#4a405c';
+    ctx.beginPath(); ctx.arc(sx, sy - 28 + fl, 20, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = mob.accent || '#d8c8ff';
+    ctx.fillRect(sx - 8, sy - 31 + fl, 5, 4); ctx.fillRect(sx + 3, sy - 31 + fl, 5, 4);
+  }
+  ctx.restore();
+  pxText('!', sx, sy - 92 + fl, {size:13, color:'#ff8a8a', align:'center', glow:'#7a2020'});
 }

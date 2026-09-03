@@ -47,7 +47,9 @@ const MAPS = {
   patio: {
     name:'Stone Reach — Pátio Central',
     onEnter:{scene:'abertura_patio', flag:'cena_abertura'},
-    fill:'.', region:'patio', outdoor:true, encounter:[14, 26], bgm:'field',
+    /* A Academia é área segura: a tensão começa na descida para o
+       Subterrâneo, nunca no espaço de convivência dos NPCs. */
+    fill:'.', region:'patio', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(30,20,60,0.18)',
     /* Decoração do pacote de props. Cada peça ocupa UMA casa e cresce
        para cima; `solido` só onde faz sentido esbarrar. Mover qualquer
@@ -55,14 +57,19 @@ const MAPS = {
        Estes são poucos e de propósito: o pátio já tem 48 árvores, e
        encher o gramado tiraria o lugar de andar. */
     decor:[
-      {x:4,  y:3,  s:'prop_flores'},
-      {x:36, y:3,  s:'prop_flores_rosa'},
-      {x:2,  y:14, s:'prop_tronco'},
-      {x:36, y:14, s:'prop_caixa',  solido:true},
-      {x:37, y:14, s:'prop_barril', solido:true},
-      {x:20, y:1,  s:'prop_poco',   solido:true},
+      {x:4,  y:3,  s:'prop_flores', text:'Flores-de-éter — abrem só onde o chão está calmo há muito tempo.'},
+      {x:36, y:3,  s:'prop_flores_rosa', text:'Estas nasceram rosadas depois que o Selo foi erguido. Ninguém sabe explicar o porquê.'},
+      {x:2,  y:14, s:'prop_tronco', text:'Um tronco velho, bom para sentar entre uma aula e outra.'},
+      {x:36, y:14, s:'prop_caixa',  solido:true, text:'Caixas do empório, ainda fechadas. Melhor não bulir.'},
+      {x:37, y:14, s:'prop_barril', solido:true, text:'Cheira a éter destilado. Selado — não é para beber.'},
+      {x:20, y:1,  s:'prop_poco',   solido:true, text:'A água lá no fundo reflete um brilho que não é do céu.'},
       {x:1,  y:6,  s:'prop_placa'},
-      {x:38, y:6,  s:'prop_fogueira'},
+      {x:10, y:6,  s:'prop_placa'},
+      {x:38, y:6,  s:'prop_fogueira', text:'O fogo arde estável, sem fumaça. Éter, de novo.'},
+      {x:13, y:3,  s:'prop_academia_stone_reach', solido:true,
+       text:'A fachada da Academia ainda ostenta o brasão original, gasto pelo tempo mas legível.'},
+      {x:18, y:20, s:'prop_portao_stone_reach',
+       text:'O portão sul de Stone Reach — pedra maciça, gravada com o mesmo selo que mantém o Subterrâneo fechado.'},
     ],
     rows:[
       '########################################',
@@ -79,7 +86,7 @@ const MAPS = {
       '#....,,,,,,,~~~~~~,,,,,,,,,,,,,,,,,....#',
       '#....,......~~~~~~....,...........,....#',
       '#....,................,......*....,....#',
-      '#....,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,....#',
+      '#+...,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,....#',
       '#....,...........T....,....T......,....#',
       '#..T.,................,...........,.T..#',
       '#....,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,....#',
@@ -92,6 +99,9 @@ const MAPS = {
     warps:[
       {to:'hall',  tx:15, ty:11, dir:'up'},   // porta grande (1º '+') → entrada sul do salão
       {to:'annex', tx:7,  ty:5,  dir:'up'},   // anexo        (2º '+') → porta do anexo
+      /* Acesso oeste seguro desde o começo. Entra antes da escada sul
+         porque o marcador está acima dela na leitura da grade. */
+      {to:'porto_lumina', tx:34, ty:14, dir:'right'},
       /* v4.8 — portão sul. Fica na ÚLTIMA linha jogável de propósito:
          a varredura de tiles é em ordem de leitura, então uma passagem
          nova só pode entrar no fim da lista sem renumerar as antigas.
@@ -144,15 +154,178 @@ const MAPS = {
               'Se vocês querem sobreviver ao que está vindo, vão precisar entender isso.',
               '...E não, eu não vou explicar de novo. Prestem atenção da próxima vez.']},
       {x:9,y:19,  name:'Zelador', sheet:'npc_zelador', wander:true, quest:'q_zelador',
-       lines:['Grama alta é ninho de bicho. Ande pelo calçamento se não quiser briga.']},
+       lines:['Cerca boa não deixa bicho subir. O problema é o que tem embaixo dela.']},
+      /* Retrato dlg_farnese já cadastrado em DIALOGUE_SPRITES (22-dialogue.js)
+         desde antes desta entrada existir — o corpo de campo é genérico
+         (npc_viajante), o retrato grande de diálogo liga sozinho pelo nome. */
+      {x:5,y:13, name:'Farnese', sheet:'npc_viajante',
+       lines:['Não sou aluna daqui. Só uma pesquisadora seguindo o rastro de um éter que não deveria existir.',
+              'Se perguntarem, diga que nunca me viu. Funciona melhor assim.']},
     ],
     signs:[
       {x:10,y:6, text:'PLACA — "Academia Stone Reach · Salão Principal. Mantenha o éter contido nos corredores."'},
+      {x:1, y:6, text:'PLACA — "Bem-vindo(a) a Stone Reach. Silêncio nos jardins após o toque de recolher."'},
     ],
     /* `need` espera o Eco cair; `flag` garante que toca uma vez só.
        O tile fica DUAS casas antes do portão, para a cena terminar com
        o jogador ainda de frente para ele. */
     triggers:[ {x:19, y:18, scene:'portao_sul', flag:'cena_portao', need:'echo_defeated'} ],
+  },
+
+  /* Porto seguro: água bloqueia; os três píeres de calçamento mantêm a
+     rota percorrível. Props continuam fora da gramática compacta de tiles. */
+  porto_lumina: {
+    name:'Porto Lúmina', fill:'.', region:'porto_lumina', outdoor:true, encounter:null, bgm:'field',
+    tint:'rgba(18,72,84,0.14)',
+    rows:[
+      '######################################',
+      '#....................................#',
+      '#.TTTT........................TTTT...#',
+      '#~~~~~~~~~~~~~~~,....................#',
+      '#~~~~~~~~~~~~~~~,.#................#.#',
+      '#~~~~~~~~~~~~~~~,.#ffffffffffffffff#.#',
+      '#~~~~~~~~~~~~~~~,.#................#.#',
+      '#~~~~~~~~~~~~~~~,.#................#.#',
+      '#~~~~~~,,,,,,,,,,,,,,....+...........#',
+      '#~~~~~~~~~~~~~~~,.....#............#.#',
+      '#~~~~~~~~~~~~~~~,.....#ffffffffffff#.#',
+      '#~~~~~~~~~~~~~~~,.....#............#.#',
+      '#~~~~~~~~~~~~~~~,.....#............#.#',
+      '#~~~~,,,,,,,,,,,,,,,,..........+.....#',
+      '#~~~~~~~~~~~~~~~,,,,,,,,,,,,,,,,,,,,+#',
+      '#~~~~~~~~~~~~~~~,....................#',
+      '#~~~~~~~~~~~~~~~,....................#',
+      '#~~~~~~~~~~~~~~~,.......#..........#.#',
+      '#~~~~~~,,,,,,,,,,,,,,...#ffffffffff#.#',
+      '#~~~~~~~~~~~~~~~,.......#..........#.#',
+      '#~~~~~~~~~~~~~~~,.......#..........#.#',
+      '######################################',
+    ],
+    spawn:{x:34, y:14, dir:'left'},
+    /* As portas internas aparecem antes da saída leste na varredura da
+       grade; a lista respeita exatamente essa ordem de leitura. */
+    warps:[
+      {to:'mesa_ambar', tx:8, ty:9, dir:'up'},
+      {to:'mercado_mare', tx:8, ty:9, dir:'up'},
+      {to:'patio', tx:1, ty:14, dir:'left'},
+    ],
+    chests:[],
+    decor:[
+      {x:6, y:8, s:'prop_barco_lumina', solido:true,
+       text:'O Vento de Coral range contra as cordas. A vela turquesa está recolhida, mas o casco parece pronto para partir.'},
+      {x:10, y:13, s:'prop_barco', solido:true,
+       text:'Um barco de pesca traz redes secando ao sol. Alguém deixou uma concha azul no banco do remo.'},
+      {x:6, y:18, s:'prop_barco', solido:true,
+       text:'O pequeno casco balança vazio. Na popa, uma placa pintada diz apenas: "volto com a maré".'},
+      {x:25,y:7, s:'prop_taverna', solido:true,
+       text:'A taverna do cais ainda não abriu. Uma placa na porta promete: "Ao anoitecer, com a maré."'},
+      {x:30,y:12,s:'prop_loja',solido:true,
+       text:'A loja está fechada por hoje. As redes na vitrine secam mais devagar do que o dono promete.'},
+      {x:20,y:4, s:'prop_placa'}, {x:18,y:16,s:'prop_placa'},
+      {x:21,y:8,s:'prop_lampiao', text:'O lampião do píer queima óleo de peixe. O cheiro só incomoda quem não é daqui.'},
+      {x:21,y:13,s:'prop_lampiao', text:'Aceso mesmo de dia — a névoa do cais engana a hora.'},
+      {x:21,y:18,s:'prop_lampiao', text:'Este lampião pisca fora de ritmo. Ninguém consertou; ninguém reclamou.'},
+      {x:17,y:3,s:'prop_flores_campo', text:'Flores de campo crescendo entre as pedras do píer. O sal não parece incomodá-las.'},
+      {x:36,y:16,s:'prop_flores_rosa', text:'Flores rosadas, plantadas longe da água — a única parte do cais que não cheira a peixe.'},
+      {x:23,y:20,s:'prop_barril',solido:true, text:'Barril vazio, virado de lado. Serve de banco para quem espera o barco.'},
+      {x:22,y:20,s:'prop_caixa',solido:true, text:'Caixa de apetrechos de pesca. Alguém escreveu "NÃO MEXER" em três idiomas diferentes.'},
+    ],
+    npcs:[
+      {x:18,y:8,name:'Iara, Mestra do Cais',sheet:'npc_viajante',
+       lines:['Píer molhado, passo curto. O mar não precisa correr para derrubar ninguém.',
+              'Stone Reach olha para dentro. Lúmina olha para o que chega. Os dois jeitos cobram seu preço.']},
+      {x:19,y:13,name:'Nilo, Marinheiro',sheet:'npc_rapaz',wander:true,
+       lines:['O Vento de Coral é da Iara. Eu só amarro as cordas e finjo que sei para onde ele vai.',
+              'Um dia esses barcos vão atravessar o horizonte. Hoje, contentam-se com a maré.']},
+    ],
+    signs:[
+      {x:20,y:4,text:'PLACA — "PORTO LÚMINA · Cais do Sol, Mercado da Maré, Mesa de Âmbar".'},
+      {x:18,y:16,text:'PLACA DO CAIS — "Barcos atracados não são passagens. Pergunte antes de subir."'},
+    ],
+  },
+
+  /* O comércio é um interior próprio: usa o estoque Lumina já definido,
+     mas separa compra e conversa da circulação estreita do cais. */
+  mercado_mare: {
+    name:'Mercado da Maré', fill:'f', region:'porto_lumina', outdoor:false, encounter:null, bgm:'field',
+    tint:'rgba(20,82,78,0.16)',
+    rows:[
+      '###################',
+      '#bbbbbbbbbbbbbbbbb#',
+      '#bfffffffBfffffffb#',
+      '#bffbbfffffffbbffb#',
+      '#bfffffffffffffffb#',
+      '#bfffffffffffffffb#',
+      '#bfffffffffffffffb#',
+      '#bffbbfffffffbbffb#',
+      '#bfffffffffffffffb#',
+      '#bfffffff+fffffffb#',
+      '###################',
+    ],
+    spawn:{x:8,y:9,dir:'up'},
+    warps:[ {to:'porto_lumina', tx:30, ty:13, dir:'down'} ],
+    chests:[],
+    decor:[
+      {x:2,y:2,s:'prop_lampiao',text:'A lâmpada cobre o balcão de dourado. O vidro verde foi polido com areia da maré baixa.'},
+      {x:14,y:2,s:'prop_lampiao',text:'A chama azul do lampião é pequena e comum; Maira a chama de "luz para escolher sem pressa".'},
+      {x:2,y:8,s:'prop_caixa',solido:true,text:'Caixa de rações seladas com cera coral. Cada uma traz um desenho diferente de peixe.'},
+      {x:14,y:8,s:'prop_barril',solido:true,text:'Barril de água limpa para viajantes. Um fio turquesa marca o nível que ainda pode ser servido.'},
+      {x:5,y:5,s:'prop_mesa_mercado',solido:true,text:'O balcão traz uma balança de latão, tecido teal e cerâmica coral. Nada aqui precisa ser violeta para parecer éter.'},
+      {x:12,y:5,s:'prop_mesa_mercado',solido:true,text:'As mercadorias foram separadas por cor, não por preço: seco, frágil e espera de maré.'},
+      {x:8,y:2,s:'prop_estandarte',text:'O estandarte tem listras de açafrão, coral e azul-marinho: as cores dos turnos de trabalho do cais.'},
+    ],
+    npcs:[
+      {x:8,y:4,name:'Maira, Feirante',sheet:'npc_camponesa',shop:'lumina',
+       lines:['Chegou cedo: peixe, pomada, corda e uma ou duas coisas que a maré não devolveu.',
+              'Não vendo promessa de viagem. Só o que cabe na mochila.']},
+      {x:13,y:6,name:'Cássio, Estoquista',sheet:'npc_rapaz',
+       lines:['Ração vai à esquerda, corda à direita e vidro longe da água. É assim que o porto continua inteiro.',
+              'A cor da etiqueta conta o que não cabe no preço: amarelo é seco, coral é frágil, azul espera a maré.']},
+    ],
+    signs:[
+      {x:2,y:1,text:'PLACA DE MADEIRA — "MERCADO DA MARÉ · provisões para a estrada, não promessas de travessia".'},
+    ],
+  },
+
+  /* Interior pequeno e social: não cura nem vende, para a Mesa de Âmbar
+     ter identidade própria sem tomar o lugar da enfermaria ou do mercado. */
+  mesa_ambar: {
+    name:'Mesa de Âmbar', fill:'f', region:'porto_lumina', outdoor:false, encounter:null, bgm:'field',
+    tint:'rgba(76,42,20,0.18)',
+    rows:[
+      '#################',
+      '#bbbbbbbbbbbbbbb#',
+      '#bffffBffffBfffb#',
+      '#bff==ffff==fffb#',
+      '#bffffccccfffffb#',
+      '#bff^fccccf^fffb#',
+      '#bffffccccfffffb#',
+      '#bff==ffff==fffb#',
+      '#bfffffffffffffb#',
+      '#bffffff+ffffffb#',
+      '#################',
+    ],
+    spawn:{x:8,y:9,dir:'up'},
+    warps:[ {to:'porto_lumina', tx:25, ty:8, dir:'down'} ],
+    chests:[],
+    decor:[
+      {x:2,y:8,s:'prop_barril',solido:true,text:'Barril de caldo cítrico. A tampa tem a cor do sol, mas o cheiro é de mar.'},
+      {x:14,y:8,s:'prop_barril',solido:true,text:'Barril de água doce. A etiqueta diz: "não confundir com a outra".'},
+      {x:2,y:2,s:'prop_lampiao',text:'A luz do lampião é âmbar, não mágica. Às vezes o comum é o luxo.'},
+      {x:14,y:2,s:'prop_lampiao',text:'O vidro azul do lampião vem das redes de uma pescadora. Ele colore a fumaça de verde.'},
+      {x:8,y:2,s:'prop_estandarte',text:'Um estandarte coral e turquesa mostra uma onda atravessando um sol dourado.'},
+    ],
+    npcs:[
+      {x:8,y:4,name:'Tavio, Taverneiro',sheet:'npc_capataz',
+       lines:['A Mesa de Âmbar serve caldo, notícia e silêncio. O último custa mais caro.',
+              'Se o porto parece tranquilo demais, sente perto da janela. A água sempre conta primeiro.']},
+      {x:4,y:6,name:'Bia, Navegadora',sheet:'npc_serva',
+       lines:['As cores dos barcos não são enfeite. Coral volta antes do pôr do sol; turquesa só sai com mar manso.',
+              'Aprendi a ler a água antes de aprender a ler papel. A água mente menos.']},
+    ],
+    signs:[
+      {x:14,y:1,text:'QUADRO DE GIZ — "Caldo de peixe · pão de algas · notícia da manhã". A última linha foi apagada várias vezes.'},
+    ],
   },
 
   hall: {
@@ -193,7 +366,9 @@ const MAPS = {
        lines:['Cada elemento supera dois outros e apanha de dois outros. Decore o anel.',
               'Fogo e Gelo se odeiam. Luz e Trevas também. Nesses casos, ambos batem forte.']},
     ],
-    signs:[],
+    signs:[
+      {x:2, y:2, text:'QUADRO DE AVISOS — "Combate elemental só nas arenas de treino." Alguém acrescentou embaixo: "Ninguém nunca seguiu isso."'},
+    ],
   },
 
   library: {
@@ -220,6 +395,11 @@ const MAPS = {
       {x:6,y:4, name:'Estudante', sheet:'npc_estudante',
        lines:['"Ressonância": quando o éter de um mago transborda, o corpo vira condutor.',
               'Dizem que dá pra sentir. Um zumbido no peito. Aí é só soltar.']},
+      /* Retrato dlg_malquior já cadastrado em DIALOGUE_SPRITES; corpo de
+         campo genérico (npc_encapuzado), retrato liga sozinho pelo nome. */
+      {x:17,y:6, name:'Malquior Morningstar', sheet:'npc_encapuzado',
+       lines:['Os livros bons não estão nas prateleiras. Estão em quem os leu e não voltou a ser o mesmo.',
+              'Continue lendo. Eu não mordo. Ainda.']},
     ],
     signs:[
       {x:16,y:3, text:'LIVRO ABERTO — "Guarde-se quando o inimigo respirar fundo. Metade do dano é metade do luto."'},
@@ -247,13 +427,23 @@ const MAPS = {
       {x:13,y:2, name:'Enfermeira', sheet:'npc_enfermeira', quest:'q_enfermeira',
        lines:['Sente-se. Você está drenado.', '...Pronto. Party inteira restaurada. Não faça disso um hábito.'],
        heal:true},
+      /* Retrato dlg_sebastian já cadastrado em DIALOGUE_SPRITES; corpo de
+         campo genérico (npc_nobre), retrato liga sozinho pelo nome. */
+      {x:4,y:3, name:'Sebastian Crowley', sheet:'npc_nobre',
+       lines:['A enfermaria é um bom lugar para observar quem finge estar bem.',
+              'Não se preocupe comigo. Eu só... visito.']},
     ],
-    signs:[],
+    signs:[
+      {x:14, y:1, text:'PLACA — "Anexo Oeste · Enfermaria. Traga o ferido, não o orgulho."'},
+    ],
   },
 
   undercroft: {
     name:'Subterrâneo Selado',
-    fill:'x', region:'undercroft', outdoor:false, encounter:[9, 18], bgm:'dungeon',
+    /* P0 de mobs no campo: este é o primeiro mapa que troca a rolagem
+       por encontros visíveis. Os estados abaixo são só configuração;
+       morte, respawn e patrulha nascem em runtime no carregamento. */
+    fill:'x', region:'undercroft', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(10,6,24,0.5)',
     rows:[
       '##################################',
@@ -291,6 +481,13 @@ const MAPS = {
     ],
     chests:[ {item:'ether', qty:3}, {item:'hipot', qty:2} ],
     npcs:[],
+    mobs:[
+      /* Os lobos que o Zelador rastreia não entram mais na Academia:
+         formam a primeira patrulha hostil da descida. */
+      {id:'rastros_lobos', x:18, y:3,  visual:'wolf',  formation:[['wolf', 2]], patrol:1},
+      {id:'golem_sombra',  x:21, y:7,  visual:'golem', formation:[['golem', 1], ['shade', 1]], patrol:1},
+      {id:'servo_inverno', x:12, y:12, visual:'frost', formation:[['frost', 1]], patrol:1},
+    ],
     signs:[
       {x:9,y:6, text:'INSCRIÇÃO — "O que foi selado aqui não dorme. Apenas espera ser lembrado."'},
     ],
@@ -323,7 +520,13 @@ const MAPS = {
     ],
     chests:[],
     npcs:[],
-    signs:[],
+    decor:[
+      {x:10, y:3, s:'prop_altar_selo', solido:true,
+       text:'O altar rachado ainda pulsa com o resto de um selo antigo. É daqui que ele nunca deveria ter saído.'},
+    ],
+    signs:[
+      {x:6, y:2, text:'INSCRIÇÃO NA PEDRA — "O que se sela, também se lembra."'},
+    ],
     boss:{id:'warden', x:10, y:4, flag:'warden_defeated',
           intro:['Algo enorme se desdobra da parede. Não tem rosto — tem memória.',
                  'O SELO QUEBRADO: "Vocês vieram lembrar. Que gentileza."'],
@@ -333,7 +536,10 @@ const MAPS = {
 
   deepway: {
     name:'Galeria Profunda',
-    fill:'x', region:'deepway', outdoor:false, encounter:[10, 20], bgm:'dungeon',
+    /* v5.31 — troca encontro aleatório por mob visível, mesma regra do
+       Subterrâneo Selado (P0). Fecha o trio: Selado e Câmara já eram
+       mob/seguro, só a Galeria ainda rolava passo. */
+    fill:'x', region:'deepway', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(8,4,20,0.56)',
     rows:[
       '##############################',
@@ -377,6 +583,11 @@ const MAPS = {
     signs:[
       {x:13,y:12, text:'INSCRIÇÃO — "O Primeiro não foi selado. Foi esquecido. É pior."'},
     ],
+    mobs:[
+      {id:'ocos_galeria',  x:10, y:6,  visual:'hollow',   formation:[['hollow',2]], patrol:1},
+      {id:'guarda_luz',    x:17, y:6,  visual:'sentinel', formation:[['sentinel',1],['revenant',1]], patrol:1},
+      {id:'teceloas',      x:14, y:14, visual:'weaver',   formation:[['weaver',1],['harpy',1]], patrol:1},
+    ],
     boss:{id:'echo', x:13, y:20, flag:'echo_defeated',
           intro:['A galeria termina num rosto que é só contorno — luz onde deveria haver alguém.',
                  'O ECO DO PRIMEIRO: "Vocês lembraram de mim. Eu preferia o contrário."'],
@@ -399,7 +610,9 @@ const MAPS = {
   ashwood: {
     name:'Mata Cindária',
     onEnter:{scene:'chegada_mata', flag:'cena_mata'},
-    fill:'.', region:'ashwood', outdoor:true, encounter:[13, 24], bgm:'field',
+    /* v5.31 — mob visível em vez de encontro por passo, mesma regra do
+       Subterrâneo (P0). Fica fora do acampamento cercado, na mata aberta. */
+    fill:'.', region:'ashwood', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(60,24,10,0.22)',
     rows:[
       '##################################',
@@ -445,6 +658,11 @@ const MAPS = {
        lines:['Bem-vindo ao acampamento. Preço de fim de mundo, mas o mundo é este aqui mesmo.']},
       {x:20,y:6, name:'Enfermeira do Acampamento', sheet:'npc_serva', heal:true,
        lines:['Sente-se antes de cair.', '...Pronto. Grupo inteiro de pé. Não abuse.']},
+    ],
+    mobs:[
+      {id:'alcateia_cinza',   x:25, y:2,  visual:'ashwolf',   formation:[['ashwolf',2]], patrol:1},
+      {id:'tronco_e_brasa',   x:22, y:12, visual:'charwood',  formation:[['charwood',1],['emberling',2]], patrol:1},
+      {id:'mago_de_cinzas',   x:10, y:16, visual:'cindermage',formation:[['cindermage',1],['ashwolf',1]], patrol:1},
     ],
     signs:[
       {x:4,y:11, text:'TÁBUA PREGADA NA ÁRVORE — "A mata não queimou. A mata AINDA está queimando. Não é a mesma coisa."'},
@@ -503,7 +721,9 @@ const MAPS = {
   nests: {
     name:'Ninhal de Éter',
     onEnter:{scene:'chegada_ninhal', flag:'cena_ninhal'},
-    fill:'.', region:'nests', outdoor:true, encounter:[14, 26], bgm:'field',
+    /* v5.31 — mob visível na pastagem aberta ao sul dos dois pátios de
+       criação, longe dos NPCs de missão. */
+    fill:'.', region:'nests', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(20,40,30,0.20)',
     rows:[
       '##############################',
@@ -552,6 +772,12 @@ const MAPS = {
       {x:15,y:11, name:'Mercador de Ninho', sheet:'npc_cigana', shop:'ninhal',
        lines:['Petisco, ração e o que mais o bicho aceitar. Preço de quem tem monopólio.']},
     ],
+    mobs:[
+      {id:'ninhada_solta', x:8,  y:10, visual:'ninho',  formation:[['ninho',2],['cascudo',1]], patrol:1},
+      {id:'bando_ladrao',  x:18, y:10, visual:'cornuda',formation:[['cornuda',1],['ladraninho',2]], patrol:1},
+      {id:'enxame_matriz', x:8,  y:13, visual:'matriz', formation:[['matriz',1],['vespao',2]], patrol:1},
+      {id:'ceifa_larvar',  x:18, y:13, visual:'pilhador',formation:[['pilhador',1],['larva',1],['matriarca',1]], patrol:1},
+    ],
     signs:[
       {x:6,y:9, text:'TÁBUA — "Não corra perto do ninho. Cria não distingue pressa de ataque."'},
     ],
@@ -594,7 +820,8 @@ const MAPS = {
   cistern: {
     name:'Cisterna Afogada',
     onEnter:{scene:'chegada_cisterna', flag:'cena_cisterna'},
-    fill:'x', region:'cistern', outdoor:false, encounter:[11, 21], bgm:'dungeon',
+    /* v5.31 — mob visível no salão largo, longe do entulho e dos NPCs. */
+    fill:'x', region:'cistern', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(6,20,34,0.52)',
     /* v4.8.1 — REDESENHADO pelo mesmo motivo do `spire`: quatro dos
        cinco NPCs estavam parados em corredor de uma casa. Aqui não
@@ -641,6 +868,12 @@ const MAPS = {
        lines:['Deite aí. Eu conserto o que der.', '...Pronto. Grupo restaurado. Vá com calma.']},
       {x:13,y:11, name:'Contrabandista', sheet:'npc_encapuzado', shop:'cisterna',
        lines:['Eu vendo o que a água devolve. E a água devolve muita coisa.']},
+      {x:16,y:7, name:'Anciã da Comporta', sheet:'npc_camponesa', quest:'q_sanguessuga',
+       lines:['Três sanguessugas pálidas presas no cano principal. Raras, graças ao éter — e famintas por causa disso.']},
+    ],
+    mobs:[
+      {id:'comporta_presa', x:9,  y:11, visual:'sluicewarden', formation:[['sluicewarden',1],['drowned',2]], patrol:1},
+      {id:'canto_afogado',  x:19, y:11, visual:'siren',        formation:[['siren',2],['paleleech',1]], patrol:1},
     ],
     signs:[
       {x:3,y:9, text:'PLACA ENFERRUJADA — "Nível máximo permitido: 2 m. Assinado: Diretoria, há muito tempo."'},
@@ -683,17 +916,22 @@ const MAPS = {
        `deluge_defeated` de propósito — é ela que o resto do capítulo
        consulta, e trocar o nome apagaria o progresso de quem já venceu
        aqui num save anterior. */
-    boss:{id:'swampking', x:9, y:6, flag:'deluge_defeated',
+    /* v-atual: retrato calmo próprio (boss_pantano_retrato) — antes o
+       nome vinha cru dentro do texto porque não havia arte para o
+       speaker acender de verdade (ver Msg.draw() em 22-dialogue.js). */
+    boss:{id:'swampking', x:9, y:6, flag:'deluge_defeated', retrato:'boss_pantano_retrato',
           intro:['A lama se abre e o que sai dela não é água: é carapaça, e é antiga.',
-                 'O DONO DO PÂNTANO: "Tudo que afunda nestas águas é meu."',
-                 'O DONO DO PÂNTANO: "Saia."'],
+                 '"Tudo que afunda nestas águas é meu."',
+                 '"Saia."'],
           cena:'comporta_depois'},
   },
 
   spire: {
     name:'Coroa de Vidro',
     onEnter:{scene:'chegada_coroa', flag:'cena_coroa'},
-    fill:'o', region:'spire', outdoor:false, encounter:[12, 22], bgm:'dungeon',
+    /* v5.31 — mob visível nos dois salões largos do topo, longe dos
+       corredores de uma casa que o teste de travessia protege. */
+    fill:'o', region:'spire', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(30,28,10,0.42)',
     /* v4.8.1 — REDESENHADO. A versão anterior era um anel de corredores
        de UMA casa, e NPC é sólido (`isSolid` conta npcs): a Astrônoma e
@@ -739,6 +977,13 @@ const MAPS = {
        lines:['Eu anunciei a Coroa. Passei o resto da vida tentando desanunciar.']},
       {x:11,y:10, name:'Mercador de Vidro', sheet:'npc_cigana', shop:'coroa',
        lines:['No fim do mundo o preço é honesto: caro. Não tem pra quem reclamar.']},
+      {x:15,y:13, name:'Herdeiro Renegado', sheet:'npc_nobre', quest:'q_penumbra',
+       lines:['A Coroa não tem espelho que não esteja rachado. Seis vazantes saem de cada racha.']},
+    ],
+    mobs:[
+      {id:'asas_vidro',    x:8,  y:4, visual:'glasswing',    formation:[['glasswing',3],['lesserherald',1]], patrol:1},
+      {id:'racha_espelho', x:15, y:4, visual:'crackmirror',  formation:[['crackmirror',2],['voidling',2]], patrol:1},
+      {id:'vazante_solta', x:20, y:5, visual:'voidling',     formation:[['voidling',1],['glasswing',2]], patrol:1},
     ],
     signs:[
       {x:2,y:8, text:'INSCRIÇÃO EM VIDRO — "A Coroa não coroou ninguém. Ela esperou, e esperar bastou."'},
@@ -782,7 +1027,9 @@ const MAPS = {
     ],
     chests:[],
     npcs:[],
-    signs:[],
+    signs:[
+      {x:6, y:2, text:'RACHADURA NO VIDRO — sob o pé, o chão mostra uma sombra que não é a sua.'},
+    ],
     triggers:[ {x:9, y:4, scene:'coroa_antes', flag:'cena_coroa_antes'} ],
     boss:{id:'crown', x:9, y:6, flag:'crown_defeated',
           intro:['No topo não há trono. Há uma coroa parada no ar, na altura exata de uma cabeça que não existe.',
@@ -798,16 +1045,24 @@ const MAPS = {
      (água) fazem o cenário sozinhos, sem letra nova. ================ */
   arquivo: {
     name:'O Arquivo Esquecido',
-    fill:'o', region:'arquivo', outdoor:false, encounter:[11, 21], bgm:'dungeon',
+    /* v5.31 — mob visível na fileira aberta do topo, longe das estantes
+       e da poça central. */
+    fill:'o', region:'arquivo', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(10,14,38,0.52)',
     decor:[
-      {x:3,  y:3,  s:'prop_estante',       solido:true},
-      {x:20, y:3,  s:'prop_estante',       solido:true},
-      {x:3,  y:13, s:'prop_estante_baixa', solido:true},
-      {x:20, y:13, s:'prop_estante_baixa', solido:true},
-      {x:11, y:2,  s:'prop_lampiao'},
-      {x:6,  y:9,  s:'prop_entulho_grande'},
-      {x:17, y:9,  s:'prop_entulho_grande'},
+      {x:3,  y:3,  s:'prop_estante',       solido:true,
+       text:'Estante alta, lotada até o teto. Ninguém arruma isso há anos.'},
+      {x:20, y:3,  s:'prop_estante',       solido:true,
+       text:'Os lombos estão úmidos, mas o texto ainda segura.'},
+      {x:3,  y:13, s:'prop_estante_baixa', solido:true,
+       text:'Estante baixa, meio vazia. Os livros que sobraram estão emprestados a si mesmos.'},
+      {x:20, y:13, s:'prop_estante_baixa', solido:true,
+       text:'Alguém empilhou o que restou por ordem de tamanho, não de assunto.'},
+      {x:11, y:2,  s:'prop_lampiao', text:'A chama não tremula. Nem com a corrente de ar da poça central.'},
+      {x:6,  y:9,  s:'prop_entulho_grande',
+       text:'Entulho de uma estante que desabou. Ainda dá para ler um título, de cabeça para baixo.'},
+      {x:17, y:9,  s:'prop_entulho_grande',
+       text:'Páginas soltas, coladas umas nas outras pela umidade.'},
     ],
     rows:[
       '########################',
@@ -845,6 +1100,12 @@ const MAPS = {
               'Porque quando eu paro, some.']},
       {x:18, y:12, name:'Mercadora de Margem', sheet:'npc_mercador', dir:'up', shop:'margem', quest:'q_ecos',
        lines:['Vendo o que acho no chão. O chão aqui é generoso.']},
+      {x:15, y:10, name:'Curador Substituto', sheet:'npc_professor', dir:'down', quest:'q_curador',
+       lines:['Os índices andam soltos de novo. Ficha que devia ficar parada anda pela estante.']},
+    ],
+    mobs:[
+      {id:'indices_soltos', x:9,  y:3, visual:'indice', formation:[['indice',2],['errata',1]], patrol:1},
+      {id:'copistas_vivos', x:16, y:3, visual:'codice', formation:[['codice',1],['redator',1],['revisor',1]], patrol:1},
     ],
     signs:[
       {x:2,  y:2,  text:'PLACA DE LATÃO — "Acervo Geral. Silêncio." Alguém riscou "Geral" e escreveu "Todo".'},
@@ -857,9 +1118,11 @@ const MAPS = {
     fill:'f', region:'arquivo', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(6,10,32,0.6)',
     decor:[
-      {x:2,  y:4,  s:'prop_estante', solido:true},
-      {x:16, y:4,  s:'prop_estante', solido:true},
-      {x:9,  y:11, s:'prop_lampiao'},
+      {x:2,  y:4,  s:'prop_estante', solido:true,
+       text:'Prateleira vazia. A poeira aqui é mais funda que a de cima.'},
+      {x:16, y:4,  s:'prop_estante', solido:true,
+       text:'Um único livro, sem título na lombada. Ninguém o abriu ainda.'},
+      {x:9,  y:11, s:'prop_lampiao', text:'A luz mal alcança a prateleira do fundo. Foi feito assim de propósito.'},
     ],
     rows:[
       '###################',
@@ -911,7 +1174,9 @@ const MAPS = {
 
   esgoto: {
     name:'Galerias de Esgoto',
-    fill:'x', region:'esgoto', outdoor:false, encounter:[8, 16], bgm:'dungeon',
+    /* v5.31 — mob visível só nos dois cruzamentos de verdade do labirinto
+       (o resto daqui é cano de uma casa, e mob bloqueia igual a NPC). */
+    fill:'x', region:'esgoto', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(18,26,10,0.5)',
     rows:[
       '##############################',
@@ -952,6 +1217,12 @@ const MAPS = {
       {x:2,y:11, name:'Ferreiro de Bueiro', sheet:'npc_ferreiro', shop:'bueiro',
        lines:['Tudo que eu vendo já foi cano. Não pergunte de qual.']},
     ],
+    /* Só um mob: o labirinto é cano de uma casa quase inteiro, e o único
+       outro cruzamento de verdade (11,7) é a passagem vertical única do
+       mapa — bloqueá-la tranca a rota, o mesmo defeito do `spire`. */
+    mobs:[
+      {id:'praga_alagada', x:17, y:7, visual:'coletor', formation:[['coletor',1],['mosca',1],['ra_imunda',1]], patrol:0},
+    ],
     signs:[
       {x:6,y:4, text:'CHAPA REBITADA — "GALERIA 3. NÍVEL DA ÁGUA: SEGURO." O ponteiro está quebrado no vermelho.'},
       {x:19,y:16, text:'PICHAÇÃO — "não beba / não toque / não conte a ninguém que você desceu"'},
@@ -987,7 +1258,8 @@ const MAPS = {
 
   lago: {
     name:'Lago Afogado',
-    fill:'.', region:'lago', outdoor:true, encounter:[12, 22], bgm:'field',
+    /* v5.31 — mob visível na margem aberta ao sul do acampamento. */
+    fill:'.', region:'lago', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(10,34,44,0.28)',
     rows:[
       '##################################',
@@ -1031,6 +1303,10 @@ const MAPS = {
        lines:['Sente. Você está com água nos pulmões e não percebeu.',
               '...Pronto. Da próxima vez respire antes de mergulhar.']},
     ],
+    mobs:[
+      {id:'garcas_da_margem', x:10, y:12, visual:'garca',        formation:[['garca',2],['naiade',1]], patrol:1},
+      {id:'serpente_baixios', x:25, y:12, visual:'serpente_lago',formation:[['sapo_lotus',1],['serpente_lago',1]], patrol:1},
+    ],
     signs:[
       {x:4,y:13, text:'ESTACA DE MADEIRA — "NÍVEL DA ÁGUA EM 1104". A marca está três metros acima da sua cabeça.'},
     ],
@@ -1065,7 +1341,9 @@ const MAPS = {
 
   podridao: {
     name:'Baixios da Podridão',
-    fill:'d', region:'podridao', outdoor:true, encounter:[11, 21], bgm:'field',
+    /* v5.31 — mob visível na faixa aberta do topo e na trilha leste,
+       fora do labirinto de câmaras estreitas. */
+    fill:'d', region:'podridao', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(34,40,8,0.34)',
     rows:[
       '##################################',
@@ -1102,6 +1380,10 @@ const MAPS = {
       {x:13,y:8, name:'Sucateiro do Brejo', sheet:'npc_capataz', shop:'brejo',
        lines:['Se apodrece, eu não compro. Se enferruja, a gente conversa.']},
     ],
+    mobs:[
+      {id:'ratada_turfa', x:10, y:3, visual:'rato_peste', formation:[['rato_peste',2],['lesma',1]], patrol:1},
+      {id:'carnicais_leste', x:28, y:6, visual:'carnical', formation:[['carnical',1],['ent_podre',1]], patrol:1},
+    ],
     signs:[
       {x:5,y:17, text:'TÁBUA MEIO ENTERRADA — "ROÇA DA ACADEMIA — COLHEITA DE OUTONO". Não é outono há muito tempo.'},
     ],
@@ -1136,7 +1418,9 @@ const MAPS = {
 
   deserto: {
     name:'Deserto de Vidro Moído',
-    fill:'d', region:'deserto', outdoor:true, encounter:[13, 24], bgm:'field',
+    /* v5.31 — mob visível na duna aberta, longe dos pilares e do
+       acampamento. */
+    fill:'d', region:'deserto', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(70,58,14,0.3)',
     rows:[
       '##################################',
@@ -1175,6 +1459,10 @@ const MAPS = {
       {x:6,y:4,  name:'Aguadeira', sheet:'npc_menina', heal:true,
        lines:['Beba. Não pergunte de onde veio.',
               '...Pronto. Grupo de pé. A água aqui é cara, então não desperdice o descanso.']},
+    ],
+    mobs:[
+      {id:'chacais_duna',    x:12, y:10, visual:'chacal',      formation:[['chacal',2],['mumia',1]], patrol:1},
+      {id:'escaravelhos_sol',x:22, y:14, visual:'escaravelho', formation:[['escaravelho',1],['salamandra_areia',1]], patrol:1},
     ],
     signs:[
       {x:3,y:9, text:'MARCO DE PEDRA — "COROA DE VIDRO — 0 KM". Você está em cima dela. Ela é a areia.'},

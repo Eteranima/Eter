@@ -194,6 +194,47 @@ function buildFormation(spec){
   return out;
 }
 
+/* Um encontro de mob só desaparece com vitória. Fuga conserva a entidade
+   no lugar; derrota recarrega o mapa e, como mob não é save, recompõe o
+   estado transitório sem gravar progresso artificial. */
+function defeatWorldMob(mob, now = Date.now()){
+  if (!mob || mob.defeated) return false;
+  mob.defeated = true; mob.engaging = false; mob.moving = false;
+  mob.respawnAt = now + rnd(15, 10) * 1000;
+  return true;
+}
+function respawnWorldMob(mob, now = Date.now()){
+  if (!mob?.defeated || now < mob.respawnAt) return false;
+  /* Não nasce em cima do grupo, de outro mob ou de objeto interativo.
+     Se o ponto ainda estiver ocupado, tenta de novo logo; o mínimo de
+     10 s já foi respeitado e o mapa continua transitável. */
+  if (!isSafeWorldMobTile(mob.homeX, mob.homeY, mob)){
+    mob.respawnAt = now + 500;
+    return false;
+  }
+  Object.assign(mob, {tx:mob.homeX, ty:mob.homeY, px:mob.homeX * TILE, py:mob.homeY * TILE,
+    fromX:mob.homeX, fromY:mob.homeY, moving:false, moveT:0, wait:rnd(3, 1),
+    defeated:false, engaging:false, respawnAt:0});
+  return true;
+}
+function startWorldMobBattle(mob){
+  if (!mob || mob.defeated || mob.engaging || G.scene !== 'FIELD') return false;
+  mob.engaging = true;
+  Sound.sfx('encounter');
+  FX.battleWipe(() => {
+    Battle.begin(buildFormation(mob.formation));
+    Battle.onFinish = kind => {
+      /* `gameOver()` recarrega um mapa novo sem chamar o gancho. Se uma
+         luta futura chegar a este callback obsoleto, ela não pode tocar
+         a instância já descartada. */
+      if (!G.map?.mobs?.includes(mob)) return;
+      if (kind === 'victory') defeatWorldMob(mob);
+      else mob.engaging = false;
+    };
+  });
+  return true;
+}
+
 /* --- Falas ------------------------------------------------------- */
 /** `npc.lines` aceita:
  *   - array de strings                      → fala simples
@@ -201,19 +242,30 @@ function buildFormation(spec){
  *   - função (G) => qualquer um dos acima    → fala condicional a flags
  *  Normaliza tudo para o formato que o Msg consome. */
 function npcLines(npc){
+  const context = {participants:npcDialogueParticipants(npc)};
   // NPC com missão: a fala dela tem prioridade sobre a fala solta
-  if (npc.quest && QUESTS[npc.quest]) return questLines(npc).map(l => normalizeLine(l, npc));
+  if (npc.quest && QUESTS[npc.quest]) return questLines(npc).map(l => normalizeLine(l, npc, context));
   let raw = typeof npc.lines === 'function' ? npc.lines(G) : npc.lines;
   if (!Array.isArray(raw)) raw = [raw];
-  return raw.map(l => normalizeLine(l, npc));
+  return raw.map(l => normalizeLine(l, npc, context));
 }
-function normalizeLine(l, npc){
+function npcDialogueParticipants(npc){
+  const leader = leaderChar();
+  if (!leader || !npc) return [];
+  return [
+    {speaker:leader.name, sheet:leader.sheet, side:'left', dir:'right'},
+    {speaker:npc.name, sheet:npc.sheet, side:'right', dir:'left'},
+  ];
+}
+function normalizeLine(l, npc, context = {}){
   const base = typeof l === 'string' ? {text:l} : {...l};
+  const participants = base.participants ?? context.participants;
   return {
+    ...base,
+    ...(participants !== undefined ? {participants} : {}),
     speaker: base.speaker ?? npc?.name ?? '',
     portrait: base.portrait ?? npc?.portrait,
     text: base.text || '',
-    choices: base.choices,
   };
 }
 /** Ajuda a escrever falas ramificadas nos dados dos mapas. */
@@ -344,6 +396,8 @@ function interact(){
     });
     return;
   }
+  const mob = worldMobAt(tx, ty);
+  if (mob){ startWorldMobBattle(mob); return; }
   const boss = G.map.boss;
   if (boss && boss.eco && boss.tx === tx && boss.ty === ty){
     const n = G.revanches[boss.id] || 0;
@@ -380,6 +434,15 @@ function interact(){
   const sign = G.map.signs.find(s => s.x === tx && s.y === ty);
   if (sign){ Msg.start([{speaker:'', text:sign.text}]); return; }
 
+  /* Decoração examinável: mesma ideia da placa, mas para o resto do
+     pacote de props (flores, poço, fogueira, caixa...). `text` é opcional
+     — decor puramente ambiental sem fala continua funcionando igual, só
+     não reage ao interagir. Nunca deixe um prop novo sem decidir um dos
+     dois de propósito (ver eter-asset-dialogue-qa / eter-playable-map-
+     and-scenery). */
+  const decorAqui = (G.map.decor || []).find(d => d.x === tx && d.y === ty && d.text);
+  if (decorAqui){ Msg.start([{speaker:'', text:decorAqui.text}]); return; }
+
   const chest = G.map.chests.find(c => c.x === tx && c.y === ty);
   if (chest){
     const key = `chest:${G.mapId}:${chest.x},${chest.y}`;
@@ -395,6 +458,7 @@ function interact(){
   if (t.id === 'water'){ Msg.start([{speaker:'', text:'A água reflete cinco rostos cansados.'}]); return; }
   if (t.id === 'shelf'){ Msg.start([{speaker:'', text:'Tratados de éter, na maioria ilegíveis.'}]); return; }
   if (t.id === 'brazier'){ Msg.start([{speaker:'', text:'A chama arde sem consumir nada. Éter puro.'}]); return; }
+  if (t.id === 'tree'){ Msg.start([{speaker:'', text:'A casca está morna — um resto de éter ainda circula por dentro.'}]); return; }
 }
 
 /* --- Rede de cristais -------------------------------------------

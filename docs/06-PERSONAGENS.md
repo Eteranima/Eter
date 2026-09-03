@@ -167,6 +167,62 @@ inimigo para o restante do grupo.
 
 ---
 
+## Beatriz Demeter — Paladina
+
+| | |
+|---|---|
+| **Elemento** | Luz |
+| **Papel** | Espadachim de dano físico com atordoamento |
+| **Base (nv1)** | HP 118 · MP 50 · ATK 24 · DEF 17 · SPD 16 |
+| **Crescimento** | HP +9 · MP +4,6 · ATK +2,1 · DEF +1,7 · SPD +1,3 |
+| **Ressonância** | Juízo Final |
+
+Chegou com sprite de campo e retrato prontos e nenhuma ficha (v5.31). Espada
+e luz que atordoam antes de ferir — julga o alvo (`Veredito`, `Exorcismo`)
+antes de golpear pesado. `geracao:'anterior'`: entra formada, sem pet de
+Ninhal. É a primeira jogável a cobrir Luz, fechando a lacuna citada abaixo.
+Recrutada em "O Acervo Não Se Cataloga Sozinho" (Arquivo Esquecido).
+
+---
+
+## Calder Pell — Ocultista
+
+| | |
+|---|---|
+| **Elemento** | Trevas |
+| **Papel** | Maldição e desgaste ao longo do tempo |
+| **Base (nv1)** | HP 100 · MP 64 · ATK 20 · DEF 15 · SPD 15 |
+| **Crescimento** | HP +7,6 · MP +5,8 · ATK +1,9 · DEF +1,5 · SPD +1,3 |
+| **Ressonância** | Cláusula Final |
+
+Chegou com sprite de campo e retrato prontos e nenhuma ficha (v5.31). Segunda
+cobertura de Trevas no elenco (Marin é a primeira) — onde ela é explosão de
+um turno, ele é debuff que fecha o cerco devagar (`Pacto Rompido`,
+`Correntes de Estrela`) até o golpe final já estar decidido. `geracao:
+'anterior'`, sem pet. Recrutado em "O Que Ficou Sem Reflexo" (Coroa de
+Vidro).
+
+---
+
+## Carmila Reachforth — Condessa
+
+| | |
+|---|---|
+| **Elemento** | Cinzas |
+| **Papel** | Dreno de vida, ofensivo e compartilhado |
+| **Base (nv1)** | HP 108 · MP 54 · ATK 23 · DEF 16 · SPD 18 |
+| **Crescimento** | HP +8,2 · MP +5,0 · ATK +2,0 · DEF +1,6 · SPD +1,5 |
+| **Ressonância** | Última Taça |
+
+Chegou com sprite de campo e retrato prontos e nenhuma ficha (v5.31). Segunda
+cobertura de Cinzas (Madao é o primeiro, com identidade totalmente
+diferente: ele regenera sozinho fora de luta, ela drena em combate e reparte
+o excedente com a party — `Sangue Emprestado`, `Pacto de Sangue`).
+`geracao:'anterior'`, sem pet. Recrutada em "O Que a Água Não Solta"
+(Cisterna Afogada).
+
+---
+
 ## Comparativo rápido
 
 | | Seiji | Ophelia | Marin | Gabriel | Max | Eden |
@@ -179,14 +235,13 @@ inimigo para o restante do grupo.
 | SPD | ●●●○○ | ●●○○○ | ●●●●○ | ●○○○○ | ●●●●● | ●●●○○ |
 | Área | nv8 | nv10 (cura) | — | nv9 (buff) | nv8 | nv1 (cura) |
 
-Cobertura elemental do elenco: Tinta, Gelo, Trevas, Fogo, Eletricidade e Vento.
-**Falta Luz** — nenhum personagem cobre esse elemento, o que torna a
-Sentinela de Luz (resistente a Trevas, fraca a Trevas… ver bestiário)
-desconfortável de propósito. Armas de loja preenchem parcialmente essa
-lacuna: a **Lâmina do Selo** dá ataque básico de Luz. Sangue deixou de
-ser lacuna: desde a mudança de elemento de combate do Madao (Cinzas,
-reaproveitando a posição de Sangue no anel), o elenco também cobre os
-inimigos dessa família — ver `docs/v531/HANDOFF.md`.
+Cobertura elemental do elenco (tabela acima, só os seis primeiros): Tinta,
+Gelo, Trevas, Fogo, Eletricidade e Vento. Somando quem chegou depois —
+Terra (Ava), Veneno (Scythe), Cinzas (Madao, Carmila), Sem elemento (Orfeu) e
+uma segunda Trevas (Calder Pell) — só falta **Luz** cobrir a Sentinela de
+Luz e afins até a v5.30. A v5.31 fecha essa lacuna: **Beatriz Demeter** é a
+primeira jogável de Luz. Armas de loja continuam preenchendo o básico sem
+personagem — a **Lâmina do Selo** dá ataque básico de Luz.
 
 ## Ideias registradas ⬜
 

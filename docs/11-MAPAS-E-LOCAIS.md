@@ -30,8 +30,8 @@ Ponto de partida. Grama, calçamento, uma fonte de água e árvores.
 
 | | |
 |---|---|
-| **Encontros** | Sim, a cada 14-26 passos — **só na grama** |
-| **Criaturas** | Lobo de Éter, Fátua Voltaica, Sombra Corrompida |
+| **Encontros** | Não — área segura |
+| **Criaturas** | Nenhuma hostil |
 | **Cristal de save** | Sim |
 | **Baú** | Poção ×2 |
 | **Saídas** | Salão Principal (porta grande) · Anexo Oeste |
@@ -42,8 +42,47 @@ Zelador (perambula).
 **Placa**: *"Academia Stone Reach · Salão Principal. Mantenha o éter contido
 nos corredores."*
 
-> O calçamento é seguro e a grama não — e o Zelador diz isso explicitamente.
-> É o tutorial de encontro aleatório, dado em fala comum.
+> A Academia é área de convivência: nem a grama aciona combate. O Zelador
+> aponta rastros que descem para o Subterrâneo, onde a ameaça começa.
+
+## Porto Lúmina
+
+**`Porto Lúmina`** · 38×22 · exterior seguro
+
+Extensão oeste do Pátio Central, disponível desde o começo. Três píeres
+separam a água do mercado; os barcos atracados são obstáculos e respondem ao
+interagir, mas ainda não conduzem a viagens. A taverna Mesa de Âmbar tem
+interior acessível, e o Mercado da Maré tem interior próprio para vender
+suprimentos de exploração sem antecipar equipamento.
+
+| | |
+|---|---|
+| **Encontros** | Não |
+| **Saída** | Pátio Central, pelo lado leste |
+| **Serviços** | Mercado da Maré · Mesa de Âmbar (taverna) |
+| **Pontos de interesse** | Vento de Coral · dois barcos de pesca · placas do cais |
+
+> Lúmina traz pedra, água, madeira, coral, teal e âmbar para fora da paleta
+> monocromática da Academia. Violeta fica restrito aos sinais de éter.
+
+## Mesa de Âmbar
+
+**`Mesa de Âmbar`** · 17×11 · interior seguro
+
+Taverna do porto. Mesas, balcão e luzes âmbar/azul-esverdeadas formam um
+espaço de conversa, não um segundo posto de cura ou comércio. A porta retorna
+ao cais e o Tavio funciona como referência social do lugar.
+
+---
+
+## Mercado da Maré
+
+**`Mercado da Maré`** · 19×11 · interior seguro
+
+Comércio do porto. Maira atende atrás do balcão; prateleiras, caixas e barris
+organizam o estoque de viagem já existente. As luzes dourada e azul, etiquetas
+coral e o estandarte açafrão quebram a monotonia sem alterar preços, itens ou
+a curva de equipamento. A porta retorna ao cais.
 
 ---
 
@@ -113,8 +152,8 @@ Primeiro ambiente hostil. Corredores estreitos, entulho, braseiros isolados.
 
 | | |
 |---|---|
-| **Encontros** | Sim, a cada 9-18 passos — em todo o piso |
-| **Criaturas** | Sombra, Golem, Espectro, Servo do Inverno, Fátua |
+| **Encontros** | Mobs visíveis — sem rolagem por passos |
+| **Criaturas** | Lobos de Éter, Sombra, Golem e Servo do Inverno |
 | **Cristal de save** | Sim (canto sudoeste) |
 | **Baús** | Elixir de Éter ×3 · Poção Maior ×2 |
 | **Saídas** | Salão Principal (escada) · Câmara do Selo |
@@ -149,8 +188,8 @@ Conteúdo pós-chefe. Estrutura em anel com duas salas laterais.
 
 | | |
 |---|---|
-| **Encontros** | Sim, a cada 10-20 passos |
-| **Criaturas** | Oco Faminto, Renascido, Sentinela de Luz, Servo do Inverno |
+| **Encontros** | Mobs visíveis — sem rolagem por passos (v5.31) |
+| **Criaturas** | Oco Faminto, Renascido, Sentinela de Luz — três mobs de campo, mesmo padrão do Subterrâneo |
 | **Cristal de save** | Sim (corredor central) |
 | **Baús** | Éter Destilado ×2 · **Couraça Selada ×1** |
 | **Chefe** | **O Eco do Primeiro**, na alcova sul |
@@ -177,9 +216,12 @@ Conteúdo pós-chefe. Estrutura em anel com duas salas laterais.
 
 ## Regras de exploração
 
-- **Encontros por contagem de passos**, não por sorteio a cada passo. O
-  contador é re-sorteado a cada encontro. Isso evita a sensação de
-  perseguição e dá um ritmo previsível.
+- Desde a v5.31, **nenhum mapa de exploração declara encontro por passo**:
+  todo combate ambiente do jogo vem de mobs visíveis no campo (Subterrâneo
+  Selado, Galeria Profunda e as sete regiões além da Academia — ver
+  `docs/PENDENCIAS-DESIGN.md`, item 3, para a lista completa e o
+  raciocínio de cada região). Mobs de campo bloqueiam a própria casa,
+  patrulham pouco e retornam após a vitória sem entrar no save.
 - Portas e escadas ativam **ao pisar**, com transição de fade.
 - Baús e placas ativam **ao interagir de frente**.
 - Cristais podem ser pisados e ativados de cima.
@@ -188,7 +230,12 @@ Conteúdo pós-chefe. Estrutura em anel com duas salas laterais.
 
 ## Lacunas ⬜
 
-- Nenhum mapa exterior além do pátio — não há "mundo" fora da academia.
+- Este documento descreve só a Academia e o trio do Subterrâneo (conteúdo
+  do Capítulo 1). As dez regiões além dele (Mata Cindária, Ninhal de Éter,
+  Cisterna Afogada, Coroa de Vidro, Arquivo Esquecido, Esgoto, Lago
+  Afogado, Baixios da Podridão e Deserto) já existem em código, com NPCs,
+  missões e mobs de campo próprios, mas ainda não têm ficha aqui — mapear
+  cada uma é trabalho futuro, não uma correção deste documento.
 - Mapas menores que a tela (Anexo, Ala, Câmara) ficam centralizados com preto
   em volta. Lê como sala flutuando no escuro; aceitável, mas é escolha não
   deliberada.

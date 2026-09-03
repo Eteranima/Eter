@@ -523,7 +523,11 @@ const RECRUIT_QUESTS = ['q_zelador', 'q_bibliotecaria', 'q_veterano', 'q_enferme
      região da v5.28. Sem elas o elenco passaria de 13 com 8 missões, e a
      rotina de sobra despejaria três recrutas na última — que funciona,
      mas é o caminho de emergência, não o desenho. */
-                        'q_coletores', 'q_serpente', 'q_carnicais', 'q_mumias'];
+                        'q_coletores', 'q_serpente', 'q_carnicais', 'q_mumias',
+  /* v5.31 — mesma regra para Beatriz, Calder e Carmila: três recrutas
+     novos, três missões novas, uma por região onde a espécie-alvo já
+     sai em formação (ver comentário em cada missão, `11-quests.js`). */
+                        'q_curador', 'q_penumbra', 'q_sanguessuga'];
 /* Quem cura. Se o protagonista não estiver aqui, o primeiro recruta é —
    um começo sem cura nenhuma trava o jogador na primeira região, e a
    primeira missão é justamente a mais fácil de alcançar. */

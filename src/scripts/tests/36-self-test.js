@@ -512,8 +512,78 @@ function runSelfTests(){
     const flags = G.flags, cena = G.scene;
     G.flags = {};
     let rodou = false;
+    const cinematica = normalizeLine({
+      speaker:'X', text:'Nós dois.', dialogSprite:'dlg_teste',
+      participants:[
+        {speaker:'X', side:'left', mirror:false, focus:true},
+        {speaker:'Y', side:'right', mirror:true, focus:false},
+      ],
+    }, {name:'Ignorado'});
+    const dupla = dialogueParticipants(cinematica);
+    ok('normalização preserva a apresentação cinematográfica',
+       cinematica.dialogSprite === 'dlg_teste' && cinematica.participants.length === 2);
+    ok('diálogo aceita dois participantes, lados, espelho e foco',
+       dupla.length === 2 && dupla[0].side === 'left' && dupla[1].side === 'right' &&
+       dupla[1].mirror === true && dupla[0].focus && !dupla[1].focus &&
+       dupla[0].dialogSprite === 'dlg_teste');
+    ok('fala simultânea deixa os dois participantes claros',
+       dialogueParticipants({...cinematica, simultaneous:true}).every(p => p.focus));
+    ok('diálogo limita a cena a dois participantes',
+       dialogueParticipants({...cinematica, participants:[
+         ...cinematica.participants, {speaker:'Z', side:'right'},
+       ]}).length === 2);
+    ok('Max resolve a dialogue sprite própria',
+       dialogueSpriteKey({speaker:'Max'}) === 'dlg_max');
+    ok('sprite de diálogo rejeita sheet de mundo',
+       dialogueSpriteKey({speaker:'X', dialogSprite:'x_sheet'}) === null);
+    ok('todo mapeamento de diálogo aponta para asset carregado',
+       Object.values(DIALOGUE_SPRITES).every(k => !!SPRITE_DATA[k] && spriteImages[k]?.complete));
+    const party = G.party, squad = G.squad, leader = G.leader;
+    const map = G.map, followers = G.followers;
+    G.party = [makeChar(PARTY_DEFS.find(c => c.name === 'Max'), 1)];
+    G.squad = ['Max']; G.leader = 0; G.followers = [];
+    const automaticas = npcLines({name:'Aluno de teste', sheet:'npc_aluno', lines:[{
+      text:'Fala com resposta.', choices:[{label:'Seguir', then:['Continuamos.']}],
+    }]});
+    const duplaAutomatica = dialogueParticipants(automaticas[0]);
+    const fallbackNpc = dialogueSpriteSource(duplaAutomatica[1]);
+    ok('interação de NPC inclui líder e interlocutor',
+       duplaAutomatica.length === 2 && duplaAutomatica[0].speaker === 'Max' &&
+       duplaAutomatica[0].side === 'left' && duplaAutomatica[1].speaker === 'Aluno de teste' &&
+       duplaAutomatica[1].side === 'right' && duplaAutomatica[0].mirror &&
+       !duplaAutomatica[0].focus && duplaAutomatica[1].focus);
+    ok('NPC sem dlg recorta só o quadro central voltado ao líder',
+       fallbackNpc?.kind === 'sheet' && fallbackNpc.sx === FRAME_INFO.npc_aluno.fw &&
+       fallbackNpc.sy === FRAME_INFO.npc_aluno.fh &&
+       fallbackNpc.sw < (spriteImages.npc_aluno.naturalWidth || spriteImages.npc_aluno.width));
+    Msg.start(automaticas); Msg.shown = 999; Msg.choose(Msg.choices[0]);
+    ok('resposta de escolha de NPC conserva a dupla automática',
+       Msg.line.participants?.length === 2 && dialogueParticipants(Msg.line)[1].focus);
+    Msg.finish();
+    G.map = {npcs:[{name:'NPC de cena', sheet:'npc_aluno'}]};
+    CUT_CMD.say.start.call({st:{}}, {who:'NPC de cena', text:'Fala roteirizada.'});
+    const duplaDeCena = dialogueParticipants(Msg.line);
+    ok('cena roteirizada de NPC também monta a dupla',
+       duplaDeCena.length === 2 && duplaDeCena[0].speaker === 'Max' &&
+       duplaDeCena[1].speaker === 'NPC de cena' && duplaDeCena[1].focus);
+    Msg.finish();
+    G.party = party; G.squad = squad; G.leader = leader;
+    G.map = map; G.followers = followers;
+    const cenaCinematica = {st:{}};
+    CUT_CMD.say.start.call(cenaCinematica, {
+      who:'X', speaker:'Ignorado', text:'Cena em dupla.', dialogSprite:'dlg_teste', simultaneous:true,
+      participants:[{speaker:'X', side:'left'}, {speaker:'Y', side:'right', mirror:true}],
+    });
+    ok('cutscene de uma linha preserva participantes e apresentação',
+       Msg.line.speaker === 'X' && Msg.line.dialogSprite === 'dlg_teste' &&
+       dialogueParticipants(Msg.line).length === 2 &&
+       dialogueParticipants(Msg.line).every(p => p.focus));
+    Msg.finish();
     Msg.start([{speaker:'X', text:'Aceita?', choices:[
-      {label:'Sim', set:{teste_ok:true}, then:['Combinado.']},
+      {label:'Sim', set:{teste_ok:true}, then:[{
+        text:'Combinado.', dialogSprite:'dlg_teste',
+        participants:[{speaker:'X', side:'left', focus:true}],
+      }]},
       {label:'Não', run:() => { rodou = true; return null; }},
     ]}]);
     Msg.shown = 999;
@@ -524,6 +594,8 @@ function runSelfTests(){
     Msg.choose(Msg.choices[0]);
     ok('escolha grava a flag', G.flags.teste_ok === true);
     ok('escolha emenda as falas de resposta', Msg.active && Msg.line.text === 'Combinado.');
+    ok('escolha preserva a apresentação da resposta',
+       Msg.line.dialogSprite === 'dlg_teste' && Msg.line.participants?.[0].focus === true);
     Msg.shown = 999; Msg.advance();
     ok('diálogo encerra depois da resposta', !Msg.active);
     // opção com `when` some quando a condição é falsa
@@ -2045,6 +2117,8 @@ function runSelfTests(){
       .map(([id]) => id);
     ok('todo mapa com encontro aleatório tem formação para a região dele',
        semForm.length === 0, semForm.join(','));
+    ok('o Pátio Central é seguro e não declara mob hostil',
+       MAPS.patio?.encounter === null && !(MAPS.patio.mobs || []).length);
     // e nenhum NPC novo em cima de parede
     const npcPresos = [];
     for (const [id, m] of Object.entries(MAPS)){
@@ -2055,6 +2129,87 @@ function runSelfTests(){
         npcPresos.push(`${id}/chefe`);
     }
     ok('nenhum NPC ou chefe nasce dentro de parede', npcPresos.length === 0, npcPresos.join(' '));
+
+    /* P0 (Subterrâneo) + v5.31 (mais dez regiões): mapa que troca
+       encontro aleatório por entidade de campo precisa continuar
+       pequeno, combater só espécies reais e não plantar ninguém em
+       objeto/interação. Checagem ESTRUTURAL abaixo é genérica — vale
+       para todo mapa com `mobs`, não só o Subterrâneo. O exercício do
+       ciclo vivo (fuga/vitória/respawn) roda só uma vez, no Subterrâneo,
+       porque testa o motor (`startWorldMobBattle`), não dado por mapa. */
+    {
+      const mapasComMob = Object.entries(MAPS).filter(([, m]) => (m.mobs || []).length);
+      const semNull = mapasComMob.filter(([, m]) => m.encounter !== null).map(([id]) => id);
+      const foraDaFaixa = mapasComMob.filter(([, m]) => m.mobs.length < 1 || m.mobs.length > 5).map(([id]) => id);
+      ok('todo mapa com mob visível declara encontro nulo',
+         semNull.length === 0, semNull.join(','));
+      ok('todo mapa com mob visível tem entre um e cinco mobs',
+         foraDaFaixa.length === 0, foraDaFaixa.join(','));
+
+      const ruins = [];
+      for (const [id, m] of mapasComMob){
+        const g = normalizeRows(m.rows, m.fill);
+        for (const mob of m.mobs){
+          const t = g?.[mob.y]?.[mob.x] && TILEDEF[g[mob.y][mob.x]];
+          if (!t || t.solid || t.warp || t.chest || t.save) ruins.push(`${id}/${mob.id}:casa`);
+          if (!BESTIARY[mob.visual] || !(mob.formation || []).length ||
+              !mob.formation.every(([sid, n]) => BESTIARY[sid] && n > 0)) ruins.push(`${id}/${mob.id}:formação`);
+          if (!(mob.patrol >= 0 && mob.patrol <= 2)) ruins.push(`${id}/${mob.id}:patrulha`);
+        }
+      }
+      ok('todo mob de campo nasce em chão seguro com formação válida',
+         ruins.length === 0, ruins.join(' '));
+
+      const def = MAPS.undercroft, mobs = def?.mobs || [];
+      const mapaAnterior = G.mapId;
+      loadMap('undercroft');
+      const vivo = G.map.mobs[0], agora = Date.now();
+      ok('mobs de campo são instâncias transitórias e bloqueiam a própria casa',
+         G.map.mobs.length === mobs.length && !!vivo && isSolid(vivo.tx, vivo.ty));
+      if (vivo){
+        /* Exercita o gancho real sem abrir uma batalha durante o relatório:
+           fugir devolve o mob ao campo; vitória o marca para respawn. */
+        const wipe = FX.battleWipe, begin = Battle.begin, gancho = Battle.onFinish;
+        FX.battleWipe = cb => cb();
+        Battle.begin = () => {};
+        const iniciou = startWorldMobBattle(vivo);
+        Battle.onFinish?.('flee');
+        const fugiu = iniciou && !vivo.engaging && !vivo.defeated;
+        startWorldMobBattle(vivo);
+        Battle.onFinish?.('victory');
+        FX.battleWipe = wipe; Battle.begin = begin; Battle.onFinish = gancho;
+        ok('fuga conserva mob e vitória o remove do campo', fugiu && vivo.defeated);
+        const espera = vivo.respawnAt - agora;
+        ok('respawn de mob fica entre 10 e 15 segundos', espera >= 10000 && espera < 15000,
+           `${Math.round(espera)} ms`);
+        vivo.respawnAt = agora - 1;
+        respawnWorldMob(vivo, agora);
+        ok('mob reaparece na origem sem gravar estado de mapa',
+           !vivo.defeated && vivo.tx === vivo.homeX && vivo.ty === vivo.homeY);
+      }
+      if (mapaAnterior) loadMap(mapaAnterior);
+    }
+
+    /* Quem perambula não pode parar em cima de uma interação. A regra é
+       compartilhada com mobs para que uma porta, escada, baú ou gatilho
+       não pare de responder só porque uma entidade escolheu aquela casa. */
+    {
+      const mapaAnterior = G.mapId, riscos = [];
+      const lados = Object.values(DIRV);
+      for (const [id, def] of Object.entries(MAPS)){
+        if (!(def.npcs || []).some(n => n.wander)) continue;
+        loadMap(id);
+        for (const npc of G.map.npcs.filter(n => n.wander)) for (const [dx, dy] of lados){
+          const x = npc.tx + dx, y = npc.ty + dy, t = tileAt(x, y);
+          const interage = t?.warp || t?.chest || t?.save ||
+            G.map.signs.some(s => s.x === x && s.y === y) ||
+            (G.map.def.triggers || []).some(g => g.x === x && g.y === y);
+          if (interage && isSafeWorldActorTile(x, y, npc)) riscos.push(`${id}/${npc.name}@${x},${y}`);
+        }
+      }
+      ok('NPC que perambula evita portas, escadas e interações', riscos.length === 0, riscos.join(' '));
+      if (mapaAnterior) loadMap(mapaAnterior);
+    }
 
     /* --- v5.28: mapa que PROMETE encontro tem de poder cumprir -------
        O encontro é gatilhado pelo TILE (`enc`), não pelo mapa. Três
@@ -2825,13 +2980,22 @@ function runSelfTests(){
 
       /* Indivíduos por encontro, por região. Uma formação que traz três
          de uma espécie vale três — é o que o contador de abates vê. */
-      const porEncontro = {};
+      const porConfronto = [];
       for (const [reg, fs] of Object.entries(FORMATIONS)){
         if (!comEncontro.has(reg) || !fs.length) continue;
         const acc = {};
         for (const f of fs) for (const [id, n] of f) acc[id] = (acc[id] || 0) + n;
-        porEncontro[reg] = {};
-        for (const k in acc) porEncontro[reg][k] = acc[k] / fs.length;
+        const medio = {};
+        for (const k in acc) medio[k] = acc[k] / fs.length;
+        porConfronto.push(medio);
+      }
+      /* Mob visível é uma fonte de combate tão real quanto uma formação
+         aleatória. Como a formação dele é fixa, conta a quantidade que
+         aparece quando ele é enfrentado, não uma média de rolagens. */
+      for (const m of Object.values(MAPS)) for (const mob of (m.mobs || [])){
+        const fixo = {};
+        for (const [id, n] of (mob.formation || [])) fixo[id] = (fixo[id] || 0) + n;
+        if (Object.keys(fixo).length) porConfronto.push(fixo);
       }
 
       const semAlvo = [], pesadas = [];
@@ -2845,7 +3009,7 @@ function runSelfTests(){
         if (q.tipo === 'collect' && emLoja.has(q.item)) continue;
 
         let melhor = 0;
-        for (const tab of Object.values(porEncontro)){
+        for (const tab of porConfronto){
           let taxa = 0;
           if (q.tipo === 'hunt') taxa = tab[q.alvo] || 0;
           else for (const [k, pr] of (dropDe[q.item] || [])) taxa += (tab[k] || 0) * pr;
@@ -2853,12 +3017,12 @@ function runSelfTests(){
         }
         if (!melhor){ semAlvo.push(`${qid}(${q.alvo || q.item})`); continue; }
         const enc = Math.ceil(q.qtd / melhor);
-        if (enc > TETO_ENCONTROS) pesadas.push(`${qid}: ${enc} encontros`);
+        if (enc > TETO_ENCONTROS) pesadas.push(`${qid}: ${enc} confrontos`);
       }
 
-      ok('toda missão tem alvo que aparece em alguma região com encontro',
+      ok('toda missão tem alvo em algum combate disponível',
          semAlvo.length === 0, semAlvo.join(' · '));
-      ok(`nenhuma missão passa de ${TETO_ENCONTROS} encontros`,
+      ok(`nenhuma missão passa de ${TETO_ENCONTROS} confrontos`,
          pesadas.length === 0, pesadas.join(' · '));
 
       /* O contador de abates é o que alimenta as missões de caça. Se
@@ -3008,12 +3172,17 @@ function runSelfTests(){
       ok('todo tile de chão é quadrado', naoQuadrado.length === 0,
          naoQuadrado.join(' · '));
 
-      /* Toda chave de TILE_ART e TALL_ART tem de existir OU não existir
-         inteira. Chave escrita errado devolve null em silêncio e o tile
-         volta ao traço sem ninguém notar que a arte não entrou. */
+      /* Toda chave de TILE_ART e TALL_ART tem de existir. Chave escrita
+         errado devolve null em silêncio e faria uma sala publicada voltar
+         ao traço procedural. */
       const arteChao = Object.values(TILE_ART).filter(k => SPRITE_DATA[k]);
       ok('há arte de chão embutida', arteChao.length >= 8,
          `${arteChao.length} de ${Object.keys(TILE_ART).length}`);
+      const arteAltaAusente = Object.entries(TALL_ART)
+        .filter(([, chave]) => !SPRITE_DATA[chave])
+        .map(([id, chave]) => `${id}: ${chave}`);
+      ok('todo tile alto está ligado a um sprite de cenário',
+         arteAltaAusente.length === 0, arteAltaAusente.join(' · '));
       ok('a água NÃO está em TILE_ART', !TILE_ART.water,
          'o atalho passaria na frente da água animada');
       ok('a água animada continua com os três quadros',
@@ -3052,13 +3221,14 @@ function runSelfTests(){
       const brigam = new Set();
       for (const m of Object.values(MAPS)){
         if (!m.region) continue;
-        if (m.encounter || m.boss) brigam.add(m.region);
+        if (m.encounter || m.boss || (m.mobs || []).length) brigam.add(m.region);
       }
       /* v5.29 — a chave também pode ser de um MAPA, que ganha da região.
          Vale a mesma exigência: o mapa tem de poder brigar, senão a
          folha nunca aparece. `arquivo_fundo` é a sala do Arquivista. */
       const comFolha = new Set(brigam);
-      for (const [id, m] of Object.entries(MAPS)) if (m.encounter || m.boss) comFolha.add(id);
+      for (const [id, m] of Object.entries(MAPS))
+        if (m.encounter || m.boss || (m.mobs || []).length) comFolha.add(id);
       const orfaos = Object.keys(SPRITE_DATA)
         .filter(k => k.startsWith('battle_bg_') && !comFolha.has(k.slice(10)));
       ok('todo battle_bg_* embutido é de região ou mapa onde há batalha',
@@ -4010,9 +4180,10 @@ function runSelfTests(){
          não muda nada, e o mapa fechado tem que sortear igual. */
       {
         const antes = G.stepsToEnc;
-        loadMap('patio');
+        const aberto = Object.keys(MAPS).find(id => MAPS[id].outdoor && MAPS[id].encounter);
+        loadMap(aberto);
         const fora = G.map.def.outdoor, faixa = G.map.def.encounter;
-        ok('o pátio é a céu aberto e tem encontro (base do teste)', !!fora && !!faixa);
+        ok('há mapa externo com encontro para testar a noite', !!aberto && !!fora && !!faixa, aberto);
 
         const amostra = (passos, n = 400) => {
           G.steps = passos;
