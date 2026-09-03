@@ -85,3 +85,19 @@
   #hint{position:fixed;top:6px;left:50%;transform:translateX(-50%);font-size:10px;color:#4a4260;
         letter-spacing:.5px;pointer-events:none;z-index:5;white-space:nowrap}
   body.touch #hint{display:none}
+
+  /* Carimbo de build — só a HML mostra (ver 39-build-badge.js). Fica
+     ESCONDIDO por padrão aqui mesmo no CSS: se o script que decide a
+     visibilidade falhar por qualquer motivo, o padrão seguro é sumido,
+     nunca aparecer em produção por acidente. */
+  #build-badge{display:none;position:fixed;
+      top:calc(6px + env(safe-area-inset-top,0px));
+      right:calc(6px + env(safe-area-inset-right,0px));
+      padding:3px 7px;font-family:'Press Start 2P',monospace;font-size:7px;
+      letter-spacing:.5px;color:#ffb4b4;background:rgba(160,20,20,0.35);
+      border:1px solid rgba(255,90,90,0.55);border-radius:4px;
+      pointer-events:none;z-index:40;white-space:nowrap}
+  #build-badge.mostrar{display:block}
+  /* No touch o botão de tela cheia já ocupa esse canto — o carimbo desce
+     pra não sobrepor. */
+  body.touch #build-badge{top:calc(48px + env(safe-area-inset-top,0px))}

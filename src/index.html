@@ -11,6 +11,10 @@
 <div id="stage"><canvas id="game-canvas" width="800" height="600"></canvas></div>
 <div id="hint">setas/WASD mover · Z confirmar · X cancelar · C menu · M mapa · TAB alternar time · N som</div>
 <div id="btn-full" title="Tela cheia">⛶</div>
+<!-- Só aparece em eterhml.denverso.com (ver scripts/39-build-badge.js). O
+     texto do carimbo é escrito por tools/construir_modular.py a cada build;
+     em src/ crua ele fica com o marcador abaixo, sem efeito nenhum. -->
+<div id="build-badge" aria-hidden="true">build __BUILD_TIMESTAMP__</div>
 
 <div id="mobile-controls">
   <div class="dpad">
@@ -69,5 +73,6 @@
 <script src="scripts/tests/36-self-test.js"></script>
 <script src="scripts/tools/37-balance.js"></script>
 <script src="scripts/data/38-skilltree-reservado.js"></script>
+<script src="scripts/39-build-badge.js"></script>
 </body>
 </html>

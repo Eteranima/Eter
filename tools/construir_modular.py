@@ -7,7 +7,11 @@ import argparse
 import hashlib
 import json
 import shutil
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
+BRT = timezone(timedelta(hours=-3))
+BUILD_TIMESTAMP_MARKER = "__BUILD_TIMESTAMP__"
 
 
 def sha256(path: Path) -> str:
@@ -39,12 +43,30 @@ def validate(source: Path) -> dict[str, object]:
     return catalog
 
 
+def carimbar_build(public: Path) -> None:
+    """Escreve a data/hora real do build em cima do marcador de index.html.
+
+    Só index.html MATERIALIZADO (public/) é tocado — src/index.html nunca
+    muda, então rodar o jogo direto da fonte mostra o marcador cru em vez
+    de uma data (inofensivo; é só o carimbo que fica escondido/estranho).
+    A visibilidade de verdade é decidida em runtime por hostname, em
+    scripts/39-build-badge.js — este carimbo é só o texto.
+    """
+    index = public / "index.html"
+    texto = index.read_text(encoding="utf-8")
+    if BUILD_TIMESTAMP_MARKER not in texto:
+        return
+    agora = datetime.now(BRT).strftime("%d/%m/%y às %H:%M")
+    index.write_text(texto.replace(BUILD_TIMESTAMP_MARKER, agora), encoding="utf-8")
+
+
 def build(source: Path, public: Path) -> None:
     catalog = validate(source)
     temporary = public.with_name(public.name + ".new")
     if temporary.exists():
         shutil.rmtree(temporary)
     shutil.copytree(source, temporary)
+    carimbar_build(temporary)
     backup = public.with_name(public.name + ".previous")
     if public.exists():
         if backup.exists():
