@@ -136,11 +136,13 @@ function desenharProp(chave, sx, sy, o = {}){
   return true;
 }
 
-/* Tile alto -> peça do pacote. O que não estiver aqui continua sendo
-   desenhado a traço, como sempre foi: estante e mesa não têm
-   equivalente no pacote, e um substituto errado é pior que o traço. */
+/* Tile alto -> peça de cenário. Todo tipo alto usado nos mapas tem arte
+   própria; o renderizador não deve voltar ao traço procedural em uma sala
+   publicada. Mesa e estante usam peças geradas para a grade de 32px. */
 const TALL_ART = {
   tree:   'prop_arvore',
+  shelf:  'prop_estante_interior',
+  table:  'prop_mesa_interior',
   pillar: 'prop_pilar',
   rubble: 'prop_entulho',
   save:   'prop_save',

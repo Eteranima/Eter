@@ -503,6 +503,21 @@ Object.assign(SPRITE_DATA, {
   "prop_tronco": "assets/world/prop_tronco.webp",
   "prop_tumulo": "assets/world/prop_tumulo.webp",
 });
+/* CENÁRIOS_STONE_REACH — props com base ancorada ao pé da célula. O
+   editor estático usa estas chaves, para que sua exportação não dependa
+   de caminho solto nem de imagem remota. */
+Object.assign(SPRITE_DATA, {
+  prop_academia_stone_reach: "assets/world/prop_academia_stone_reach.webp",
+  prop_portao_stone_reach: "assets/world/prop_portao_stone_reach.webp",
+  prop_altar_selo: "assets/world/prop_altar_selo.webp",
+  prop_barco_lumina: "assets/world/prop_barco_lumina.webp",
+  /* Interiores compartilham o mesmo pixel art de 32px: mesa neutra
+     para salas gerais, balcão colorido somente no Mercado da Maré e
+     estante alta no lugar do desenho procedural. */
+  prop_mesa_interior: "assets/world/prop_mesa_interior.webp",
+  prop_mesa_mercado: "assets/world/prop_mesa_mercado.webp",
+  prop_estante_interior: "assets/world/prop_estante_interior.webp",
+});
 /* <<< FIM DOS PROPS */
 
 /* >>> ARTE DE CRIATURAS (gerado por assets/_mobs.py) */

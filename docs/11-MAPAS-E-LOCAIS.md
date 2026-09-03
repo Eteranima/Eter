@@ -45,6 +45,45 @@ nos corredores."*
 > A Academia é área de convivência: nem a grama aciona combate. O Zelador
 > aponta rastros que descem para o Subterrâneo, onde a ameaça começa.
 
+## Porto Lúmina
+
+**`Porto Lúmina`** · 38×22 · exterior seguro
+
+Extensão oeste do Pátio Central, disponível desde o começo. Três píeres
+separam a água do mercado; os barcos atracados são obstáculos e respondem ao
+interagir, mas ainda não conduzem a viagens. A taverna Mesa de Âmbar tem
+interior acessível, e o Mercado da Maré tem interior próprio para vender
+suprimentos de exploração sem antecipar equipamento.
+
+| | |
+|---|---|
+| **Encontros** | Não |
+| **Saída** | Pátio Central, pelo lado leste |
+| **Serviços** | Mercado da Maré · Mesa de Âmbar (taverna) |
+| **Pontos de interesse** | Vento de Coral · dois barcos de pesca · placas do cais |
+
+> Lúmina traz pedra, água, madeira, coral, teal e âmbar para fora da paleta
+> monocromática da Academia. Violeta fica restrito aos sinais de éter.
+
+## Mesa de Âmbar
+
+**`Mesa de Âmbar`** · 17×11 · interior seguro
+
+Taverna do porto. Mesas, balcão e luzes âmbar/azul-esverdeadas formam um
+espaço de conversa, não um segundo posto de cura ou comércio. A porta retorna
+ao cais e o Tavio funciona como referência social do lugar.
+
+---
+
+## Mercado da Maré
+
+**`Mercado da Maré`** · 19×11 · interior seguro
+
+Comércio do porto. Maira atende atrás do balcão; prateleiras, caixas e barris
+organizam o estoque de viagem já existente. As luzes dourada e azul, etiquetas
+coral e o estandarte açafrão quebram a monotonia sem alterar preços, itens ou
+a curva de equipamento. A porta retorna ao cais.
+
 ---
 
 ## Salão Principal

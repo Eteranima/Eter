@@ -3172,12 +3172,17 @@ function runSelfTests(){
       ok('todo tile de chão é quadrado', naoQuadrado.length === 0,
          naoQuadrado.join(' · '));
 
-      /* Toda chave de TILE_ART e TALL_ART tem de existir OU não existir
-         inteira. Chave escrita errado devolve null em silêncio e o tile
-         volta ao traço sem ninguém notar que a arte não entrou. */
+      /* Toda chave de TILE_ART e TALL_ART tem de existir. Chave escrita
+         errado devolve null em silêncio e faria uma sala publicada voltar
+         ao traço procedural. */
       const arteChao = Object.values(TILE_ART).filter(k => SPRITE_DATA[k]);
       ok('há arte de chão embutida', arteChao.length >= 8,
          `${arteChao.length} de ${Object.keys(TILE_ART).length}`);
+      const arteAltaAusente = Object.entries(TALL_ART)
+        .filter(([, chave]) => !SPRITE_DATA[chave])
+        .map(([id, chave]) => `${id}: ${chave}`);
+      ok('todo tile alto está ligado a um sprite de cenário',
+         arteAltaAusente.length === 0, arteAltaAusente.join(' · '));
       ok('a água NÃO está em TILE_ART', !TILE_ART.water,
          'o atalho passaria na frente da água animada');
       ok('a água animada continua com os três quadros',

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Éter Anima — Editor de Cenários</title>
+  <link rel="stylesheet" href="editor-cenarios.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">FERRAMENTA INTERNA · NÃO ENTRA NO RUNTIME DO JOGO</p>
+      <h1>Editor de Cenários</h1>
+      <p>Autorie a grade e a decoração no mesmo contrato de <code>MAPS</code>.</p>
+    </div>
+    <div class="header-actions">
+      <button id="validate" class="secondary">Validar</button>
+      <button id="copy" class="primary">Copiar definição</button>
+    </div>
+  </header>
+
+  <main>
+    <aside class="panel controls">
+      <h2>Mapa</h2>
+      <label>ID <input id="map-id" value="novo_cenario" pattern="[a-z0-9_]+"></label>
+      <label>Nome <input id="map-name" value="Novo cenário"></label>
+      <div class="two-cols">
+        <label>Largura <input id="map-width" type="number" min="8" max="48" value="24"></label>
+        <label>Altura <input id="map-height" type="number" min="8" max="32" value="16"></label>
+      </div>
+      <div class="two-cols">
+        <label>Preenchimento
+          <select id="map-fill"><option value=".">Grama</option><option value="f">Piso</option><option value="x">Pedra rachada</option></select>
+        </label>
+        <label>BGM
+          <select id="map-bgm"><option value="field">Campo</option><option value="dungeon">Masmorra</option></select>
+        </label>
+      </div>
+      <label class="check"><input id="map-outdoor" type="checkbox" checked> Área externa (ciclo dia/noite)</label>
+      <button id="resize" class="secondary wide">Aplicar tamanho</button>
+
+      <h2>Camada</h2>
+      <div class="mode-buttons" role="group" aria-label="Camada de edição">
+        <button data-mode="tile" class="selected">Tiles</button><button data-mode="prop">Props</button>
+      </div>
+      <p id="selection" class="selection">Tile selecionado: grama</p>
+
+      <h2>Tiles</h2>
+      <div id="tile-palette" class="palette"></div>
+
+      <h2>Props de cenário</h2>
+      <div id="prop-palette" class="props"></div>
+      <label class="check"><input id="prop-solid" type="checkbox" checked> Prop bloqueia a célula</label>
+      <label>Texto ao examinar <input id="prop-text" type="text" placeholder='Ex.: "Barril de água limpa."'></label>
+      <label class="check"><input id="prop-mute" type="checkbox"> Decoração muda (sem texto, decisão deliberada)</label>
+      <p class="small">Requisito do jogo: todo prop reage ao interagir (texto) ou é declarado mudo de propósito —
+        nunca fica sem nenhum dos dois. Placa (<code>prop_placa</code>) é exceção: o texto dela vai no campo
+        <strong>Placas / signs</strong> ao lado, na mesma coordenada do sprite.</p>
+      <p class="small">Clique em um prop e depois na grade. Clique numa célula já decorada para removê-la.</p>
+    </aside>
+
+    <section class="workspace">
+      <div class="canvas-wrap"><canvas id="map-canvas" width="768" height="512" aria-label="Grade editável do cenário"></canvas></div>
+      <div class="legend"><span class="spawn">◆</span> spawn <span class="solid">■</span> sólido <span class="decor">●</span> decoração</div>
+      <div id="status" class="status" aria-live="polite">Pronto para editar.</div>
+    </section>
+
+    <aside class="panel export-panel">
+      <h2>Metadados</h2>
+      <label>Spawn X <input id="spawn-x" type="number" min="1" value="2"></label>
+      <label>Spawn Y <input id="spawn-y" type="number" min="1" value="2"></label>
+      <label>Direção
+        <select id="spawn-dir"><option>down</option><option>up</option><option>left</option><option>right</option></select>
+      </label>
+      <label>Warps (JSON)<textarea id="warps" spellcheck="false">[]</textarea></label>
+      <label>Baús (JSON)<textarea id="chests" spellcheck="false">[]</textarea></label>
+      <p class="small">A ordem de <code>warps</code> e <code>chests</code> precisa seguir os marcadores <code>+</code>/<code>S</code> e <code>$</code> na leitura, como em <code>12-maps.js</code>.</p>
+      <label>Placas / signs (JSON)<textarea id="signs" spellcheck="false">[]</textarea></label>
+      <p class="small">Cada placa (<code>prop_placa</code> na camada de props) precisa de uma entrada aqui
+        <strong>na mesma coordenada</strong>: <code>{"x":0,"y":0,"text":"..."}</code>. Sprite sem texto ou texto sem
+        sprite quebra a interação — já aconteceu no Pátio.</p>
+
+      <h2>Prioridade de arte</h2>
+      <ol class="priority">
+        <li><strong>Fachada Stone Reach</strong><span>âncora visual do pátio</span></li>
+        <li><strong>Portão Stone Reach</strong><span>transição da Academia</span></li>
+        <li><strong>Altar do Selo</strong><span>reuso em masmorras e chefes</span></li>
+      </ol>
+      <h2>Contrato de asset</h2>
+      <ul class="contract">
+        <li>WebP com alfa real, em <code>assets/world/</code></li>
+        <li>Base do sprite alinhada ao pé da célula</li>
+        <li>Registrar chave em <code>00-assets.js</code> e no catálogo</li>
+        <li><strong>100% interativo</strong>: todo prop tem texto ao examinar
+          ou é marcado deliberadamente mudo — nada fica de fora só de
+          decoração estática</li>
+      </ul>
+    </aside>
+  </main>
+  <script src="editor-cenarios.js"></script>
+</body>
+</html>

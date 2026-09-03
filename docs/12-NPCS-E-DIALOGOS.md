@@ -108,6 +108,64 @@ transformar a Academia em área de combate.
 
 ---
 
+## Porto Lúmina
+
+### Iara, Mestra do Cais
+
+> Píer molhado, passo curto. O mar não precisa correr para derrubar ninguém.
+
+> Stone Reach olha para dentro. Lúmina olha para o que chega. Os dois jeitos
+> cobram seu preço.
+
+**Função**: ensina a leitura física dos píeres e apresenta o porto como a
+abertura da Academia para o mundo, sem prometer viagem que o jogo ainda não
+oferece.
+
+### Maira, Feirante
+
+*Loja: Mercado da Maré, interior do Porto Lúmina*
+
+> Chegou cedo: peixe, pomada, corda e uma ou duas coisas que a maré não
+> devolveu.
+
+**Função**: comércio de preparação, limitado a consumíveis e acessórios já
+compatíveis com a curva de poder.
+
+### Cássio, Estoquista
+
+*Mercado da Maré, interior do Porto Lúmina*
+
+> Ração vai à esquerda, corda à direita e vidro longe da água. É assim que o
+> porto continua inteiro.
+
+**Função**: dá leitura prática às cores das etiquetas e delimita o mercado
+como provisão de estrada, sem sugerir uma viagem marítima ainda inexistente.
+
+### Tavio, Taverneiro
+
+*Mesa de Âmbar, interior do Porto Lúmina*
+
+> A Mesa de Âmbar serve caldo, notícia e silêncio. O último custa mais caro.
+
+**Função**: dá presença social ao porto; não adiciona cura nem um serviço que
+substitua a enfermaria.
+
+### Bia, Navegadora
+
+> As cores dos barcos não são enfeite. Coral volta antes do pôr do sol;
+> turquesa só sai com mar manso.
+
+**Função**: justifica a paleta diversa do porto dentro do mundo e mostra que
+as cores também carregam leitura prática para quem vive da maré.
+
+### Nilo, Marinheiro
+
+> Um dia esses barcos vão atravessar o horizonte. Hoje, contentam-se com a
+> maré.
+
+**Função**: ancora a interação com os barcos e semeia viagem futura sem criar
+uma transição inexistente.
+
 ## Salão Principal
 
 ### Bibliotecária

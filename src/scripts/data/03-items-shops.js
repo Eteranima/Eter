@@ -7,16 +7,16 @@ const STAT_LABEL = {hp:'HP', mp:'MP', atk:'ATK', def:'DEF', spd:'SPD',
 
 const ITEMS = {
   // --- consumíveis ---
-  potion:  {kind:'consumable', name:'Poção',            desc:'Restaura 60 HP de um aliado.',        use:'ally',   hp:60,  price:60,  color:'#5aba5a'},
-  hipot:   {kind:'consumable', name:'Poção Maior',      desc:'Restaura 180 HP de um aliado.',       use:'ally',   hp:180, price:220, color:'#5aba5a'},
+  potion:  {kind:'consumable', name:'Poção',            desc:'Restaura 60 HP de um aliado.',        use:'ally',   hp:60,  price:60,  icon:'icon_pocao', color:'#5aba5a'},
+  hipot:   {kind:'consumable', name:'Poção Maior',      desc:'Restaura 180 HP de um aliado.',       use:'ally',   hp:180, price:220, icon:'icon_pocao_grande', color:'#5aba5a'},
   megapot: {kind:'consumable', name:'Poção Suprema',    desc:'Restaura 420 HP de um aliado.',       use:'ally',   hp:420, price:600, color:'#7ada7a'},
-  ether:   {kind:'consumable', name:'Elixir de Éter',   desc:'Restaura 30 MP de um aliado.',        use:'ally',   mp:30,  price:120, color:'#5a8afa'},
+  ether:   {kind:'consumable', name:'Elixir de Éter',   desc:'Restaura 30 MP de um aliado.',        use:'ally',   mp:30,  price:120, icon:'icon_eter', color:'#5a8afa'},
   hiether: {kind:'consumable', name:'Éter Destilado',   desc:'Restaura 90 MP de um aliado.',        use:'ally',   mp:90,  price:420, color:'#8ab0fa'},
-  antidote:{kind:'consumable', name:'Sal Purificador',  desc:'Remove todas as condições.',          use:'ally',   cure:true, price:80, color:'#dad0a0'},
-  phoenix: {kind:'consumable', name:'Pena de Ressurgir',desc:'Revive um aliado com 50% do HP.',     use:'fallen', revive:0.5, price:400, color:'#eaca3a'},
-  bomb:    {kind:'consumable', name:'Frasco Ígneo',     desc:'Causa 120 de dano de Fogo a um inimigo.', use:'enemy', power:120, elem:'fire', price:150, color:'#e85a30'},
+  antidote:{kind:'consumable', name:'Sal Purificador',  desc:'Remove todas as condições.',          use:'ally',   cure:true, price:80, icon:'icon_sal', color:'#dad0a0'},
+  phoenix: {kind:'consumable', name:'Pena de Ressurgir',desc:'Revive um aliado com 50% do HP.',     use:'fallen', revive:0.5, price:400, icon:'icon_fenix', color:'#eaca3a'},
+  bomb:    {kind:'consumable', name:'Frasco Ígneo',     desc:'Causa 120 de dano de Fogo a um inimigo.', use:'enemy', power:120, elem:'fire', price:150, icon:'icon_bomba', color:'#e85a30'},
   shard:   {kind:'consumable', name:'Estilhaço Polar',  desc:'Causa 120 de dano de Gelo a um inimigo.', use:'enemy', power:120, elem:'ice',  price:150, color:'#5aaaea'},
-  tent:    {kind:'consumable', name:'Tenda de Campo',   desc:'Restaura HP/MP da party (só no campo).', use:'field', full:true, price:300, color:'#b0a080'},
+  tent:    {kind:'consumable', name:'Tenda de Campo',   desc:'Restaura HP/MP da party (só no campo).', use:'field', full:true, price:300, icon:'icon_tenda', color:'#b0a080'},
   elixir:  {kind:'consumable', name:'Elixir Perfeito',  desc:'Restaura TODO o HP e MP de um aliado.', use:'ally', hp:9999, mp:9999, price:900, color:'#ffe44a'},
   gale:    {kind:'consumable', name:'Frasco de Vendaval',desc:'Causa 120 de dano de Vento a um inimigo.', use:'enemy', power:120, elem:'wind', price:150, color:'#a8ffd0'},
 
@@ -28,16 +28,16 @@ const ITEMS = {
        'party'   → o grupo inteiro, sem escolher alvo
        'enemies' → todos os inimigos vivos
        'escape'  → fuga garantida (só em combate)  */
-  medkit:  {kind:'consumable', name:'Bandagem Rúnica',  desc:'Restaura 45% do HP máximo de um aliado.', use:'ally', hpPct:0.45, price:300, color:'#7ada7a'},
+  medkit:  {kind:'consumable', name:'Bandagem Rúnica',  desc:'Restaura 45% do HP máximo de um aliado.', use:'ally', hpPct:0.45, price:300, icon:'icon_bandagem', color:'#7ada7a'},
   dew:     {kind:'consumable', name:'Orvalho Engarrafado', desc:'Restaura 140 HP de TODO o grupo.',    use:'party', hp:140, price:520, color:'#5aba9a'},
   panacea: {kind:'consumable', name:'Panaceia',         desc:'Remove todas as condições do grupo.',    use:'party', cure:true, price:260, color:'#dad0a0'},
   rebirth: {kind:'consumable', name:'Cinza de Fênix',   desc:'Revive TODOS os caídos com 40% do HP.',  use:'party', revive:0.4, price:1500, color:'#ffb04a'},
-  focustea:{kind:'consumable', name:'Chá de Foco',      desc:'Enche 40% da Ressonância de um aliado.', use:'ally', reso:40, price:380, color:'#b89aff'},
+  focustea:{kind:'consumable', name:'Chá de Foco',      desc:'Enche 40% da Ressonância de um aliado.', use:'ally', reso:40, price:380, icon:'icon_cha', color:'#b89aff'},
   warcry:  {kind:'consumable', name:'Tônico de Fúria',  desc:'ATK do alvo +45% por 3 turnos.',         use:'ally', buff:{atk:1.45, turns:3}, price:320, color:'#e05a5a'},
-  aegis:   {kind:'consumable', name:'Óleo de Escudo',   desc:'DEF do alvo +60% por 3 turnos.',         use:'ally', buff:{def:1.6, turns:3},  price:320, color:'#8ab0fa'},
+  aegis:   {kind:'consumable', name:'Óleo de Escudo',   desc:'DEF do alvo +60% por 3 turnos.',         use:'ally', buff:{def:1.6, turns:3},  price:320, icon:'icon_oleo', color:'#8ab0fa'},
   swift:   {kind:'consumable', name:'Essência Veloz',   desc:'SPD do alvo +50% por 3 turnos.',         use:'ally', buff:{spd:1.5, turns:3},  price:300, color:'#a8ffd0'},
   ironspike:{kind:'consumable',name:'Cravo de Ferro',   desc:'60 de dano e 240 de POSTURA num inimigo.', use:'enemy', power:60, elem:'none', poiseHit:240, price:420, color:'#ffd24a'},
-  smoke:   {kind:'consumable', name:'Fumaça Cinzenta',  desc:'Fuga garantida (não funciona contra chefe).', use:'escape', price:90, color:'#8a8a9a'},
+  smoke:   {kind:'consumable', name:'Fumaça Cinzenta',  desc:'Fuga garantida (não funciona contra chefe).', use:'escape', price:90, icon:'icon_fumaca', color:'#8a8a9a'},
   voltflask:{kind:'consumable',name:'Frasco Voltaico',  desc:'120 de dano de Eletricidade a um inimigo.', use:'enemy', power:120, elem:'electricity', price:150, color:'#ffe44a'},
   inkflask:{kind:'consumable', name:'Frasco de Nanquim',desc:'120 de dano de Tinta. Pode cegar.',      use:'enemy', power:120, elem:'ink', status:{id:'blind',chance:0.5}, price:180, color:'#5a8afa'},
   umbraflask:{kind:'consumable',name:'Frasco Umbral',   desc:'120 de dano de Trevas. Pode apavorar.',  use:'enemy', power:120, elem:'darkness', status:{id:'dread',chance:0.5}, price:180, color:'#9a6aba'},
@@ -53,15 +53,15 @@ const ITEMS = {
      "mate N bichos" — com material dropado, "traga N garras" é uma
      missão de COLETA que depende de matar, mas com sorte no meio, o que
      dá textura diferente. Vendem-se por pouco: é lixo com dono. */
-  m_presa:  {kind:'material', name:'Presa Cindária',   desc:'Dente de lobo de cinzas, ainda morno.',            price:60,  color:'#e85a30'},
-  m_seiva:  {kind:'material', name:'Seiva Calcinada',  desc:'Resina preta que escorre de tronco queimado.',     price:80,  color:'#8a6a3a'},
-  m_escama: {kind:'material', name:'Escama Afogada',   desc:'Placa fria arrancada de algo que vivia na água.',  price:110, color:'#5aaaea'},
-  m_caco:   {kind:'material', name:'Caco Cantante',    desc:'Lasca de vidro da Coroa. Zumbe quando encostada.', price:150, color:'#e8e8ff'},
+  m_presa:  {kind:'material', name:'Presa Cindária',   desc:'Dente de lobo de cinzas, ainda morno.',            price:60,  icon:'icon_material_presa', color:'#e85a30'},
+  m_seiva:  {kind:'material', name:'Seiva Calcinada',  desc:'Resina preta que escorre de tronco queimado.',     price:80,  icon:'icon_material_seiva', color:'#8a6a3a'},
+  m_escama: {kind:'material', name:'Escama Afogada',   desc:'Placa fria arrancada de algo que vivia na água.',  price:110, icon:'icon_material_escama', color:'#5aaaea'},
+  m_caco:   {kind:'material', name:'Caco Cantante',    desc:'Lasca de vidro da Coroa. Zumbe quando encostada.', price:150, icon:'icon_material_caco', color:'#e8e8ff'},
   m_pluma:  {kind:'material', name:'Pluma de Éter',    desc:'Pena que não cai — fica parada no ar.',            price:130, color:'#a8ffd0'},
   m_casulo: {kind:'material', name:'Casulo Morno',     desc:'Alguma coisa se mexe lá dentro. Devagar.',         price:200, color:'#d0b060'},
 
   /* --- v4.9: PETISCOS (dão EXP de pet) ------------------------------ */
-  p_racao:  {kind:'consumable', name:'Ração de Ninho', desc:'Dá 120 de EXP ao pet ativo.',  use:'pet', petExp:120,  price:180, color:'#c8a060'},
+  p_racao:  {kind:'consumable', name:'Ração de Ninho', desc:'Dá 120 de EXP ao pet ativo.',  use:'pet', petExp:120,  price:180, icon:'icon_racao', color:'#c8a060'},
   p_bolo:   {kind:'consumable', name:'Bolo de Éter',   desc:'Dá 400 de EXP ao pet ativo.',  use:'pet', petExp:400,  price:520, color:'#e0b070'},
   p_banquete:{kind:'consumable',name:'Banquete do Ninhal', desc:'Dá 1200 de EXP ao pet ativo.', use:'pet', petExp:1200, price:1400, color:'#ffd24a'},
 
@@ -199,6 +199,12 @@ const SHOPS = {
     {id:'w_tinta', need:'warden_defeated'}, {id:'w_gelo', need:'warden_defeated'},
     {id:'a_manto', need:'warden_defeated'}, {id:'t_vital', need:'warden_defeated'},
     {id:'t_elo',   need:'warden_defeated'},
+  ]},
+  /* Porto Lúmina prepara exploração sem antecipar armas nem saltar a
+     curva de poder que continua ligada aos chefes. */
+  lumina: {name:'Mercado da Maré', stock:[
+    'potion','hipot','ether','antidote','tent','smoke','gale','shard',
+    'medkit','p_racao','t_corda','t_pluma',
   ]},
   errante: {name:'Mercador Errante', stock:[
     'megapot','hiether','phoenix','tent','elixir','medkit','smoke','panacea',
