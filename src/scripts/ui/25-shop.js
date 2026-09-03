@@ -34,7 +34,21 @@ const Shop = {
   listaAtual(){
     const base = this.mode === 'buy' ? this.stock() : this.sellable();
     const f = SHOP_TABS[this.tab].filtro;
-    return base.filter(id => f(ITEMS[id]));
+    return base.filter(id => f(ITEMS[id], id));
+  },
+  /** Fixa/desafixa um item nos favoritos. Teto baixo de propósito — é
+      atalho para o que se compra toda visita, não uma segunda bolsa. */
+  PIN_MAX: 8,
+  isPinned(id){ return (G.pinnedItems || []).includes(id); },
+  togglePin(id){
+    G.pinnedItems = G.pinnedItems || [];
+    const i = G.pinnedItems.indexOf(id);
+    if (i >= 0){ G.pinnedItems.splice(i, 1); this.toast(`${ITEMS[id].name} removido dos favoritos.`); return; }
+    if (G.pinnedItems.length >= this.PIN_MAX){
+      Sound.sfx('deny'); this.toast(`Favoritos cheios (máx. ${this.PIN_MAX}).`); return;
+    }
+    G.pinnedItems.push(id);
+    this.toast(`${ITEMS[id].name} fixado nos favoritos.`);
   },
 
   update(dt){
@@ -55,6 +69,7 @@ const Shop = {
     if (cur.i !== antes) this.qtd = 1;
     if (!lista.length) return;
     const id = lista[cur.i % lista.length], it = ITEMS[id];
+    if (Input.pressed('pin')) this.togglePin(id);
 
     // quantidade: equipamento é sempre 1
     const maxQ = it.kind === 'equip' ? 1
@@ -93,7 +108,7 @@ const Shop = {
     pxText(`${G.gold}₢`, W - 42, 52, {size:10, color:'#eaca3a', align:'right'});
     pxText(this.mode === 'buy' ? 'COMPRAR' : 'VENDER', 42, 74,
            {size:9, color:this.mode === 'buy' ? '#7ada7a' : '#eaca3a'});
-    uiText('TAB comprar/vender · ◄► categoria · Shift+◄► quantidade · X sai',
+    uiText('TAB comprar/vender · ◄► categoria · Shift+◄► quantidade · P fixar · X sai',
            W - 42, 74, {size:11, color:'#5a4a7a', align:'right'});
 
     // abas de categoria
@@ -116,7 +131,8 @@ const Shop = {
       const i = ini + k, it = ITEMS[id], y = 142 + k * 30, on = idx === i;
       if (on){ ctx.fillStyle = 'rgba(120,86,200,.22)'; ctx.fillRect(34, y - 17, 430, 26); }
       drawItemMark(it, 40, y - 4);
-      pxText(it.name, 66, y, {size:8, color:on ? '#fff' : '#a89ac0'});
+      pxText(`${this.isPinned(id) ? '* ' : ''}${it.name}`, 66, y,
+             {size:8, color:on ? '#fff' : (this.isPinned(id) ? '#eaca3a' : '#a89ac0')});
       const preco = this.mode === 'buy' ? this.priceOf(id) : this.sellPrice(id);
       pxText(`${preco}₢`, 400, y, {size:8, color:'#eaca3a', align:'right'});
       const tem = Bag.count(id);
@@ -132,6 +148,8 @@ const Shop = {
        acabava desenhado por cima do nome do item. */
     if (sel.icon) drawItemMark(sel, dx + 16, 152, 32);
     pxText(sel.name, dx + (sel.icon ? 54 : 16), 158, {size:9, color:sel.color || '#d0c8e0'});
+    pxText(this.isPinned(id) ? '* fixado' : 'P fixa', dx + dw - 16, 158,
+           {size:7, align:'right', color:this.isPinned(id) ? '#eaca3a' : '#5a4a7a'});
     wrapUI(sel.desc || '', dw - 32, 12).forEach((ln, k) =>
       uiText(ln, dx + 16, 180 + k * 18, {size:12, color:'#8a7aaa'}));
 

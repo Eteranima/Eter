@@ -21,6 +21,7 @@ const Input = {
     j:'missoes', J:'missoes',
     u:'status',  U:'status',
     r:'reset', R:'reset',        // redefinir a árvore de habilidades
+    p:'pin', P:'pin',            // fixar/desafixar item na loja (favoritos)
     /* Zoom e centralizar, do grimório. Ficam em teclas que nenhuma
        outra tela usa, para que valham em qualquer lugar que venha a
        precisar de câmera. */

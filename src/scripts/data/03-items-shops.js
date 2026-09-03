@@ -288,13 +288,18 @@ const SHOPS = {
   ]},
 };
 
-/* Abas da loja. `slot` casa com ITEMS.slot; consumíveis não têm slot. */
+/* Abas da loja. `slot` casa com ITEMS.slot; consumíveis não têm slot.
+   `filtro` recebe (item, id) — a maioria só usa o item, mas Favoritos
+   precisa do id para casar com G.pinnedItems (o pin é por id, não é um
+   campo do item). Fica por último de propósito: não é a aba padrão,
+   é a que o jogador escolhe entrar depois de fixar alguma coisa. */
 const SHOP_TABS = [
   {id:'todos',     nome:'Tudo',      filtro:() => true},
   {id:'consumo',   nome:'Consumo',   filtro:it => it.kind === 'consumable'},
   {id:'weapon',    nome:'Armas',     filtro:it => it.slot === 'weapon'},
   {id:'armor',     nome:'Armaduras', filtro:it => it.slot === 'armor'},
   {id:'accessory', nome:'Talismãs',  filtro:it => it.slot === 'accessory'},
+  {id:'favoritos', nome:'* Favoritos', filtro:(it, id) => (G.pinnedItems || []).includes(id)},
 ];
 
 /* --- Habilidades -------------------------------------------------- */
