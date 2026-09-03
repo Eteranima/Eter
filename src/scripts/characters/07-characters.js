@@ -176,6 +176,28 @@ const PARTY_DEFS = [
    pitch:'Cada golpe reabastece ela, então sozinha aguenta mais do que parece. Só não tem com quem repartir o excedente.'},
 ];
 
+/* --- Guests-tutoriais ----------------------------------------------
+   Malquior Morningstar e Sebastian Crowley NÃO são PARTY_DEFS: nunca
+   são recrutados, nunca entram em G.party/G.squad, nunca são salvos.
+   Existem só para uma luta de demonstração de 1-2 rodadas (gancho em
+   Battle.begin({guest:...}), ver makeGuestAlly() em
+   engine/16-save-state.js e guestAct() em combat/27-controller.js) —
+   o padrão "Wally leva você até o mato e captura um Pokémon" que o
+   usuário pediu: um NPC já cadastrado em DIALOGUE_SPRITES entra na
+   luta, mostra UMA mecânica em segundos e sai, sem virar personagem
+   de verdade. Estatística fixa (nível 5 equivalente), sem base/grow/
+   learn/árvore — não precisa, porque nunca ganha EXP nem persiste. */
+const GUEST_ALLIES = {
+  malquior: {name:'Malquior Morningstar', element:'darkness', role:'Ocultista',
+    sheet:'npc_encapuzado', portrait:'dlg_malquior',
+    hp:130, mp:40, atk:20, def:12, spd:14, guestSkill:'guest_area',
+    licao:'Habilidade em área acerta todo mundo de uma vez — poucos alvos sobrevivem a isso por muito tempo.'},
+  sebastian: {name:'Sebastian Crowley', element:'light', role:'Guardião',
+    sheet:'npc_batedor', portrait:'dlg_sebastian',
+    hp:150, mp:40, atk:14, def:18, spd:12, guestSkill:'guest_escudo',
+    licao:'Um escudo em todo o grupo custa o turno de quem lança, mas paga a diferença nas rodadas seguintes.'},
+};
+
 /* ===================================================================
    4b. ÁRVORE DE HABILIDADES
    -------------------------------------------------------------------

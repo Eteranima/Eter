@@ -171,6 +171,11 @@ const Battle = {
     this.active = true; this.isBoss = !!opts.boss;
     this.revanche = !!opts.revanche;
     this.allies = activeParty().map(prepAlly);
+    /* Guest-tutorial (Malquior/Sebastian, ver GUEST_ALLIES): entra como
+       mais um aliado só nesta luta, nunca em G.party/G.squad. `layout()`
+       logo abaixo já é genérico sobre `this.allies`, então não precisa
+       de nenhum caso especial pra posicionar/desenhar. */
+    if (opts.guest) this.allies.push(makeGuestAlly(opts.guest));
     // escala pelo grupo que REALMENTE entrou na luta
     this.enemies = enemyIds.map((id, i) => makeEnemyUnit(id, i, this.allies.length));
     labelEnemies(this.enemies);
@@ -423,7 +428,10 @@ const Battle = {
       this.wait(0.7, () => this.nextTurn());
       return;
     }
-    if (u.side === 'ally'){
+    if (u.side === 'ally' && u.guestAI){
+      this.phase = 'ANIM';
+      this.wait(0.6, () => this.guestAct(u));
+    } else if (u.side === 'ally'){
       this.phase = 'INPUT'; this.cmd.i = 0;
     } else {
       /* Quantos golpes ele dá NESTE turno. Decidido aqui, uma vez, e não
@@ -526,6 +534,24 @@ const Battle = {
       if (!caidos.length){ Sound.sfx('deny'); this.pushLog('Ninguém caiu.'); return; }
     }
     this.toTarget();
+  },
+  /** Turno do convidado (Malquior/Sebastian): sem fase de INPUT, sem
+      cursor de alvo manual — sempre a mesma habilidade de lição, que
+      por desenho usa `target:'all'`/`'allies'` (ver 04-skills.js,
+      guest_area/guest_escudo) exatamente pra nunca precisar escolher
+      um alvo único sozinho. O fallback de alvo único existe só por
+      segurança, caso um guest futuro use outra habilidade. */
+  guestAct(u){
+    this.actor = u;
+    const id = u.guestSkill, s = SKILLS[id];
+    this.pendingSkill = {...s, id}; this.pendingIsUlt = false;
+    if (s.target === 'all') this.execute(this.enemies.filter(isAlive));
+    else if (s.target === 'allies') this.execute(this.allies.filter(isAlive));
+    else if (s.target === 'self') this.execute([u]);
+    else {
+      const alvo = this.enemies.find(isAlive);
+      if (alvo) this.execute([alvo]); else this.nextTurn();
+    }
   },
   /** Dispara a Conjunta: cobra os dois, queima o turno do parceiro. */
   chooseCombo(o){
@@ -958,7 +984,10 @@ const Battle = {
   victory(){
     this.phase = 'VICTORY';
     Sound.stopBgm(); Sound.sfx('victory');
-    const survivors = this.allies.filter(isAlive);
+    /* Convidado nunca ganha EXP: ele nem existe fora desta luta, e
+       aparecer na tela de "subiu de nível" seria estranho pra quem
+       está de saída. */
+    const survivors = this.allies.filter(a => isAlive(a) && !a.guestAI);
     const D = diff();
     /* A revanche paga menos, e o que ela NÃO paga é o item garantido.
 

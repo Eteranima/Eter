@@ -395,10 +395,26 @@ const MAPS = {
        lines:['"Ressonância": quando o éter de um mago transborda, o corpo vira condutor.',
               'Dizem que dá pra sentir. Um zumbido no peito. Aí é só soltar.']},
       /* Retrato dlg_malquior já cadastrado em DIALOGUE_SPRITES; corpo de
-         campo genérico (npc_encapuzado), retrato liga sozinho pelo nome. */
+         campo genérico (npc_encapuzado), retrato liga sozinho pelo nome.
+         Guest-tutorial: uma luta de demonstração de 1-2 rodadas contra
+         uma "tinta que aprendeu a se mexer" (não é o Subterrâneo de
+         verdade vazando pra área segura — é só a forma que a lição
+         toma). Ensina habilidade em área. Flag trava em uma vez só. */
       {x:17,y:6, name:'Malquior Morningstar', sheet:'npc_encapuzado',
-       lines:['Os livros bons não estão nas prateleiras. Estão em quem os leu e não voltou a ser o mesmo.',
-              'Continue lendo. Eu não mordo. Ainda.']},
+       lines: G => {
+         if (G.flags.malquior_licao)
+           return ['Os livros bons não estão nas prateleiras. Estão em quem os leu e não voltou a ser o mesmo.',
+                   'Continue lendo. Eu não mordo. Ainda.'];
+         return [
+           {text:'Os livros bons não estão nas prateleiras. Estão em quem os leu e não voltou a ser o mesmo.'},
+           {text:'Quer ver uma coisa? Não é perigoso — é só tinta que aprendeu a se mexer.',
+            choices:[
+              {label:'Ver a demonstração', set:{malquior_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.malquior})); return null; }},
+              {label:'Agora não', then:['Continue lendo. Eu não mordo. Ainda.']},
+            ]},
+         ];
+       }},
     ],
     signs:[
       {x:16,y:3, text:'LIVRO ABERTO — "Guarde-se quando o inimigo respirar fundo. Metade do dano é metade do luto."'},
@@ -427,10 +443,24 @@ const MAPS = {
        lines:['Sente-se. Você está drenado.', '...Pronto. Party inteira restaurada. Não faça disso um hábito.'],
        heal:true},
       /* Retrato dlg_sebastian já cadastrado em DIALOGUE_SPRITES; corpo de
-         campo genérico (npc_nobre), retrato liga sozinho pelo nome. */
+         campo genérico (npc_batedor), retrato liga sozinho pelo nome.
+         Guest-tutorial: mesma ideia de Malquior na Biblioteca, mas
+         ensinando escudo em área. Flag trava em uma vez só. */
       {x:4,y:3, name:'Sebastian Crowley', sheet:'npc_batedor',
-       lines:['A enfermaria é um bom lugar para observar quem finge estar bem.',
-              'Não se preocupe comigo. Eu só... visito.']},
+       lines: G => {
+         if (G.flags.sebastian_licao)
+           return ['A enfermaria é um bom lugar para observar quem finge estar bem.',
+                   'Não se preocupe comigo. Eu só... visito.'];
+         return [
+           {text:'A enfermaria é um bom lugar para observar quem finge estar bem.'},
+           {text:'Deixe eu mostrar uma coisa — nada que a Enfermeira precise saber.',
+            choices:[
+              {label:'Ver a demonstração', set:{sebastian_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.sebastian})); return null; }},
+              {label:'Agora não', then:['Não se preocupe comigo. Eu só... visito.']},
+            ]},
+         ];
+       }},
     ],
     signs:[
       {x:15, y:1, text:'PLACA — "Anexo Oeste · Enfermaria. Traga o ferido, não o orgulho."'},
