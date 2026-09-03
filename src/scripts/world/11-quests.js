@@ -474,6 +474,52 @@ const QUESTS = {
     premio:{gold:6000, itens:['a_astral','rebirth']},
   },
 
+  /* ================= v5.31: TRÊS RECRUTAS NOVOS =====================
+     Mesma regra da v5.30 (comentário em RECRUIT_QUESTS): três
+     personagens novos pedem três missões novas, cada uma na região
+     onde a espécie-alvo já sai em formação — sem isso o denominador de
+     `assertQuestsCompletáveis` sobe para quem já existia. Quantidades
+     calculadas pela taxa real de cada espécie no formations daquela
+     região (Arquivo/índice 6-em-8, Coroa de Vidro/vazante 15-em-24,
+     Cisterna/sanguessuga-pálida 7-em-29 — esta é a mais rara das três,
+     por isso a quantidade mais baixa). */
+  q_curador: {
+    npc:'Curador Substituto', titulo:'O Acervo Não Se Cataloga Sozinho',
+    tipo:'hunt', alvo:'indice', qtd:8,
+    resumo:'Abater 8 Índices Vivos no Arquivo Esquecido.',
+    oferta:['Os índices andam soltos de novo. Ficha que devia ficar parada anda pela estante.',
+            'Oito. Um por corredor. Aí eu volto a saber onde as coisas estão.'],
+    andamento:['Oito índices. Enquanto não voltam pro lugar, nada aqui se acha.'],
+    entrega:['Oito. O acervo volta a fazer sentido — por hoje.',
+             'Ela nem precisou ler o catálogo pra achar cada um. Isso aqui é dela.'],
+    depois:['Se algum dia eu perder o controle de novo, sei a quem chamar.'],
+    premio:{gold:5200, itens:['nectar','a_astral']},
+  },
+  q_penumbra: {
+    npc:'Herdeiro Renegado', titulo:'O Que Ficou Sem Reflexo',
+    tipo:'hunt', alvo:'voidling', qtd:6,
+    resumo:'Abater 6 Vazantes na Coroa de Vidro.',
+    oferta:['A Coroa não tem espelho que não esteja rachado. Seis vazantes saem de cada racha.',
+            'Feche seis, e eu paro de contar os que faltam voltar.'],
+    andamento:['Seis vazantes. Cada um que fica é um espelho que não fecha.'],
+    entrega:['Seis. Por uma noite, todo espelho aqui mostra só o que devia.',
+             'Ele não agradece alto. Mas fica, e isso já diz o que precisa.'],
+    depois:['A Coroa continua rachada. Só não sangra mais vazante por hoje.'],
+    premio:{gold:5600, itens:['megapot','rebirth']},
+  },
+  q_sanguessuga: {
+    npc:'Anciã da Comporta', titulo:'O Que a Água Não Solta',
+    tipo:'hunt', alvo:'paleleech', qtd:3,
+    resumo:'Abater 3 Sanguessugas Pálidas na Cisterna Afogada.',
+    oferta:['Três sanguessugas pálidas presas no cano principal. Raras, graças ao éter — e famintas por causa disso.',
+            'Três. Não precisa mais que isso pra comporta voltar a abrir.'],
+    andamento:['Três sanguessugas. Elas não soltam o cano sozinhas.'],
+    entrega:['Três. A água volta a correr, e ela também.',
+             'Bebeu mais dessa água que qualquer um vivo. Sabia exatamente onde procurar.'],
+    depois:['A comporta segura. Até a próxima cheia, pelo menos.'],
+    premio:{gold:6400, itens:['elixir','a_astral']},
+  },
+
 };;
 
 /* --- Curva de EXP --------------------------------------------------

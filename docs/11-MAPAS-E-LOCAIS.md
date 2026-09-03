@@ -149,8 +149,8 @@ Conteúdo pós-chefe. Estrutura em anel com duas salas laterais.
 
 | | |
 |---|---|
-| **Encontros** | Sim, a cada 10-20 passos |
-| **Criaturas** | Oco Faminto, Renascido, Sentinela de Luz, Servo do Inverno |
+| **Encontros** | Mobs visíveis — sem rolagem por passos (v5.31) |
+| **Criaturas** | Oco Faminto, Renascido, Sentinela de Luz — três mobs de campo, mesmo padrão do Subterrâneo |
 | **Cristal de save** | Sim (corredor central) |
 | **Baús** | Éter Destilado ×2 · **Couraça Selada ×1** |
 | **Chefe** | **O Eco do Primeiro**, na alcova sul |
@@ -177,9 +177,11 @@ Conteúdo pós-chefe. Estrutura em anel com duas salas laterais.
 
 ## Regras de exploração
 
-- Mapas que ainda declaram encontro usam **contagem de passos**, não sorteio a
-  cada passo. O contador é re-sorteado a cada encontro.
-- No Subterrâneo Selado, os combates vêm de mobs visíveis: bloqueiam a casa,
+- Desde a v5.31, **nenhum mapa de exploração declara encontro por passo**:
+  todo combate ambiente do jogo vem de mobs visíveis no campo (Subterrâneo
+  Selado, Galeria Profunda e as sete regiões além da Academia — ver
+  `docs/PENDENCIAS-DESIGN.md`, item 3, para a lista completa e o
+  raciocínio de cada região). Mobs de campo bloqueiam a própria casa,
   patrulham pouco e retornam após a vitória sem entrar no save.
 - Portas e escadas ativam **ao pisar**, com transição de fade.
 - Baús e placas ativam **ao interagir de frente**.
@@ -189,7 +191,12 @@ Conteúdo pós-chefe. Estrutura em anel com duas salas laterais.
 
 ## Lacunas ⬜
 
-- Nenhum mapa exterior além do pátio — não há "mundo" fora da academia.
+- Este documento descreve só a Academia e o trio do Subterrâneo (conteúdo
+  do Capítulo 1). As dez regiões além dele (Mata Cindária, Ninhal de Éter,
+  Cisterna Afogada, Coroa de Vidro, Arquivo Esquecido, Esgoto, Lago
+  Afogado, Baixios da Podridão e Deserto) já existem em código, com NPCs,
+  missões e mobs de campo próprios, mas ainda não têm ficha aqui — mapear
+  cada uma é trabalho futuro, não uma correção deste documento.
 - Mapas menores que a tela (Anexo, Ala, Câmara) ficam centralizados com preto
   em volta. Lê como sala flutuando no escuro; aceitável, mas é escolha não
   deliberada.

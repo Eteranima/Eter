@@ -34,6 +34,14 @@ const ULTIMATES = {
             desc:'Ele finalmente levanta. DEF +90% e ATK +35% por 3 turnos.'},
   Scythe:  {name:'Última Colheita',   power:104, elem:'poison', target:'one',
             status:{id:'terror', chance:1}, desc:'Ela termina o brinde.'},
+  /* v5.31 — Beatriz, Calder e Carmila entram no mesmo padrão de dano
+     puro da geração anterior (nenhuma cura nova: ver nota acima). */
+  'Beatriz Demeter': {name:'Juízo Final', power:100, elem:'light', target:'one',
+            status:{id:'stun', chance:0.7}, desc:'A luz não pergunta duas vezes.'},
+  'Calder Pell': {name:'Cláusula Final', power:90, elem:'darkness', target:'one',
+            status:{id:'dread', chance:0.65}, desc:'Ele já sabia que ia terminar assim.'},
+  'Carmila Reachforth': {name:'Última Taça', power:98, elem:'blood', target:'all',
+            status:{id:'bleed', chance:0.6}, drain:0.5, desc:'Ela bebe de todos, ao mesmo tempo.'},
 };
 
 /* --- HABILIDADE CONJUNTA -------------------------------------------

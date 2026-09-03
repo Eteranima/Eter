@@ -2130,25 +2130,37 @@ function runSelfTests(){
     }
     ok('nenhum NPC ou chefe nasce dentro de parede', npcPresos.length === 0, npcPresos.join(' '));
 
-    /* P0 — Subterrâneo troca encontro aleatório por três entidades de
-       campo. A configuração precisa continuar pequena, combater só
-       espécies reais e não plantar ninguém em objeto/interação. */
+    /* P0 (Subterrâneo) + v5.31 (mais dez regiões): mapa que troca
+       encontro aleatório por entidade de campo precisa continuar
+       pequeno, combater só espécies reais e não plantar ninguém em
+       objeto/interação. Checagem ESTRUTURAL abaixo é genérica — vale
+       para todo mapa com `mobs`, não só o Subterrâneo. O exercício do
+       ciclo vivo (fuga/vitória/respawn) roda só uma vez, no Subterrâneo,
+       porque testa o motor (`startWorldMobBattle`), não dado por mapa. */
     {
-      const def = MAPS.undercroft, mobs = def?.mobs || [], ruins = [];
-      const g = def && normalizeRows(def.rows, def.fill);
-      for (const mob of mobs){
-        const t = g?.[mob.y]?.[mob.x] && TILEDEF[g[mob.y][mob.x]];
-        if (!t || t.solid || t.warp || t.chest || t.save) ruins.push(`${mob.id}:casa`);
-        if (!BESTIARY[mob.visual] || !(mob.formation || []).length ||
-            !mob.formation.every(([id, n]) => BESTIARY[id] && n > 0)) ruins.push(`${mob.id}:formação`);
-        if (!(mob.patrol >= 0 && mob.patrol <= 2)) ruins.push(`${mob.id}:patrulha`);
+      const mapasComMob = Object.entries(MAPS).filter(([, m]) => (m.mobs || []).length);
+      const semNull = mapasComMob.filter(([, m]) => m.encounter !== null).map(([id]) => id);
+      const foraDaFaixa = mapasComMob.filter(([, m]) => m.mobs.length < 1 || m.mobs.length > 5).map(([id]) => id);
+      ok('todo mapa com mob visível declara encontro nulo',
+         semNull.length === 0, semNull.join(','));
+      ok('todo mapa com mob visível tem entre um e cinco mobs',
+         foraDaFaixa.length === 0, foraDaFaixa.join(','));
+
+      const ruins = [];
+      for (const [id, m] of mapasComMob){
+        const g = normalizeRows(m.rows, m.fill);
+        for (const mob of m.mobs){
+          const t = g?.[mob.y]?.[mob.x] && TILEDEF[g[mob.y][mob.x]];
+          if (!t || t.solid || t.warp || t.chest || t.save) ruins.push(`${id}/${mob.id}:casa`);
+          if (!BESTIARY[mob.visual] || !(mob.formation || []).length ||
+              !mob.formation.every(([sid, n]) => BESTIARY[sid] && n > 0)) ruins.push(`${id}/${mob.id}:formação`);
+          if (!(mob.patrol >= 0 && mob.patrol <= 2)) ruins.push(`${id}/${mob.id}:patrulha`);
+        }
       }
-      ok('o Subterrâneo tem até três mobs visíveis e nenhum encontro aleatório',
-         def?.encounter === null && mobs.length >= 1 && mobs.length <= 3,
-         `${mobs.length} mobs · encontro=${def?.encounter}`);
-      ok('todo mob do Subterrâneo nasce em chão seguro com formação válida',
+      ok('todo mob de campo nasce em chão seguro com formação válida',
          ruins.length === 0, ruins.join(' '));
 
+      const def = MAPS.undercroft, mobs = def?.mobs || [];
       const mapaAnterior = G.mapId;
       loadMap('undercroft');
       const vivo = G.map.mobs[0], agora = Date.now();

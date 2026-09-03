@@ -44,16 +44,29 @@ aproveitar `RESERVADO_RACAS` como referência de identidade racial
 (o que cada raça É), mesmo sem o sistema mecânico de raça estar ligado
 ainda.
 
-## 3. Mob no modo World (arte + engine) — base entregue no P0
+## 3. Mob no modo World (arte + engine) — entregue no P0 + v5.31
 
 O P0 introduziu a entidade de mapa em `17-world.js`, o ciclo de
 combate/respawn em `18-day-night.js`, patrulha em `19-world-map.js` e
-desenho em `20-field-view.js`. O Subterrâneo Selado é o recorte inicial:
-três mobs visíveis, com combate real, sem encontro aleatório e sem
-persistir derrota ou temporizador no save.
+desenho em `20-field-view.js`, com o Subterrâneo Selado como recorte
+inicial. A v5.31 estendeu o mesmo mecanismo (genérico, sem nada
+hardcoded para o Subterrâneo) às dez regiões que ainda rolavam encontro
+por passo — Galeria Profunda, Mata Cindária, Ninhal de Éter, Cisterna
+Afogada, Coroa de Vidro, Arquivo Esquecido, Esgoto, Lago Afogado,
+Baixios da Podridão e Deserto de Vidro Moído. Nenhum mapa de exploração
+do jogo ainda declara `encounter` como array; todos usam `mobs:[]` ou
+são seguros (`encounter:null` sem mob).
 
-Ver `docs/ATLAS-SPRITES.md`, seção 4: o suporte atual é arte estática a
-84px. A grade 3×4 e mobs condicionais de missão continuam pendentes e
-devem ser projetados junto da missão que os consumir. A expansão para
-outras áreas requer equilibrar cada mapa e preservar as quests que hoje
-dependem de encontros aleatórios.
+Cada região recebeu de 1 a 4 mobs (o Esgoto ficou com um só: o mapa é
+corredor de uma casa quase inteiro, e só há um cruzamento largo o
+bastante para não travar a única rota — bloquear o outro cruzamento
+teria repetido o defeito documentado no `spire`). As espécies escolhidas
+reaproveitam o catálogo de `FORMATIONS` de cada região — nada de bestiário
+foi inventado — e cada mapa foi conferido para que toda missão de caça
+e coleta da região continue completável dentro do teto de 15 confrontos
+(`assertQuestsCompletáveis`), inclusive somando a rota completa de
+recrutamento com qualquer personagem como inicial.
+
+Ver `docs/ATLAS-SPRITES.md`, seção 4: o suporte de arte continua estático
+a 84px. A grade 3×4 e mobs condicionais de missão seguem pendentes e
+devem ser projetados junto da missão que os consumir.

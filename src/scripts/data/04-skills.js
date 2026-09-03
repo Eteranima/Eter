@@ -481,6 +481,66 @@ const SKILLS = {
   b_finalcharge:{name:'Investida Final',    cost:0, power:80, elem:'darkness', type:'atk', target:'one',
                  poise:2.1, exausto:true, arte:'boss_vharok_investida',
                  desc:'Atravessa a arena três vezes. Na última, já não sobra fôlego pra fugir.'},
+
+  /* ============ v5.31: TRÊS QUE JÁ TINHAM ARTE E NÃO TINHAM FICHA ====
+     Beatriz Demeter, Calder Pell e Carmila Reachforth chegaram com
+     sprite de campo e retrato prontos, sem UMA linha de design. Curva
+     de potência e nível idêntica à da geração anterior (v5.30): base
+     alta, aprende em 1/1/8/12/15/20/24/28, 3 Lâmina / 2 Maré / 3 Voz. */
+
+  // --- Luz (Beatriz Demeter): julga antes de golpear ---
+  bt_corte:     {name:'Corte Consagrado', cost:6,  power:26, elem:'light', type:'atk', target:'one',
+                 phys:true, desc:'A espada não é o que fere. É o que ela carrega.'},
+  bt_veredito:  {name:'Veredito',         cost:11, power:0,  elem:'light', type:'debuff', target:'one',
+                 status:{id:'stun',chance:0.35}, desc:'Ela decide antes de golpear. Ele só descobre depois.'},
+  bt_disciplina:{name:'Disciplina de Ordem',cost:14,power:0, elem:'light', type:'buff', target:'self',
+                 buff:{def:1.5, turns:3}, desc:'DEF +50% por 3 turnos. Guarda fechada, luz acesa.'},
+  bt_circulo:   {name:'Círculo de Luz',   cost:22, power:32, elem:'light', type:'atk', target:'all',
+                 status:{id:'stun',chance:0.3}, desc:'Um círculo se fecha e prende quem está dentro.'},
+  bt_juramento: {name:'Juramento',        cost:20, power:0,  elem:'light', type:'buff', target:'allies',
+                 buff:{def:1.4, turns:3}, desc:'DEF da party +40% por 3 turnos. Ela jurou proteger, não vencer sozinha.'},
+  bt_exorcismo: {name:'Exorcismo',        cost:28, power:54, elem:'light', type:'atk', target:'one',
+                 poise:1.6, status:{id:'stun',chance:0.4}, desc:'Não sobra espaço pro que estava escondido ali.'},
+  bt_alvorada:  {name:'Alvorada',         cost:38, power:50, elem:'light', type:'atk', target:'all',
+                 status:{id:'stun',chance:0.35}, desc:'A luz chega em todo lugar ao mesmo tempo.'},
+  bt_sentenca:  {name:'Sentença Final',   cost:34, power:82, elem:'light', type:'atk', target:'one',
+                 phys:true, poise:2.0, desc:'O julgamento acabou três golpes atrás. Isto é só a sentença.'},
+
+  // --- Trevas (Calder Pell): cobra o preço depois, nunca na hora ---
+  cp_toque:     {name:'Toque Selado',     cost:6,  power:25, elem:'darkness', type:'atk', target:'one',
+                 desc:'Ele mal encosta. O resto é a maldição trabalhando.'},
+  cp_pacto:     {name:'Pacto Rompido',    cost:11, power:0,  elem:'darkness', type:'debuff', target:'one',
+                 buff:{atk:0.75, turns:3}, desc:'ATK do alvo −25% por 3 turnos. Cláusula que ele não leu.'},
+  cp_correntes: {name:'Correntes de Estrela',cost:15,power:0, elem:'darkness', type:'debuff', target:'one',
+                 buff:{def:0.7, spd:0.85, turns:3}, desc:'DEF −30% e SPD −15% do alvo por 3 turnos.'},
+  cp_ordalia:   {name:'Ordália',          cost:20, power:34, elem:'darkness', type:'atk', target:'all',
+                 status:{id:'dread',chance:0.4}, desc:'Todo mundo responde pela mesma pergunta.'},
+  cp_juramento_negro:{name:'Juramento Negro',cost:18,power:0, elem:'darkness', type:'buff', target:'self',
+                 buff:{atk:1.3, turns:3}, desc:'ATK +30% por 3 turnos. Ele já sabia que ia chegar aqui.'},
+  cp_veredicto: {name:'Veredito das Sombras',cost:28,power:52, elem:'darkness', type:'atk', target:'one',
+                 poise:1.5, status:{id:'dread',chance:0.5}, desc:'A sentença estava escrita desde a primeira cena.'},
+  cp_colheita:  {name:'Colheita',         cost:36, power:44, elem:'darkness', type:'atk', target:'all',
+                 drain:0.4, desc:'Ele não tira só a vida. Tira o que sobrou depois.'},
+  cp_ultimo_selo:{name:'Último Selo',     cost:34, power:80, elem:'darkness', type:'atk', target:'one',
+                 poise:1.8, desc:'Não é pressa. É o último passo de um plano longo.'},
+
+  // --- Cinzas (Carmila Reachforth): cada golpe enche a taça ---
+  cm_unha:      {name:'Unha de Espinho',  cost:6,  power:25, elem:'blood', type:'atk', target:'one',
+                 phys:true, desc:'Corta fino. O resto ela bebe depois.'},
+  cm_convite:   {name:'Convite',          cost:10, power:0,  elem:'blood', type:'debuff', target:'one',
+                 status:{id:'bleed',chance:0.5}, desc:'Ela nunca precisa insistir duas vezes.'},
+  cm_veia:      {name:'Sangue Emprestado',cost:14, power:0,  elem:'blood', type:'buff', target:'ally',
+                 buff:{atk:1.3, turns:3}, desc:'ATK do alvo +30% por 3 turnos. Ela reparte o que já tomou.'},
+  cm_banquete:  {name:'Banquete',         cost:20, power:32, elem:'blood', type:'atk', target:'all',
+                 drain:0.35, desc:'A mesa é grande o bastante para todos os presentes.'},
+  cm_pacto:     {name:'Pacto de Sangue',  cost:18, power:0,  elem:'blood', type:'buff', target:'allies',
+                 buff:{atk:1.25, spd:1.1, turns:3}, desc:'ATK +25% e SPD +10% da party por 3 turnos.'},
+  cm_sede:      {name:'Sede Antiga',      cost:28, power:48, elem:'blood', type:'atk', target:'one',
+                 drain:0.55, poise:1.4, status:{id:'bleed',chance:0.4}, desc:'Séculos de fome não se satisfazem devagar.'},
+  cm_enxame:    {name:'Enxame de Espinhos',cost:38,power:44, elem:'blood', type:'atk', target:'all',
+                 status:{id:'bleed',chance:0.4}, desc:'Cada espinho encontra a própria veia.'},
+  cm_ceia_eterna:{name:'Ceia Eterna',     cost:36, power:78, elem:'blood', type:'atk', target:'one',
+                 drain:0.65, poise:1.9, desc:'Ela já bebeu de reis. Este não vai durar muito mais.'},
 };
 
 /* --- Ultimates (Ressonância) — 1 por personagem ------------------- */

@@ -345,7 +345,10 @@ const MAPS = {
 
   deepway: {
     name:'Galeria Profunda',
-    fill:'x', region:'deepway', outdoor:false, encounter:[10, 20], bgm:'dungeon',
+    /* v5.31 — troca encontro aleatório por mob visível, mesma regra do
+       Subterrâneo Selado (P0). Fecha o trio: Selado e Câmara já eram
+       mob/seguro, só a Galeria ainda rolava passo. */
+    fill:'x', region:'deepway', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(8,4,20,0.56)',
     rows:[
       '##############################',
@@ -389,6 +392,11 @@ const MAPS = {
     signs:[
       {x:13,y:12, text:'INSCRIÇÃO — "O Primeiro não foi selado. Foi esquecido. É pior."'},
     ],
+    mobs:[
+      {id:'ocos_galeria',  x:10, y:6,  visual:'hollow',   formation:[['hollow',2]], patrol:1},
+      {id:'guarda_luz',    x:17, y:6,  visual:'sentinel', formation:[['sentinel',1],['revenant',1]], patrol:1},
+      {id:'teceloas',      x:14, y:14, visual:'weaver',   formation:[['weaver',1],['harpy',1]], patrol:1},
+    ],
     boss:{id:'echo', x:13, y:20, flag:'echo_defeated',
           intro:['A galeria termina num rosto que é só contorno — luz onde deveria haver alguém.',
                  'O ECO DO PRIMEIRO: "Vocês lembraram de mim. Eu preferia o contrário."'],
@@ -411,7 +419,9 @@ const MAPS = {
   ashwood: {
     name:'Mata Cindária',
     onEnter:{scene:'chegada_mata', flag:'cena_mata'},
-    fill:'.', region:'ashwood', outdoor:true, encounter:[13, 24], bgm:'field',
+    /* v5.31 — mob visível em vez de encontro por passo, mesma regra do
+       Subterrâneo (P0). Fica fora do acampamento cercado, na mata aberta. */
+    fill:'.', region:'ashwood', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(60,24,10,0.22)',
     rows:[
       '##################################',
@@ -457,6 +467,11 @@ const MAPS = {
        lines:['Bem-vindo ao acampamento. Preço de fim de mundo, mas o mundo é este aqui mesmo.']},
       {x:20,y:6, name:'Enfermeira do Acampamento', sheet:'npc_serva', heal:true,
        lines:['Sente-se antes de cair.', '...Pronto. Grupo inteiro de pé. Não abuse.']},
+    ],
+    mobs:[
+      {id:'alcateia_cinza',   x:25, y:2,  visual:'ashwolf',   formation:[['ashwolf',2]], patrol:1},
+      {id:'tronco_e_brasa',   x:22, y:12, visual:'charwood',  formation:[['charwood',1],['emberling',2]], patrol:1},
+      {id:'mago_de_cinzas',   x:10, y:16, visual:'cindermage',formation:[['cindermage',1],['ashwolf',1]], patrol:1},
     ],
     signs:[
       {x:4,y:11, text:'TÁBUA PREGADA NA ÁRVORE — "A mata não queimou. A mata AINDA está queimando. Não é a mesma coisa."'},
@@ -515,7 +530,9 @@ const MAPS = {
   nests: {
     name:'Ninhal de Éter',
     onEnter:{scene:'chegada_ninhal', flag:'cena_ninhal'},
-    fill:'.', region:'nests', outdoor:true, encounter:[14, 26], bgm:'field',
+    /* v5.31 — mob visível na pastagem aberta ao sul dos dois pátios de
+       criação, longe dos NPCs de missão. */
+    fill:'.', region:'nests', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(20,40,30,0.20)',
     rows:[
       '##############################',
@@ -564,6 +581,12 @@ const MAPS = {
       {x:15,y:11, name:'Mercador de Ninho', sheet:'npc_cigana', shop:'ninhal',
        lines:['Petisco, ração e o que mais o bicho aceitar. Preço de quem tem monopólio.']},
     ],
+    mobs:[
+      {id:'ninhada_solta', x:8,  y:10, visual:'ninho',  formation:[['ninho',2],['cascudo',1]], patrol:1},
+      {id:'bando_ladrao',  x:18, y:10, visual:'cornuda',formation:[['cornuda',1],['ladraninho',2]], patrol:1},
+      {id:'enxame_matriz', x:8,  y:13, visual:'matriz', formation:[['matriz',1],['vespao',2]], patrol:1},
+      {id:'ceifa_larvar',  x:18, y:13, visual:'pilhador',formation:[['pilhador',1],['larva',1],['matriarca',1]], patrol:1},
+    ],
     signs:[
       {x:6,y:9, text:'TÁBUA — "Não corra perto do ninho. Cria não distingue pressa de ataque."'},
     ],
@@ -606,7 +629,8 @@ const MAPS = {
   cistern: {
     name:'Cisterna Afogada',
     onEnter:{scene:'chegada_cisterna', flag:'cena_cisterna'},
-    fill:'x', region:'cistern', outdoor:false, encounter:[11, 21], bgm:'dungeon',
+    /* v5.31 — mob visível no salão largo, longe do entulho e dos NPCs. */
+    fill:'x', region:'cistern', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(6,20,34,0.52)',
     /* v4.8.1 — REDESENHADO pelo mesmo motivo do `spire`: quatro dos
        cinco NPCs estavam parados em corredor de uma casa. Aqui não
@@ -653,6 +677,12 @@ const MAPS = {
        lines:['Deite aí. Eu conserto o que der.', '...Pronto. Grupo restaurado. Vá com calma.']},
       {x:13,y:11, name:'Contrabandista', sheet:'npc_encapuzado', shop:'cisterna',
        lines:['Eu vendo o que a água devolve. E a água devolve muita coisa.']},
+      {x:16,y:7, name:'Anciã da Comporta', sheet:'npc_camponesa', quest:'q_sanguessuga',
+       lines:['Três sanguessugas pálidas presas no cano principal. Raras, graças ao éter — e famintas por causa disso.']},
+    ],
+    mobs:[
+      {id:'comporta_presa', x:9,  y:11, visual:'sluicewarden', formation:[['sluicewarden',1],['drowned',2]], patrol:1},
+      {id:'canto_afogado',  x:19, y:11, visual:'siren',        formation:[['siren',2],['paleleech',1]], patrol:1},
     ],
     signs:[
       {x:3,y:9, text:'PLACA ENFERRUJADA — "Nível máximo permitido: 2 m. Assinado: Diretoria, há muito tempo."'},
@@ -705,7 +735,9 @@ const MAPS = {
   spire: {
     name:'Coroa de Vidro',
     onEnter:{scene:'chegada_coroa', flag:'cena_coroa'},
-    fill:'o', region:'spire', outdoor:false, encounter:[12, 22], bgm:'dungeon',
+    /* v5.31 — mob visível nos dois salões largos do topo, longe dos
+       corredores de uma casa que o teste de travessia protege. */
+    fill:'o', region:'spire', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(30,28,10,0.42)',
     /* v4.8.1 — REDESENHADO. A versão anterior era um anel de corredores
        de UMA casa, e NPC é sólido (`isSolid` conta npcs): a Astrônoma e
@@ -751,6 +783,13 @@ const MAPS = {
        lines:['Eu anunciei a Coroa. Passei o resto da vida tentando desanunciar.']},
       {x:11,y:10, name:'Mercador de Vidro', sheet:'npc_cigana', shop:'coroa',
        lines:['No fim do mundo o preço é honesto: caro. Não tem pra quem reclamar.']},
+      {x:15,y:13, name:'Herdeiro Renegado', sheet:'npc_nobre', quest:'q_penumbra',
+       lines:['A Coroa não tem espelho que não esteja rachado. Seis vazantes saem de cada racha.']},
+    ],
+    mobs:[
+      {id:'asas_vidro',    x:8,  y:4, visual:'glasswing',    formation:[['glasswing',3],['lesserherald',1]], patrol:1},
+      {id:'racha_espelho', x:15, y:4, visual:'crackmirror',  formation:[['crackmirror',2],['voidling',2]], patrol:1},
+      {id:'vazante_solta', x:20, y:5, visual:'voidling',     formation:[['voidling',1],['glasswing',2]], patrol:1},
     ],
     signs:[
       {x:2,y:8, text:'INSCRIÇÃO EM VIDRO — "A Coroa não coroou ninguém. Ela esperou, e esperar bastou."'},
@@ -810,7 +849,9 @@ const MAPS = {
      (água) fazem o cenário sozinhos, sem letra nova. ================ */
   arquivo: {
     name:'O Arquivo Esquecido',
-    fill:'o', region:'arquivo', outdoor:false, encounter:[11, 21], bgm:'dungeon',
+    /* v5.31 — mob visível na fileira aberta do topo, longe das estantes
+       e da poça central. */
+    fill:'o', region:'arquivo', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(10,14,38,0.52)',
     decor:[
       {x:3,  y:3,  s:'prop_estante',       solido:true},
@@ -857,6 +898,12 @@ const MAPS = {
               'Porque quando eu paro, some.']},
       {x:18, y:12, name:'Mercadora de Margem', sheet:'npc_mercador', dir:'up', shop:'margem', quest:'q_ecos',
        lines:['Vendo o que acho no chão. O chão aqui é generoso.']},
+      {x:15, y:10, name:'Curador Substituto', sheet:'npc_professor', dir:'down', quest:'q_curador',
+       lines:['Os índices andam soltos de novo. Ficha que devia ficar parada anda pela estante.']},
+    ],
+    mobs:[
+      {id:'indices_soltos', x:9,  y:3, visual:'indice', formation:[['indice',2],['errata',1]], patrol:1},
+      {id:'copistas_vivos', x:16, y:3, visual:'codice', formation:[['codice',1],['redator',1],['revisor',1]], patrol:1},
     ],
     signs:[
       {x:2,  y:2,  text:'PLACA DE LATÃO — "Acervo Geral. Silêncio." Alguém riscou "Geral" e escreveu "Todo".'},
@@ -923,7 +970,9 @@ const MAPS = {
 
   esgoto: {
     name:'Galerias de Esgoto',
-    fill:'x', region:'esgoto', outdoor:false, encounter:[8, 16], bgm:'dungeon',
+    /* v5.31 — mob visível só nos dois cruzamentos de verdade do labirinto
+       (o resto daqui é cano de uma casa, e mob bloqueia igual a NPC). */
+    fill:'x', region:'esgoto', outdoor:false, encounter:null, bgm:'dungeon',
     tint:'rgba(18,26,10,0.5)',
     rows:[
       '##############################',
@@ -964,6 +1013,12 @@ const MAPS = {
       {x:2,y:11, name:'Ferreiro de Bueiro', sheet:'npc_ferreiro', shop:'bueiro',
        lines:['Tudo que eu vendo já foi cano. Não pergunte de qual.']},
     ],
+    /* Só um mob: o labirinto é cano de uma casa quase inteiro, e o único
+       outro cruzamento de verdade (11,7) é a passagem vertical única do
+       mapa — bloqueá-la tranca a rota, o mesmo defeito do `spire`. */
+    mobs:[
+      {id:'praga_alagada', x:17, y:7, visual:'coletor', formation:[['coletor',1],['mosca',1],['ra_imunda',1]], patrol:0},
+    ],
     signs:[
       {x:6,y:4, text:'CHAPA REBITADA — "GALERIA 3. NÍVEL DA ÁGUA: SEGURO." O ponteiro está quebrado no vermelho.'},
       {x:19,y:16, text:'PICHAÇÃO — "não beba / não toque / não conte a ninguém que você desceu"'},
@@ -999,7 +1054,8 @@ const MAPS = {
 
   lago: {
     name:'Lago Afogado',
-    fill:'.', region:'lago', outdoor:true, encounter:[12, 22], bgm:'field',
+    /* v5.31 — mob visível na margem aberta ao sul do acampamento. */
+    fill:'.', region:'lago', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(10,34,44,0.28)',
     rows:[
       '##################################',
@@ -1043,6 +1099,10 @@ const MAPS = {
        lines:['Sente. Você está com água nos pulmões e não percebeu.',
               '...Pronto. Da próxima vez respire antes de mergulhar.']},
     ],
+    mobs:[
+      {id:'garcas_da_margem', x:10, y:12, visual:'garca',        formation:[['garca',2],['naiade',1]], patrol:1},
+      {id:'serpente_baixios', x:25, y:12, visual:'serpente_lago',formation:[['sapo_lotus',1],['serpente_lago',1]], patrol:1},
+    ],
     signs:[
       {x:4,y:13, text:'ESTACA DE MADEIRA — "NÍVEL DA ÁGUA EM 1104". A marca está três metros acima da sua cabeça.'},
     ],
@@ -1077,7 +1137,9 @@ const MAPS = {
 
   podridao: {
     name:'Baixios da Podridão',
-    fill:'d', region:'podridao', outdoor:true, encounter:[11, 21], bgm:'field',
+    /* v5.31 — mob visível na faixa aberta do topo e na trilha leste,
+       fora do labirinto de câmaras estreitas. */
+    fill:'d', region:'podridao', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(34,40,8,0.34)',
     rows:[
       '##################################',
@@ -1114,6 +1176,10 @@ const MAPS = {
       {x:13,y:8, name:'Sucateiro do Brejo', sheet:'npc_capataz', shop:'brejo',
        lines:['Se apodrece, eu não compro. Se enferruja, a gente conversa.']},
     ],
+    mobs:[
+      {id:'ratada_turfa', x:10, y:3, visual:'rato_peste', formation:[['rato_peste',2],['lesma',1]], patrol:1},
+      {id:'carnicais_leste', x:28, y:6, visual:'carnical', formation:[['carnical',1],['ent_podre',1]], patrol:1},
+    ],
     signs:[
       {x:5,y:17, text:'TÁBUA MEIO ENTERRADA — "ROÇA DA ACADEMIA — COLHEITA DE OUTONO". Não é outono há muito tempo.'},
     ],
@@ -1148,7 +1214,9 @@ const MAPS = {
 
   deserto: {
     name:'Deserto de Vidro Moído',
-    fill:'d', region:'deserto', outdoor:true, encounter:[13, 24], bgm:'field',
+    /* v5.31 — mob visível na duna aberta, longe dos pilares e do
+       acampamento. */
+    fill:'d', region:'deserto', outdoor:true, encounter:null, bgm:'field',
     tint:'rgba(70,58,14,0.3)',
     rows:[
       '##################################',
@@ -1187,6 +1255,10 @@ const MAPS = {
       {x:6,y:4,  name:'Aguadeira', sheet:'npc_menina', heal:true,
        lines:['Beba. Não pergunte de onde veio.',
               '...Pronto. Grupo de pé. A água aqui é cara, então não desperdice o descanso.']},
+    ],
+    mobs:[
+      {id:'chacais_duna',    x:12, y:10, visual:'chacal',      formation:[['chacal',2],['mumia',1]], patrol:1},
+      {id:'escaravelhos_sol',x:22, y:14, visual:'escaravelho', formation:[['escaravelho',1],['salamandra_areia',1]], patrol:1},
     ],
     signs:[
       {x:3,y:9, text:'MARCO DE PEDRA — "COROA DE VIDRO — 0 KM". Você está em cima dela. Ela é a areia.'},

@@ -28,6 +28,14 @@ const BATTLE_ART = {
      NOME, e é trocando o nome do ator que a transformação aparece. */
   'Gabriel Lycan': {w:104, h:134, src:'assets/characters/gabriel-lycan-src.webp'},
   Scythe: {w:90, h:152, src:'assets/characters/scythe-src.webp'},
+  /* v5.31 — Beatriz, Calder e Carmila nunca ganharam um "-src.webp"
+     dedicado: a arte que existe pra elas é a mesma catalogada para o
+     diálogo (`dlg_*`), mas em corpo inteiro e na mesma qualidade das
+     outras artes de combate — não é um busto reaproveitado. Se um dia
+     chegar arte de batalha própria, troque só o `src` aqui. */
+  'Beatriz Demeter': {w:98, h:152, src:'assets/characters/dlg_beatriz.webp'},
+  'Calder Pell': {w:100, h:152, src:'assets/characters/dlg_calderpell.webp'},
+  'Carmila Reachforth': {w:96, h:152, src:'assets/characters/dlg_carmila.webp'},
 };
 
 /* --- Party -------------------------------------------------------- */
@@ -135,6 +143,37 @@ const PARTY_DEFS = [
    learn:[[1,'am_lamina'],[1,'am_fenda'],[8,'am_ordem'],[12,'am_asa'],[15,'am_selo'],
           [20,'am_coroa'],[24,'am_dracon'],[28,'am_herdeira']],
    pitch:'Cavaleira de Fogo, dano físico. A base mais alta do elenco e o crescimento mais lento.'},
+
+  /* ============ v5.31: TRÊS QUE JÁ TINHAM SPRITE E SHEET ============
+     Beatriz Demeter, Calder Pell e Carmila Reachforth chegaram ao
+     catálogo de assets prontos (sheet de campo + retrato) sem NENHUMA
+     ficha de personagem em lugar nenhum — nem stats, nem elemento, nem
+     habilidade. `geracao:'anterior'` porque nenhum dos três lê como
+     estudante recém-chegado; mesma curva de base/crescimento da v5.30
+     (base alta, cresce menos, empata com o elenco lá na frente). Sem pet
+     de Ninhal, como todo `anterior`. Elemento: Beatriz fecha Luz, a
+     única das dez afinidades do anel sem NENHUM personagem jogável até
+     aqui; Calder e Carmila repetem Trevas/Cinzas, que já eram únicas —
+     duplicar elemento é o padrão já usado em Fogo (3×) e Eletricidade
+     (2×), não uma exceção. */
+  {name:'Beatriz Demeter', element:'light', role:'Paladina', geracao:'anterior',
+   sheet:'beatriz_sheet', portrait:'dlg_beatriz',
+   base:{hp:118, mp:50, atk:24, def:17, spd:16}, grow:{hp:9, mp:4.6, atk:2.1, def:1.7, spd:1.3},
+   learn:[[1,'bt_corte'],[1,'bt_veredito'],[8,'bt_disciplina'],[12,'bt_circulo'],[15,'bt_juramento'],
+          [20,'bt_exorcismo'],[24,'bt_alvorada'],[28,'bt_sentenca']],
+   pitch:'Atordoa antes de cortar, mas gasta luz rápido demais pra abusar sozinha. Boa entrada, ruim em maratona.'},
+  {name:'Calder Pell', element:'darkness', role:'Ocultista', geracao:'anterior',
+   sheet:'calderpell_sheet', portrait:'dlg_calderpell',
+   base:{hp:100, mp:64, atk:20, def:15, spd:15}, grow:{hp:7.6, mp:5.8, atk:1.9, def:1.5, spd:1.3},
+   learn:[[1,'cp_toque'],[1,'cp_pacto'],[8,'cp_correntes'],[12,'cp_ordalia'],[15,'cp_juramento_negro'],
+          [20,'cp_veredicto'],[24,'cp_colheita'],[28,'cp_ultimo_selo']],
+   pitch:'Não corre atrás de nada — mas sozinho, a maldição demora pra fechar o cerco, e ele apanha esperando.'},
+  {name:'Carmila Reachforth', element:'blood', role:'Condessa', geracao:'anterior',
+   sheet:'carmila_sheet', portrait:'dlg_carmila',
+   base:{hp:108, mp:54, atk:23, def:16, spd:18}, grow:{hp:8.2, mp:5.0, atk:2.0, def:1.6, spd:1.5},
+   learn:[[1,'cm_unha'],[1,'cm_convite'],[8,'cm_veia'],[12,'cm_banquete'],[15,'cm_pacto'],
+          [20,'cm_sede'],[24,'cm_enxame'],[28,'cm_ceia_eterna']],
+   pitch:'Cada golpe reabastece ela, então sozinha aguenta mais do que parece. Só não tem com quem repartir o excedente.'},
 ];
 
 /* ===================================================================

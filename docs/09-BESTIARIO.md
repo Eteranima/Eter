@@ -1,6 +1,11 @@
 # 09 — Bestiário
 
-Nove criaturas comuns, distribuídas em três regiões. Chefes em
+Nove criaturas comuns, distribuídas nas três regiões do Capítulo 1
+(Pátio Central, Subterrâneo Selado e Galeria Profunda) — as únicas
+mapeadas neste documento. O jogo tem outras dez regiões além destas
+(ver `docs/PENDENCIAS-DESIGN.md`, item 3), cada uma com seu próprio
+elenco de criaturas já definido em `src/scripts/monsters/09-bestiary.js`
+e `10-formations.js`, mas ainda sem ficha de design aqui. Chefes em
 [10](10-CHEFES.md).
 
 Todas são, no lore, éter transbordado que ganhou forma própria — não são
@@ -15,7 +20,9 @@ animais nem demônios. Ver [02](02-MUNDO-E-LORE.md).
 
 ## Região: Pátio Central
 
-Encontro a cada 14-26 passos na grama. O calçamento é seguro.
+O Pátio Central não declara encontro — é área segura (P0, 2026-09-02). As
+três criaturas abaixo só aparecem hoje como a primeira patrulha visível do
+Subterrâneo Selado, antes de chegarem à Academia.
 
 ### Lobo de Éter
 | | |
@@ -54,10 +61,6 @@ primeiro. É a primeira lição de **priorização de alvo**.
 
 Única criatura com **arte de sprite** em vez de desenho procedural. Aplica
 Pavor (DEF −25%), que amplifica tudo que vier depois.
-
-O Pátio Central não tem combate ambiente. Os Lobos de Éter aparecem como a
-primeira patrulha visível do Subterrâneo Selado, antes que consigam subir para
-a Academia.
 
 ---
 
