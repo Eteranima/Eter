@@ -57,14 +57,15 @@ const MAPS = {
        Estes são poucos e de propósito: o pátio já tem 48 árvores, e
        encher o gramado tiraria o lugar de andar. */
     decor:[
-      {x:4,  y:3,  s:'prop_flores'},
-      {x:36, y:3,  s:'prop_flores_rosa'},
-      {x:2,  y:14, s:'prop_tronco'},
-      {x:36, y:14, s:'prop_caixa',  solido:true},
-      {x:37, y:14, s:'prop_barril', solido:true},
-      {x:20, y:1,  s:'prop_poco',   solido:true},
+      {x:4,  y:3,  s:'prop_flores', text:'Flores-de-éter — abrem só onde o chão está calmo há muito tempo.'},
+      {x:36, y:3,  s:'prop_flores_rosa', text:'Estas nasceram rosadas depois que o Selo foi erguido. Ninguém sabe explicar o porquê.'},
+      {x:2,  y:14, s:'prop_tronco', text:'Um tronco velho, bom para sentar entre uma aula e outra.'},
+      {x:36, y:14, s:'prop_caixa',  solido:true, text:'Caixas do empório, ainda fechadas. Melhor não bulir.'},
+      {x:37, y:14, s:'prop_barril', solido:true, text:'Cheira a éter destilado. Selado — não é para beber.'},
+      {x:20, y:1,  s:'prop_poco',   solido:true, text:'A água lá no fundo reflete um brilho que não é do céu.'},
       {x:1,  y:6,  s:'prop_placa'},
-      {x:38, y:6,  s:'prop_fogueira'},
+      {x:10, y:6,  s:'prop_placa'},
+      {x:38, y:6,  s:'prop_fogueira', text:'O fogo arde estável, sem fumaça. Éter, de novo.'},
     ],
     rows:[
       '########################################',
@@ -150,6 +151,7 @@ const MAPS = {
     ],
     signs:[
       {x:10,y:6, text:'PLACA — "Academia Stone Reach · Salão Principal. Mantenha o éter contido nos corredores."'},
+      {x:1, y:6, text:'PLACA — "Bem-vindo(a) a Stone Reach. Silêncio nos jardins após o toque de recolher."'},
     ],
     /* `need` espera o Eco cair; `flag` garante que toca uma vez só.
        O tile fica DUAS casas antes do portão, para a cena terminar com

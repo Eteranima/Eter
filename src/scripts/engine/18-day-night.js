@@ -434,6 +434,15 @@ function interact(){
   const sign = G.map.signs.find(s => s.x === tx && s.y === ty);
   if (sign){ Msg.start([{speaker:'', text:sign.text}]); return; }
 
+  /* Decoração examinável: mesma ideia da placa, mas para o resto do
+     pacote de props (flores, poço, fogueira, caixa...). `text` é opcional
+     — decor puramente ambiental sem fala continua funcionando igual, só
+     não reage ao interagir. Nunca deixe um prop novo sem decidir um dos
+     dois de propósito (ver eter-asset-dialogue-qa / eter-playable-map-
+     and-scenery). */
+  const decorAqui = (G.map.decor || []).find(d => d.x === tx && d.y === ty && d.text);
+  if (decorAqui){ Msg.start([{speaker:'', text:decorAqui.text}]); return; }
+
   const chest = G.map.chests.find(c => c.x === tx && c.y === ty);
   if (chest){
     const key = `chest:${G.mapId}:${chest.x},${chest.y}`;
@@ -449,6 +458,7 @@ function interact(){
   if (t.id === 'water'){ Msg.start([{speaker:'', text:'A água reflete cinco rostos cansados.'}]); return; }
   if (t.id === 'shelf'){ Msg.start([{speaker:'', text:'Tratados de éter, na maioria ilegíveis.'}]); return; }
   if (t.id === 'brazier'){ Msg.start([{speaker:'', text:'A chama arde sem consumir nada. Éter puro.'}]); return; }
+  if (t.id === 'tree'){ Msg.start([{speaker:'', text:'A casca está morna — um resto de éter ainda circula por dentro.'}]); return; }
 }
 
 /* --- Rede de cristais -------------------------------------------

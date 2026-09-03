@@ -208,6 +208,7 @@ function alvoNaFrente(){
   if (m.boss && m.boss.tx === tx && m.boss.ty === ty)
     return m.boss.eco ? 'Eco' : 'Enfrentar';
   if ((m.signs || []).some(s => s.x === tx && s.y === ty)) return 'Ler';
+  if ((m.decor || []).some(d => d.x === tx && d.y === ty && d.text)) return 'Examinar';
   if ((m.chests || []).some(c => c.x === tx && c.y === ty && !G.flags[c.flag])) return 'Abrir';
   const t = tileAt(tx, ty);
   if (t && t.save) return 'Salvar';
