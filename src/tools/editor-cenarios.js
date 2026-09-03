@@ -58,20 +58,27 @@ function validate(){
     warps=list('warps','Warps');chests=list('chests','Baús');signs=list('signs','Placas');
     if(warps.length!==marker('+S').length)errors.push(`Warps: ${warps.length}, marcadores +/S: ${marker('+S').length}.`);
     if(chests.length!==marker('$').length)errors.push(`Baús: ${chests.length}, marcadores $: ${marker('$').length}.`);
-    /* Requisito 100% interativo (2026-09-03): todo prop reage ao examinar
-       (texto próprio ou, no caso de prop_placa, uma entrada em `signs` na
-       MESMA coordenada) ou foi marcado mudo de propósito — nunca por
-       esquecimento. O bug real que motivou isto: uma placa visível sem
-       texto ligado, e um texto sem placa visível, em coordenadas
-       diferentes do mesmo mapa. */
+    /* Requisito 100% interativo: todo prop de decor (prop_placa incluído)
+       reage ao examinar (`text`) ou foi marcado mudo de propósito — nunca
+       por esquecimento. `signs` é um mecanismo SEPARADO (placa muda,
+       embutida na parede) e nunca compartilha coordenada com decor: o
+       motor só aceita `signs` num tile de base SÓLIDO (parede/água/
+       árvore/estante/mesa/pilar/braseiro/entulho/baú), e só aceita
+       `decor` num tile de base NÃO sólido — as duas regras juntas fazem
+       de "decor em (x,y) == sign em (x,y)" uma contradição, nunca um
+       requisito. (Histórico: essa mistura já foi tentada e quebrou o
+       autoteste de verdade — decor sólido "dentro de parede" e sign fora
+       de tile sólido são os dois erros que a validação abaixo evita.) */
     state.decor.forEach(d=>{
-      if(d.s==='prop_placa'){
-        if(!signs.some(s=>s.x===d.x&&s.y===d.y))warnings.push(`prop_placa em (${d.x},${d.y}) sem entrada correspondente em signs — a placa não vai reagir.`);
-      } else if(!d.text && !d.mudo){
-        warnings.push(`Prop ${d.s} em (${d.x},${d.y}) sem texto e sem marcação de mudo deliberado.`);
-      }
+      const ch=state.grid[d.y]?.[d.x], solidoDaBase=!!TILES[ch]?.[2];
+      if(solidoDaBase)errors.push(`decor ${d.s} em (${d.x},${d.y}) está em cima de um tile de base sólido — decor só vale em tile aberto.`);
+      if(!d.text && !d.mudo)warnings.push(`Prop ${d.s} em (${d.x},${d.y}) sem texto e sem marcação de mudo deliberado.`);
     });
-    signs.forEach(s=>{ if(!state.decor.some(d=>d.s==='prop_placa'&&d.x===s.x&&d.y===s.y))warnings.push(`sign em (${s.x},${s.y}) sem prop_placa visível na mesma coordenada.`); });
+    signs.forEach(s=>{
+      const ch=state.grid[s.y]?.[s.x], solidoDaBase=!!TILES[ch]?.[2];
+      if(!solidoDaBase)errors.push(`sign em (${s.x},${s.y}) não está sobre tile de base sólido — o autoteste exige placa "embutida" na parede/água/objeto.`);
+      if(state.decor.some(d=>d.x===s.x&&d.y===s.y))errors.push(`sign em (${s.x},${s.y}) compartilha coordenada com um decor — mova um dos dois.`);
+    });
   }catch(error){errors.push(error.message);}
   return {errors,warnings,warps,chests,signs};
 }

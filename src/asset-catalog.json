@@ -3895,6 +3895,118 @@
       "mime": "image/webp",
       "bytes": 45370,
       "sha256": "0013e07879341cc3dfa69cd596573a248d70da7658814c7becee242cfb423441"
+    },
+    {
+      "key": "icon_bandagem",
+      "path": "assets/ui/icon_bandagem.webp",
+      "mime": "image/webp",
+      "bytes": 1272,
+      "sha256": "50366e57696153386767a6c59cc5ea72ab48b2dfcdb74ba57e37d1994ff30bd8"
+    },
+    {
+      "key": "icon_bomba",
+      "path": "assets/ui/icon_bomba.webp",
+      "mime": "image/webp",
+      "bytes": 1480,
+      "sha256": "8539b9f5916fa0183e17e8ac72d7d0232dbcf18d2f3f8b24aeec268bd2e1450f"
+    },
+    {
+      "key": "icon_cha",
+      "path": "assets/ui/icon_cha.webp",
+      "mime": "image/webp",
+      "bytes": 1370,
+      "sha256": "2766b6d1c3def8c67521e3b9da73c1a3e26dafe912bf3e2ee7537aad13a7b95f"
+    },
+    {
+      "key": "icon_eter",
+      "path": "assets/ui/icon_eter.webp",
+      "mime": "image/webp",
+      "bytes": 1186,
+      "sha256": "5a63869201d11bd47b6e9d83de7f1b74ade61d15fee9a29800655fb8049dd353"
+    },
+    {
+      "key": "icon_fenix",
+      "path": "assets/ui/icon_fenix.webp",
+      "mime": "image/webp",
+      "bytes": 1032,
+      "sha256": "820881019ccb4d7794748123e4d93a2d32d11ff8d862483c52bb80cda9fee555"
+    },
+    {
+      "key": "icon_fumaca",
+      "path": "assets/ui/icon_fumaca.webp",
+      "mime": "image/webp",
+      "bytes": 1066,
+      "sha256": "17fe432cf333ecd2ea3dbd402f58e37af4433815396c3909b2f0e9aabcdee38e"
+    },
+    {
+      "key": "icon_material_caco",
+      "path": "assets/ui/icon_material_caco.webp",
+      "mime": "image/webp",
+      "bytes": 1526,
+      "sha256": "1b40df7be6f4a3035a654487508b9a2d65a98129586aa9e2a7af7d3ce7a56911"
+    },
+    {
+      "key": "icon_material_escama",
+      "path": "assets/ui/icon_material_escama.webp",
+      "mime": "image/webp",
+      "bytes": 1100,
+      "sha256": "8ac17284f520c50fcc4e4689eb0417bd160d546d5e57932bf7ac6733579db26a"
+    },
+    {
+      "key": "icon_material_presa",
+      "path": "assets/ui/icon_material_presa.webp",
+      "mime": "image/webp",
+      "bytes": 1036,
+      "sha256": "cd83ba63638772747ccf4acd1ef6428d39459d224c21ca485126e21d06a1bc5e"
+    },
+    {
+      "key": "icon_material_seiva",
+      "path": "assets/ui/icon_material_seiva.webp",
+      "mime": "image/webp",
+      "bytes": 1078,
+      "sha256": "822bd4f1b3601eb3f2b978d94861569cb336707d94abc01c3290da4551817b63"
+    },
+    {
+      "key": "icon_oleo",
+      "path": "assets/ui/icon_oleo.webp",
+      "mime": "image/webp",
+      "bytes": 1308,
+      "sha256": "38c4a2c7643df20cee7f07c8cfc07f5c1d81cc2cddb1fdee9c2519f008a1a587"
+    },
+    {
+      "key": "icon_pocao",
+      "path": "assets/ui/icon_pocao.webp",
+      "mime": "image/webp",
+      "bytes": 1334,
+      "sha256": "fcac94b3863bfc49713daa1e96b6cb3f3337d81ee79001e31b061d72e303e839"
+    },
+    {
+      "key": "icon_pocao_grande",
+      "path": "assets/ui/icon_pocao_grande.webp",
+      "mime": "image/webp",
+      "bytes": 1096,
+      "sha256": "a56c65c0cbecd87c89d09ea2161f4e809c8b85c9bb4b76378774c89aa9e81be0"
+    },
+    {
+      "key": "icon_racao",
+      "path": "assets/ui/icon_racao.webp",
+      "mime": "image/webp",
+      "bytes": 1516,
+      "sha256": "af7381078c5b05bbd22e109ff4aa01073bb25f50379ec6c23c53d328f1424bc7"
+    },
+    {
+      "key": "icon_sal",
+      "path": "assets/ui/icon_sal.webp",
+      "mime": "image/webp",
+      "bytes": 1590,
+      "sha256": "6cb9735530329464bdf2574a10a27470e4cf07002eb58b99438a2010e2d75bbd"
+    },
+    {
+      "key": "icon_tenda",
+      "path": "assets/ui/icon_tenda.webp",
+      "mime": "image/webp",
+      "bytes": 1460,
+      "sha256": "022144b7bb88414f6e9847ca1c86e9b82c946019ba07b70cc47634301a988f45"
     }
   ],
   "scripts": [

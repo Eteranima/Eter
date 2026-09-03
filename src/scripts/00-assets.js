@@ -44,6 +44,28 @@ Object.assign(SPRITE_DATA, {
   icon_sword: "assets/ui/icon_sword.webp",
   icon_sword_red: "assets/ui/icon_sword_red.webp",
 });
+/* ICONES_CONSUMIVEL_BLOCO — ícones próprios para consumíveis/materiais
+   que antes só tinham o quadradinho de cor (fallback de drawItemMark).
+   Mesmo mecanismo genérico dos ícones de arma: basta o campo `icon` no
+   ITEMS[] correspondente apontar pra uma destas chaves. */
+Object.assign(SPRITE_DATA, {
+  icon_pocao: "assets/ui/icon_pocao.webp",
+  icon_pocao_grande: "assets/ui/icon_pocao_grande.webp",
+  icon_eter: "assets/ui/icon_eter.webp",
+  icon_sal: "assets/ui/icon_sal.webp",
+  icon_fenix: "assets/ui/icon_fenix.webp",
+  icon_bomba: "assets/ui/icon_bomba.webp",
+  icon_tenda: "assets/ui/icon_tenda.webp",
+  icon_bandagem: "assets/ui/icon_bandagem.webp",
+  icon_cha: "assets/ui/icon_cha.webp",
+  icon_oleo: "assets/ui/icon_oleo.webp",
+  icon_fumaca: "assets/ui/icon_fumaca.webp",
+  icon_racao: "assets/ui/icon_racao.webp",
+  icon_material_presa: "assets/ui/icon_material_presa.webp",
+  icon_material_seiva: "assets/ui/icon_material_seiva.webp",
+  icon_material_escama: "assets/ui/icon_material_escama.webp",
+  icon_material_caco: "assets/ui/icon_material_caco.webp",
+});
 /* TILES_ANIMADOS_BLOCO — 3 quadros de água (32x32, opacos e tileáveis)
    e 3 de braseiro (32x96, com alfa). Os dois tiles eram desenhados
    proceduralmente com uma senoide em cima do relógio; a arte troca o
