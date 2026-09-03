@@ -10,7 +10,11 @@ function drawTileArt(ch, x, y, sx, sy, T2){
      esquecer um. `save` e `chest` NÃO passam por aqui — os dois compõem
      duas camadas e são tratados nos ramos deles. */
   if (id !== 'save' && id !== 'chest'){
-    const arte = arteTile(TILE_ART[id]);
+    /* Um mapa pode trocar a pele de um caractere sem trocar a sua
+       gramática. Porto Lúmina, por exemplo, continua usando `,` como
+       caminho passável, mas o mostra em tábuas de cais. */
+    const chaveLocal = G.map?.def?.tileArt?.[ch];
+    const arte = arteTile(chaveLocal || TILE_ART[id]);
     if (arte){ ctx.drawImage(arte, sx, sy, T2, T2); return; }
   }
 

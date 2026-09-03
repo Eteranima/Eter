@@ -101,7 +101,7 @@ const G = {
   cristais:{},            // rede de viagem rápida: mapa:x:y → ponto
   visitados:{},           // id do mapa → true, o nevoeiro do mapa
   revanches:{},           // id do chefe → quantas vezes o eco já caiu
-  tema:'eter',            // tema de interface (ver TEMAS)
+  tema:'relogio',         // tema de interface (ver TEMAS)
   modificadorCombate:false,
   gameMaster:false,       // Modo Mestre (código secreto no título, v5.32)
   pets:{},                // id do pet → {lvl, exp}. Só os já conquistados.
@@ -562,7 +562,7 @@ function newGame(inicial){
   G.revanches = {};                    // ecos de chefe (v5.24)
   G.pets = {}; G.petAtivo = null;
   G.moldura = 'nenhuma';
-  G.tema = 'eter';
+  G.tema = 'relogio';
   G.modificadorCombate = false;
   G.gameMaster = false;
   G.playtime = 0;
@@ -639,8 +639,9 @@ function loadFromSave(s){
   /* Save de antes das molduras — ou com uma moldura que não existe mais —
      volta para o traço original em vez de ficar sem canto nenhum. */
   G.moldura = MOLDURAS.some(m => m.id === s.moldura) ? s.moldura : 'nenhuma';
-  // idem para o tema: desconhecido ou ausente volta ao Éter
-  G.tema = TEMAS.some(t => t.id === s.tema) ? s.tema : 'eter';
+  // Save sem tema acompanha o relógio: dia dourado, noite fria. Saves
+  // existentes com uma escolha explícita continuam exatamente nela.
+  G.tema = TEMAS.some(t => t.id === s.tema) ? s.tema : 'relogio';
   G.modificadorCombate = modificadorDoSave(s);
   G.gameMaster = s.gameMaster === true;
   G.quests = s.quests || {}; G.kills = s.kills || {};

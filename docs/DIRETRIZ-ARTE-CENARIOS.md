@@ -32,3 +32,14 @@ dominar porto, cidade ou interiores.
 2. Interiores sociais e comércio, incluindo variações específicas de local.
 3. Cenas de batalha e fundos regionais.
 4. Interface, ícones de item e efeitos, mantendo a cor semântica de combate.
+
+## Marcos regionais e fichas
+
+Áreas amplas não ficam dependentes apenas da letra do tile. Acampamentos,
+comportas, formações de vidro e acervos usam props altos, ancorados pela base e
+interagíveis quando houver texto de mundo. A ficha de Status usa o retrato
+canônico de cada integrante, com cartões legíveis e ornamento neutro em ouro,
+teal e coral; o elemento continua sendo indicado pela sua própria cor.
+
+As molduras de diálogo e menu são transparências decorativas sobre painéis de
+alto contraste: delimitam a interface sem substituir o texto, foco ou clique.

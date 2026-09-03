@@ -189,6 +189,38 @@ const ITEMS = {
             desc:'Guarda o lugar. Quem o carrega volta mais depressa ao que sabia.'},
 };
 
+/* Uma família visual por item não-armamento. Nome e cor mantêm sua
+   liberdade de conteúdo; a silhueta evita que qualquer dado publicado
+   recorra ao quadradinho de cor do renderer. */
+const ICONE_DE_ITEM = {
+  megapot:'icon_pocao_grande', hiether:'icon_eter', elixir:'icon_eter',
+  shard:'icon_bomba', gale:'icon_bomba', dew:'icon_pocao', panacea:'icon_sal',
+  rebirth:'icon_fenix', warcry:'icon_oleo', swift:'icon_oleo',
+  ironspike:'icon_material_caco', voltflask:'icon_bomba', inkflask:'icon_bomba',
+  umbraflask:'icon_bomba', sunflask:'icon_bomba', bloodflask:'icon_bomba',
+  bigbomb:'icon_bomba', nectar:'icon_cha', stone:'icon_material_caco',
+  m_presa:'icon_material_presa', m_seiva:'icon_material_seiva',
+  m_escama:'icon_material_escama', m_caco:'icon_material_caco',
+  m_pluma:'icon_fenix', m_casulo:'icon_material_casulo',
+  p_racao:'icon_racao', p_bolo:'icon_racao', p_banquete:'icon_racao',
+  a_tunica:'icon_armadura_tunica', a_manto:'icon_armadura_manto',
+  a_coura:'icon_armadura_couraca', a_veste:'icon_armadura_manto',
+  a_casco:'icon_armadura_couraca', a_bruma:'icon_armadura_manto',
+  a_escama:'icon_armadura_vidro', a_vidro:'icon_armadura_vidro',
+  a_astral:'icon_armadura_vidro', a_encader:'icon_armadura_manto',
+  t_foco:'icon_talisma_anel', t_agil:'icon_talisma_broche',
+  t_vital:'icon_talisma_amuleto', t_resson:'icon_talisma_selo',
+  t_pluma:'icon_fenix', t_elo:'icon_talisma_anel', t_brasa:'icon_talisma_anel',
+  t_corda:'icon_talisma_amuleto', t_espelho:'icon_material_caco',
+  t_sino:'icon_talisma_selo', t_martelo:'icon_talisma_selo',
+  t_olho:'icon_material_caco', t_coroa:'icon_talisma_selo',
+  t_presa:'icon_material_presa', m_folha:'icon_material_folha',
+  m_lacre:'icon_material_lacre', m_valvula:'icon_material_valvula',
+  m_junco:'icon_material_junco', m_esporo:'icon_material_esporo',
+  m_carapaca:'icon_material_carapaca', t_marcador:'icon_talisma_marcador',
+};
+Object.entries(ICONE_DE_ITEM).forEach(([id, icon]) => { ITEMS[id].icon = icon; });
+
 /* --- Lojas -------------------------------------------------------- */
 /* `need` opcional: item só aparece depois da flag. Venda = 50% do preço. */
 const SHOPS = {

@@ -488,6 +488,134 @@
       "sha256": "04bf71cc18e701f33d36591d40c463be1508956ab8321b576f5d99065b083a2f"
     },
     {
+      "key": "icon_pocao", "path": "assets/ui/icon_pocao.webp", "mime": "image/webp", "bytes": 1334,
+      "sha256": "fcac94b3863bfc49713daa1e96b6cb3f3337d81ee79001e31b061d72e303e839"
+    },
+    {
+      "key": "icon_pocao_grande", "path": "assets/ui/icon_pocao_grande.webp", "mime": "image/webp", "bytes": 1096,
+      "sha256": "a56c65c0cbecd87c89d09ea2161f4e809c8b85c9bb4b76378774c89aa9e81be0"
+    },
+    {
+      "key": "icon_eter", "path": "assets/ui/icon_eter.webp", "mime": "image/webp", "bytes": 1186,
+      "sha256": "5a63869201d11bd47b6e9d83de7f1b74ade61d15fee9a29800655fb8049dd353"
+    },
+    {
+      "key": "icon_sal", "path": "assets/ui/icon_sal.webp", "mime": "image/webp", "bytes": 1590,
+      "sha256": "6cb9735530329464bdf2574a10a27470e4cf07002eb58b99438a2010e2d75bbd"
+    },
+    {
+      "key": "icon_fenix", "path": "assets/ui/icon_fenix.webp", "mime": "image/webp", "bytes": 1032,
+      "sha256": "820881019ccb4d7794748123e4d93a2d32d11ff8d862483c52bb80cda9fee555"
+    },
+    {
+      "key": "icon_bomba", "path": "assets/ui/icon_bomba.webp", "mime": "image/webp", "bytes": 1480,
+      "sha256": "8539b9f5916fa0183e17e8ac72d7d0232dbcf18d2f3f8b24aeec268bd2e1450f"
+    },
+    {
+      "key": "icon_tenda", "path": "assets/ui/icon_tenda.webp", "mime": "image/webp", "bytes": 1460,
+      "sha256": "022144b7bb88414f6e9847ca1c86e9b82c946019ba07b70cc47634301a988f45"
+    },
+    {
+      "key": "icon_bandagem", "path": "assets/ui/icon_bandagem.webp", "mime": "image/webp", "bytes": 1272,
+      "sha256": "50366e57696153386767a6c59cc5ea72ab48b2dfcdb74ba57e37d1994ff30bd8"
+    },
+    {
+      "key": "icon_cha", "path": "assets/ui/icon_cha.webp", "mime": "image/webp", "bytes": 1370,
+      "sha256": "2766b6d1c3def8c67521e3b9da73c1a3e26dafe912bf3e2ee7537aad13a7b95f"
+    },
+    {
+      "key": "icon_oleo", "path": "assets/ui/icon_oleo.webp", "mime": "image/webp", "bytes": 1308,
+      "sha256": "38c4a2c7643df20cee7f07c8cfc07f5c1d81cc2cddb1fdee9c2519f008a1a587"
+    },
+    {
+      "key": "icon_fumaca", "path": "assets/ui/icon_fumaca.webp", "mime": "image/webp", "bytes": 1066,
+      "sha256": "17fe432cf333ecd2ea3dbd402f58e37af4433815396c3909b2f0e9aabcdee38e"
+    },
+    {
+      "key": "icon_racao", "path": "assets/ui/icon_racao.webp", "mime": "image/webp", "bytes": 1516,
+      "sha256": "af7381078c5b05bbd22e109ff4aa01073bb25f50379ec6c23c53d328f1424bc7"
+    },
+    {
+      "key": "icon_material_presa", "path": "assets/ui/icon_material_presa.webp", "mime": "image/webp", "bytes": 1036,
+      "sha256": "cd83ba63638772747ccf4acd1ef6428d39459d224c21ca485126e21d06a1bc5e"
+    },
+    {
+      "key": "icon_material_seiva", "path": "assets/ui/icon_material_seiva.webp", "mime": "image/webp", "bytes": 1078,
+      "sha256": "822bd4f1b3601eb3f2b978d94861569cb336707d94abc01c3290da4551817b63"
+    },
+    {
+      "key": "icon_material_escama", "path": "assets/ui/icon_material_escama.webp", "mime": "image/webp", "bytes": 1100,
+      "sha256": "8ac17284f520c50fcc4e4689eb0417bd160d546d5e57932bf7ac6733579db26a"
+    },
+    {
+      "key": "icon_material_caco", "path": "assets/ui/icon_material_caco.webp", "mime": "image/webp", "bytes": 1526,
+      "sha256": "1b40df7be6f4a3035a654487508b9a2d65a98129586aa9e2a7af7d3ce7a56911"
+    },
+    {
+      "key": "icon_armadura_tunica", "path": "assets/ui/icon_armadura_tunica.webp", "mime": "image/webp", "bytes": 1634,
+      "sha256": "730ba1bd07125d6bdf1f67c013ef0b7086764f37070a82ecf23b805fad3a46cb"
+    },
+    {
+      "key": "icon_armadura_manto", "path": "assets/ui/icon_armadura_manto.webp", "mime": "image/webp", "bytes": 1678,
+      "sha256": "f68f0458a87a18739a78918ca2e6df23fc2ccbe6f1f7a33306c49a0d9bf16a3d"
+    },
+    {
+      "key": "icon_armadura_couraca", "path": "assets/ui/icon_armadura_couraca.webp", "mime": "image/webp", "bytes": 1678,
+      "sha256": "7256eca5eee6aab13efe91021c09373de39b11cc0694f761bee26275f8e8aaed"
+    },
+    {
+      "key": "icon_armadura_vidro", "path": "assets/ui/icon_armadura_vidro.webp", "mime": "image/webp", "bytes": 1848,
+      "sha256": "9b0497970314edfa7efc93dac6f55573957803f3e2dd07f262aaae0226eefd41"
+    },
+    {
+      "key": "icon_talisma_anel", "path": "assets/ui/icon_talisma_anel.webp", "mime": "image/webp", "bytes": 1124,
+      "sha256": "a880e3970d76097c8ea9afe35b92ded7144998cc2883f90f5b4d48ed1d1259ec"
+    },
+    {
+      "key": "icon_talisma_broche", "path": "assets/ui/icon_talisma_broche.webp", "mime": "image/webp", "bytes": 1288,
+      "sha256": "bd0bebc51acc8763cfa4d6510a8a370cb75b7056482ab0fde4434ab5fc858e7f"
+    },
+    {
+      "key": "icon_talisma_amuleto", "path": "assets/ui/icon_talisma_amuleto.webp", "mime": "image/webp", "bytes": 1236,
+      "sha256": "c23ebb211b18944ac5e615f902206e4f995f7eecdd4258d4b3d63035a06b024f"
+    },
+    {
+      "key": "icon_talisma_selo", "path": "assets/ui/icon_talisma_selo.webp", "mime": "image/webp", "bytes": 1238,
+      "sha256": "ded1ba7f7a685e4d1bc245ceae1166d59f5eb8086a7dbecf45578847d833dcd6"
+    },
+    {
+      "key": "icon_material_casulo", "path": "assets/ui/icon_material_casulo.webp", "mime": "image/webp", "bytes": 1196,
+      "sha256": "08a16c8cbb3347979997a0131fd5c1e7b3a531a0f058b24c2aebd95a6a1c7cbf"
+    },
+    {
+      "key": "icon_material_folha", "path": "assets/ui/icon_material_folha.webp", "mime": "image/webp", "bytes": 1240,
+      "sha256": "bb21803202544d5a993b9f33a16352eaa06287fd73458caee35c48f4233af23c"
+    },
+    {
+      "key": "icon_material_lacre", "path": "assets/ui/icon_material_lacre.webp", "mime": "image/webp", "bytes": 1322,
+      "sha256": "c13d02461e7c45522301a9e4f8b685c5d4810849307168f946208eb66c910c5d"
+    },
+    {
+      "key": "icon_material_valvula", "path": "assets/ui/icon_material_valvula.webp", "mime": "image/webp", "bytes": 1368,
+      "sha256": "4bfba2e9a0a85b6176b3728d944b8933684612342048bfe69931a8c1b5f5c8fa"
+    },
+    {
+      "key": "icon_material_junco", "path": "assets/ui/icon_material_junco.webp", "mime": "image/webp", "bytes": 1606,
+      "sha256": "1620e6199b8f235c2700969683772219ba3f4f5a26f319834b599ccee2bb9dae"
+    },
+    {
+      "key": "icon_material_esporo", "path": "assets/ui/icon_material_esporo.webp", "mime": "image/webp", "bytes": 1760,
+      "sha256": "c0bc8e4b41ad8e0d76027c2bc1c62c4df70d717c90a87662dd63d5b2ee9c2d7c"
+    },
+    {
+      "key": "icon_material_carapaca", "path": "assets/ui/icon_material_carapaca.webp", "mime": "image/webp", "bytes": 1488,
+      "sha256": "75036b703300b7bc6afd1c400b827f0c431a9ab8b07667b0902974c69fd11866"
+    },
+    {
+      "key": "icon_talisma_marcador", "path": "assets/ui/icon_talisma_marcador.webp", "mime": "image/webp", "bytes": 1540,
+      "sha256": "c4c30cb7b6e7e8c7efc7cc451430ee3502749a3db8102fc5b1c061da0500edda"
+    },
+    {
       "key": "tile_agua_0",
       "path": "assets/world/tile_agua_0.webp",
       "mime": "image/webp",
@@ -542,6 +670,13 @@
       "mime": "image/webp",
       "bytes": 1750,
       "sha256": "d218b18fac9edb3e548591044a9ab7a8d45fd020b6bc84a403be90f0d199decf"
+    },
+    {
+      "key": "tile_cais_lumina",
+      "path": "assets/world/tile_cais_lumina.webp",
+      "mime": "image/webp",
+      "bytes": 1400,
+      "sha256": "bfe4de8bf16f23c6c8c11d054c987370ac41fa208ddb1d546e2a0a89cfadab2c"
     },
     {
       "key": "tile_dirt",
@@ -647,6 +782,26 @@
       "mime": "image/webp",
       "bytes": 622,
       "sha256": "1e81acdcc7f99a98065cb82996a174374ba58db982fa92ad4756d32b0abf6cb1"
+    },
+    {
+      "key": "ail_bleed", "path": "assets/ui/ail_bleed.webp", "mime": "image/webp", "bytes": 680,
+      "sha256": "237128fe6e511caea20214f4a5c5b41adcb30a6036e8e6db5d545e93bb72c890"
+    },
+    {
+      "key": "ail_blind", "path": "assets/ui/ail_blind.webp", "mime": "image/webp", "bytes": 768,
+      "sha256": "81968792b3727b324f3dec0f3792cbb0dc020d9dfa48818bbe0796cb6bfa6d38"
+    },
+    {
+      "key": "ail_dread", "path": "assets/ui/ail_dread.webp", "mime": "image/webp", "bytes": 906,
+      "sha256": "2d2d16d7ec377b2c3b0f98b70db6ad8b86d30425c553a2e2f7edafb0b989d14d"
+    },
+    {
+      "key": "ail_exposed", "path": "assets/ui/ail_exposed.webp", "mime": "image/webp", "bytes": 932,
+      "sha256": "c5876ebfb49c9d52f805501db965066af2485179e77d83ee0f5e2fcbd57fbe9e"
+    },
+    {
+      "key": "ail_marked", "path": "assets/ui/ail_marked.webp", "mime": "image/webp", "bytes": 742,
+      "sha256": "3292332b92e02c0222f2190875f55830d34f8052bb573c70684229406f851e68"
     },
     {
       "key": "ui_canto_01",
@@ -1170,8 +1325,8 @@
       "key": "battle_bg_arquivo",
       "path": "assets/world/battle_bg_arquivo.webp",
       "mime": "image/webp",
-      "bytes": 772376,
-      "sha256": "f94f84eb17d21484134943256c0d5df0a8cbe1090b86da8afbc21282ce803575"
+      "bytes": 628968,
+      "sha256": "26f0fdf86d30fe340c2620b1890e9d15843ec5de63aa3475d0c768a514a3c40d"
     },
     {
       "key": "battle_bg_arquivo_fundo",
@@ -2087,8 +2242,8 @@
       "key": "prop_lampiao",
       "path": "assets/world/prop_lampiao.webp",
       "mime": "image/webp",
-      "bytes": 1588,
-      "sha256": "c755bd14d69aaff33f0a938c71decbaac6b4fb3677fe9cdf98157d4882792695"
+      "bytes": 3006,
+      "sha256": "61f35d695996120ff19ed390f0dc1fd9794ebaadc8c3b70ca912ca56111f0411"
     },
     {
       "key": "prop_loja",
@@ -2504,6 +2659,55 @@
       "sha256": "6d86756adb857e5764e84d6c2db366f95cebff721680b8a1591c47ac0ff5386a"
     },
     {
+      "key": "ui_status_ornamento",
+      "path": "assets/ui/ui_status_ornamento.webp",
+      "mime": "image/webp",
+      "bytes": 2500,
+      "sha256": "5c3a6cd9d956af6cfd4010669baab3acaf0db8ddfed146390d3c751bc1c15d8c"
+    },
+    {
+      "key": "ui_moldura_dialogo",
+      "path": "assets/ui/ui_moldura_dialogo.webp",
+      "mime": "image/webp",
+      "bytes": 26066,
+      "sha256": "c54a56bebc609f85d5e13c9ea4e44356fb04ecd4ac418aa035f1bb864cde245f"
+    },
+    {
+      "key": "ui_moldura_menu",
+      "path": "assets/ui/ui_moldura_menu.webp",
+      "mime": "image/webp",
+      "bytes": 62980,
+      "sha256": "333c1c8562bc0b0f20b6c02295c8d774d8f8e5bdfb180c65bbc93e26abdad5b8"
+    },
+    {
+      "key": "prop_acampamento_cinzas",
+      "path": "assets/world/prop_acampamento_cinzas.webp",
+      "mime": "image/webp",
+      "bytes": 7472,
+      "sha256": "5d4576cd66abb789c67651d6714c4e36113c4a9688faf0693f4c604050ca8272"
+    },
+    {
+      "key": "prop_comporta_eter",
+      "path": "assets/world/prop_comporta_eter.webp",
+      "mime": "image/webp",
+      "bytes": 8926,
+      "sha256": "e143e7227f753bd4f1a69a485e6d718f9f4cd4a7471e6a1ab9b0c7c1cb831cc1"
+    },
+    {
+      "key": "prop_cristal_vidro",
+      "path": "assets/world/prop_cristal_vidro.webp",
+      "mime": "image/webp",
+      "bytes": 3840,
+      "sha256": "de99a79c20f5ca919fbe844740455f8eb4f6ab4cb237c8aed69540371d06aa05"
+    },
+    {
+      "key": "prop_estante_arquivo",
+      "path": "assets/world/prop_estante_arquivo.webp",
+      "mime": "image/webp",
+      "bytes": 2874,
+      "sha256": "6a2158e030c3cabafd52e2986dd20fccc01671f92df21292dda0132da25712af"
+    },
+    {
       "key": "prop_arvore",
       "path": "assets/world/prop_arvore.webp",
       "mime": "image/webp",
@@ -2530,6 +2734,27 @@
       "mime": "image/webp",
       "bytes": 9588,
       "sha256": "c6fa7fe0e56209859cd8d0c2282d3775d1ed039ed4b0ad4c23ded98dcb4eb3d6"
+    },
+    {
+      "key": "prop_barco_pesca_lumina",
+      "path": "assets/world/prop_barco_pesca_lumina.webp",
+      "mime": "image/webp",
+      "bytes": 10750,
+      "sha256": "f26266fae6089cab1b89299879fd0bbe6dfd173f5b5a47bae8957d1ba2da8a84"
+    },
+    {
+      "key": "prop_taverna_lumina",
+      "path": "assets/world/prop_taverna_lumina.webp",
+      "mime": "image/webp",
+      "bytes": 30298,
+      "sha256": "9109b1704778b866058956d8e23611af041a2f4541a43bb6a3b4d56f137e9354"
+    },
+    {
+      "key": "prop_loja_lumina",
+      "path": "assets/world/prop_loja_lumina.webp",
+      "mime": "image/webp",
+      "bytes": 25966,
+      "sha256": "f19aefaaeb591d431a96345d4513d79ec3dd74bfc61f6f0fed187e709be1456b"
     },
     {
       "key": "prop_mesa_interior",
