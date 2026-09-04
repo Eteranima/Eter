@@ -66,11 +66,17 @@ const MAPS = {
       {x:1,  y:6,  s:'prop_placa',
        text:'PLACA — "Bem-vindo(a) a Stone Reach. Silêncio nos jardins após o toque de recolher."'},
       {x:38, y:6,  s:'prop_fogueira', text:'O fogo arde estável, sem fumaça. Éter, de novo.'},
-      /* x:13 fica alinhado com a porta ('+' em y:6, warp pra 'hall');
-         y:2 é a mesma folga usada antes do redesenho do prédio — em
-         cima da porta e sólido, a fachada trancaria a única entrada
-         do Salão. */
-      {x:13, y:2,  s:'prop_academia_stone_reach', solido:true,
+      /* `desenharProp` ancora a peça pelo PÉ: a base da imagem cola no
+         fundo da célula (x,y) e ela cresce pra cima. A fachada tem
+         160px (5 casas) de altura; ancorar em y:6 (linha da porta)
+         cobre as 4 linhas da parede (y:3-6) inteiras, então a arte nova
+         substitui visualmente o tijolo genérico em vez de flutuar
+         acima dele com um vão de grama no meio (achado do usuário
+         comparando com o print da PR #12). SEM `solido`: a colisão de
+         verdade já é a parede/porta do próprio grid (TILEDEF), e
+         marcar esta célula sólida tranca a única passagem pro Salão —
+         foi exatamente o softlock corrigido antes. */
+      {x:13, y:6,  s:'prop_academia_stone_reach',
        text:'A fachada da Academia ainda ostenta o brasão original, gasto pelo tempo mas legível.'},
       {x:18, y:20, s:'prop_portao_stone_reach',
        text:'O portão sul de Stone Reach — pedra maciça, gravada com o mesmo selo que mantém o Subterrâneo fechado.'},
