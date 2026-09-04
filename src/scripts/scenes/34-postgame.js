@@ -87,7 +87,7 @@ SCENES.chegada_mata = {
   flag:'cena_mata',
   cmds:[
     {do:'wait',  s:0.4},
-    {do:'bgm',   id:'field'},
+    {do:'bgm',   id:'ashwood'},
     {do:'say',   text:'A mata não terminou de queimar. Ela está queimando devagar, há tempo demais para isso ainda ser um incêndio.'},
     {do:'move',  who:'player', dir:'down', steps:2},
     {do:'cam',   to:[12, 8], speed:2.2},
@@ -180,7 +180,7 @@ SCENES.chegada_ninhal = {
   flag:'cena_ninhal',
   cmds:[
     {do:'wait',  s:0.4},
-    {do:'bgm',   id:'field'},
+    {do:'bgm',   id:'nests'},
     {do:'say',   text:'A trilha leste sai da cinza e entra em mato verde de repente, como se alguém tivesse traçado a linha com régua.'},
     {do:'move',  who:'player', dir:'down', steps:2},
     {do:'cam',   to:[12, 8], speed:2.2},
@@ -244,7 +244,7 @@ SCENES.chegada_cisterna = {
   flag:'cena_cisterna',
   cmds:[
     {do:'wait',  s:0.4},
-    {do:'bgm',   id:'dungeon'},
+    {do:'bgm',   id:'cistern'},
     {do:'say',   text:'A água aqui embaixo não corre. Ela espera, e o som que faz é de alguém respirando devagar.'},
     {do:'move',  who:'player', dir:'down', steps:2},
     {do:'cam',   to:[13, 10], speed:2.2},
@@ -331,7 +331,7 @@ SCENES.chegada_coroa = {
   flag:'cena_coroa',
   cmds:[
     {do:'wait',  s:0.4},
-    {do:'bgm',   id:'dungeon'},
+    {do:'bgm',   id:'spire'},
     {do:'flash', color:'#fff4c0', s:0.7},
     {do:'say',   text:'Lá dentro é claro. Não há tocha, janela nem fogo: a claridade está no próprio vidro.'},
     {do:'move',  who:'player', dir:'down', steps:2},

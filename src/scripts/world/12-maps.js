@@ -49,7 +49,7 @@ const MAPS = {
     onEnter:{scene:'abertura_patio', flag:'cena_abertura'},
     /* A Academia é área segura: a tensão começa na descida para o
        Subterrâneo, nunca no espaço de convivência dos NPCs. */
-    fill:'.', region:'patio', outdoor:true, encounter:null, bgm:'field',
+    fill:'.', region:'patio', outdoor:true, encounter:null, bgm:'patio',
     tint:'rgba(30,20,60,0.18)',
     /* Decoração do pacote de props. Cada peça ocupa UMA casa e cresce
        para cima; `solido` só onde faz sentido esbarrar. Mover qualquer
@@ -238,7 +238,7 @@ const MAPS = {
   /* Porto seguro: água bloqueia; os três píeres de calçamento mantêm a
      rota percorrível. Props continuam fora da gramática compacta de tiles. */
   porto_lumina: {
-    name:'Porto Lúmina', fill:'.', region:'porto_lumina', outdoor:true, encounter:null, bgm:'field',
+    name:'Porto Lúmina', fill:'.', region:'porto_lumina', outdoor:true, encounter:null, bgm:'porto_lumina',
     tint:'rgba(18,72,84,0.14)',
     /* Mantém `,` passável como caminho em toda a gramática de MAPS,
        mas aqui o chão é um cais de cedro, não calçamento de Stone Reach. */
@@ -313,7 +313,7 @@ const MAPS = {
   /* O comércio é um interior próprio: usa o estoque Lumina já definido,
      mas separa compra e conversa da circulação estreita do cais. */
   mercado_mare: {
-    name:'Mercado da Maré', fill:'f', region:'porto_lumina', outdoor:false, encounter:null, bgm:'field',
+    name:'Mercado da Maré', fill:'f', region:'porto_lumina', outdoor:false, encounter:null, bgm:'porto_lumina',
     tint:'rgba(20,82,78,0.16)',
     rows:[
       '###################',
@@ -356,7 +356,7 @@ const MAPS = {
   /* Interior pequeno e social: não cura nem vende, para a Mesa de Âmbar
      ter identidade própria sem tomar o lugar da enfermaria ou do mercado. */
   mesa_ambar: {
-    name:'Mesa de Âmbar', fill:'f', region:'porto_lumina', outdoor:false, encounter:null, bgm:'field',
+    name:'Mesa de Âmbar', fill:'f', region:'porto_lumina', outdoor:false, encounter:null, bgm:'porto_lumina',
     tint:'rgba(76,42,20,0.18)',
     rows:[
       '#################',
@@ -396,7 +396,7 @@ const MAPS = {
 
   hall: {
     name:'Stone Reach — Salão Principal',
-    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'field',
+    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'hall',
     tint:'rgba(20,14,40,0.34)',
     rows:[
       '##############################',
@@ -447,7 +447,7 @@ const MAPS = {
 
   library: {
     name:'Stone Reach — Ala de Estudos',
-    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'field',
+    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'hall',
     tint:'rgba(24,16,44,0.38)',
     rows:[
       '######################',
@@ -500,7 +500,7 @@ const MAPS = {
 
   annex: {
     name:'Stone Reach — Anexo Oeste',
-    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'field',
+    fill:'f', region:'hall', outdoor:false, encounter:null, bgm:'hall',
     tint:'rgba(20,16,36,0.32)',
     rows:[
       '################',
@@ -550,7 +550,7 @@ const MAPS = {
     /* P0 de mobs no campo: este é o primeiro mapa que troca a rolagem
        por encontros visíveis. Os estados abaixo são só configuração;
        morte, respawn e patrulha nascem em runtime no carregamento. */
-    fill:'x', region:'undercroft', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'x', region:'undercroft', outdoor:false, encounter:null, bgm:'undercroft',
     tint:'rgba(10,6,24,0.5)',
     rows:[
       '##################################',
@@ -639,7 +639,7 @@ const MAPS = {
 
   sanctum: {
     name:'Câmara do Selo',
-    fill:'x', region:'undercroft', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'x', region:'undercroft', outdoor:false, encounter:null, bgm:'undercroft',
     tint:'rgba(14,4,26,0.55)',
     rows:[
       '#####################',
@@ -712,7 +712,7 @@ const MAPS = {
     /* v5.31 — troca encontro aleatório por mob visível, mesma regra do
        Subterrâneo Selado (P0). Fecha o trio: Selado e Câmara já eram
        mob/seguro, só a Galeria ainda rolava passo. */
-    fill:'x', region:'deepway', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'x', region:'deepway', outdoor:false, encounter:null, bgm:'deepway',
     tint:'rgba(8,4,20,0.56)',
     rows:[
       '##############################',
@@ -785,7 +785,7 @@ const MAPS = {
     onEnter:{scene:'chegada_mata', flag:'cena_mata'},
     /* v5.31 — mob visível em vez de encontro por passo, mesma regra do
        Subterrâneo (P0). Fica fora do acampamento cercado, na mata aberta. */
-    fill:'.', region:'ashwood', outdoor:true, encounter:null, bgm:'field',
+    fill:'.', region:'ashwood', outdoor:true, encounter:null, bgm:'ashwood',
     tint:'rgba(60,24,10,0.22)',
     rows:[
       '##################################',
@@ -848,7 +848,7 @@ const MAPS = {
 
   ashpyre: {
     name:'Clareira da Pira',
-    fill:'d', region:'ashwood', outdoor:true, encounter:null, bgm:'dungeon',
+    fill:'d', region:'ashwood', outdoor:true, encounter:null, bgm:'ashwood',
     tint:'rgba(80,20,4,0.34)',
     rows:[
       '###################',
@@ -900,7 +900,7 @@ const MAPS = {
     onEnter:{scene:'chegada_ninhal', flag:'cena_ninhal'},
     /* v5.31 — mob visível na pastagem aberta ao sul dos dois pátios de
        criação, longe dos NPCs de missão. */
-    fill:'.', region:'nests', outdoor:true, encounter:null, bgm:'field',
+    fill:'.', region:'nests', outdoor:true, encounter:null, bgm:'nests',
     tint:'rgba(20,40,30,0.20)',
     rows:[
       '##############################',
@@ -962,7 +962,7 @@ const MAPS = {
 
   nests_deep: {
     name:'A Chocadeira',
-    fill:'.', region:'nests', outdoor:true, encounter:null, bgm:'dungeon',
+    fill:'.', region:'nests', outdoor:true, encounter:null, bgm:'nests',
     tint:'rgba(16,32,24,0.34)',
     rows:[
       '###################',
@@ -1016,7 +1016,7 @@ const MAPS = {
     name:'Cisterna Afogada',
     onEnter:{scene:'chegada_cisterna', flag:'cena_cisterna'},
     /* v5.31 — mob visível no salão largo, longe do entulho e dos NPCs. */
-    fill:'x', region:'cistern', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'x', region:'cistern', outdoor:false, encounter:null, bgm:'cistern',
     tint:'rgba(6,20,34,0.52)',
     /* v4.8.1 — REDESENHADO pelo mesmo motivo do `spire`: quatro dos
        cinco NPCs estavam parados em corredor de uma casa. Aqui não
@@ -1081,7 +1081,7 @@ const MAPS = {
 
   cistern_deep: {
     name:'A Comporta',
-    fill:'x', region:'cistern', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'x', region:'cistern', outdoor:false, encounter:null, bgm:'cistern',
     tint:'rgba(4,16,30,0.58)',
     rows:[
       '###################',
@@ -1148,7 +1148,7 @@ const MAPS = {
     onEnter:{scene:'chegada_coroa', flag:'cena_coroa'},
     /* v5.31 — mob visível nos dois salões largos do topo, longe dos
        corredores de uma casa que o teste de travessia protege. */
-    fill:'o', region:'spire', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'o', region:'spire', outdoor:false, encounter:null, bgm:'spire',
     tint:'rgba(30,28,10,0.42)',
     /* v4.8.1 — REDESENHADO. A versão anterior era um anel de corredores
        de UMA casa, e NPC é sólido (`isSolid` conta npcs): a Astrônoma e
@@ -1215,7 +1215,7 @@ const MAPS = {
 
   spire_top: {
     name:'Coroa de Vidro — Cume',
-    fill:'f', region:'spire', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'f', region:'spire', outdoor:false, encounter:null, bgm:'spire',
     tint:'rgba(40,36,12,0.44)',
     rows:[
       '###################',
@@ -1288,7 +1288,7 @@ const MAPS = {
     name:'O Arquivo Esquecido',
     /* v5.31 — mob visível na fileira aberta do topo, longe das estantes
        e da poça central. */
-    fill:'o', region:'arquivo', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'o', region:'arquivo', outdoor:false, encounter:null, bgm:'arquivo',
     tint:'rgba(10,14,38,0.52)',
     decor:[
       {x:3,  y:3,  s:'prop_estante_arquivo', solido:true,
@@ -1356,7 +1356,7 @@ const MAPS = {
 
   arquivo_fundo: {
     name:'A Última Prateleira',
-    fill:'f', region:'arquivo', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'f', region:'arquivo', outdoor:false, encounter:null, bgm:'arquivo',
     tint:'rgba(6,10,32,0.6)',
     decor:[
       {x:2,  y:4,  s:'prop_estante_arquivo', solido:true,
@@ -1435,7 +1435,7 @@ const MAPS = {
     name:'Galerias de Esgoto',
     /* v5.31 — mob visível só nos dois cruzamentos de verdade do labirinto
        (o resto daqui é cano de uma casa, e mob bloqueia igual a NPC). */
-    fill:'x', region:'esgoto', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'x', region:'esgoto', outdoor:false, encounter:null, bgm:'esgoto',
     tint:'rgba(18,26,10,0.5)',
     rows:[
       '##############################',
@@ -1490,7 +1490,7 @@ const MAPS = {
 
   esgoto_fundo: {
     name:'Poço de Decantação',
-    fill:'x', region:'esgoto', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'x', region:'esgoto', outdoor:false, encounter:null, bgm:'esgoto',
     tint:'rgba(14,22,8,0.58)',
     rows:[
       '###################',
@@ -1518,7 +1518,7 @@ const MAPS = {
   lago: {
     name:'Lago Afogado',
     /* v5.31 — mob visível na margem aberta ao sul do acampamento. */
-    fill:'.', region:'lago', outdoor:true, encounter:null, bgm:'field',
+    fill:'.', region:'lago', outdoor:true, encounter:null, bgm:'lago',
     tint:'rgba(10,34,44,0.28)',
     rows:[
       '##################################',
@@ -1573,7 +1573,7 @@ const MAPS = {
 
   lago_fundo: {
     name:'Templo Submerso',
-    fill:'f', region:'lago', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'f', region:'lago', outdoor:false, encounter:null, bgm:'lago',
     tint:'rgba(6,28,40,0.55)',
     rows:[
       '#####################',
@@ -1602,7 +1602,7 @@ const MAPS = {
     name:'Baixios da Podridão',
     /* v5.31 — mob visível na faixa aberta do topo e na trilha leste,
        fora do labirinto de câmaras estreitas. */
-    fill:'d', region:'podridao', outdoor:true, encounter:null, bgm:'field',
+    fill:'d', region:'podridao', outdoor:true, encounter:null, bgm:'podridao',
     tint:'rgba(34,40,8,0.34)',
     rows:[
       '##################################',
@@ -1650,7 +1650,7 @@ const MAPS = {
 
   podridao_fundo: {
     name:'Alagado de Esporos',
-    fill:'d', region:'podridao', outdoor:true, encounter:null, bgm:'dungeon',
+    fill:'d', region:'podridao', outdoor:true, encounter:null, bgm:'podridao',
     tint:'rgba(28,36,6,0.44)',
     rows:[
       '#####################',
@@ -1679,7 +1679,7 @@ const MAPS = {
     name:'Deserto de Vidro Moído',
     /* v5.31 — mob visível na duna aberta, longe dos pilares e do
        acampamento. */
-    fill:'d', region:'deserto', outdoor:true, encounter:null, bgm:'field',
+    fill:'d', region:'deserto', outdoor:true, encounter:null, bgm:'deserto',
     tint:'rgba(70,58,14,0.3)',
     rows:[
       '##################################',
@@ -1730,7 +1730,7 @@ const MAPS = {
 
   deserto_fundo: {
     name:'Tumba de Cristal Fosco',
-    fill:'f', region:'deserto', outdoor:false, encounter:null, bgm:'dungeon',
+    fill:'f', region:'deserto', outdoor:false, encounter:null, bgm:'deserto',
     tint:'rgba(48,40,10,0.5)',
     /* Cinemática de revelação na primeira entrada — mesma gramática de
        SCENES.abertura_patio, câmera+barras+tremor em vez de caixa de
