@@ -134,17 +134,15 @@ function desenharProp(chave, sx, sy, o = {}){
   const img = chave && spriteImages[chave];
   if (!img || !(img.complete ?? true) || !(img.naturalWidth || img.width)) return false;
   const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
-  const e = o.escala ?? 1;
-  const lw = Math.round(iw * e), lh = Math.round(ih * e);
-  const bx = sx + TILE / 2, by = sy + TILE - (o.recuo ?? 2);
-  if (o.sombra !== false){
+  const layout = calcularLayoutProp(iw, ih, sx, sy, o, TILE);
+  if (layout.sombra){
     ctx.save();
     ctx.fillStyle = 'rgba(0,0,0,.32)';
     ctx.beginPath();
-    ctx.ellipse(bx, by - 1, Math.min(lw * .40, TILE * .58), 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(layout.peX, layout.peY - 1, layout.sombraRaioX, 5, 0, 0, Math.PI * 2);
     ctx.fill(); ctx.restore();
   }
-  ctx.drawImage(img, Math.round(bx - lw / 2), by - lh, lw, lh);
+  ctx.drawImage(img, layout.x, layout.y, layout.largura, layout.altura);
   return true;
 }
 
