@@ -689,6 +689,86 @@ const TILE_ART = {
      (`TILE_AGUA`), e o atalho de `drawTileArt` roda antes do switch —
      pôr uma imagem estática nesta tabela congelaria a água. */
 };
+
+/* ===================================================================
+   FAMÍLIAS VISUAIS REGIONAIS (v5.33) — infraestrutura do plano de
+   expansão de assets (ver docs/DIRETRIZ-ARTE-CENARIOS.md). Generaliza
+   o mecanismo que já existia SÓ pra árvore em drawTallTile (variação
+   determinística por x,y) pra qualquer id lógico de tile OU de tall,
+   por mapa ou por região inteira.
+
+   Uma família é uma lista de variantes ({key, weight?}) pra um id
+   lógico. A escolha entre variantes é 100% determinística — nunca
+   `Math.random()` — a mesma célula do mesmo mapa sempre mostra a
+   mesma arte, em toda entrada/reload; nada disso entra no save (dá
+   pra reconstruir da seed a qualquer momento).
+
+   Prioridade de resolução (a mais específica vence primeiro):
+     1. `tileArt`/`decor.s` explícito do mapa/objeto  (já existe, intocado)
+     2. família do MAPA        (WORLD_ART_FAMILIES.mapas[mapId])
+     3. família da REGIÃO      (WORLD_ART_FAMILIES.regioes[regionId])
+     4. `TILE_ART`/`TALL_ART`  (já existe, intocado)
+     5. desenho procedural     (já existe, intocado)
+
+   Fase 1 do plano (zero mudança visual): a família de exemplo abaixo
+   nasce com UMA variante só, que já É a arte atual — prova que a
+   resolução por região funciona sem mudar um pixel do que já está
+   publicado. Novas variantes (e novas famílias) entram depois, uma de
+   cada vez, cada uma passando por QA visual antes de virar padrão —
+   nunca em lote cego. */
+const WORLD_ART_FAMILIES = {
+  regioes: {
+    /* Prova de conceito da Fase 1: reafirma o pilar do Subterrâneo
+       como família de variante única. Nenhuma arte nova; só liga o
+       cano. */
+    undercroft: { pillar: [{key:'prop_pilar', weight:1}] },
+  },
+  mapas: {},
+};
+
+/** Hash determinístico e estável (djb2) — nunca `Math.random()`. A
+ *  mesma string sempre devolve o mesmo número, em qualquer navegador
+ *  e em qualquer sessão. */
+function hashDeterministico(texto){
+  let h = 5381;
+  for (let i = 0; i < texto.length; i++) h = ((h * 33) ^ texto.charCodeAt(i)) >>> 0;
+  return h >>> 0;
+}
+
+/** Família aplicável a um id lógico (de `TILEDEF[ch].id`, tile raso ou
+ *  tall) na célula atual — mapa vence região. `null` quando nenhuma das
+ *  duas declara nada pra esse id: quem chamou cai no `TILE_ART`/
+ *  `TALL_ART`/fallback de sempre, sem checar mais nada. */
+function familiaDe(idLogico){
+  const mapaId = G.mapId, regiaoId = G.map?.def?.region;
+  const doMapa = mapaId && WORLD_ART_FAMILIES.mapas[mapaId]?.[idLogico];
+  if (doMapa && doMapa.length) return doMapa;
+  const daRegiao = regiaoId && WORLD_ART_FAMILIES.regioes[regiaoId]?.[idLogico];
+  if (daRegiao && daRegiao.length) return daRegiao;
+  return null;
+}
+
+/** Escolhe UMA variante da família pra (x,y) — sempre a mesma pra essa
+ *  célula desse mapa. Peso inteiro ≥1; sem peso conta 1. */
+function varianteDeFamilia(familia, idLogico, x, y){
+  const total = familia.reduce((n, v) => n + (v.weight || 1), 0);
+  const h = hashDeterministico(`${G.mapId}:${idLogico}:${x}:${y}`) % total;
+  let acumulado = 0;
+  for (const v of familia){
+    acumulado += v.weight || 1;
+    if (h < acumulado) return v.key;
+  }
+  return familia[familia.length - 1].key;
+}
+
+/** Ponto único de consulta pra quem desenha: a CHAVE de sprite da
+ *  família pra esse id/célula, ou `null` — sem família declarada, ou
+ *  chave que ainda não carregou (`arteTile` decide isso na hora de
+ *  desenhar, não aqui). */
+function chaveDeFamilia(idLogico, x, y){
+  const familia = familiaDe(idLogico);
+  return familia ? varianteDeFamilia(familia, idLogico, x, y) : null;
+}
 /* Fila de ícones de condição. Todo estado publicado tem arte em 16px;
    o glifo abaixo é só defesa para dados inválidos em desenvolvimento.
    Devolve a largura usada, para quem chama seguir escrevendo depois. */
