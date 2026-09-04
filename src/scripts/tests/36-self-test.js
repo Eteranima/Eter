@@ -1043,9 +1043,14 @@ function runSelfTests(){
        formas aqui mantém o teste pegando o erro que ele existe para pegar
        (nome trocado num lugar só) sem acusar a mecânica. */
     const FORMAS = [LYCAN.arte, MADAO.artePapelao, MADAO.arteVitoria];
+    /* v5.32 — guest-tutorial (Abel/Ava/Orfeu/Beatriz/Calder/Amanda/
+       Scythe) entra em batalha de verdade (Battle.begin({guest:...})),
+       então precisa da mesma arte de combate que tinha como jogável;
+       saíram de PARTY_DEFS mas continuam citados aqui de propósito. */
     const orfa = Object.keys(BATTLE_ART)
-      .filter(n => !PARTY_DEFS.some(d => d.name === n) && !FORMAS.includes(n));
-    ok('BATTLE_ART só cita personagens do elenco ou segunda forma deles',
+      .filter(n => !PARTY_DEFS.some(d => d.name === n) && !FORMAS.includes(n) &&
+                   !Object.values(GUEST_ALLIES).some(g => g.name === n));
+    ok('BATTLE_ART só cita personagens do elenco, guest-tutorial ou segunda forma deles',
        orfa.length === 0, orfa.join(' · '));
     ok('toda segunda forma declarada tem arte de combate',
        FORMAS.every(n => !!BATTLE_ART[n]), FORMAS.filter(n => !BATTLE_ART[n]).join(','));
@@ -2285,25 +2290,33 @@ function runSelfTests(){
          Object.values(PETS).every(p => p.formas.every(f => tipos.has(f.tipo))));
       ok('toda condição citada por pet existe',
          Object.values(PETS).every(p => p.formas.every(f => !f.status || !!AILMENTS[f.status.id])));
-      ok('todo dono de pet é personagem do elenco (ou nulo, no de história)',
-         Object.values(PETS).every(p => p.dono === null || PARTY_DEFS.some(d => d.name === p.dono)),
-         Object.values(PETS).filter(p => p.dono && !PARTY_DEFS.some(d => d.name === p.dono)).map(p => p.dono).join(','));
+      /* v5.32 — dono válido passou a incluir GUEST_ALLIES: Ava (coelho)
+         e Amanda (dragão) saíram de PARTY_DEFS e viraram guest-tutorial,
+         mas o pet que já era delas continua existindo (o bônus "dono em
+         campo" fica permanentemente adormecido, já que um guest nunca
+         entra em G.squad — isso é intencional, não um bug: é o mesmo
+         padrão do dragão da Amanda, que já era lore antes dela ser
+         jogável). */
+      const donoValido = nome => PARTY_DEFS.some(d => d.name === nome) ||
+                                  Object.values(GUEST_ALLIES).some(g => g.name === nome);
+      ok('todo dono de pet é personagem do elenco ou guest-tutorial (ou nulo, no de história)',
+         Object.values(PETS).every(p => p.dono === null || donoValido(p.dono)),
+         Object.values(PETS).filter(p => p.dono && !donoValido(p.dono)).map(p => p.dono).join(','));
       /* v5.30 — a regra passou a ser POR GERAÇÃO. Pet se conquista no
          Ninhal, que é excursão de estudante; os quatro professores que
-         entraram são formados há onze anos e não caçam ovo.
-
-         A Amanda é a exceção declarada, e é exceção de história, não de
-         conveniência: o dragão já era "da diretora Felt" no texto do
-         jogo desde a v4.9, muito antes de ela ser jogável. */
+         entraram são formados há onze anos e não caçam ovo. */
       const alunos = PARTY_DEFS.filter(d => d.geracao !== 'anterior');
       ok('cada aluno do elenco tem exatamente um pet',
          alunos.every(d => Object.values(PETS).filter(p => p.dono === d.name).length === 1),
          alunos.filter(d => Object.values(PETS).filter(p => p.dono === d.name).length !== 1)
                .map(d => d.name).join(','));
+      /* v5.32 — a Amanda (a exceção de história do dragão, "já era da
+         diretora Felt" desde a v4.9) saiu de PARTY_DEFS: nenhum
+         professor ATUAL tem pet, e é isso que a linha agora trava. */
       const profsComPet = PARTY_DEFS.filter(d => d.geracao === 'anterior')
         .filter(d => Object.values(PETS).some(p => p.dono === d.name)).map(d => d.name);
-      ok('da geração anterior, só a Amanda tem pet',
-         profsComPet.length === 1 && profsComPet[0] === 'Amanda Felt', profsComPet.join(','));
+      ok('da geração anterior, nenhum tem pet (o dragão da Amanda ficou com dono fora do elenco)',
+         profsComPet.length === 0, profsComPet.join(','));
       ok('nenhum pet ficou sem dono depois da v5.30',
          Object.values(PETS).every(p => !!p.dono),
          Object.entries(PETS).filter(([, p]) => !p.dono).map(([k]) => k).join(','));
@@ -2328,9 +2341,12 @@ function runSelfTests(){
 
     /* --- v5.27: pet do elemento do dono, e save antigo sobrevive --- */
     {
+      /* v5.32 — dono pode estar em PARTY_DEFS ou em GUEST_ALLIES (Ava,
+         Amanda), ver comentário acima na checagem de dono válido. */
       const errados = Object.entries(PETS)
         .filter(([, p]) => p.dono)
-        .map(([id, p]) => [id, p, PARTY_DEFS.find(d => d.name === p.dono)])
+        .map(([id, p]) => [id, p, PARTY_DEFS.find(d => d.name === p.dono) ||
+                                   Object.values(GUEST_ALLIES).find(g => g.name === p.dono)])
         .filter(([, p, d]) => d && d.element !== p.elem)
         .map(([id, p, d]) => `${id}: pet ${p.elem} × dono ${d.element}`);
       ok('cada pet é do elemento do dono', errados.length === 0, errados.join(' · '));
@@ -2341,8 +2357,9 @@ function runSelfTests(){
         .filter(([, , f]) => !f.sprite || !SPRITE_DATA[f.sprite])
         .map(([id, i]) => `${id}/f${i + 1}`);
       ok('toda forma de todo pet tem arte', semArte.length === 0, semArte.join(' '));
-      ok('todo dono de pet existe no elenco',
-         Object.values(PETS).every(p => !p.dono || PARTY_DEFS.some(d => d.name === p.dono)));
+      ok('todo dono de pet existe no elenco ou em GUEST_ALLIES',
+         Object.values(PETS).every(p => !p.dono || PARTY_DEFS.some(d => d.name === p.dono) ||
+                                         Object.values(GUEST_ALLIES).some(g => g.name === p.dono)));
 
       /* O mapa de renome existe para não apagar pet de save antigo. Se
          um destino sair da tabela, o pet some em silêncio na carga —

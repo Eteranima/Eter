@@ -92,7 +92,10 @@ const QUESTS = {
     entrega:['Então é verdade que dá pra derrubar. Bom saber antes de morrer.',
              'Peguei isso de um que já não precisava mais.'],
     depois:['A clareira tá quase decente. Quase.'],
-    premio:{gold:2600, itens:['w_carvao','hipot','hipot']},
+    /* v5.32 — não recruta mais ninguém (ver RECRUIT_QUESTS em
+       08-progression-grimoire.js); em vez de companheira, entrega um
+       conjunto de equipamento completo. */
+    premio:{gold:2600, itens:['w_carvao','hipot','hipot','a_bruma','t_agil']},
   },
   q_guardafogo: {
     npc:'Guarda-Fogo', titulo:'Brasas Soltas',
@@ -116,7 +119,9 @@ const QUESTS = {
     entrega:['Perfeito. Nenhum trincado. Você tem mão boa.',
              'Isto aqui eu guardava pra mim. Guardar não estava rendendo.'],
     depois:['Volte quando tiver mais. Eu sempre compro.'],
-    premio:{gold:1500, itens:['bigbomb','warcry','aegis']},
+    /* v5.32 — não recruta mais ninguém (ver RECRUIT_QUESTS); conjunto
+       de equipamento completo no lugar da companheira. */
+    premio:{gold:1500, itens:['bigbomb','warcry','aegis','a_casco','t_brasa']},
   },
 
   // --- Cisterna Afogada ---
@@ -393,7 +398,9 @@ const QUESTS = {
     entrega:['Cinco. Já dá para medir a galeria inteira.',
              'A Academia paga em dinheiro. Eu pago nisto, que é melhor.'],
     depois:['Dá para andar a galeria inteira agora. Obrigada.'],
-    premio:{gold:1100, itens:['t_vital','w_volt']},
+    /* v5.32 — não recruta mais ninguém (ver RECRUIT_QUESTS); conjunto
+       de equipamento completo no lugar do companheiro. */
+    premio:{gold:1100, itens:['t_vital','w_volt','a_manto','t_foco']},
   },
 
   // --- Lago Afogado ---
@@ -419,7 +426,9 @@ const QUESTS = {
     entrega:['Quatro. Hoje eu atravessei de olhos fechados.',
              'Isto estava no fundo do barco desde antes de mim.'],
     depois:['A travessia é só travessia agora. É o máximo que se pede de um lago.'],
-    premio:{gold:2000, itens:['w_mare','megapot','megapot']},
+    /* v5.32 — não recruta mais ninguém (ver RECRUIT_QUESTS); conjunto
+       de equipamento completo no lugar do companheiro. */
+    premio:{gold:2000, itens:['w_mare','megapot','megapot','a_escama','t_corda']},
   },
 
   // --- Baixios da Podridão ---
@@ -471,18 +480,22 @@ const QUESTS = {
     entrega:['Cinco. A rota está silenciosa do jeito certo.',
              'Isto veio da última caravana que passou inteira. Faz doze anos.'],
     depois:['Passo por aqui de novo no mês que vem. Vivo, dessa vez.'],
-    premio:{gold:6000, itens:['a_astral','rebirth']},
+    /* v5.32 — não recruta mais ninguém (ver RECRUIT_QUESTS); conjunto
+       de equipamento completo no lugar do companheiro. */
+    premio:{gold:6000, itens:['a_astral','rebirth','t_marcador']},
   },
 
-  /* ================= v5.31: TRÊS RECRUTAS NOVOS =====================
-     Mesma regra da v5.30 (comentário em RECRUIT_QUESTS): três
-     personagens novos pedem três missões novas, cada uma na região
-     onde a espécie-alvo já sai em formação — sem isso o denominador de
-     `assertQuestsCompletáveis` sobe para quem já existia. Quantidades
-     calculadas pela taxa real de cada espécie no formations daquela
-     região (Arquivo/índice 6-em-8, Coroa de Vidro/vazante 15-em-24,
-     Cisterna/sanguessuga-pálida 7-em-29 — esta é a mais rara das três,
-     por isso a quantidade mais baixa). */
+  /* ================= v5.31: TRÊS MISSÕES DE REGIÃO ==================
+     Mesma regra da v5.30 (comentário em RECRUIT_QUESTS): três missões
+     novas, cada uma na região onde a espécie-alvo já sai em formação —
+     sem isso o denominador de `assertQuestsCompletáveis` sobe para
+     quem já existia. Quantidades calculadas pela taxa real de cada
+     espécie no formations daquela região (Arquivo/índice 6-em-8, Coroa
+     de Vidro/vazante 15-em-24, Cisterna/sanguessuga-pálida 7-em-29 —
+     esta é a mais rara das três, por isso a quantidade mais baixa).
+     v5.32 — nenhuma das três recruta mais ninguém (ver RECRUIT_QUESTS
+     em 08-progression-grimoire.js); cada uma paga em equipamento
+     completo no lugar do companheiro que traziam. */
   q_curador: {
     npc:'Curador Substituto', titulo:'O Acervo Não Se Cataloga Sozinho',
     tipo:'hunt', alvo:'indice', qtd:8,
@@ -493,7 +506,7 @@ const QUESTS = {
     entrega:['Oito. O acervo volta a fazer sentido — por hoje.',
              'Ela nem precisou ler o catálogo pra achar cada um. Isso aqui é dela.'],
     depois:['Se algum dia eu perder o controle de novo, sei a quem chamar.'],
-    premio:{gold:5200, itens:['nectar','a_astral']},
+    premio:{gold:5200, itens:['nectar','a_astral','t_sino']},
   },
   q_penumbra: {
     npc:'Herdeiro Renegado', titulo:'O Que Ficou Sem Reflexo',
@@ -505,7 +518,7 @@ const QUESTS = {
     entrega:['Seis. Por uma noite, todo espelho aqui mostra só o que devia.',
              'Ele não agradece alto. Mas fica, e isso já diz o que precisa.'],
     depois:['A Coroa continua rachada. Só não sangra mais vazante por hoje.'],
-    premio:{gold:5600, itens:['megapot','rebirth']},
+    premio:{gold:5600, itens:['megapot','rebirth','a_encader','t_presa']},
   },
   q_sanguessuga: {
     npc:'Anciã da Comporta', titulo:'O Que a Água Não Solta',
@@ -517,7 +530,7 @@ const QUESTS = {
     entrega:['Três. A água volta a correr, e ela também.',
              'Bebeu mais dessa água que qualquer um vivo. Sabia exatamente onde procurar.'],
     depois:['A comporta segura. Até a próxima cheia, pelo menos.'],
-    premio:{gold:6400, itens:['elixir','a_astral']},
+    premio:{gold:6400, itens:['elixir','a_astral','t_coroa']},
   },
 
 };;

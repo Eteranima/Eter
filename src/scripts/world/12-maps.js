@@ -161,6 +161,24 @@ const MAPS = {
       {x:5,y:13, name:'Farnese', sheet:'npc_eremita',
        lines:['Não sou aluna daqui. Só uma pesquisadora seguindo o rastro de um éter que não deveria existir.',
               'Se perguntarem, diga que nunca me viu. Funciona melhor assim.']},
+      /* Guest-tutorial (v5.32, ver GUEST_ALLIES): o único dos nove
+         sempre disponível, sem `needFlag` — é o primeiro contato do
+         jogador com a mecânica de área, antes de qualquer chefe. */
+      {x:34,y:17, name:'Abel Nomikos', sheet:'abel_sheet',
+       lines: G => {
+         if (G.flags.abel_licao)
+           return ['Fogo em área não escolhe quem queima primeiro. É por isso que ensino essa antes de qualquer outra.',
+                   'Continue treinando. O resto do elenco vai cobrar isso de você.'];
+         return [
+           {text:'Fogo em área não escolhe quem queima primeiro. Quer ver o que quero dizer?'},
+           {text:'Não é perigoso — é só uma forma que a lição toma.',
+            choices:[
+              {label:'Ver a demonstração', set:{abel_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.abel})); return null; }},
+              {label:'Agora não', then:['Continue treinando. O resto do elenco vai cobrar isso de você.']},
+            ]},
+         ];
+       }},
     ],
     signs:[
       {x:10,y:6, text:'PLACA — "Academia Stone Reach · Salão Principal. Mantenha o éter contido nos corredores."'},
@@ -402,8 +420,10 @@ const MAPS = {
          Guest-tutorial: uma luta de demonstração de 1-2 rodadas contra
          uma "tinta que aprendeu a se mexer" (não é o Subterrâneo de
          verdade vazando pra área segura — é só a forma que a lição
-         toma). Ensina habilidade em área. Flag trava em uma vez só. */
-      {x:17,y:6, name:'Malquior Morningstar', sheet:'npc_encapuzado',
+         toma). Ensina a marcar alvo. Flag trava em uma vez só.
+         v5.32 — `needFlag` gradua a aparição: só depois do Eco caído,
+         pra não competir com o Abel (sempre disponível) logo de cara. */
+      {x:17,y:6, name:'Malquior Morningstar', sheet:'npc_encapuzado', needFlag:'echo_defeated',
        lines: G => {
          if (G.flags.malquior_licao)
            return ['Os livros bons não estão nas prateleiras. Estão em quem os leu e não voltou a ser o mesmo.',
@@ -448,8 +468,9 @@ const MAPS = {
       /* Retrato dlg_sebastian já cadastrado em DIALOGUE_SPRITES; corpo de
          campo genérico (npc_batedor), retrato liga sozinho pelo nome.
          Guest-tutorial: mesma ideia de Malquior na Biblioteca, mas
-         ensinando escudo em área. Flag trava em uma vez só. */
-      {x:4,y:3, name:'Sebastian Crowley', sheet:'npc_batedor',
+         ensinando a provocar (puxar o alvo do inimigo). Flag trava em
+         uma vez só. `needFlag`: só depois do chefe de Ashpyre cair. */
+      {x:4,y:3, name:'Sebastian Crowley', sheet:'npc_batedor', needFlag:'cinder_defeated',
        lines: G => {
          if (G.flags.sebastian_licao)
            return ['A enfermaria é um bom lugar para observar quem finge estar bem.',
@@ -551,7 +572,26 @@ const MAPS = {
       {to:'undercroft', tx:21, ty:19, dir:'up'},
     ],
     chests:[],
-    npcs:[],
+    /* Guest-tutorial (v5.32, ver GUEST_ALLIES): Ava só aparece depois
+       que o Guardião do Selo cai — é a primeira lição pós-chefe,
+       esperando bem onde a vitória aconteceu. */
+    npcs:[
+      {x:13,y:7, name:'Ava Rosa Groot', sheet:'ava_sheet', needFlag:'warden_defeated',
+       lines: G => {
+         if (G.flags.ava_licao)
+           return ['O chão ainda lembra do Guardião. Um escudo bom faz o grupo esquecer mais rápido.',
+                   'Volte sempre que precisar respirar.'];
+         return [
+           {text:'Vocês derrubaram o que segurava esta câmara. Impressionante — e um pouco imprudente.'},
+           {text:'Deixe eu mostrar uma forma mais segura de aguentar o próximo.',
+            choices:[
+              {label:'Ver a demonstração', set:{ava_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.ava})); return null; }},
+              {label:'Agora não', then:['Volte sempre que precisar respirar.']},
+            ]},
+         ];
+       }},
+    ],
     decor:[
       {x:10, y:3, s:'prop_altar_selo', solido:true,
        text:'O altar rachado ainda pulsa com o resto de um selo antigo. É daqui que ele nunca deveria ter saído.'},
@@ -842,7 +882,25 @@ const MAPS = {
     spawn:{x:9, y:2, dir:'down'},
     warps:[ {to:'nests', tx:12, ty:15, dir:'up'} ],
     chests:[],
-    npcs:[],
+    /* Guest-tutorial (v5.32, ver GUEST_ALLIES): Orfeu só aparece depois
+       que A Que Choca cai. */
+    npcs:[
+      {x:14,y:10, name:'Orfeu Bauss', sheet:'orfeu_sheet', needFlag:'ninho_defeated',
+       lines: G => {
+         if (G.flags.orfeu_licao)
+           return ['Ela chocou seis e você derrubou a sétima. Aprenda a esperar o golpe antes de responder.',
+                   'Continue de pé. É a parte que mais importa.'];
+         return [
+           {text:'Você derrubou a mãe da ninhada. Eu vi de longe — respeito.'},
+           {text:'Quer aprender a virar o golpe do inimigo contra ele?',
+            choices:[
+              {label:'Ver a demonstração', set:{orfeu_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.orfeu})); return null; }},
+              {label:'Agora não', then:['Continue de pé. É a parte que mais importa.']},
+            ]},
+         ];
+       }},
+    ],
     signs:[
       {x:8,y:5, text:'ÁRVORE MARCADA — dezenas de riscos. Alguém contou cada cria que saiu daqui.'},
     ],
@@ -947,7 +1005,25 @@ const MAPS = {
        blockedMsg:'A comporta está fechada por dentro. Alguém a segura — e ainda respira.'},
     ],
     chests:[],
-    npcs:[],
+    /* Guest-tutorial (v5.32, ver GUEST_ALLIES): Beatriz só aparece
+       depois que o Dono do Pântano cai. */
+    npcs:[
+      {x:14,y:10, name:'Beatriz Demeter', sheet:'beatriz_sheet', needFlag:'deluge_defeated',
+       lines: G => {
+         if (G.flags.beatriz_licao)
+           return ['A água aqui ainda carrega o que ele era. Cure o grupo inteiro antes que carregue vocês também.',
+                   'Vá em paz. E com o grupo de pé.'];
+         return [
+           {text:'Vocês tiraram o que afundava tudo daqui. Bom trabalho — mas ninguém saiu ileso, eu vejo.'},
+           {text:'Deixe eu mostrar como curar todo mundo de uma vez.',
+            choices:[
+              {label:'Ver a demonstração', set:{beatriz_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.beatriz})); return null; }},
+              {label:'Agora não', then:['Vá em paz. E com o grupo de pé.']},
+            ]},
+         ];
+       }},
+    ],
     signs:[
       {x:7,y:5, text:'MARCA NA PAREDE — riscos de unha contando dias. Param no dia noventa e um.'},
     ],
@@ -1072,7 +1148,25 @@ const MAPS = {
        blockedMsg:'O vidro do chão range mas não cede. A coroa ainda está inteira lá em cima.'},
     ],
     chests:[],
-    npcs:[],
+    /* Guest-tutorial (v5.32, ver GUEST_ALLIES): Calder só aparece
+       depois que a Coroa Sem Cabeça cai. */
+    npcs:[
+      {x:14,y:10, name:'Calder Pell', sheet:'calderpell_sheet', needFlag:'crown_defeated',
+       lines: G => {
+         if (G.flags.calder_licao)
+           return ['A coroa nunca teve cabeça pra vestir. Vocês, ao menos, saem daqui com alguma coisa a mais.',
+                   'Volte quando quiser tirar mais do que dão.'];
+         return [
+           {text:'Uma coroa sem ninguém pra vestir. Curioso o que sobra quando a vaidade cai.'},
+           {text:'Deixe eu mostrar como tirar vida de quem tenta tirar a sua.',
+            choices:[
+              {label:'Ver a demonstração', set:{calder_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.calder})); return null; }},
+              {label:'Agora não', then:['Volte quando quiser tirar mais do que dão.']},
+            ]},
+         ];
+       }},
+    ],
     signs:[
       {x:6, y:1, text:'GRAVURA NA PAREDE — "Aqui, a Coroa ainda sonha que tem cabeça."'},
     ],
@@ -1189,7 +1283,25 @@ const MAPS = {
     spawn:{x:9, y:2, dir:'down'},
     warps:[ {to:'arquivo', tx:11, ty:12, dir:'up'} ],
     chests:[],
-    npcs:[],
+    /* Guest-tutorial (v5.32, ver GUEST_ALLIES): Amanda só aparece
+       depois que o Arquivista cai. */
+    npcs:[
+      {x:14,y:10, name:'Amanda Felt', sheet:'amanda_sheet', needFlag:'arquivista_defeated',
+       lines: G => {
+         if (G.flags.amanda_licao)
+           return ['Ninguém constava no arquivo dele. Vocês, pelo menos, ficaram — na ficha errada, mas ficaram.',
+                   'Volte se precisar abrir uma guarda de novo.'];
+         return [
+           {text:'Uma ficha em branco onde devia haver um nome. Isso aqui vale mais que qualquer registro.'},
+           {text:'Deixe eu mostrar como abrir a guarda de todo mundo de uma vez.',
+            choices:[
+              {label:'Ver a demonstração', set:{amanda_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.amanda})); return null; }},
+              {label:'Agora não', then:['Volte se precisar abrir uma guarda de novo.']},
+            ]},
+         ];
+       }},
+    ],
     signs:[
       {x:5,  y:5, text:'ETIQUETA — "Vol. 1 de 1". Não havia segundo volume. Nunca houve.'},
     ],
@@ -1540,7 +1652,26 @@ const MAPS = {
     spawn:{x:9, y:2, dir:'down'},
     warps:[ {to:'deserto', tx:17, ty:16, dir:'up'} ],
     chests:[ {item:'a_astral', qty:1}, {item:'t_coroa', qty:1} ],
-    npcs:[],
+    /* Guest-tutorial (v5.32, ver GUEST_ALLIES): Scythe é a última das
+       nove — só aparece depois do Vharok, o chefe final. Lição de
+       encerramento: um golpe único e devastador. */
+    npcs:[
+      {x:10,y:10, name:'Scythe', sheet:'scythe_sheet', needFlag:'vharok_defeated',
+       lines: G => {
+         if (G.flags.scythe_licao)
+           return ['Ele pediu pra ver até onde vocês conseguiam fugir. Vocês nem tentaram.',
+                   'Guarde essa lição. Nem toda luta precisa de mais que um golpe.'];
+         return [
+           {text:'Chegar até aqui já diz o bastante. Mas ainda falta uma coisa pra aprender.'},
+           {text:'Às vezes a luta inteira se resolve num golpe só. Quer ver?',
+            choices:[
+              {label:'Ver a demonstração', set:{scythe_licao:true},
+               run(){ FX.battleWipe(() => Battle.begin(['shade'], {guest:GUEST_ALLIES.scythe})); return null; }},
+              {label:'Agora não', then:['Guarde essa lição. Nem toda luta precisa de mais que um golpe.']},
+            ]},
+         ];
+       }},
+    ],
     signs:[
       {x:4,y:4, text:'LÁPIDE SEM NOME — só a data. É a mesma data em todas as outras vinte lápides.'},
     ],
