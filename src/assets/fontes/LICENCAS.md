@@ -8,6 +8,7 @@ hospedagem própria desde que a licença acompanhe os arquivos.
 |---|---|---|---|
 | Inter | `inter-latin.woff2`, `inter-latin-ext.woff2` | Rasmus Andersson | SIL OFL 1.1 |
 | Press Start 2P | `press-start-2p-latin.woff2`, `press-start-2p-latin-ext.woff2` | CodeMan38 | SIL OFL 1.1 |
+| Alegreya | `alegreya-latin-ext.woff2` | Juan Pablo del Peral / Huerta Tipográfica | SIL OFL 1.1 |
 
 Só os subconjuntos latino e latino estendido são servidos: são os que o jogo
 usa em português. O publicador copia estes arquivos para `public/assets/fontes`
