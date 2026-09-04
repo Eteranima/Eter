@@ -43,6 +43,7 @@ let PROPS = [...INITIAL_PROPS];
 const $ = id => document.getElementById(id), canvas = $('map-canvas'), ctx = canvas.getContext('2d');
 let state = {w:24,h:16,fill:'.',grid:[],decor:[],npcs:[],selectedTile:'.',selectedProp:PROPS[0][0],mode:'tile'};
 const images = {};
+let ASSET_PATHS = {};
 /* Regiões reais, extraídas de MAPS de verdade (12-maps.js) — a mesma
    lista que WORLD_ART_FAMILIES/cenas/BGM já usam. 'nova_regiao' é o
    único valor que não existe em MAPS: sinaliza pro autor que ele está
@@ -56,9 +57,12 @@ const REGIOES_REAIS = [...new Set(Object.values(MAPS).map(def => def.region).fil
 const TRILHAS_MAPA = Object.keys(Sound.TRACKS).filter(nome => nome !== 'battle' && nome !== 'boss').sort();
 let NPC_SHEETS = [];
 function propPath(prop){ return prop?.[5] || `assets/world/${prop?.[0]}.webp`; }
+function carregarImagemPorChave(key, path){
+  if(!key || images[key])return images[key];
+  const image=new Image(); image.src=`../${path||ASSET_PATHS[key]||`assets/world/${key}.webp`}`; image.onload=render; images[key]=image; return image;
+}
 function carregarImagem(prop){
-  if(!prop || images[prop[0]])return images[prop?.[0]];
-  const image=new Image(); image.src=`../${propPath(prop)}`; image.onload=render; images[prop[0]]=image; return image;
+  return prop && carregarImagemPorChave(prop[0],propPath(prop));
 }
 function grupoDoProp(key){
   if(key.includes('stone_reach')||key.includes('academia')||key.includes('altar_selo'))return 'Stone Reach';
@@ -77,7 +81,21 @@ function render(){
   canvas.width=state.w*CELL; canvas.height=state.h*CELL; ctx.imageSmoothingEnabled=false;
   for(let y=0;y<state.h;y++)for(let x=0;x<state.w;x++){
     const [,,solid]=TILES[state.grid[y][x]]||TILES['#']; ctx.fillStyle=TILES[state.grid[y][x]]?.[1]||'#333';ctx.fillRect(x*CELL,y*CELL,CELL,CELL);
-    ctx.strokeStyle=solid?'#0005':'#fff1';ctx.strokeRect(x*CELL+.5,y*CELL+.5,CELL-1,CELL-1);if(state.grid[y][x]!=='.'){ctx.fillStyle='#fffb';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText(state.grid[y][x],x*CELL+CELL/2,y*CELL+16);}
+    ctx.strokeStyle=solid?'#0005':'#fff1';ctx.strokeRect(x*CELL+.5,y*CELL+.5,CELL-1,CELL-1);
+    const id=TILEDEF[state.grid[y][x]]?.id;
+    if(state.grid[y][x]!=='.'&&!TALL_ART[id]){ctx.fillStyle='#fffb';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText(state.grid[y][x],x*CELL+CELL/2,y*CELL+16);}
+  }
+  /* A seleção de família recebe o mapa/região que o autor está editando.
+     É a mesma chave determinística do campo; só o fator 24/32 adapta o
+     preview, nunca a âncora ou a variante escolhida. */
+  const contextoArte={mapaId:$('map-id').value.trim(),regiaoId:regiaoEfetiva()};
+  for(let y=0;y<state.h;y++)for(let x=0;x<state.w;x++){
+    const id=TILEDEF[state.grid[y][x]]?.id, chave=chaveDeFamilia(id,x,y,contextoArte)||TALL_ART[id];
+    const image=carregarImagemPorChave(chave);
+    if(!chave||!image?.complete||!image.naturalWidth)continue;
+    const fator=CELL/32,layout=calcularLayoutProp(image.naturalWidth,image.naturalHeight,x*CELL,y*CELL,{escala:fator,recuo:2*fator},CELL);
+    if(layout.sombra){ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(layout.peX,layout.peY-2*fator,layout.sombraRaioX,5*fator,0,0,Math.PI*2);ctx.fill();}
+    ctx.drawImage(image,layout.x,layout.y,layout.largura,layout.altura);
   }
   state.decor.forEach(d=>{
     const prop=PROPS.find(([key])=>key===d.s), image=carregarImagem(prop), x=d.x*CELL,y=d.y*CELL;
@@ -166,6 +184,7 @@ async function carregarAtlas(){
   try{
     const resposta=await fetch('../asset-catalog.json',{cache:'no-store'});if(!resposta.ok)throw new Error(`HTTP ${resposta.status}`);
     const catalogo=await resposta.json(),base=new Map(INITIAL_PROPS.map(prop=>[prop[0],prop]));
+    ASSET_PATHS=Object.fromEntries((catalogo.assets||[]).map(asset=>[asset.key,asset.path]));
     const assets=(catalogo.assets||[]).filter(asset=>asset.key?.startsWith('prop_')&&asset.path?.startsWith('assets/world/'));
     if(!assets.length)throw new Error('nenhum prop world encontrado');
     PROPS=assets.sort((a,b)=>a.key.localeCompare(b.key)).map(asset=>{const anterior=base.get(asset.key)||[];return [asset.key,anterior[1]||nomeDoProp(asset.key),anterior[2]??true,anterior[3]??1,grupoDoProp(asset.key),asset.path];});
