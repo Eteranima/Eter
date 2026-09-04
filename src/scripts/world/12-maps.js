@@ -385,6 +385,14 @@ const MAPS = {
       {x:20,y:8, name:'Veterano', sheet:'npc_veterano', quest:'q_veterano',
        lines:['Cada elemento supera dois outros e apanha de dois outros. Decore o anel.',
               'Fogo e Gelo se odeiam. Luz e Trevas também. Nesses casos, ambos batem forte.']},
+      /* Carmila Reachforth (v5.32): tinha sheet/retrato catalogados desde
+         a v5.31 sem NENHUMA aparição no mundo (docs/PENDENCIAS-DESIGN.md
+         item 2, "elenco multirracial da Academia"). Não vira jogável nem
+         guest-tutorial (decisão do usuário) — só NPC de ambientação,
+         representando o convívio de raças que o item 2 pede. */
+      {x:5,y:8, name:'Carmila Reachforth', sheet:'carmila_sheet',
+       lines:['Alguns ainda atravessam o corredor quando me veem chegar. Outros já almoçam comigo. Isso é mais do que qualquer castelo me deu em duzentos anos.',
+              'A Academia não me pediu pra provar nada. Só pediu pra não morder ninguém no refeitório. Acho justo.']},
     ],
     signs:[
       {x:2, y:1, text:'QUADRO DE AVISOS — "Combate elemental só nas arenas de treino." Alguém acrescentou embaixo: "Ninguém nunca seguiu isso."'},
@@ -533,7 +541,44 @@ const MAPS = {
       {to:'esgoto',  tx:2,  ty:2,  dir:'down'}, // 'S' (à direita) → bueiro
     ],
     chests:[ {item:'ether', qty:3}, {item:'hipot', qty:2} ],
-    npcs:[],
+    /* Elijah (v5.32) — chefe secreto opcional. `elijah_sheet` chegou
+       catalogado numa leva anterior sem NENHUMA aparição no mundo (ver
+       00-assets.js e docs do audit). Canto isolado do Subterrâneo de
+       propósito: é segredo, não passagem obrigatória. Normal e cifrado
+       até vharok cair; depois, revela a corrupção e oferece a luta —
+       `elijah_corrompido` em BESTIARY (09-bestiary.js), que reaproveita
+       o sprite de `shade` como revelação, não placeholder (ver comentário
+       lá). Flag trava a luta em uma vez só, save não perde o corpo: ele
+       continua parado ali depois, só sem oferecer revanche. */
+    npcs:[
+      {x:2,y:18, name:'Elijah', sheet:'elijah_sheet',
+       sheetPorFlag:{flag:'vharok_defeated', sheet:'elijah_corrompido_sheet'},
+       lines: G => {
+         if (G.flags.elijah_derrotado)
+           return ['O que sobrou dele nem lembra mais de ter sido gente.',
+                   'Pelo menos parou de crescer.'];
+         if (!G.flags.vharok_defeated)
+           return ['Ninguém desce até aqui além de mim. Você devia voltar.',
+                   'Eu só preciso de mais um pouco de tempo. Só mais um pouco.'];
+         return [
+           {text:'Você venceu lá em cima. Aqui embaixo, eu também estive vencendo — só que perdendo pra mim mesmo.'},
+           {text:'Cada Sombra Corrompida que vocês mataram esse jogo inteiro... era um pedaço de mim escapando. Eu não consigo mais segurar.',
+            choices:[
+              {label:'Enfrentar o que sobrou dele',
+               run(){
+                 FX.battleWipe(() => {
+                   Battle.begin(['elijah_corrompido']);
+                   Battle.onFinish = kind => {
+                     if (kind === 'victory') G.flags.elijah_derrotado = true;
+                   };
+                 });
+                 return null;
+               }},
+              {label:'Ir embora', then:['Volte quando estiver pronto. Eu... acho que ainda vou estar aqui.']},
+            ]},
+         ];
+       }},
+    ],
     mobs:[
       /* Os lobos que o Zelador rastreia não entram mais na Academia:
          formam a primeira patrulha hostil da descida. */
@@ -578,9 +623,19 @@ const MAPS = {
     npcs:[
       {x:13,y:7, name:'Ava Rosa Groot', sheet:'ava_sheet', needFlag:'warden_defeated',
        lines: G => {
+         /* 2º traje (v5.32, ava_outfit2_sheet/dlg_ava_outfit2 — catalogados
+            desde a v5.31 sem NENHUMA mecânica de troca): depois da lição,
+            ela aparece com o traje novo. `dialogSprite` troca só o retrato
+            grande de diálogo (ver 22-dialogue.js); a folha de campo
+            continua a mesma, então nada muda ao vê-la andando no mapa —
+            só ao conversar de novo. */
          if (G.flags.ava_licao)
-           return ['O chão ainda lembra do Guardião. Um escudo bom faz o grupo esquecer mais rápido.',
-                   'Volte sempre que precisar respirar.'];
+           return [
+             {speaker:'Ava Rosa Groot', dialogSprite:'dlg_ava_outfit2',
+              text:'O chão ainda lembra do Guardião. Um escudo bom faz o grupo esquecer mais rápido.'},
+             {speaker:'Ava Rosa Groot', dialogSprite:'dlg_ava_outfit2',
+              text:'Volte sempre que precisar respirar.'},
+           ];
          return [
            {text:'Vocês derrubaram o que segurava esta câmara. Impressionante — e um pouco imprudente.'},
            {text:'Deixe eu mostrar uma forma mais segura de aguentar o próximo.',
@@ -1681,7 +1736,11 @@ const MAPS = {
        texto simples por uma cutscene de vitória de verdade; o motor já
        faz isso sozinho (ver Battle.onFinish em combat/27-controller.js,
        "cena no chefe: em vez de despejar duas linhas de texto..."). */
-    boss:{id:'vharok', x:9, y:5, flag:'vharok_defeated',
+    /* `retrato` aqui é o rosto de combate (não o calmo das cutscenes
+       vharok_reveal/vharok_outro, ver 33-story.js) — o mesmo padrão do
+       Dono do Pântano (boss_pantano_retrato). Sem ele, a fala de abertura
+       da luta caía em texto puro, sem rosto. */
+    boss:{id:'vharok', x:9, y:5, flag:'vharok_defeated', retrato:'boss_vharok_retrato',
           intro:['Mostre-me até onde consegue fugir.'],
           cena:'vharok_outro'},
   },

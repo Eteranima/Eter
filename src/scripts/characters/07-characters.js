@@ -49,34 +49,48 @@ const BATTLE_ART = {
    informar a DECISÃO, não para vender o personagem: quem escolhe está
    escolhendo com quem vai jogar sozinho a primeira região inteira, então
    a frase diz honestamente como é a vida solo dele. */
+/* v5.32 — `lore` e `cenario` alimentam a tela de escolha (ui/31-
+   character-select.js): cada personagem passou a ter uma frase de
+   origem (distinta do `pitch`, que é sobre jogabilidade solo) e um
+   fundo de região (mesma arte usada em `battle_bg_*` no combate) que
+   representa de onde ele vem — o "lugar no mapa" pedido pelo usuário.
+   Nenhum dos dois é lido por save nem por combate: existem só pra essa
+   tela. Cobre a lacuna documentada em docs/06-PERSONAGENS.md — "o
+   elenco tem papel mecânico, não voz". */
 const PARTY_DEFS = [
   {name:'Seiji',   element:'ink',         role:'Escriba',   sheet:'kael_sheet',    portrait:'kael_portrait',
    base:{hp:85, mp:40, atk:18, def:12, spd:15}, grow:{hp:9, mp:5, atk:2.2, def:1.6, spd:1.5},
    learn:[[1,'ink_cut'],[1,'ink_stain'],[8,'ink_flood'],[12,'ink_seal'],[15,'ink_verse'],[20,'ink_erase'],[24,'ink_margin'],[28,'ink_deluge']],
-   pitch:'Nada de extremo e nada de buraco. Começo mais seguro para quem não conhece o jogo.'},
+   pitch:'Nada de extremo e nada de buraco. Começo mais seguro para quem não conhece o jogo.',
+   lore:'O Códice Sem Fundo é o que sobra dele quando o resto da Academia esquece.', cenario:'arquivo'},
   {name:'Ophelia', element:'ice',         role:'Curandeira',sheet:'ophelia_sheet', portrait:'ophelia_portrait',
    base:{hp:70, mp:55, atk:14, def:10, spd:13}, grow:{hp:7, mp:8, atk:1.6, def:1.4, spd:1.4},
    learn:[[1,'ice_shard'],[1,'mend'],[6,'ice_deep'],[10,'mend_all'],[13,'ice_lance'],[16,'cleanse'],[20,'ice_grave'],[25,'recall'],[29,'mend_deep']],
-   pitch:'Cura desde o nível 1: quase não morre, mas as lutas demoram. Sobrevive a erros.'},
+   pitch:'Cura desde o nível 1: quase não morre, mas as lutas demoram. Sobrevive a erros.',
+   lore:'Aprendeu a tratar o frio dos outros tratando o próprio primeiro.', cenario:'cistern'},
   {name:'Marin',   element:'darkness',    role:'Assassina', sheet:'marin_sheet',   portrait:'marin_portrait',
    base:{hp:75, mp:50, atk:20, def:9,  spd:16}, grow:{hp:8, mp:6, atk:2.6, def:1.2, spd:1.9},
    learn:[[1,'dark_veil'],[1,'eclipse'],[7,'drain'],[12,'shadowstep'],[16,'rend'],[20,'darknight'],[25,'abyss'],[30,'souldrain']],
-   pitch:'Bate primeiro e bate forte, mas apanha feio. Sozinha, é corrida contra o relógio.'},
+   pitch:'Bate primeiro e bate forte, mas apanha feio. Sozinha, é corrida contra o relógio.',
+   lore:'Não fala de antes de Stone Reach. A Hora Sem Estrelas prefere assim.', cenario:'deepway'},
   {name:'Gabriel', element:'fire',        role:'Guardião',  sheet:'gabriel_sheet', portrait:'gabriel_portrait',
    base:{hp:90, mp:35, atk:22, def:14, spd:11}, grow:{hp:11,mp:4, atk:2.4, def:2.1, spd:1.1},
    learn:[[1,'fire_fist'],[1,'blaze'],[9,'bulwark'],[12,'flamewall'],[14,'taunt'],[18,'hammer'],[23,'emberguard'],[29,'furnace']],
-   pitch:'Mais vida e mais defesa que todo mundo. Aguenta o começo solo na base do couro.'},
+   pitch:'Mais vida e mais defesa que todo mundo. Aguenta o começo solo na base do couro.',
+   lore:'Cresceu ouvindo forja, não conversa. Guarda o calor pra ninguém se queimar.', cenario:'ashwood'},
   {name:'Max',     element:'electricity', role:'Vanguarda', sheet:'max_sheet',     portrait:'max_portrait',
    base:{hp:78, mp:42, atk:19, def:11, spd:17}, grow:{hp:8, mp:6, atk:2.3, def:1.5, spd:2.1},
    learn:[[1,'jolt'],[1,'haste'],[8,'storm'],[12,'chain'],[15,'overload'],[19,'blitz'],[24,'haste_all'],[30,'thunderfall']],
-   pitch:'O mais rápido do elenco — costuma agir duas vezes antes do inimigo se mexer.'},
+   pitch:'O mais rápido do elenco — costuma agir duas vezes antes do inimigo se mexer.',
+   lore:'Nunca chegou atrasado uma vez na vida, e é o único orgulho que admite ter.', cenario:'spire'},
   /* Eden é a segunda curandeira, mas NÃO é uma segunda Ophelia:
      a Ophelia cura forte em um alvo, a Eden cura fraco em TODOS desde o
      nível 1 e abre o inimigo com Exposto, fazendo o time bater mais. */
   {name:'Eden',     element:'wind',        role:'Oráculo',   sheet:'eden_sheet',     portrait:'eden_portrait',
    base:{hp:72, mp:52, atk:15, def:10, spd:15}, grow:{hp:7, mp:7, atk:1.7, def:1.3, spd:1.6},
    learn:[[1,'gale_cut'],[1,'breath'],[6,'updraft'],[11,'stormeye'],[14,'tailwind'],[16,'windblade'],[20,'cleanwind'],[25,'cyclone'],[31,'worldbreath']],
-   pitch:'Cura fraca em todos e abre o inimigo com Exposto. Brilha em grupo, sofre sozinha.'},
+   pitch:'Cura fraca em todos e abre o inimigo com Exposto. Brilha em grupo, sofre sozinha.',
+   lore:'Fala pouco porque o vento já carrega o aviso um passo antes de qualquer golpe.', cenario:'nests'},
   /* v5.32 — Ava Rosa Groot e Scythe saíram do elenco jogável e viraram
      guests-tutoriais (ver GUEST_ALLIES, mais abaixo): a Ava ensina
      escudo em grupo, a Scythe ensina golpe único devastador. Motivo:
@@ -96,7 +110,8 @@ const PARTY_DEFS = [
    base:{hp:92, mp:38, atk:15, def:15, spd:12}, grow:{hp:11, mp:5, atk:1.6, def:2.2, spd:1.2},
    learn:[[1,'m_punch'],[1,'cardboard'],[6,'m_nap'],[10,'m_ember'],[14,'m_shrug'],
           [18,'m_flare'],[22,'m_box_all'],[26,'m_bonfire'],[30,'m_last']],
-   pitch:'Regenera sozinho fora da luta e se esconde atrás de uma caixa. Não morre, só desiste devagar.'},
+   pitch:'Regenera sozinho fora da luta e se esconde atrás de uma caixa. Não morre, só desiste devagar.',
+   lore:'A caixa de papelão não é covardia. É o único abrigo que nunca o abandonou.', cenario:'podridao'},
   /* ============ v5.30: A GERAÇÃO ANTERIOR ENTRA EM CAMPO ============
      Quatro professores de Stone Reach viraram jogáveis nesta leva.
      Chegavam com curva de 29 anos de ofício: base alta e crescimento
@@ -111,7 +126,8 @@ const PARTY_DEFS = [
    base:{hp:112, mp:52, atk:22, def:16, spd:19}, grow:{hp:8.6, mp:4.8, atk:2.1, def:1.5, spd:1.5},
    learn:[[1,'sn_faisca'],[1,'sn_marca'],[8,'sn_passo'],[12,'sn_sopro'],[15,'sn_corrente'],
           [20,'sn_garra'],[24,'sn_voo'],[28,'sn_despertar']],
-   pitch:'Marca o alvo, acelera e cai em cima. Frágil, mas escolhe quem morre primeiro.'},
+   pitch:'Marca o alvo, acelera e cai em cima. Frágil, mas escolhe quem morre primeiro.',
+   lore:'Marca primeiro, sente depois. Se é que sente.', cenario:'esgoto'},
 
   /* ============ v5.31/v5.32: TRÊS QUE JÁ TINHAM SPRITE E SHEET ======
      Beatriz Demeter, Calder Pell e Carmila Reachforth chegaram ao
