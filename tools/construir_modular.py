@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -43,7 +44,7 @@ def validate(source: Path) -> dict[str, object]:
     return catalog
 
 
-def carimbar_build(public: Path) -> None:
+def carimbar_build(public: Path, agora: str) -> None:
     """Escreve a data/hora real do build em cima do marcador de index.html.
 
     Só index.html MATERIALIZADO (public/) é tocado — src/index.html nunca
@@ -56,8 +57,37 @@ def carimbar_build(public: Path) -> None:
     texto = index.read_text(encoding="utf-8")
     if BUILD_TIMESTAMP_MARKER not in texto:
         return
-    agora = datetime.now(BRT).strftime("%d/%m/%y às %H:%M")
     index.write_text(texto.replace(BUILD_TIMESTAMP_MARKER, agora), encoding="utf-8")
+
+
+def aplicar_cache_bust(public: Path, versao: str) -> None:
+    """Acrescenta `?v=<versao>` em script/CSS locais do index.html materializado.
+
+    O servidor manda `Cache-Control: max-age=14400` (4h) pros arquivos
+    estáticos, e o nome do arquivo nunca muda de um build pro outro — um
+    navegador que já visitou o jogo nas últimas 4h continua rodando o JS
+    ANTIGO em cache local mesmo depois de um `git push` pra main, sem
+    erro nenhum pra avisar (foi exatamente o que aconteceu: o elenco já
+    tinha encolhido no servidor, mas quem visitou antes seguia vendo o
+    elenco velho). `index.html` em si já é `Cache-Control: no-cache`, mas
+    isso não ajuda em nada os arquivos que ELE referencia.
+
+    A query string muda a cada build (mesmo carimbo de `carimbar_build`),
+    então a URL do script é literalmente outra — o navegador é obrigado a
+    buscar de novo, mesmo com `max-age` alto. Só toca `scripts/*.js` e
+    `styles/*.css` locais; nunca um `<script>` de CDN (não existe nenhum
+    neste projeto, mas a regra fica explícita pra não quebrar se um dia
+    entrar). Imagem/áudio não entram aqui — cache-bust neles pediria
+    tocar em `00-assets.js` (onde cada `Image().src` é montado), mudança
+    maior e fora do reportado desta vez. """
+    index = public / "index.html"
+    texto = index.read_text(encoding="utf-8")
+    texto = re.sub(
+        r'(src|href)="((?:scripts|styles)/[^"?]+\.(?:js|css))"',
+        rf'\1="\2?v={versao}"',
+        texto,
+    )
+    index.write_text(texto, encoding="utf-8")
 
 
 def build(source: Path, public: Path) -> None:
@@ -66,7 +96,9 @@ def build(source: Path, public: Path) -> None:
     if temporary.exists():
         shutil.rmtree(temporary)
     shutil.copytree(source, temporary)
-    carimbar_build(temporary)
+    agora_dt = datetime.now(BRT)
+    carimbar_build(temporary, agora_dt.strftime("%d/%m/%y às %H:%M"))
+    aplicar_cache_bust(temporary, agora_dt.strftime("%Y%m%d%H%M%S"))
     backup = public.with_name(public.name + ".previous")
     if public.exists():
         if backup.exists():
