@@ -2725,22 +2725,22 @@
       "key": "prop_tree_stone_reach_01",
       "path": "assets/world/prop_tree_stone_reach_01.webp",
       "mime": "image/webp",
-      "bytes": 10682,
-      "sha256": "f63b89f2962af95993d55cfc5c68a5ef27eac6ec98ddc64e4d82186a8627cf10"
+      "bytes": 6780,
+      "sha256": "aabbbd0a9dd728087dbe666bd96028ec47417ea7739dadd5938461806533a4bd"
     },
     {
       "key": "prop_tree_stone_reach_02",
       "path": "assets/world/prop_tree_stone_reach_02.webp",
       "mime": "image/webp",
-      "bytes": 5994,
-      "sha256": "4de031bdb63f8ad2b973e350c2848104d51d54d3b6a81dc9cab1983366ba766b"
+      "bytes": 3394,
+      "sha256": "24be0fdc7912ed18430612d4f0e2aefb134d3b1584af11e762e8cceb37be90fa"
     },
     {
       "key": "prop_tree_stone_reach_03",
       "path": "assets/world/prop_tree_stone_reach_03.webp",
       "mime": "image/webp",
-      "bytes": 9354,
-      "sha256": "83243321aae7bc7b1fdb2a3fc208e5e43df957d8a134cf8ef021de8341eb5190"
+      "bytes": 7978,
+      "sha256": "b89d7b4f83700841fbd5c4151ec5c1e30aa24db11544a8f099c266198b4851cc"
     },
     {
       "key": "prop_barco",
@@ -2788,64 +2788,64 @@
       "key": "prop_table_stone_reach_01",
       "path": "assets/world/prop_table_stone_reach_01.webp",
       "mime": "image/webp",
-      "bytes": 1086,
-      "sha256": "76c2302bed9154a325f3ce0425712d6720d48f61e2f6d82a722a9a4c787bc569"
+      "bytes": 2114,
+      "sha256": "d8edac40105f07f41a645bc8a85845270f48b4e6ff634947ae279459bc7598ba"
     },
     {
       "key": "prop_table_stone_reach_02",
       "path": "assets/world/prop_table_stone_reach_02.webp",
       "mime": "image/webp",
-      "bytes": 1196,
-      "sha256": "2a8074cf4fc6e990637bc4d82a8fb7aec8f169806dacf04ed43bbce73ada9f91"
+      "bytes": 2332,
+      "sha256": "8b3efe7434c117f5ea606eca96a4fb370d2c2a445e17d4e1bd094c6653931ac2"
     },
     {
       "key": "prop_table_stone_reach_03",
       "path": "assets/world/prop_table_stone_reach_03.webp",
       "mime": "image/webp",
-      "bytes": 850,
-      "sha256": "5217869afb5bd663199dd377f33344bd73645a599764163e2dfe4a9ae579b399"
+      "bytes": 2004,
+      "sha256": "6e68b32e2d611cbf21701092f985d07f59f490886bddf2b8b52c1fdc6f4cdff8"
     },
     {
       "key": "prop_bench_stone_reach_01",
       "path": "assets/world/prop_bench_stone_reach_01.webp",
       "mime": "image/webp",
-      "bytes": 918,
-      "sha256": "81f3c2a2140cc0b1f669a8f391dbc9848a2155c65c798f2ed65dc4647eaa3d03"
+      "bytes": 2310,
+      "sha256": "ffd6d044d4868de4d6122cc87bbac6516fe2909b0789bd8609a00d385e6e97cf"
     },
     {
       "key": "prop_bench_stone_reach_02",
       "path": "assets/world/prop_bench_stone_reach_02.webp",
       "mime": "image/webp",
-      "bytes": 914,
-      "sha256": "2deb9be99e39a4755da0f6b158851005b890f45485733281a9cc342e6fd4f860"
+      "bytes": 2774,
+      "sha256": "5082fe641a0846f440a89fc1519b5ff0c7e82fc03dbac9f8ea31bd3b9ca7189e"
     },
     {
       "key": "prop_bench_stone_reach_03",
       "path": "assets/world/prop_bench_stone_reach_03.webp",
       "mime": "image/webp",
-      "bytes": 894,
-      "sha256": "dec8666d24e6445cde9f7b43da95ebbce96c64484c45ee3c1eceb0de141b558b"
+      "bytes": 3072,
+      "sha256": "4e95d706a3d55697992f72eb256d2876b4f90fbe399ed781701418027e08c3a9"
     },
     {
       "key": "prop_plant_stone_reach_01",
       "path": "assets/world/prop_plant_stone_reach_01.webp",
       "mime": "image/webp",
-      "bytes": 1888,
-      "sha256": "96a6c5ea8a59bbbf262bf7b4fd9c479dc997f0bfbc945f1a0bc55cedeb8f69d7"
+      "bytes": 1856,
+      "sha256": "6f2942ead0e7652dc30fc341117b04254f9aa2926c37fd46d1338b270afde36d"
     },
     {
       "key": "prop_plant_stone_reach_02",
       "path": "assets/world/prop_plant_stone_reach_02.webp",
       "mime": "image/webp",
-      "bytes": 1690,
-      "sha256": "d00cb13aec635d99364739ea80c006bd9bbf7b82f94d26a0d682eadfcc222f2d"
+      "bytes": 1256,
+      "sha256": "0f7dfd0ccfab28d624475c76a65e4a08da0b01a16ee4c8893b80365af3568afa"
     },
     {
       "key": "prop_plant_stone_reach_03",
       "path": "assets/world/prop_plant_stone_reach_03.webp",
       "mime": "image/webp",
-      "bytes": 1488,
-      "sha256": "fea758ce884912f85593cd7a2557df211be8bb10ea49147b6e4cee1d927a8e26"
+      "bytes": 1300,
+      "sha256": "c8d3e859bc20548b23bd555a4cab593089179fb0fcbaed7405534620420b8c57"
     },
     {
       "key": "prop_lake_edge_patio_north",
@@ -2893,22 +2893,22 @@
       "key": "prop_shelf_stone_reach_01",
       "path": "assets/world/prop_shelf_stone_reach_01.webp",
       "mime": "image/webp",
-      "bytes": 2770,
-      "sha256": "00f2ee1d611f207573f136fefb1740992f1df3f875f89eb76ea5e57a6986250d"
+      "bytes": 3058,
+      "sha256": "8540513d7a8dd29244c57e26a7190e6880dadd973535045b040204c177f18d34"
     },
     {
       "key": "prop_shelf_stone_reach_02",
       "path": "assets/world/prop_shelf_stone_reach_02.webp",
       "mime": "image/webp",
-      "bytes": 3546,
-      "sha256": "53c19bf4f0b1833de0bd15d3b449ad2fdaa4456c82ff8dfad0d1e3003ca33e65"
+      "bytes": 2772,
+      "sha256": "fd488ebe837732b41c76a7d6c91a0deb7b2324c2a7ab4ca0a4f826f14661acfc"
     },
     {
       "key": "prop_shelf_stone_reach_03",
       "path": "assets/world/prop_shelf_stone_reach_03.webp",
       "mime": "image/webp",
-      "bytes": 3752,
-      "sha256": "fcafac7f9d9de0da78a3a189e40f4db994deab11beef9c46d6e25cb6023f110a"
+      "bytes": 2614,
+      "sha256": "e7ff073a9c2973640b32c6c0b4e7e38d2db0fff52fbefae56c47688ec0dd79f0"
     },
     {
       "key": "prop_barril",

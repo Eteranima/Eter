@@ -10,21 +10,24 @@ const WORLD_ART_FAMILIES = {
   regioes: {
     patio: {
       tree: [
-        {key:'prop_arvore', weight:2},
-        {key:'prop_tree_stone_reach_01', weight:1},
+        {key:'prop_tree_stone_reach_01', weight:2},
         {key:'prop_tree_stone_reach_02', weight:1},
         {key:'prop_tree_stone_reach_03', weight:1},
       ],
     },
+    /* prop_estante_interior (32x64) e prop_mesa_interior (32x32) saíram
+       da família: as três variantes novas de cada uma são 2-3x maiores
+       (64x96/64x64) — misturadas com o móvel pequeno original, a
+       estante/mesa "genérica" destoava visivelmente ao lado das novas
+       na mesma parede (achado ao vivo na Biblioteca, comparando com o
+       mesmo ajuste já feito em patio.tree). */
     hall: {
       shelf: [
-        {key:'prop_estante_interior', weight:4},
         {key:'prop_shelf_stone_reach_01', weight:1},
         {key:'prop_shelf_stone_reach_02', weight:1},
         {key:'prop_shelf_stone_reach_03', weight:1},
       ],
       table: [
-        {key:'prop_mesa_interior', weight:4},
         {key:'prop_table_stone_reach_01', weight:1},
         {key:'prop_table_stone_reach_02', weight:1},
         {key:'prop_table_stone_reach_03', weight:1},
