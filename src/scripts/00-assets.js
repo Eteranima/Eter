@@ -509,6 +509,37 @@ Object.assign(SPRITE_DATA, {
 Object.assign(SPRITE_DATA, {
   "prop_arvore": "assets/world/prop_arvore.webp",
   "prop_arvore_escura": "assets/world/prop_arvore_escura.webp",
+  /* Copas ornamentais do Pátio de Stone Reach; escolhidas pela família
+     regional `patio.tree`, com a árvore original ainda mais frequente. */
+  "prop_tree_stone_reach_01": "assets/world/prop_tree_stone_reach_01.webp",
+  "prop_tree_stone_reach_02": "assets/world/prop_tree_stone_reach_02.webp",
+  "prop_tree_stone_reach_03": "assets/world/prop_tree_stone_reach_03.webp",
+  /* Estantes da Academia: variantes regionais para Salão, Biblioteca e
+     Anexo, resolvidas por `hall.shelf` sem mudar tiles ou colisão. */
+  "prop_shelf_stone_reach_01": "assets/world/prop_shelf_stone_reach_01.webp",
+  "prop_shelf_stone_reach_02": "assets/world/prop_shelf_stone_reach_02.webp",
+  "prop_shelf_stone_reach_03": "assets/world/prop_shelf_stone_reach_03.webp",
+  /* Mesas de estudo da Academia: livros, instrumentos e candeeiro
+     distinguem salas sem criar tiles, colisão ou decoração estática. */
+  "prop_table_stone_reach_01": "assets/world/prop_table_stone_reach_01.webp",
+  "prop_table_stone_reach_02": "assets/world/prop_table_stone_reach_02.webp",
+  "prop_table_stone_reach_03": "assets/world/prop_table_stone_reach_03.webp",
+  /* Bancos pontuais do pátio: madeira, pedra e brasão dão descanso ao
+     gramado sem transformar a Academia numa camada estática de fundo. */
+  "prop_bench_stone_reach_01": "assets/world/prop_bench_stone_reach_01.webp",
+  "prop_bench_stone_reach_02": "assets/world/prop_bench_stone_reach_02.webp",
+  "prop_bench_stone_reach_03": "assets/world/prop_bench_stone_reach_03.webp",
+  /* Vegetação baixa do pátio: leitura regional sem acrescentar colisão
+     nem competir com as árvores ou com o trajeto dos estudantes. */
+  "prop_plant_stone_reach_01": "assets/world/prop_plant_stone_reach_01.webp",
+  "prop_plant_stone_reach_02": "assets/world/prop_plant_stone_reach_02.webp",
+  "prop_plant_stone_reach_03": "assets/world/prop_plant_stone_reach_03.webp",
+  /* Margem modular do lago do pátio: sobrepõe pedra baixa à água sem
+     congelar sua animação nem transformar o lago em obstáculo novo. */
+  "prop_lake_edge_patio_north": "assets/world/prop_lake_edge_patio_north.webp",
+  "prop_lake_edge_patio_south": "assets/world/prop_lake_edge_patio_south.webp",
+  "prop_lake_edge_patio_west": "assets/world/prop_lake_edge_patio_west.webp",
+  "prop_lake_edge_patio_east": "assets/world/prop_lake_edge_patio_east.webp",
   "prop_barco": "assets/world/prop_barco.webp",
   "prop_barril": "assets/world/prop_barril.webp",
   "prop_caixa": "assets/world/prop_caixa.webp",
