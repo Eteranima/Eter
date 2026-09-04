@@ -573,6 +573,19 @@ const SKILLS = {
                 desc:'Quebrar a guarda de todo mundo de uma vez abre o caminho pro resto do grupo.'},
   guest_nuke:  {name:'Golpe Final', cost:0, power:95, elem:'poison', type:'atk', target:'one',
                 poise:2.0, desc:'Um golpe só, pensado pra encerrar a luta ali mesmo.'},
+
+  /* --- Elijah Corrompido (v5.32) ------------------------------------
+     Chefe secreto opcional: sprites de campo (normal/corrompido)
+     chegaram catalogados desde uma leva anterior sem NENHUMA entrada em
+     BESTIARY nem no mundo (ver 09-bestiary.js e world/12-maps.js,
+     undercroft). `cost:0` no mesmo padrão dos outros chefes — chefe não
+     gerencia MP. */
+  el_dreno_final: {name:'Dreno Final', cost:0, power:70, elem:'darkness', type:'atk', target:'one',
+                drain:0.5, poise:1.8, desc:'O que ele perdeu de si mesmo, cobra de volta de qualquer um.'},
+  el_colapso:  {name:'Colapso de Sombra', cost:0, power:50, elem:'darkness', type:'atk', target:'all',
+                status:{id:'dread', chance:0.5}, desc:'Cada sombra que escapou dele lembra exatamente de quem era.'},
+  el_fragmento:{name:'Fragmento Consciente', cost:0, power:0, elem:'darkness', type:'buff', target:'self',
+                buff:{atk:1.3, turns:3}, desc:'Por um instante, os pedaços soltos se lembram de apontar na mesma direção.'},
 };
 
 /* --- Ultimates (Ressonância) — 1 por personagem ------------------- */

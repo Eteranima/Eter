@@ -452,6 +452,10 @@ function updateNPCs(dt){
 function updateField(dt){
   const p = G.player;
   const dur = stepDuration();
+  /* v5.32 — tempo parado, só pra Madao trocar pro chibi de campo agora
+     que ele existe (ver drawActor em 20-field-view.js). Zera a cada
+     passo; ninguém mais consulta, então não precisa entrar no save. */
+  p.idleT = p.moving ? 0 : (p.idleT || 0) + dt;
   if (updateMover(p, dt, dur)) onStepComplete();
   G.followers.forEach(f => updateMover(f, dt, dur));
   if (!p.moving && G.scene === 'FIELD'){

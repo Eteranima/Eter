@@ -21,10 +21,39 @@ const ESCOLHA_VISIVEIS = 9;
 const ESCOLHA_TEXTO_X = 262;
 const ESCOLHA_TEXTO_W = ESCOLHA_PAINEL.x + ESCOLHA_PAINEL.w - ESCOLHA_TEXTO_X - 12;
 
+/** Desenha o fundo de região (mesma folha `battle_bg_*` do combate,
+ *  animada do mesmo jeito — ver FUNDO_BATALHA/desenharFundoEmArte em
+ *  combat/28-view.js) cobrindo a tela, numa opacidade dada. Sem folha
+ *  para o cenário (personagem sem `cenario`, ou arte ainda não
+ *  carregada), não desenha nada — quem chama já tem o gradiente padrão
+ *  por baixo, então nunca fica em branco. */
+function desenharCenarioEscolha(cenario, alpha){
+  if (!cenario || alpha <= 0) return;
+  const img = arteUI('battle_bg_' + cenario);
+  if (!img) return;
+  const cols = Math.max(1, Math.round((img.naturalWidth  || img.width)  / W));
+  const rows = Math.max(1, Math.round((img.naturalHeight || img.height) / H));
+  const total = cols * rows;
+  const passo = Math.floor(Date.now() / (1000 / FUNDO_BATALHA.fps));
+  const i = ((passo % total) + total) % total;
+  const cw = (img.naturalWidth  || img.width)  / cols;
+  const ch = (img.naturalHeight || img.height) / rows;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(img, (i % cols) * cw, Math.floor(i / cols) * ch, cw, ch, 0, 0, W, H);
+  ctx.restore();
+}
+
 const Escolha = {
   cur:{i:0}, t:0,
+  /* Transição de cenário: quando o cursor muda de personagem, o fundo
+     do personagem anterior desbota enquanto o novo entra — sem isso a
+     troca de região seria um corte seco a cada aperto de seta, e o
+     "lugar diferente no mapa" pedido vira ruído em vez de imersão. */
+  _cenAtual:null, _cenAnterior:null, _fadeT:1,
 
-  open(){ this.cur.i = 0; this.t = 0; G.scene = 'CHOOSE'; },
+  open(){ this.cur.i = 0; this.t = 0; this._cenAtual = PARTY_DEFS[0]?.cenario || null;
+          this._cenAnterior = null; this._fadeT = 1; G.scene = 'CHOOSE'; },
 
   /** Maior valor do elenco em cada atributo — a régua das barras. */
   tetos(){
@@ -42,6 +71,11 @@ const Escolha = {
   update(dt){
     this.t += dt;
     navList(this.cur, PARTY_DEFS.length);
+    const cen = PARTY_DEFS[this.cur.i]?.cenario || null;
+    if (cen !== this._cenAtual){
+      this._cenAnterior = this._cenAtual; this._cenAtual = cen; this._fadeT = 0;
+    }
+    this._fadeT = Math.min(1, this._fadeT + dt / 0.35);
     if (Input.pressed('cancel')){ Sound.sfx('cancel'); G.scene = 'TITLE'; Title.refresh(); return; }
     if (Input.pressed('confirm')){
       Sound.sfx('confirm');
@@ -59,6 +93,13 @@ const Escolha = {
     const g = ctx.createRadialGradient(W / 2, 180, 30, W / 2, H / 2, 480);
     g.addColorStop(0, '#1c1132'); g.addColorStop(1, '#07070c');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    /* Cenário de origem: o gradiente acima é a base que nunca falha
+       (personagem sem cenário, ou arte ainda carregando); por cima
+       entra a região do personagem atual, cruzando com a do anterior
+       enquanto `_fadeT` sobe — ver update(). */
+    desenharCenarioEscolha(this._cenAnterior, 1 - this._fadeT);
+    desenharCenarioEscolha(this._cenAtual, this._fadeT);
+    ctx.fillStyle = 'rgba(5,4,10,0.62)'; ctx.fillRect(0, 0, W, H);
 
     pxText('QUEM COMEÇA', W / 2, 46, {size:15, color:'#b89aff', align:'center', glow:'#7a4aca', blur:18});
     uiText('Você joga sozinho até a primeira missão. O resto do elenco entra depois, um por missão entregue.',
@@ -153,6 +194,13 @@ const Escolha = {
       bar(bx + 62, y, 150, 8, v / M[k], '#2a2040', E.main);
       uiText(String(v), bx + 220, y + 8, {size:12, color:'#b0a4c8'});
     });
+
+    /* Frase de origem (lore), no vão vazio entre as colunas de stat/
+       skill (terminam perto de py+210) e o pitch de jogabilidade
+       (começa em py+ph-52=py+240) — não disputa espaço com nenhum dos
+       dois. Some sem quebrar nada em personagem sem `lore` (guest ou
+       futuro), já que só desenha quando o campo existe. */
+    if (d.lore) uiText(`"${d.lore}"`, bx, py + 224, {size:12, color:'#6a5a86'});
 
     // o que já vem destravado de graça na árvore
     const prontas = c.skills.map(id => SKILLS[id]).filter(Boolean);

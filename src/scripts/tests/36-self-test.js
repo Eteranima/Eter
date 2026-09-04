@@ -1031,10 +1031,22 @@ function runSelfTests(){
         if (b.sprite) (porSprite[b.sprite] = porSprite[b.sprite] || []).push(id);
       /* As FASES de chefe são a exceção declarada: o Dono do Pântano e o
          Arquivista trocam de sprite ao longo da luta, e a chave da fase 1
-         é a mesma do `sprite` da entrada. Isso é uma criatura só. */
-      const dividem = Object.entries(porSprite).filter(([, ids]) => ids.length > 1)
+         é a mesma do `sprite` da entrada. Isso é uma criatura só.
+
+         v5.32 — `mob_shade` também é exceção, mas de OUTRO motivo: é
+         reaproveite DE PROPÓSITO pelo chefe secreto Elijah Corrompido
+         (ver 09-bestiary.js) — os sprites reais dele (elijah_sheet/
+         elijah_corrompido_sheet) são folha de CAMPO (grade de
+         personagem), formato incompatível com retrato de combate; a
+         revelação da história É que a corrupção dele sempre teve a
+         mesma cara de toda Sombra Corrompida do jogo. Não é arte
+         faltando, é reaproveite narrativo. */
+      const EXCECOES_ARTE_DIVIDIDA = new Set(['mob_shade']);
+      const dividem = Object.entries(porSprite)
+        .filter(([k, ids]) => ids.length > 1 && !EXCECOES_ARTE_DIVIDIDA.has(k))
         .map(([k, ids]) => `${k}: ${ids.join('+')}`);
-      ok('nenhuma criatura divide arte com outra', dividem.length === 0, dividem.join(' · '));
+      ok('nenhuma criatura divide arte com outra (fora das exceções declaradas)',
+         dividem.length === 0, dividem.join(' · '));
     }
 
     /* Pega renomeação incompleta: arte de combate apontando para quem não
@@ -1270,7 +1282,7 @@ function runSelfTests(){
   {
     const dir = ESCOLHA_PAINEL.x + ESCOLHA_PAINEL.w;
     ctx.save();
-    let vazaPitch = [], semPitch = [], vazaSkill = [];
+    let vazaPitch = [], semPitch = [], vazaSkill = [], semLore = [], vazaLore = [], loreSemCenario = [];
     for (const d of PARTY_DEFS){
       if (!d.pitch) semPitch.push(d.name);
       ctx.font = FONT_UI(13);
@@ -1282,12 +1294,28 @@ function runSelfTests(){
         const txt = `${s.name}  ·  ${ELEM[s.elem].name}`;
         if (ESCOLHA_TEXTO_X + 268 + ctx.measureText(txt).width > dir) vazaSkill.push(d.name + '/' + s.name);
       }
+      /* v5.32 — lore/cenario: mesma armadilha de vazamento, e a frase
+         não pode quebrar em 2 linhas porque mora sozinha no vão entre
+         as colunas de stat/skill e o pitch (ver 31-character-select.js,
+         py+224 fixo — uma 2ª linha cairia em cima do pitch). */
+      if (!d.lore) semLore.push(d.name);
+      if (!d.cenario) loreSemCenario.push(d.name);
+      ctx.font = FONT_UI(12);
+      if (d.lore && ESCOLHA_TEXTO_X + ctx.measureText(`"${d.lore}"`).width > dir)
+        vazaLore.push(d.name);
     }
     ctx.restore();
     ok('todo personagem tem frase de apresentação na tela de escolha',
        semPitch.length === 0, semPitch.join(','));
     ok('a frase de apresentação não vaza o painel', vazaPitch.length === 0, vazaPitch.join(','));
     ok('a lista de habilidades não vaza o painel', vazaSkill.length === 0, vazaSkill.join(','));
+    ok('todo personagem tem lore na tela de escolha', semLore.length === 0, semLore.join(','));
+    ok('todo personagem tem cenário de origem na tela de escolha',
+       loreSemCenario.length === 0, loreSemCenario.join(','));
+    ok('a frase de lore não vaza o painel (cabe numa linha só)', vazaLore.length === 0, vazaLore.join(','));
+    ok('todo cenário citado existe como battle_bg',
+       PARTY_DEFS.every(d => !d.cenario || !!SPRITE_DATA['battle_bg_' + d.cenario]),
+       PARTY_DEFS.filter(d => d.cenario && !SPRITE_DATA['battle_bg_' + d.cenario]).map(d => d.cenario).join(','));
     /* A carta tem PISO: abaixo de ~78 px o retrato e o nome não convivem
        mais na mesma carta. Até a v5.29 a largura saía do elenco inteiro,
        e com treze personagens caiu para 54 — daí a janela. O que se mede

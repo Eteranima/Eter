@@ -121,7 +121,12 @@ function loadMap(id, sx, sy, sdir){
      só depois de um marco de progresso, em vez de sempre disponíveis. */
   m.npcs = (def.npcs || []).filter(n => !n.needFlag || G.flags[n.needFlag]).map(n => {
     const p = nearestFree(n.x, n.y);
-    return {...n, tx:p.x, ty:p.y, px:p.x * TILE, py:p.y * TILE, homeX:p.x, homeY:p.y,
+    /* `sheetPorFlag` ({flag, sheet}): NPC que muda de folha quando uma
+       flag vira true (ex.: Elijah — normal até vharok_defeated, depois
+       ganha a folha corrompida), sem precisar de mapa recarregar pra
+       decidir isso de novo — só relê a flag no próximo loadMap. */
+    const sheet = (n.sheetPorFlag && G.flags[n.sheetPorFlag.flag]) ? n.sheetPorFlag.sheet : n.sheet;
+    return {...n, sheet, tx:p.x, ty:p.y, px:p.x * TILE, py:p.y * TILE, homeX:p.x, homeY:p.y,
             dir:'down', moving:false, moveT:0, animT:0, fromX:p.x, fromY:p.y, wait:rnd(3, 1)};
   });
   /* O chefe fica na alcova mesmo depois de vencido — como ECO.

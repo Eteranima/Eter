@@ -273,8 +273,17 @@ function drawField(){
      Acontecia num caso real: qualquer tela que desenha o campo por
      baixo (menu, loja) rodando antes de o elenco existir derrubava o
      jogo com "cannot read 'sheet' of undefined". */
+  /* Madao parado (v5.32): depois de alguns segundos sem andar, troca pra
+     forma Papelão em campo também — até aqui só existia em combate
+     (`papelaoT`, ver combat/27-controller.js). `madao_papelao_sheet`
+     estava catalogada desde a v5.32 sem nenhum consumidor (ver
+     00-assets.js); aqui ela finalmente aparece, e a piada bate com a
+     própria descrição dele ("se esconde atrás de uma caixa"). Some
+     assim que ele volta a andar — `p.idleT` zera a cada passo. */
+  const folhaLider = lead && lead.name === 'Madao' && (p.idleT || 0) > 4 && spriteImages.madao_papelao_sheet
+    ? 'madao_papelao_sheet' : lead && folhaDe(lead);
   if (lead) drawables.push({y:p.py + TILE, fn:() => {
-    drawActor({...p, sheet:folhaDe(lead)}, p.px - cam.x + TILE / 2, p.py - cam.y + TILE, {});
+    drawActor({...p, sheet:folhaLider}, p.px - cam.x + TILE / 2, p.py - cam.y + TILE, {});
     pxText(lead.name, p.px - cam.x + TILE / 2, p.py - cam.y - 40,
       {size:7, color:ELEM[lead.element].glow, align:'center', glow:ELEM[lead.element].main, blur:6});
   }});

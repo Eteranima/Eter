@@ -627,6 +627,25 @@ const BESTIARY = {
            color:'#171522', accent:'#b96bff',
            res:{darkness:0.3, light:1.8}},
 
+  /* Elijah Corrompido (v5.32) — chefe secreto opcional, só depois de
+     vharok_defeated (ver Elijah em world/12-maps.js, undercroft).
+     `elijah_sheet`/`elijah_corrompido_sheet` são folhas de CAMPO (grade
+     3×4 direcional, formato de personagem/NPC) — Elijah as usa andando
+     no mundo nas duas formas, antes e depois da corrupção. Nenhuma das
+     duas serve pra retrato de combate (formato incompatível com o resto
+     do bestiário, que usa arte de monstro dedicada); a luta reaproveita
+     `mob_shade` de propósito, não por falta de arte — é a revelação: a
+     corrupção dele sempre teve a mesma cara de toda Sombra Corrompida
+     que o jogador já derrotou o jogo inteiro. */
+  elijah_corrompido:{name:'Elijah, o Que Vazou', element:'darkness', lvl:44, shape:'humanoid',
+           sprite:'mob_shade', boss:true,
+           base:{hp:11000, atk:380, def:52, spd:42}, poise:2200,
+           skills:['el_fragmento','el_colapso','el_dreno_final'],
+           exp:22000, gold:25000,
+           drops:[['a_astral',1],['t_coroa',1],['rebirth',1],['elixir',1]],
+           color:'#0c0a16', accent:'#6a2aea',
+           res:{darkness:0.25, light:1.6}},
+
 };
 
 /* --- Formações de encontro por região ----------------------------- */
