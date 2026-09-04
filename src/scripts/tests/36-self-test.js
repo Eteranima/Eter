@@ -3365,6 +3365,50 @@ function runSelfTests(){
            JSON.stringify(TILEDEF) === tiledefAntes);
 
         G.mapId = antes.mapId; G.map = antes.map;
+
+        /* Toda variante de família tem de aparecer em pelo menos uma
+           célula real do mapa/região a que pertence — senão a arte foi
+           entregue mas nunca é vista. Achado real (revisão automática da
+           PR #12): peso 4:1:1:1 em `patio.tree` deixava a variante _03
+           sem nenhuma das 17 árvores do Pátio. Sonda TODAS as células dos
+           mapas reais com a mesma leitura que o renderer usa
+           (`TILEDEF[ch].id`), soma quais chaves saíram pelo menos uma
+           vez; família com só 1 variante (prova de conceito) não tem
+           cobertura a provar e é ignorada. */
+        {
+          const salvoFam = {mapa:G.mapId, cena:G.scene, x:G.player.tx, y:G.player.ty};
+          const inacessiveis = [];
+          const origens = [
+            ...Object.entries(WORLD_ART_FAMILIES.mapas).map(([mid, porId]) => ({tipo:'mapa', alvo:mid, porId})),
+            ...Object.entries(WORLD_ART_FAMILIES.regioes).map(([reg, porId]) => ({tipo:'regiao', alvo:reg, porId})),
+          ];
+          for (const {tipo, alvo, porId} of origens){
+            const mapasAlvo = tipo === 'mapa'
+              ? (MAPS[alvo] ? [alvo] : [])
+              : Object.entries(MAPS).filter(([, def]) => def.region === alvo).map(([mid]) => mid);
+            if (mapasAlvo.length === 0) continue;
+            for (const [idLogico, variantes] of Object.entries(porId)){
+              if (!Array.isArray(variantes) || variantes.length < 2) continue;
+              const vistos = new Set();
+              for (const mid of mapasAlvo){
+                loadMap(mid); Cut.stop && Cut.stop(); Msg.active = false; Msg.lines = [];
+                const linhas = (MAPS[mid].grid || MAPS[mid].rows || []).map(String);
+                for (let y = 0; y < linhas.length; y++)
+                  for (let x = 0; x < linhas[y].length; x++){
+                    const td = TILEDEF[linhas[y][x]];
+                    if (td && td.id === idLogico) vistos.add(chaveDeFamilia(idLogico, x, y));
+                  }
+              }
+              const faltando = variantes.map(v => v.key).filter(k => !vistos.has(k));
+              if (faltando.length) inacessiveis.push(`${tipo}:${alvo}/${idLogico}: ${faltando.join(',')}`);
+            }
+          }
+          ok('toda variante de família aparece em pelo menos uma célula real do mapa/região',
+             inacessiveis.length === 0, inacessiveis.join(' · '));
+          if (salvoFam.mapa) loadMap(salvoFam.mapa, salvoFam.x, salvoFam.y);
+          Cut.stop && Cut.stop(); Msg.active = false; Msg.lines = [];
+          G.scene = salvoFam.cena || 'FIELD';
+        }
       }
 
       /* O lampião é uma peça vertical de cais/interior: largura de tile

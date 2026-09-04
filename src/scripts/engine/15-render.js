@@ -722,8 +722,14 @@ const WORLD_ART_FAMILIES = {
        três copas ornamentais reduzem a repetição das alamedas sem tocar
        em colisão, mapa ou no caminho procedural de outros biomas. */
     patio: {
+      /* Peso 4:1:1:1 (proporção original) deixava a _03 sem nenhuma
+         célula real nas 17 árvores do Pátio — achado da revisão da
+         PR #12. 2:1:1:1 mantém a árvore histórica como a mais comum
+         (quase a maioria sozinha) e garante as três variantes na
+         grade de verdade; ver teste "toda variante de família aparece
+         em pelo menos uma célula real". */
       tree: [
-        {key:'prop_arvore', weight:4},
+        {key:'prop_arvore', weight:2},
         {key:'prop_tree_stone_reach_01', weight:1},
         {key:'prop_tree_stone_reach_02', weight:1},
         {key:'prop_tree_stone_reach_03', weight:1},
