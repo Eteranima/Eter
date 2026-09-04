@@ -391,8 +391,13 @@ function drawFieldHUD(){
     const a = clamp(G.banner.t, 0, 1);
     ctx.save(); ctx.globalAlpha = a;
     const larg = Math.max(220, G.banner.text.length * 9 + 28);
-    panel(W / 2 - larg / 2, 200, larg, 34, {alpha:.86});
-    pxText(G.banner.text, W / 2, 222, {size:9, color:'#b89aff', align:'center'});
+    const vaoTopo = HUD_MUNDO.recursos.x - (HUD_MUNDO.local.x + HUD_MUNDO.local.w) - 16;
+    const y = larg <= vaoTopo ? 8 : 200;
+    /* A faixa central do topo fica livre entre a placa da região e os
+       recursos. Aviso curto de chegada fica ali e não cobre fachada,
+       NPC ou landmark; mensagem longa preserva o painel central. */
+    panel(W / 2 - larg / 2, y, larg, 34, {alpha:.86});
+    pxText(G.banner.text, W / 2, y + 22, {size:9, color:'#b89aff', align:'center'});
     ctx.restore();
   }
   drawZonaLocal();

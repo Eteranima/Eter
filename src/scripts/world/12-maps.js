@@ -75,8 +75,16 @@ const MAPS = {
          comparando com o print da PR #12). SEM `solido`: a colisão de
          verdade já é a parede/porta do próprio grid (TILEDEF), e
          marcar esta célula sólida tranca a única passagem pro Salão —
-         foi exatamente o softlock corrigido antes. */
-      {x:13, y:6,  s:'prop_academia_stone_reach',
+         foi exatamente o softlock corrigido antes. A parede (y:3-6)
+         tem 6 casas de largura (colunas 10-15) — LARGURA PAR, então o
+         centro de verdade (coluna 12,5) cai ENTRE duas células, e
+         nenhuma âncora inteira sozinha centra a imagem de 192px (6
+         casas): ancorada em x:13 (a porta), a imagem ficava meia casa
+         deslocada pra direita, sobrando tijolo genérico à mostra do
+         lado esquerdo (achado do usuário, 2º print). `deslocX:-16`
+         desloca só o desenho (não a célula/colisão) meia casa pra
+         esquerda, fechando o vão. */
+      {x:13, y:6,  s:'prop_academia_stone_reach', deslocX:-16,
        text:'A fachada da Academia ainda ostenta o brasão original, gasto pelo tempo mas legível.'},
       {x:18, y:20, s:'prop_portao_stone_reach',
        text:'O portão sul de Stone Reach — pedra maciça, gravada com o mesmo selo que mantém o Subterrâneo fechado.'},
@@ -94,18 +102,18 @@ const MAPS = {
        text:'Musgo e flores baixas reaproveitam as pedras antigas do pátio.'},
       /* A água continua sendo tile animado; estas peças transparentes só
          desenham a margem baixa nas células externas do lago. */
-      {x:13, y:9,  s:'prop_lake_edge_patio_north', text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:14, y:9,  s:'prop_lake_edge_patio_north', text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:15, y:9,  s:'prop_lake_edge_patio_north', text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:16, y:9,  s:'prop_lake_edge_patio_north', text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:12, y:10, s:'prop_lake_edge_patio_west',  text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:17, y:10, s:'prop_lake_edge_patio_east',  text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:12, y:11, s:'prop_lake_edge_patio_west',  text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:17, y:11, s:'prop_lake_edge_patio_east',  text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:13, y:12, s:'prop_lake_edge_patio_south', text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:14, y:12, s:'prop_lake_edge_patio_south', text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:15, y:12, s:'prop_lake_edge_patio_south', text:'Pedras baixas e musgo protegem a margem do lago.'},
-      {x:16, y:12, s:'prop_lake_edge_patio_south', text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:13, y:9,  s:'prop_lake_edge_patio_north', sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:14, y:9,  s:'prop_lake_edge_patio_north', sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:15, y:9,  s:'prop_lake_edge_patio_north', sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:16, y:9,  s:'prop_lake_edge_patio_north', sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:12, y:10, s:'prop_lake_edge_patio_west',  sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:17, y:10, s:'prop_lake_edge_patio_east',  sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:12, y:11, s:'prop_lake_edge_patio_west',  sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:17, y:11, s:'prop_lake_edge_patio_east',  sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:13, y:12, s:'prop_lake_edge_patio_south', sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:14, y:12, s:'prop_lake_edge_patio_south', sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:15, y:12, s:'prop_lake_edge_patio_south', sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
+      {x:16, y:12, s:'prop_lake_edge_patio_south', sombra:false, text:'Pedras baixas e musgo protegem a margem do lago.'},
     ],
     rows:[
       '########################################',
