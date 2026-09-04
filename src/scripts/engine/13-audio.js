@@ -138,6 +138,69 @@ const Sound = {
               bass:[36,36,36,43, 36,36,42,41, 34,34,34,41, 34,34,40,39],
               lead:[72,75,79,75, 77,75,72,70, 70,73,77,73, 75,73,70,68],
               pad:[48,null,55,null, 48,null,54,null, 46,null,53,null, 46,null,52,null]},
+
+    /* --- Trilhas regionais (v5.34) — uma identidade por região, não só
+       "campo aberto" × "masmorra" pro jogo inteiro. `field`/`dungeon`
+       continuam intactas (fallback de def.bgm ausente, retomada pós-luta
+       em 27-controller.js, e cenas roteirizadas em 34-postgame.js usam
+       os dois nomes direto) — nada aqui troca o que já existia, só
+       acrescenta opção pros mapas escolherem. */
+    patio:       {bpm:88,  wave:'triangle',       // Pátio Central — dó maior, acolhedor
+                  bass:[48,null,48,null,43,null,43,null, 45,null,45,null,50,null,50,null],
+                  lead:[72,76,79,76,72,74,72,null, 74,77,81,77,74,76,74,null],
+                  pad:[55,null,null,null,null,null,null,null, 53,null,null,null,null,null,null,null]},
+    porto_lumina:{bpm:100, wave:'square',          // cais/mercado — sol mixolídio, cadência de chá-lá
+                  bass:[43,43,50,43, 43,43,48,43, 41,41,48,41, 41,41,46,41],
+                  lead:[67,null,70,74, 67,null,70,72, 65,null,69,72, 65,null,67,70],
+                  pad:[50,null,null,null,50,null,null,null, 48,null,null,null,48,null,null,null]},
+    hall:        {bpm:68,  wave:'sine',            // Salão/Biblioteca/Anexo — ré dórico, contemplativo
+                  bass:[38,null,null,null,45,null,null,null, 36,null,null,null,43,null,null,null],
+                  lead:[null,null,62,null,null,65,69,null, null,null,60,null,null,64,67,null],
+                  pad:[50,null,null,null,null,null,null,null, 48,null,null,null,null,null,null,null]},
+    undercroft:  {bpm:56,  wave:'sine',            // Subterrâneo Selado — lá frígio, drone esparso
+                  bass:[33,null,null,null,null,null,null,null, 34,null,null,null,null,null,null,null],
+                  lead:[null,null,null,57,null,null,null,null, null,null,null,58,null,null,null,null],
+                  pad:[45,null,null,null,null,null,null,null, 46,null,null,null,null,null,null,null]},
+    deepway:     {bpm:62,  wave:'triangle',        // Galeria Profunda — mi frígio-dominante, alienígena
+                  bass:[28,null,null,33,null,null,28,null, 30,null,null,35,null,null,30,null],
+                  lead:[null,55,null,null,58,null,62,null, null,53,null,null,56,null,60,null],
+                  pad:[40,null,null,null,null,null,null,null, 42,null,null,null,null,null,null,null]},
+    ashwood:     {bpm:74,  wave:'sawtooth',        // Mata Cindária — fá menor harmônico, sombrio
+                  bass:[29,null,29,null,36,null,29,null, 27,null,27,null,34,null,27,null],
+                  lead:[65,68,71,68,65,64,65,null, 63,65,68,65,63,62,63,null],
+                  pad:[41,null,null,null,null,null,null,null, 39,null,null,null,null,null,null,null]},
+    nests:       {bpm:130, wave:'square',          // Ninhal de Éter — si lócrio, zumbido rápido
+                  bass:[35,35,35,35,35,35,38,35, 33,33,33,33,33,33,36,33],
+                  lead:[71,74,77,74,71,74,77,74, 69,72,75,72,69,72,75,72],
+                  pad:[47,null,null,null,null,null,null,null, 45,null,null,null,null,null,null,null]},
+    cistern:     {bpm:58,  wave:'sine',            // Cisterna Afogada — ré menor, gotas esparsas
+                  bass:[26,null,null,null,null,null,null,null, 31,null,null,null,null,null,null,null],
+                  lead:[null,null,null,74,null,null,null,null, null,null,null,77,null,null,null,null],
+                  pad:[50,null,null,null,null,null,null,null, 53,null,null,null,null,null,null,null]},
+    spire:       {bpm:94,  wave:'triangle',        // Coroa de Vidro — mi maior, cristalino e alto
+                  bass:[40,null,40,null,47,null,40,null, 38,null,38,null,45,null,38,null],
+                  lead:[76,null,80,83,null,80,76,null, 78,null,81,85,null,81,78,null],
+                  pad:[64,null,null,null,null,null,null,null, 63,null,null,null,null,null,null,null]},
+    arquivo:     {bpm:66,  wave:'sine',            // Arquivo Esquecido — sol eólio, arpejo misterioso
+                  bass:[31,null,null,null,34,null,null,null, 29,null,null,null,32,null,null,null],
+                  lead:[null,62,null,65,null,67,null,null, null,60,null,63,null,65,null,null],
+                  pad:[46,null,null,null,null,null,null,null, 44,null,null,null,null,null,null,null]},
+    esgoto:      {bpm:70,  wave:'sawtooth',        // Esgoto — cromático sujo, grave e dissonante
+                  bass:[25,null,28,null,25,null,26,null, 24,null,27,null,24,null,25,null],
+                  lead:[53,null,56,null,55,null,53,null, 51,null,54,null,53,null,51,null],
+                  pad:[37,null,null,null,null,null,null,null, 36,null,null,null,null,null,null,null]},
+    lago:        {bpm:58,  wave:'sine',            // Lago Afogado — fá menor, melancólico
+                  bass:[29,null,null,null,32,null,null,null, 27,null,null,null,31,null,null,null],
+                  lead:[null,68,null,71,null,72,null,null, null,66,null,68,null,70,null,null],
+                  pad:[53,null,null,null,null,null,null,null, 51,null,null,null,null,null,null,null]},
+    podridao:    {bpm:64,  wave:'sawtooth',        // Baixios da Podridão — si♭ lócrio, apodrecido
+                  bass:[34,null,37,null,34,null,35,null, 32,null,35,null,32,null,33,null],
+                  lead:[61,null,64,null,63,null,61,null, 59,null,62,null,61,null,59,null],
+                  pad:[41,null,null,null,null,null,null,null, 39,null,null,null,null,null,null,null]},
+    deserto:     {bpm:76,  wave:'triangle',        // Deserto de Vidro Moído — lá menor, árido e esparso
+                  bass:[33,null,null,null,null,null,null,null, 36,null,null,null,null,null,null,null],
+                  lead:[null,null,69,null,null,null,76,null, null,null,67,null,null,null,74,null],
+                  pad:[57,null,null,null,null,null,null,null, 55,null,null,null,null,null,null,null]},
   },
 
   bgm(name){

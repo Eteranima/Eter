@@ -168,6 +168,11 @@ function runSelfTests(){
     ok(`[${id}] baús casam com o conteúdo`, chests === (def.chests||[]).length,
        `${chests} tiles / ${(def.chests||[]).length} itens`);
     ok(`[${id}] destinos existem`, (def.warps||[]).every(wp => !!MAPS[wp.to]));
+    /* `Sound.bgm(nome)` sem trilha correspondente não erra — só fica
+       mudo pra sempre, sem aviso nenhum (17-world.js chama isso todo
+       loadMap). Achar isso sem o teste seria só percebendo o silêncio
+       ao vivo. */
+    ok(`[${id}] bgm aponta para trilha que existe`, !def.bgm || !!Sound.TRACKS[def.bgm], def.bgm);
     // o ponto de chegada precisa ser pisável no mapa de destino
     const badLanding = (def.warps||[]).filter(wp => {
       const dm = MAPS[wp.to]; if (!dm) return true;
@@ -1562,6 +1567,13 @@ function runSelfTests(){
       const semBicho = (sc.cmds || []).filter(c =>
         c.do === 'battle' && !(c.foes || []).every(f => !!BESTIARY[f]));
       ok(`[cena ${id}] batalhas usam criaturas do bestiário`, semBicho.length === 0);
+      /* `Sound.bgm(nome)` sem trilha correspondente não erra — só toca
+         silêncio pra sempre, sem aviso nenhum. `{do:'bgm'}` sem `id`
+         é silenciar de propósito (cena de clímax), continua válido. */
+      const semTrilha = (sc.cmds || []).filter(c =>
+        c.do === 'bgm' && c.id && !Sound.TRACKS[c.id]);
+      ok(`[cena ${id}] bgm aponta para trilha que existe`, semTrilha.length === 0,
+         semTrilha.map(c => c.id).join(' '));
     }
 
     // 2) todo gatilho aponta para uma cena que existe
