@@ -14,6 +14,7 @@
       <p>Autorie a grade e a decoração no mesmo contrato de <code>MAPS</code>.</p>
     </div>
     <div class="header-actions">
+      <button id="undo" class="secondary" disabled title="Ctrl+Z">↶ Desfazer</button>
       <button id="validate" class="secondary">Validar</button>
       <button id="copy" class="primary">Copiar definição</button>
     </div>
@@ -62,13 +63,19 @@
       <div id="prop-palette" class="props"></div>
       <label class="check"><input id="prop-solid" type="checkbox" checked> Prop bloqueia a célula</label>
       <label class="check"><input id="prop-shadow" type="checkbox" checked> Desenhar sombra de contato</label>
+      <label>Giro da peça
+        <button id="prop-rotate" type="button" class="secondary" data-giro="0">0°</button>
+      </label>
       <label>Texto ao examinar <input id="prop-text" type="text" placeholder='Ex.: "Barril de água limpa."'></label>
       <label class="check"><input id="prop-mute" type="checkbox"> Decoração muda (sem texto, decisão deliberada)</label>
       <p class="small">Requisito do jogo: todo prop, placa (<code>prop_placa</code>) incluída, reage ao interagir
         (texto aqui) ou é declarado mudo de propósito — nunca fica sem nenhum dos dois. Só entra num tile ABERTO
         (não sólido) — para uma placa muda embutida na parede, use <strong>Placas / signs</strong> ao lado, nunca
         os dois na mesma coordenada.</p>
-      <p class="small">Clique em um prop e depois na grade. Clique numa célula já decorada para removê-la.</p>
+      <p class="small">Clique em um prop e depois na grade. Clique numa célula já decorada para removê-la, ou
+        Shift+clique nela pra girar 90° em vez de remover — o jogo de verdade já sabe desenhar um prop girado
+        (o pé continua na mesma célula, só o desenho roda). Nem toda arte fica bem rotacionada — julgue pelo
+        resultado, não é regra pra todo prop.</p>
     </aside>
 
     <section class="workspace">

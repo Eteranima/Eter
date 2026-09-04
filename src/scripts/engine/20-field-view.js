@@ -142,7 +142,18 @@ function desenharProp(chave, sx, sy, o = {}){
     ctx.ellipse(layout.peX, layout.peY - 1, layout.sombraRaioX, 5, 0, 0, Math.PI * 2);
     ctx.fill(); ctx.restore();
   }
-  ctx.drawImage(img, layout.x, layout.y, layout.largura, layout.altura);
+  /* Sombra nunca gira com a peça — ela é do CHÃO, não do sprite. Só o
+     desenho gira, sobre o próprio pé (layout.peX/peY), pra continuar
+     plantado na mesma casa em vez de "flutuar" pra fora dela. */
+  if (layout.giro){
+    ctx.save();
+    ctx.translate(layout.peX, layout.peY);
+    ctx.rotate(layout.giro * Math.PI / 180);
+    ctx.drawImage(img, -layout.largura / 2, -layout.altura, layout.largura, layout.altura);
+    ctx.restore();
+  } else {
+    ctx.drawImage(img, layout.x, layout.y, layout.largura, layout.altura);
+  }
   return true;
 }
 

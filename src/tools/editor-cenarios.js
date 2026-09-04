@@ -43,6 +43,40 @@ let PROPS = INITIAL_PROPS.map(prop=>[...prop,gruposDoProp(prop[0]),`assets/world
 const $ = id => document.getElementById(id), canvas = $('map-canvas'), ctx = canvas.getContext('2d');
 let state = {w:24,h:16,fill:'.',grid:[],decor:[],npcs:[],selectedTile:'.',selectedProp:PROPS[0][0],mode:'tile'};
 const images = {};
+/* Giro (graus) do PRÓXIMO prop a colocar — não é campo de `state`
+   porque não é conteúdo do mapa, é só o modo de colocação atual (como
+   `prop-solid`/`prop-shadow`). Existe de verdade no jogo: giro é
+   suportado direto em calcularLayoutProp/desenharProp (14b-prop-
+   layout.js, 20-field-view.js) — a prévia aqui não inventa nada que o
+   motor não sabe desenhar. */
+let giroAtual = 0;
+/* Undo por snapshot: guarda uma cópia profunda de tudo que É conteúdo
+   do mapa (grade/decor/npcs/dimensão) antes de cada mutação. Só isso —
+   seleção de ferramenta, texto em edição etc. não entram no histórico,
+   porque desfazer uma escolha de paleta não é o que o autor espera de
+   Ctrl+Z. */
+let undoStack = [];
+function clonarEstado(){
+  return {w:state.w, h:state.h, fill:state.fill,
+    grid:state.grid.map(linha=>[...linha]),
+    decor:state.decor.map(d=>({...d})),
+    npcs:state.npcs.map(n=>({...n, lines:[...(n.lines||[])]}))};
+}
+function pushUndo(){
+  undoStack.push(clonarEstado());
+  if(undoStack.length>50)undoStack.shift();
+  $('undo').disabled=false;
+}
+function desfazer(){
+  if(!undoStack.length)return;
+  const anterior=undoStack.pop();
+  state={...state, w:anterior.w, h:anterior.h, fill:anterior.fill, grid:anterior.grid, decor:anterior.decor, npcs:anterior.npcs};
+  $('map-width').value=state.w; $('map-height').value=state.h; $('map-fill').value=state.fill;
+  $('spawn-x').max=state.w-2; $('spawn-y').max=state.h-2;
+  $('undo').disabled=!undoStack.length;
+  renderizarListaNpc(); render();
+  status('Última ação desfeita.','ok');
+}
 let ASSET_PATHS = {};
 /* Regiões reais, extraídas de MAPS de verdade (12-maps.js) — a mesma
    lista que WORLD_ART_FAMILIES/cenas/BGM já usam. 'nova_regiao' é o
@@ -87,6 +121,10 @@ function gruposDoProp(key){
   return [...grupos].sort();
 }
 function nomeDoProp(key){ return key.replace(/^prop_/,'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase()); }
+function atualizarBotaoGiro(){
+  const botao=$('prop-rotate');if(!botao)return;
+  botao.textContent=`${giroAtual}°`;botao.dataset.giro=giroAtual;
+}
 
 function blank(w,h,fill){ return Array.from({length:h},(_,y)=>Array.from({length:w},(_,x)=>x===0||y===0||x===w-1||y===h-1?'#':fill)); }
 function status(message,kind=''){ const output=$('status'); output.textContent=message; output.className=`status ${kind}`; }
@@ -117,9 +155,15 @@ function render(){
     if(image?.complete && image.naturalWidth){
       /* A arte é 32px/tile no jogo; o canvas do editor é 24px/tile.
          A função e a âncora são literalmente as mesmas do runtime. */
-      const fator=CELL/32, layout=calcularLayoutProp(image.naturalWidth,image.naturalHeight,x,y,{escala:(d.escala??1)*fator,recuo:(d.recuo??2)*fator,sombra:d.sombra},CELL);
+      const fator=CELL/32, layout=calcularLayoutProp(image.naturalWidth,image.naturalHeight,x,y,{escala:(d.escala??1)*fator,recuo:(d.recuo??2)*fator,sombra:d.sombra,giro:d.giro},CELL);
       if(layout.sombra){ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(layout.peX,layout.peY-2*fator,layout.sombraRaioX,5*fator,0,0,Math.PI*2);ctx.fill();}
-      ctx.drawImage(image,layout.x,layout.y,layout.largura,layout.altura);
+      if(layout.giro){
+        ctx.save();ctx.translate(layout.peX,layout.peY);ctx.rotate(layout.giro*Math.PI/180);
+        ctx.drawImage(image,-layout.largura/2,-layout.altura,layout.largura,layout.altura);
+        ctx.restore();
+      }else{
+        ctx.drawImage(image,layout.x,layout.y,layout.largura,layout.altura);
+      }
     }else{ctx.fillStyle='#00a8a8';ctx.fillRect(x+7,y+7,10,10);}
   });
   /* NPC não tem a folha (spritesheet de 3x4 quadros) carregada aqui —
@@ -148,7 +192,7 @@ function palettes(){
   Object.entries(TILES).forEach(([key,[name]])=>{const button=document.createElement('button');button.className='tile';button.innerHTML=`<span>${key}</span>${name}`;button.dataset.tile=key;button.onclick=()=>{state.selectedTile=key;state.mode='tile';choose();};$('tile-palette').append(button);});
   const busca=($('atlas-search')?.value||'').trim().toLocaleLowerCase(),grupo=$('atlas-filter')?.value||'all';
   const filtrados=PROPS.filter(([key,name,,,grupos])=>(grupo==='all'||grupos.includes(grupo))&&`${key} ${name}`.toLocaleLowerCase().includes(busca));
-  filtrados.forEach(([key,name,solid,,,path])=>{const button=document.createElement('button');button.className='prop';button.innerHTML=`<img src="../${path||`assets/world/${key}.webp`}" alt=""><span>${name}</span>`;button.dataset.prop=key;button.onclick=()=>{state.selectedProp=key;state.mode='prop';$('prop-solid').checked=solid;$('prop-shadow').checked=!key.includes('lake_edge');choose();};$('prop-palette').append(button);});
+  filtrados.forEach(([key,name,solid,,,path])=>{const button=document.createElement('button');button.className='prop';button.innerHTML=`<img src="../${path||`assets/world/${key}.webp`}" alt=""><span>${name}</span>`;button.dataset.prop=key;button.onclick=()=>{state.selectedProp=key;state.mode='prop';$('prop-solid').checked=solid;$('prop-shadow').checked=!key.includes('lake_edge');giroAtual=0;atualizarBotaoGiro();choose();};$('prop-palette').append(button);});
   if($('atlas-summary'))$('atlas-summary').textContent=`${filtrados.length} de ${PROPS.length} props do catálogo`;
 }
 function atualizarFiltros(){
@@ -221,9 +265,10 @@ async function carregarAtlas(){
   }
 }
 function resize(){
+  pushUndo();
   const w=Math.max(8,Math.min(48,Number($('map-width').value)||24)),h=Math.max(8,Math.min(32,Number($('map-height').value)||16)),fill=$('map-fill').value,next=blank(w,h,fill);
   for(let y=0;y<Math.min(h,state.h);y++)for(let x=0;x<Math.min(w,state.w);x++)next[y][x]=state.grid[y][x];
-  state={...state,w,h,fill,grid:next,decor:state.decor.filter(d=>d.x<w&&d.y<h)};$('spawn-x').max=w-2;$('spawn-y').max=h-2;render();status(`Grade ajustada para ${w}×${h}.`,'ok');
+  state={...state,w,h,fill,grid:next,decor:state.decor.filter(d=>d.x<w&&d.y<h),npcs:state.npcs.filter(n=>n.x<w&&n.y<h)};$('spawn-x').max=w-2;$('spawn-y').max=h-2;renderizarListaNpc();render();status(`Grade ajustada para ${w}×${h}.`,'ok');
 }
 function list(id,label){try{const value=JSON.parse($(id).value);if(!Array.isArray(value))throw new Error('não é uma lista');return value;}catch(error){throw new Error(`${label}: JSON inválido (${error.message}).`);}}
 function validate(){
@@ -296,6 +341,7 @@ function definition(){
     const bits=[`x:${d.x}`,`y:${d.y}`,`s:'${d.s}'`];
     if(d.solido)bits.push('solido:true');
     if(d.sombra===false)bits.push('sombra:false');
+    if(d.giro)bits.push(`giro:${d.giro}`);
     if(d.mudo)bits.push('mudo:true');
     if(d.text)bits.push(`text:'${d.text.replace(/'/g,"\\'")}'`);
     return `      {${bits.join(', ')}},`;
@@ -317,9 +363,25 @@ function definition(){
 canvas.addEventListener('click',event=>{
   const rect=canvas.getBoundingClientRect(),x=Math.floor((event.clientX-rect.left)*canvas.width/rect.width/CELL),y=Math.floor((event.clientY-rect.top)*canvas.height/rect.height/CELL);
   if(x<0||y<0||x>=state.w||y>=state.h)return;
-  if(state.mode==='tile'){state.grid[y][x]=state.selectedTile;render();return;}
+  if(state.mode==='tile'){pushUndo();state.grid[y][x]=state.selectedTile;render();return;}
   const at=state.decor.findIndex(d=>d.x===x&&d.y===y);
-  if(at>=0){state.decor.splice(at,1);render();return;}
+  if(at>=0){
+    /* Shift+clique gira 90° em vez de remover — mesma célula, mesmo
+       prop, só o desenho roda (o motor de verdade já sabe fazer isso,
+       ver calcularLayoutProp/desenharProp). Clique normal continua
+       removendo, como sempre. */
+    if(event.shiftKey){
+      pushUndo();
+      const atual=state.decor[at], novoGiro=((atual.giro||0)+90)%360, novo={...atual};
+      if(novoGiro)novo.giro=novoGiro;else delete novo.giro;
+      state.decor[at]=novo;
+      status(`${nomeDoProp(atual.s)} girado pra ${novoGiro}°.`,'ok');
+      render();
+      return;
+    }
+    pushUndo();
+    state.decor.splice(at,1);render();return;
+  }
   const text=$('prop-text').value.trim(),mudo=$('prop-mute').checked;
   /* Requisito 100% interativo: recusa colocar um prop sem texto E sem a
      marcação explícita de "mudo de propósito" — placa é exceção porque
@@ -328,7 +390,8 @@ canvas.addEventListener('click',event=>{
     status('Preencha "Texto ao examinar" ou marque "Decoração muda" antes de colocar este prop.','error');
     return;
   }
-  state.decor.push({x,y,s:state.selectedProp,solido:$('prop-solid').checked,sombra:$('prop-shadow').checked,...(text?{text}:{}),...(mudo?{mudo:true}:{})});
+  pushUndo();
+  state.decor.push({x,y,s:state.selectedProp,solido:$('prop-solid').checked,sombra:$('prop-shadow').checked,...(giroAtual?{giro:giroAtual}:{}),...(text?{text}:{}),...(mudo?{mudo:true}:{})});
   status(state.selectedProp==='prop_placa'
     ? `Placa colocada em (${x},${y}). Adicione a entrada correspondente em "Placas / signs" na mesma coordenada.`
     : `${propData()?.[1]||state.selectedProp} colocado em (${x},${y})${text?' com texto.':' — decoração muda.'}`, 'ok');
@@ -341,7 +404,7 @@ function renderizarListaNpc(){
     const item=document.createElement('li');
     item.innerHTML=`<span><strong>${n.name}</strong> (${n.x},${n.y}) — ${n.sheet}${n.wander?' · anda':''}${n.notas?' · <em>precisa de acabamento</em>':''}</span>`;
     const remover=document.createElement('button');remover.textContent='Remover';remover.className='secondary';
-    remover.onclick=()=>{state.npcs.splice(i,1);renderizarListaNpc();render();};
+    remover.onclick=()=>{pushUndo();state.npcs.splice(i,1);renderizarListaNpc();render();};
     item.append(remover);lista.append(item);
   });
 }
@@ -354,12 +417,16 @@ $('npc-add').onclick=()=>{
   const notas=$('npc-notas').value.trim();
   if(!linhas.length && !notas){status('Preencha ao menos uma fala, ou explique em "precisa de acabamento manual" por que não tem.','error');return;}
   const shop=$('npc-shop').value,quest=$('npc-quest').value,portrait=$('npc-portrait').value;
+  pushUndo();
   state.npcs.push({x,y,name,sheet,wander:$('npc-wander').checked,lines:linhas,...(shop?{shop}:{}),...(quest?{quest}:{}),...(portrait?{portrait}:{}),...(notas?{notas}:{})});
   $('npc-name').value='';$('npc-lines').value='';$('npc-notas').value='';$('npc-wander').checked=false;$('npc-shop').value='';$('npc-quest').value='';$('npc-portrait').value='';
   renderizarListaNpc();render();
   status(`NPC "${name}" adicionado em (${x},${y}).`,'ok');
 };
 $('resize').onclick=resize;$('validate').onclick=()=>{const r=validate();status(r.errors.length?r.errors.join(' '):r.warnings.length?r.warnings.join(' '):'Validação concluída: contrato de MAPS consistente.',r.errors.length?'error':'ok');};$('copy').onclick=async()=>{const value=definition();if(!value)return;try{await navigator.clipboard.writeText(value);status('Definição MAPS copiada. Cole em src/scripts/world/12-maps.js.','ok');}catch{status('Área de transferência indisponível.','error');}};
+$('undo').onclick=desfazer;
+document.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();desfazer();}});
+$('prop-rotate').onclick=()=>{giroAtual=(giroAtual+90)%360;atualizarBotaoGiro();};
 ['spawn-x','spawn-y'].forEach(id=>$(id).addEventListener('input',render));document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{state.mode=button.dataset.mode;choose();});
 ['atlas-search','atlas-filter'].forEach(id=>$(id)?.addEventListener(id==='atlas-search'?'input':'change',palettes));
-state.grid=blank(state.w,state.h,state.fill);atualizarFiltros();palettes();render();choose();popularRegiaoEBgm();popularSheetsDeNpc();popularReferenciasNpc();carregarAtlas();
+state.grid=blank(state.w,state.h,state.fill);atualizarFiltros();palettes();render();choose();popularRegiaoEBgm();popularSheetsDeNpc();popularReferenciasNpc();atualizarBotaoGiro();carregarAtlas();
