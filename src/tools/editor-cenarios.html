@@ -103,12 +103,14 @@
         <select id="npc-sheet"></select>
       </label>
       <label class="check"><input id="npc-wander" type="checkbox"> Anda pelo mapa (wander)</label>
+      <label>Loja existente (opcional)<select id="npc-shop"></select></label>
+      <label>Missão existente (opcional)<select id="npc-quest"></select></label>
+      <label>Retrato de diálogo (opcional)<select id="npc-portrait"></select></label>
       <label>Falas (uma por linha)<textarea id="npc-lines" spellcheck="false" placeholder="Cada linha vira uma fala estática, na ordem digitada."></textarea></label>
       <label>Precisa de acabamento manual (opcional) <input id="npc-notas" type="text" placeholder="Ex.: loja, quest, retrato, escolha condicional"></label>
-      <p class="small">Cobre só o caso simples: falas estáticas em sequência. Diálogo condicional
-        (<code>lines: G =&gt; ...</code>), loja (<code>shop</code>), missão (<code>quest</code>) ou retrato
-        (<code>portrait</code>) saem como comentário <code>/* completar: ... */</code> na definição — precisam de
-        edição manual em <code>12-maps.js</code>, não são inventados aqui.</p>
+      <p class="small">Loja, missão e retrato vêm exclusivamente das referências já usadas pelo jogo.
+        Diálogo condicional (<code>lines: G =&gt; ...</code>) continua fora do formulário e sai como
+        comentário <code>/* completar: ... */</code>, pois é lógica de verdade.</p>
       <button id="npc-add" class="secondary wide">Adicionar NPC</button>
       <ul id="npc-list" class="npc-list"></ul>
 
@@ -140,6 +142,7 @@
   <script src="../scripts/engine/14b-prop-layout.js"></script>
   <script src="../scripts/engine/14c-world-art.js"></script>
   <script src="../scripts/engine/17-world.js"></script>
+  <script src="../scripts/ui/22-dialogue.js"></script>
   <script src="editor-cenarios.js"></script>
 </body>
 </html>

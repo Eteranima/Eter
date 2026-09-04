@@ -39,7 +39,7 @@ const INITIAL_PROPS = [
   ['prop_taverna_lumina','Taverna Mesa de Âmbar',true,4.25],
   ['prop_loja_lumina','Loja Mercado da Maré',true,4],
 ];
-let PROPS = [...INITIAL_PROPS];
+let PROPS = INITIAL_PROPS.map(prop=>[...prop,gruposDoProp(prop[0]),`assets/world/${prop[0]}.webp`]);
 const $ = id => document.getElementById(id), canvas = $('map-canvas'), ctx = canvas.getContext('2d');
 let state = {w:24,h:16,fill:'.',grid:[],decor:[],npcs:[],selectedTile:'.',selectedProp:PROPS[0][0],mode:'tile'};
 const images = {};
@@ -56,6 +56,14 @@ const REGIOES_REAIS = [...new Set(Object.values(MAPS).map(def => def.region).fil
    engano uma trilha de luta pro mapa inteiro. */
 const TRILHAS_MAPA = Object.keys(Sound.TRACKS).filter(nome => nome !== 'battle' && nome !== 'boss').sort();
 let NPC_SHEETS = [];
+const REFERENCIAS_NPC = (()=>{
+  const npcs=Object.values(MAPS).flatMap(def=>def.npcs||[]);
+  return {
+    lojas:[...new Set(npcs.map(n=>n.shop).filter(Boolean))].sort(),
+    missoes:[...new Set(npcs.map(n=>n.quest).filter(Boolean))].sort(),
+    retratos:[...new Set(Object.values(DIALOGUE_SPRITES))].sort(),
+  };
+})();
 function propPath(prop){ return prop?.[5] || `assets/world/${prop?.[0]}.webp`; }
 function carregarImagemPorChave(key, path){
   if(!key || images[key])return images[key];
@@ -64,12 +72,19 @@ function carregarImagemPorChave(key, path){
 function carregarImagem(prop){
   return prop && carregarImagemPorChave(prop[0],propPath(prop));
 }
-function grupoDoProp(key){
-  if(key.includes('stone_reach')||key.includes('academia')||key.includes('altar_selo'))return 'Stone Reach';
-  if(key.includes('lumina'))return 'Porto Lúmina';
-  if(key.includes('undercroft'))return 'Undercroft';
-  if(key.includes('hall'))return 'Hall';
-  return 'Geral';
+function gruposDoProp(key){
+  /* Curadoria por consumidores reais, nunca pelo texto do filename.
+     Inclui decor publicado e variantes declaradas em famílias; uma peça
+     reutilizada continua aparecendo em cada região em que combina. */
+  const grupos=new Set();
+  Object.values(MAPS).forEach(def=>{if(def.region&&def.decor?.some(d=>d.s===key))grupos.add(def.region);});
+  Object.entries(WORLD_ART_FAMILIES.regioes).forEach(([regiao,familias])=>{
+    if(Object.values(familias).some(variantes=>variantes.some(v=>v.key===key)))grupos.add(regiao);
+  });
+  Object.entries(WORLD_ART_FAMILIES.mapas).forEach(([mapa,familias])=>{
+    if(Object.values(familias).some(variantes=>variantes.some(v=>v.key===key))&&MAPS[mapa]?.region)grupos.add(MAPS[mapa].region);
+  });
+  return [...grupos].sort();
 }
 function nomeDoProp(key){ return key.replace(/^prop_/,'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase()); }
 
@@ -132,14 +147,14 @@ function palettes(){
   $('tile-palette').innerHTML='';$('prop-palette').innerHTML='';
   Object.entries(TILES).forEach(([key,[name]])=>{const button=document.createElement('button');button.className='tile';button.innerHTML=`<span>${key}</span>${name}`;button.dataset.tile=key;button.onclick=()=>{state.selectedTile=key;state.mode='tile';choose();};$('tile-palette').append(button);});
   const busca=($('atlas-search')?.value||'').trim().toLocaleLowerCase(),grupo=$('atlas-filter')?.value||'all';
-  const filtrados=PROPS.filter(([key,name,,,propGrupo])=>(grupo==='all'||propGrupo===grupo)&&`${key} ${name}`.toLocaleLowerCase().includes(busca));
+  const filtrados=PROPS.filter(([key,name,,,grupos])=>(grupo==='all'||grupos.includes(grupo))&&`${key} ${name}`.toLocaleLowerCase().includes(busca));
   filtrados.forEach(([key,name,solid,,,path])=>{const button=document.createElement('button');button.className='prop';button.innerHTML=`<img src="../${path||`assets/world/${key}.webp`}" alt=""><span>${name}</span>`;button.dataset.prop=key;button.onclick=()=>{state.selectedProp=key;state.mode='prop';$('prop-solid').checked=solid;$('prop-shadow').checked=!key.includes('lake_edge');choose();};$('prop-palette').append(button);});
   if($('atlas-summary'))$('atlas-summary').textContent=`${filtrados.length} de ${PROPS.length} props do catálogo`;
 }
 function atualizarFiltros(){
   const filtro=$('atlas-filter');if(!filtro)return;
   const anterior=filtro.value;filtro.innerHTML='<option value="all">Todo o atlas</option>';
-  [...new Set(PROPS.map(prop=>prop[4]||'Geral'))].sort().forEach(grupo=>{const option=document.createElement('option');option.value=grupo;option.textContent=grupo;filtro.append(option);});
+  [...new Set(PROPS.flatMap(prop=>prop[4]))].sort().forEach(grupo=>{const option=document.createElement('option');option.value=grupo;option.textContent=grupo;filtro.append(option);});
   filtro.value=[...filtro.options].some(option=>option.value===anterior)?anterior:'all';
 }
 /* Região e BGM populados de MAPS/Sound.TRACKS DE VERDADE (carregados
@@ -180,6 +195,15 @@ function popularSheetsDeNpc(){
   sel.innerHTML=NPC_SHEETS.map(key=>`<option value="${key}">${nomeDoNpc(key)} (${key})</option>`).join('')
     ||'<option value="">catálogo indisponível — digite a chave manualmente depois</option>';
 }
+function popularReferenciasNpc(){
+  const preencher=(id,valores,rotulo)=>{
+    const sel=$(id);if(!sel)return;
+    sel.innerHTML=`<option value="">— sem ${rotulo} —</option>`+valores.map(valor=>`<option value="${valor}">${valor}</option>`).join('');
+  };
+  preencher('npc-shop',REFERENCIAS_NPC.lojas,'loja');
+  preencher('npc-quest',REFERENCIAS_NPC.missoes,'missão');
+  preencher('npc-portrait',REFERENCIAS_NPC.retratos,'retrato');
+}
 async function carregarAtlas(){
   try{
     const resposta=await fetch('../asset-catalog.json',{cache:'no-store'});if(!resposta.ok)throw new Error(`HTTP ${resposta.status}`);
@@ -187,11 +211,11 @@ async function carregarAtlas(){
     ASSET_PATHS=Object.fromEntries((catalogo.assets||[]).map(asset=>[asset.key,asset.path]));
     const assets=(catalogo.assets||[]).filter(asset=>asset.key?.startsWith('prop_')&&asset.path?.startsWith('assets/world/'));
     if(!assets.length)throw new Error('nenhum prop world encontrado');
-    PROPS=assets.sort((a,b)=>a.key.localeCompare(b.key)).map(asset=>{const anterior=base.get(asset.key)||[];return [asset.key,anterior[1]||nomeDoProp(asset.key),anterior[2]??true,anterior[3]??1,grupoDoProp(asset.key),asset.path];});
+    PROPS=assets.sort((a,b)=>a.key.localeCompare(b.key)).map(asset=>{const anterior=base.get(asset.key)||[];return [asset.key,anterior[1]||nomeDoProp(asset.key),anterior[2]??true,anterior[3]??1,gruposDoProp(asset.key),asset.path];});
     NPC_SHEETS=(catalogo.assets||[]).filter(asset=>asset.key?.startsWith('npc_')).map(asset=>asset.key).sort();
     state.selectedProp=PROPS[0][0];PROPS.forEach(carregarImagem);atualizarFiltros();palettes();choose();popularSheetsDeNpc();
   }catch(error){
-    PROPS=INITIAL_PROPS.map(prop=>[...prop,grupoDoProp(prop[0]),`assets/world/${prop[0]}.webp`]);PROPS.forEach(carregarImagem);atualizarFiltros();palettes();
+    PROPS=INITIAL_PROPS.map(prop=>[...prop,gruposDoProp(prop[0]),`assets/world/${prop[0]}.webp`]);PROPS.forEach(carregarImagem);atualizarFiltros();palettes();
     NPC_SHEETS=[];popularSheetsDeNpc();
     if($('atlas-summary'))$('atlas-summary').textContent=`Catálogo indisponível; usando ${PROPS.length} props-base (${error.message}).`;
   }
@@ -280,6 +304,9 @@ function definition(){
   const npcs=state.npcs.map(n=>{
     const bits=[`x:${n.x}`,`y:${n.y}`,`name:'${n.name.replace(/'/g,"\\'")}'`,`sheet:'${n.sheet}'`];
     if(n.wander)bits.push('wander:true');
+    if(n.shop)bits.push(`shop:'${n.shop}'`);
+    if(n.quest)bits.push(`quest:'${n.quest}'`);
+    if(n.portrait)bits.push(`portrait:'${n.portrait}'`);
     const linhas=(n.lines||[]).map(l=>`'${l.replace(/'/g,"\\'")}'`);
     bits.push(`lines:[${linhas.join(', ')}]`);
     const linha=`      {${bits.join(', ')}},`;
@@ -326,12 +353,13 @@ $('npc-add').onclick=()=>{
   const linhas=$('npc-lines').value.split('\n').map(l=>l.trim()).filter(Boolean);
   const notas=$('npc-notas').value.trim();
   if(!linhas.length && !notas){status('Preencha ao menos uma fala, ou explique em "precisa de acabamento manual" por que não tem.','error');return;}
-  state.npcs.push({x,y,name,sheet,wander:$('npc-wander').checked,lines:linhas,...(notas?{notas}:{})});
-  $('npc-name').value='';$('npc-lines').value='';$('npc-notas').value='';$('npc-wander').checked=false;
+  const shop=$('npc-shop').value,quest=$('npc-quest').value,portrait=$('npc-portrait').value;
+  state.npcs.push({x,y,name,sheet,wander:$('npc-wander').checked,lines:linhas,...(shop?{shop}:{}),...(quest?{quest}:{}),...(portrait?{portrait}:{}),...(notas?{notas}:{})});
+  $('npc-name').value='';$('npc-lines').value='';$('npc-notas').value='';$('npc-wander').checked=false;$('npc-shop').value='';$('npc-quest').value='';$('npc-portrait').value='';
   renderizarListaNpc();render();
   status(`NPC "${name}" adicionado em (${x},${y}).`,'ok');
 };
 $('resize').onclick=resize;$('validate').onclick=()=>{const r=validate();status(r.errors.length?r.errors.join(' '):r.warnings.length?r.warnings.join(' '):'Validação concluída: contrato de MAPS consistente.',r.errors.length?'error':'ok');};$('copy').onclick=async()=>{const value=definition();if(!value)return;try{await navigator.clipboard.writeText(value);status('Definição MAPS copiada. Cole em src/scripts/world/12-maps.js.','ok');}catch{status('Área de transferência indisponível.','error');}};
 ['spawn-x','spawn-y'].forEach(id=>$(id).addEventListener('input',render));document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{state.mode=button.dataset.mode;choose();});
 ['atlas-search','atlas-filter'].forEach(id=>$(id)?.addEventListener(id==='atlas-search'?'input':'change',palettes));
-state.grid=blank(state.w,state.h,state.fill);atualizarFiltros();palettes();render();choose();popularRegiaoEBgm();popularSheetsDeNpc();carregarAtlas();
+state.grid=blank(state.w,state.h,state.fill);atualizarFiltros();palettes();render();choose();popularRegiaoEBgm();popularSheetsDeNpc();popularReferenciasNpc();carregarAtlas();

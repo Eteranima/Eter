@@ -14,7 +14,9 @@ const RUN_MULT   = 0.62;   // multiplicador de duração ao correr (shift)
 const ANIM_STEP  = 0.09;   // troca de quadro do ciclo de caminhada
 
 const FONT_PX  = n => `${n}px "Press Start 2P", ui-monospace, monospace`;
-const FONT_UI  = n => `${n}px Inter, system-ui, sans-serif`;
+/* Corpo de diálogo: serif literária com ritmo de fantasia, mas ampla e
+   legível em parágrafos — o nome continua em Press Start 2P. */
+const FONT_UI  = n => `${n}px Alegreya, Inter, Georgia, serif`;
 
 const clamp  = (v,a,b) => v < a ? a : v > b ? b : v;
 const lerp   = (a,b,t) => a + (b - a) * t;

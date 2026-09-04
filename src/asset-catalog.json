@@ -4365,6 +4365,13 @@
       "mime": "image/webp",
       "bytes": 1460,
       "sha256": "022144b7bb88414f6e9847ca1c86e9b82c946019ba07b70cc47634301a988f45"
+    },
+    {
+      "key": "font_alegreya_latin_ext",
+      "path": "assets/fontes/alegreya-latin-ext.woff2",
+      "mime": "font/woff2",
+      "bytes": 37856,
+      "sha256": "16b24f84da5ac12dc79ea1060e3fd4e299f19146f607021f81bcf0b8123fe5bd"
     }
   ],
   "scripts": [
