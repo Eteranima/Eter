@@ -716,92 +716,9 @@ const TILE_ART = {
    publicado. Novas variantes (e novas famílias) entram depois, uma de
    cada vez, cada uma passando por QA visual antes de virar padrão —
    nunca em lote cego. */
-const WORLD_ART_FAMILIES = {
-  regioes: {
-    /* Pátio da Academia: a árvore histórica continua predominante; as
-       três copas ornamentais reduzem a repetição das alamedas sem tocar
-       em colisão, mapa ou no caminho procedural de outros biomas. */
-    patio: {
-      /* Peso 4:1:1:1 (proporção original) deixava a _03 sem nenhuma
-         célula real nas 17 árvores do Pátio — achado da revisão da
-         PR #12. 2:1:1:1 mantém a árvore histórica como a mais comum
-         (quase a maioria sozinha) e garante as três variantes na
-         grade de verdade; ver teste "toda variante de família aparece
-         em pelo menos uma célula real". */
-      tree: [
-        {key:'prop_arvore', weight:2},
-        {key:'prop_tree_stone_reach_01', weight:1},
-        {key:'prop_tree_stone_reach_02', weight:1},
-        {key:'prop_tree_stone_reach_03', weight:1},
-      ],
-    },
-    /* Academia: os interiores de Salão, Biblioteca e Anexo alternam
-       estantes catalogadas, sem alterar a grade sólida que as suporta. */
-    hall: {
-      shelf: [
-        {key:'prop_estante_interior', weight:4},
-        {key:'prop_shelf_stone_reach_01', weight:1},
-        {key:'prop_shelf_stone_reach_02', weight:1},
-        {key:'prop_shelf_stone_reach_03', weight:1},
-      ],
-      table: [
-        {key:'prop_mesa_interior', weight:4},
-        {key:'prop_table_stone_reach_01', weight:1},
-        {key:'prop_table_stone_reach_02', weight:1},
-        {key:'prop_table_stone_reach_03', weight:1},
-      ],
-    },
-    /* Prova de conceito da Fase 1: reafirma o pilar do Subterrâneo
-       como família de variante única. Nenhuma arte nova; só liga o
-       cano. */
-    undercroft: { pillar: [{key:'prop_pilar', weight:1}] },
-  },
-  mapas: {},
-};
-
-/** Hash determinístico e estável (djb2) — nunca `Math.random()`. A
- *  mesma string sempre devolve o mesmo número, em qualquer navegador
- *  e em qualquer sessão. */
-function hashDeterministico(texto){
-  let h = 5381;
-  for (let i = 0; i < texto.length; i++) h = ((h * 33) ^ texto.charCodeAt(i)) >>> 0;
-  return h >>> 0;
-}
-
-/** Família aplicável a um id lógico (de `TILEDEF[ch].id`, tile raso ou
- *  tall) na célula atual — mapa vence região. `null` quando nenhuma das
- *  duas declara nada pra esse id: quem chamou cai no `TILE_ART`/
- *  `TALL_ART`/fallback de sempre, sem checar mais nada. */
-function familiaDe(idLogico){
-  const mapaId = G.mapId, regiaoId = G.map?.def?.region;
-  const doMapa = mapaId && WORLD_ART_FAMILIES.mapas[mapaId]?.[idLogico];
-  if (doMapa && doMapa.length) return doMapa;
-  const daRegiao = regiaoId && WORLD_ART_FAMILIES.regioes[regiaoId]?.[idLogico];
-  if (daRegiao && daRegiao.length) return daRegiao;
-  return null;
-}
-
-/** Escolhe UMA variante da família pra (x,y) — sempre a mesma pra essa
- *  célula desse mapa. Peso inteiro ≥1; sem peso conta 1. */
-function varianteDeFamilia(familia, idLogico, x, y){
-  const total = familia.reduce((n, v) => n + (v.weight || 1), 0);
-  const h = hashDeterministico(`${G.mapId}:${idLogico}:${x}:${y}`) % total;
-  let acumulado = 0;
-  for (const v of familia){
-    acumulado += v.weight || 1;
-    if (h < acumulado) return v.key;
-  }
-  return familia[familia.length - 1].key;
-}
-
-/** Ponto único de consulta pra quem desenha: a CHAVE de sprite da
- *  família pra esse id/célula, ou `null` — sem família declarada, ou
- *  chave que ainda não carregou (`arteTile` decide isso na hora de
- *  desenhar, não aqui). */
-function chaveDeFamilia(idLogico, x, y){
-  const familia = familiaDe(idLogico);
-  return familia ? varianteDeFamilia(familia, idLogico, x, y) : null;
-}
+/* WORLD_ART_FAMILIES, TALL_ART e a resolução determinística vivem em
+   engine/14c-world-art.js. O editor também carrega esse arquivo e usa
+   a mesma função pura com contexto explícito. */
 /* Fila de ícones de condição. Todo estado publicado tem arte em 16px;
    o glifo abaixo é só defesa para dados inválidos em desenvolvimento.
    Devolve a largura usada, para quem chama seguir escrevendo depois. */

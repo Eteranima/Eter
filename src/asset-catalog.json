@@ -4384,6 +4384,7 @@
     "scripts/engine/13-audio.js",
     "scripts/engine/14-input.js",
     "scripts/engine/14b-prop-layout.js",
+    "scripts/engine/14c-world-art.js",
     "scripts/engine/15-render.js",
     "scripts/engine/16-save-state.js",
     "scripts/engine/17-world.js",

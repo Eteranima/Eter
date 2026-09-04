@@ -149,15 +149,6 @@ function desenharProp(chave, sx, sy, o = {}){
 /* Tile alto -> peça de cenário. Todo tipo alto usado nos mapas tem arte
    própria; o renderizador não deve voltar ao traço procedural em uma sala
    publicada. Mesa e estante usam peças geradas para a grade de 32px. */
-const TALL_ART = {
-  tree:   'prop_arvore',
-  shelf:  'prop_estante_interior',
-  table:  'prop_mesa_interior',
-  pillar: 'prop_pilar',
-  rubble: 'prop_entulho',
-  save:   'prop_save',
-};
-
 function drawTallTile(ch, x, y, sx, sy){
   const t = Date.now();
   const idAlto = TILEDEF[ch].id;
