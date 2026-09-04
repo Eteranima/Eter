@@ -28,14 +28,16 @@ const BATTLE_ART = {
      NOME, e é trocando o nome do ator que a transformação aparece. */
   'Gabriel Lycan': {w:104, h:134, src:'assets/characters/gabriel-lycan-src.webp'},
   Scythe: {w:90, h:152, src:'assets/characters/scythe-src.webp'},
-  /* v5.31 — Beatriz, Calder e Carmila nunca ganharam um "-src.webp"
-     dedicado: a arte que existe pra elas é a mesma catalogada para o
-     diálogo (`dlg_*`), mas em corpo inteiro e na mesma qualidade das
-     outras artes de combate — não é um busto reaproveitado. Se um dia
-     chegar arte de batalha própria, troque só o `src` aqui. */
+  /* v5.31 — Beatriz e Calder nunca ganharam um "-src.webp" dedicado: a
+     arte que existe pra eles é a mesma catalogada para o diálogo
+     (`dlg_*`), mas em corpo inteiro e na mesma qualidade das outras
+     artes de combate — não é um busto reaproveitado. v5.32: os dois
+     saíram de PARTY_DEFS (viraram guests-tutoriais, ver GUEST_ALLIES),
+     mas a entrada aqui continua servindo — é ela que desenha os dois
+     na luta de demonstração. Se um dia chegar arte de batalha própria,
+     troque só o `src` aqui. */
   'Beatriz Demeter': {w:98, h:152, src:'assets/characters/dlg_beatriz.webp'},
   'Calder Pell': {w:100, h:152, src:'assets/characters/dlg_calderpell.webp'},
-  'Carmila Reachforth': {w:96, h:152, src:'assets/characters/dlg_carmila.webp'},
 };
 
 /* --- Party -------------------------------------------------------- */
@@ -75,24 +77,14 @@ const PARTY_DEFS = [
    base:{hp:72, mp:52, atk:15, def:10, spd:15}, grow:{hp:7, mp:7, atk:1.7, def:1.3, spd:1.6},
    learn:[[1,'gale_cut'],[1,'breath'],[6,'updraft'],[11,'stormeye'],[14,'tailwind'],[16,'windblade'],[20,'cleanwind'],[25,'cyclone'],[31,'worldbreath']],
    pitch:'Cura fraca em todos e abre o inimigo com Exposto. Brilha em grupo, sofre sozinha.'},
-  /* v5.1 — os dois que entram por último no elenco.
-     A Ava não é uma terceira curandeira: ela quase não cura, ela impede
-     o dano antes dele acontecer. Tem o maior DEF do elenco e o menor ATK.
-     A Scythe divide o papel de assassina com a Marin, mas por outro
-     caminho: a Marin é pico e a Scythe é subtração — tira o turno do
-     inimigo com Pavor antes de tirar o HP. */
-  {name:'Ava Rosa Groot', element:'earth', role:'Druida',
-   sheet:'ava_sheet', portrait:'ava_portrait',
-   base:{hp:88, mp:50, atk:13, def:16, spd:10}, grow:{hp:10, mp:7, atk:1.4, def:2.3, spd:1.0},
-   learn:[[1,'root_lash'],[1,'bark_ward'],[7,'bloom'],[11,'stonehide'],[15,'quake'],
-          [19,'deeproot'],[23,'greenmend'],[27,'gaia_wall'],[31,'regrowth']],
-   pitch:'Aguenta mais que todo mundo e quase não bate. Sozinha, empaca; em grupo, ninguém cai.'},
-  {name:'Scythe', element:'poison', role:'Ceifadora',
-   sheet:'scythe_sheet', portrait:'scythe_portrait',
-   base:{hp:74, mp:48, atk:21, def:10, spd:18}, grow:{hp:8, mp:6, atk:2.5, def:1.3, spd:2.0},
-   learn:[[1,'toxin_cut'],[1,'wither'],[8,'dreadcut'],[12,'creeping'],[16,'scythe_arc'],
-          [20,'venom_veil'],[25,'reaping'],[30,'last_rites']],
-   pitch:'Tira o turno do inimigo antes de tirar a vida. Rápida, letal e de vidro.'},
+  /* v5.32 — Ava Rosa Groot e Scythe saíram do elenco jogável e viraram
+     guests-tutoriais (ver GUEST_ALLIES, mais abaixo): a Ava ensina
+     escudo em grupo, a Scythe ensina golpe único devastador. Motivo:
+     pedido explícito do usuário — travar personagens específicos como
+     ajuda de IA em vez de membros recrutáveis normais. GUEST_ALLIES dá
+     a cada um stats e UMA habilidade novos, pensados só pra lição — o
+     kit antigo (`learn`, em SKILLS) fica órfão no arquivo de skills,
+     sem quebrar nada (nenhum autoteste exige skill sem dono). */
   /* Madao NÃO divide mais elemento de combate com ninguém: virou Cinzas
      (ID interno `blood`, reaproveitando a posição de Sangue no anel —
      ver comentário em ELEM.blood), a mesma família da identidade da
@@ -106,96 +98,100 @@ const PARTY_DEFS = [
           [18,'m_flare'],[22,'m_box_all'],[26,'m_bonfire'],[30,'m_last']],
    pitch:'Regenera sozinho fora da luta e se esconde atrás de uma caixa. Não morre, só desiste devagar.'},
   /* ============ v5.30: A GERAÇÃO ANTERIOR ENTRA EM CAMPO ============
-     Quatro professores de Stone Reach viram jogáveis. Chegam com curva
-     de 29 anos de ofício: base alta e crescimento MENOR que o dos
-     alunos, porque quem já está formado cresce menos. No fim da curva
-     empatam com o elenco; no meio, adiantam.
+     Quatro professores de Stone Reach viraram jogáveis nesta leva.
+     Chegavam com curva de 29 anos de ofício: base alta e crescimento
+     MENOR que o dos alunos, porque quem já está formado cresce menos.
 
-     `geracao` separa aluno de professor, e é o que a regra de pet
-     consulta — pet se conquista no Ninhal, que é coisa de estudante.
-     A exceção é a Amanda: o dragão da diretora já era dela no jogo
-     antes de ela ser jogável, e agora tem dono de verdade.
-
-     NOTA DE CÂNONE: o documento diz que a Amanda "não é jogável — ela é
-     a diretora". A arte de combate que chegou diz o contrário, e a arte
-     ganhou. Reverter é apagar a entrada dela daqui. */
-  {name:'Orfeu Bauss', element:'none',  role:'Lutador', geracao:'anterior',
-   sheet:'orfeu_sheet',  portrait:'orfeu_portrait',
-   base:{hp:132, mp:34, atk:24, def:20, spd:17}, grow:{hp:10, mp:3.4, atk:2.1, def:1.8, spd:1.3},
-   learn:[[1,'or_golpe'],[1,'or_guarda'],[8,'or_absorver'],[12,'or_rodada'],[15,'or_disciplina'],
-          [20,'or_contra'],[24,'or_vazio'],[28,'or_conquista']],
-   pitch:'Lutador sem elemento nenhum, e é essa a graça: não há fraqueza elemental para explorar.'},
-  {name:'Abel Nomikos', element:'fire',  role:'Mago', geracao:'anterior',
-   sheet:'abel_sheet',   portrait:'abel_portrait',
-   base:{hp:104, mp:58, atk:23, def:14, spd:16}, grow:{hp:8, mp:5.2, atk:2.2, def:1.4, spd:1.3},
-   learn:[[1,'ab_leitura'],[1,'ab_nota'],[8,'ab_runa'],[12,'ab_indice'],[15,'ab_pagina'],
-          [20,'ab_calculo'],[24,'ab_tomo'],[28,'ab_conclusao']],
-   pitch:'Mago de Fogo, dano mágico. Desmonta o inimigo antes de queimá-lo.'},
+     v5.32 — Orfeu Bauss, Abel Nomikos e Amanda Felt saíram do elenco
+     jogável (viraram guests-tutoriais, ver GUEST_ALLIES: contra-ataque,
+     área e quebra de armadura, respectivamente). Só o Snoopy, dos
+     quatro, continua aqui. */
   {name:'Snoopy',  element:'electricity', role:'Assassino', geracao:'anterior',
    sheet:'snoopy_sheet', portrait:'snoopy_portrait',
    base:{hp:112, mp:52, atk:22, def:16, spd:19}, grow:{hp:8.6, mp:4.8, atk:2.1, def:1.5, spd:1.5},
    learn:[[1,'sn_faisca'],[1,'sn_marca'],[8,'sn_passo'],[12,'sn_sopro'],[15,'sn_corrente'],
           [20,'sn_garra'],[24,'sn_voo'],[28,'sn_despertar']],
    pitch:'Marca o alvo, acelera e cai em cima. Frágil, mas escolhe quem morre primeiro.'},
-  {name:'Amanda Felt', element:'fire', role:'Cavaleira', geracao:'anterior',
-   sheet:'amanda_sheet', portrait:'amanda_portrait',
-   base:{hp:140, mp:56, atk:27, def:21, spd:20}, grow:{hp:9.4, mp:4.6, atk:2.0, def:1.6, spd:1.2},
-   learn:[[1,'am_lamina'],[1,'am_fenda'],[8,'am_ordem'],[12,'am_asa'],[15,'am_selo'],
-          [20,'am_coroa'],[24,'am_dracon'],[28,'am_herdeira']],
-   pitch:'Cavaleira de Fogo, dano físico. A base mais alta do elenco e o crescimento mais lento.'},
 
-  /* ============ v5.31: TRÊS QUE JÁ TINHAM SPRITE E SHEET ============
+  /* ============ v5.31/v5.32: TRÊS QUE JÁ TINHAM SPRITE E SHEET ======
      Beatriz Demeter, Calder Pell e Carmila Reachforth chegaram ao
-     catálogo de assets prontos (sheet de campo + retrato) sem NENHUMA
-     ficha de personagem em lugar nenhum — nem stats, nem elemento, nem
-     habilidade. `geracao:'anterior'` porque nenhum dos três lê como
-     estudante recém-chegado; mesma curva de base/crescimento da v5.30
-     (base alta, cresce menos, empata com o elenco lá na frente). Sem pet
-     de Ninhal, como todo `anterior`. Elemento: Beatriz fecha Luz, a
-     única das dez afinidades do anel sem NENHUM personagem jogável até
-     aqui; Calder e Carmila repetem Trevas/Cinzas, que já eram únicas —
-     duplicar elemento é o padrão já usado em Fogo (3×) e Eletricidade
-     (2×), não uma exceção. */
-  {name:'Beatriz Demeter', element:'light', role:'Paladina', geracao:'anterior',
-   sheet:'beatriz_sheet', portrait:'dlg_beatriz',
-   base:{hp:118, mp:50, atk:24, def:17, spd:16}, grow:{hp:9, mp:4.6, atk:2.1, def:1.7, spd:1.3},
-   learn:[[1,'bt_corte'],[1,'bt_veredito'],[8,'bt_disciplina'],[12,'bt_circulo'],[15,'bt_juramento'],
-          [20,'bt_exorcismo'],[24,'bt_alvorada'],[28,'bt_sentenca']],
-   pitch:'Atordoa antes de cortar, mas gasta luz rápido demais pra abusar sozinha. Boa entrada, ruim em maratona.'},
-  {name:'Calder Pell', element:'darkness', role:'Ocultista', geracao:'anterior',
-   sheet:'calderpell_sheet', portrait:'dlg_calderpell',
-   base:{hp:100, mp:64, atk:20, def:15, spd:15}, grow:{hp:7.6, mp:5.8, atk:1.9, def:1.5, spd:1.3},
-   learn:[[1,'cp_toque'],[1,'cp_pacto'],[8,'cp_correntes'],[12,'cp_ordalia'],[15,'cp_juramento_negro'],
-          [20,'cp_veredicto'],[24,'cp_colheita'],[28,'cp_ultimo_selo']],
-   pitch:'Não corre atrás de nada — mas sozinho, a maldição demora pra fechar o cerco, e ele apanha esperando.'},
-  {name:'Carmila Reachforth', element:'blood', role:'Condessa', geracao:'anterior',
-   sheet:'carmila_sheet', portrait:'dlg_carmila',
-   base:{hp:108, mp:54, atk:23, def:16, spd:18}, grow:{hp:8.2, mp:5.0, atk:2.0, def:1.6, spd:1.5},
-   learn:[[1,'cm_unha'],[1,'cm_convite'],[8,'cm_veia'],[12,'cm_banquete'],[15,'cm_pacto'],
-          [20,'cm_sede'],[24,'cm_enxame'],[28,'cm_ceia_eterna']],
-   pitch:'Cada golpe reabastece ela, então sozinha aguenta mais do que parece. Só não tem com quem repartir o excedente.'},
+     catálogo de assets prontos (v5.31) e viraram jogáveis por uma leva.
+     v5.32 — nenhum dos três continua em PARTY_DEFS: Beatriz e Calder
+     viraram guests-tutoriais (cura em grupo e dreno de vida, ver
+     GUEST_ALLIES); Carmila saiu do elenco jogável sem virar guest —
+     pedido do usuário, sem mecânica de tutorial associada a ela. A
+     missão que a recrutava (`q_sanguessuga`) agora paga em equipamento
+     em vez de companheira (ver 11-quests.js e RECRUIT_QUESTS). */
 ];
 
 /* --- Guests-tutoriais ----------------------------------------------
-   Malquior Morningstar e Sebastian Crowley NÃO são PARTY_DEFS: nunca
-   são recrutados, nunca entram em G.party/G.squad, nunca são salvos.
-   Existem só para uma luta de demonstração de 1-2 rodadas (gancho em
-   Battle.begin({guest:...}), ver makeGuestAlly() em
-   engine/16-save-state.js e guestAct() em combat/27-controller.js) —
-   o padrão "Wally leva você até o mato e captura um Pokémon" que o
-   usuário pediu: um NPC já cadastrado em DIALOGUE_SPRITES entra na
-   luta, mostra UMA mecânica em segundos e sai, sem virar personagem
-   de verdade. Estatística fixa (nível 5 equivalente), sem base/grow/
-   learn/árvore — não precisa, porque nunca ganha EXP nem persiste. */
+   Nenhum destes 9 é PARTY_DEFS: nunca são recrutados, nunca entram em
+   G.party/G.squad, nunca são salvos. Existem só para uma luta de
+   demonstração de 1-2 rodadas (gancho em Battle.begin({guest:...}),
+   ver makeGuestAlly() em engine/16-save-state.js e guestAct() em
+   combat/27-controller.js) — o padrão "Wally leva você até o mato e
+   captura um Pokémon" que o usuário pediu: um NPC entra na luta,
+   mostra UMA mecânica em segundos e sai, sem virar personagem de
+   verdade. Estatística fixa (nível 5 equivalente), sem base/grow/
+   learn/árvore — não precisa, porque nunca ganha EXP nem persiste.
+
+   v5.32 — sete destes nove (todos menos Malquior/Sebastian, que já
+   eram NPC-only) SAÍRAM de PARTY_DEFS nesta versão: eram personagem
+   jogável shipado, e o usuário pediu explicitamente para travá-los
+   como ajuda de IA em vez de membro recrutável. `sheet`/`portrait`
+   reaproveitam a arte de campo/diálogo que cada um já tinha como
+   jogável — é a mesma pessoa, só o papel mudou.
+
+   GRADUAL POR FLAG: cada um só aparece no mundo (ver `needFlag` na
+   entrada de `npcs` em world/12-maps.js, filtrado em engine/17-world.js)
+   depois de um marco de progresso — Abel é o único sempre disponível
+   desde o início. Mecânica e local, na ordem em que se desbloqueiam:
+     Abel      → área              · Pátio (sempre)
+     Ava       → escudo em grupo   · Câmara do Selo, após warden_defeated
+     Malquior  → marcar alvo       · Biblioteca, após echo_defeated
+     Sebastian → provocar          · Anexo, após cinder_defeated
+     Orfeu     → contra-ataque     · A Chocadeira, após ninho_defeated
+     Beatriz   → cura em grupo     · A Comporta, após deluge_defeated
+     Calder    → dreno de vida     · Coroa de Vidro (Cume), após crown_defeated
+     Amanda    → quebra de guarda  · A Última Prateleira, após arquivista_defeated
+     Scythe    → golpe devastador  · Tumba de Cristal Fosco, após vharok_defeated */
 const GUEST_ALLIES = {
+  abel: {name:'Abel Nomikos', element:'fire', role:'Mago',
+    sheet:'abel_sheet', portrait:'abel_portrait',
+    hp:120, mp:50, atk:24, def:13, spd:15, guestSkill:'guest_area',
+    licao:'Habilidade em área acerta todo mundo de uma vez — poucos alvos sobrevivem a isso por muito tempo.'},
+  ava: {name:'Ava Rosa Groot', element:'earth', role:'Druida',
+    sheet:'ava_sheet', portrait:'ava_portrait',
+    hp:150, mp:40, atk:12, def:20, spd:10, guestSkill:'guest_escudo',
+    licao:'Um escudo em todo o grupo custa o turno de quem lança, mas paga a diferença nas rodadas seguintes.'},
   malquior: {name:'Malquior Morningstar', element:'darkness', role:'Ocultista',
     sheet:'npc_encapuzado', portrait:'dlg_malquior',
-    hp:130, mp:40, atk:20, def:12, spd:14, guestSkill:'guest_area',
-    licao:'Habilidade em área acerta todo mundo de uma vez — poucos alvos sobrevivem a isso por muito tempo.'},
+    hp:130, mp:40, atk:20, def:12, spd:14, guestSkill:'guest_marca',
+    licao:'Marcar todo mundo de uma vez custa o turno, mas ninguém escapa da mira depois disso.'},
   sebastian: {name:'Sebastian Crowley', element:'light', role:'Guardião',
     sheet:'npc_batedor', portrait:'dlg_sebastian',
-    hp:150, mp:40, atk:14, def:18, spd:12, guestSkill:'guest_escudo',
-    licao:'Um escudo em todo o grupo custa o turno de quem lança, mas paga a diferença nas rodadas seguintes.'},
+    hp:150, mp:40, atk:14, def:18, spd:12, guestSkill:'guest_provocar',
+    licao:'Provocar puxa o golpe pra quem aguenta — o resto do grupo respira um turno.'},
+  orfeu: {name:'Orfeu Bauss', element:'none', role:'Lutador',
+    sheet:'orfeu_sheet', portrait:'orfeu_portrait',
+    hp:170, mp:30, atk:26, def:19, spd:16, guestSkill:'guest_contra',
+    licao:'Esperar o golpe errado do inimigo vale mais que apressar o seu.'},
+  beatriz: {name:'Beatriz Demeter', element:'light', role:'Paladina',
+    sheet:'beatriz_sheet', portrait:'dlg_beatriz',
+    hp:140, mp:55, atk:20, def:16, spd:15, guestSkill:'guest_cura',
+    licao:'Curar todo mundo de uma vez custa o turno inteiro — vale quando ninguém pode cair agora.'},
+  calder: {name:'Calder Pell', element:'darkness', role:'Ocultista',
+    sheet:'calderpell_sheet', portrait:'dlg_calderpell',
+    hp:125, mp:60, atk:22, def:14, spd:14, guestSkill:'guest_dreno',
+    licao:'Cada ponto tirado do inimigo é um ponto que volta pra você.'},
+  amanda: {name:'Amanda Felt', element:'fire', role:'Cavaleira',
+    sheet:'amanda_sheet', portrait:'amanda_portrait',
+    hp:165, mp:45, atk:25, def:20, spd:17, guestSkill:'guest_quebra',
+    licao:'Quebrar a guarda de todo mundo de uma vez abre o caminho pro resto do grupo.'},
+  scythe: {name:'Scythe', element:'poison', role:'Ceifadora',
+    sheet:'scythe_sheet', portrait:'scythe_portrait',
+    hp:110, mp:45, atk:30, def:12, spd:19, guestSkill:'guest_nuke',
+    licao:'Um golpe só, pensado pra encerrar a luta ali mesmo.'},
 };
 
 /* ===================================================================

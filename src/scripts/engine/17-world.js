@@ -114,7 +114,12 @@ function loadMap(id, sx, sy, sdir){
     console.warn(`[${id}] ${warpTiles.length} tiles de passagem para ${(def.warps||[]).length} destinos`);
 
   G.map = m;   // NPCs/boss precisam de isSolid, que lê G.map
-  m.npcs = (def.npcs || []).map(n => {
+  /* `needFlag` (mesmo campo/mesma regra dos warps, ver onStepComplete em
+     18-day-night.js): NPC gradual — só existe no mundo depois que a flag
+     vira true. Usado pelos guests-tutoriais (Ava/Malquior/Sebastian/
+     Orfeu/Beatriz/Calder/Amanda/Scythe, ver GUEST_ALLIES) pra aparecer
+     só depois de um marco de progresso, em vez de sempre disponíveis. */
+  m.npcs = (def.npcs || []).filter(n => !n.needFlag || G.flags[n.needFlag]).map(n => {
     const p = nearestFree(n.x, n.y);
     return {...n, tx:p.x, ty:p.y, px:p.x * TILE, py:p.y * TILE, homeX:p.x, homeY:p.y,
             dir:'down', moving:false, moveT:0, animT:0, fromX:p.x, fromY:p.y, wait:rnd(3, 1)};

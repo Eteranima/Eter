@@ -510,24 +510,21 @@ function syncArvore(c){
    início do jogo (`montarRecrutas`) e guardado no save, senão o
    escolhido apareceria de novo como recompensa de si mesmo. */
 /* A ordem é a de recrutamento: `montarRecrutas` casa o k-ésimo que falta
-   com a k-ésima missão daqui. As cinco primeiras são as da academia; as
-   duas últimas, da Mata Cindária, trazem a Ava e a Scythe — que entram
-   no meio do jogo de propósito, quando o grupo já tem forma e ganhar um
-   suporte de DEF ou uma ceifadora é uma DECISÃO de formação, não a
-   diferença entre jogar e não jogar.
-   O casamento temático é o que sobra: o Lenhador da mata queimada traz a
-   guardiã do bosque, e o Alquimista traz quem vive de veneno. */
+   com a k-ésima missão daqui. As cinco primeiras são as da academia.
+
+   v5.32 — a lista ENCOLHEU de volta para 7. Ava, Scythe, Orfeu, Abel,
+   Amanda, Beatriz, Calder e Carmila saíram de PARTY_DEFS (viraram
+   guests-tutoriais ou, no caso da Carmila, saíram do elenco jogável
+   sem virar nada) — pedido explícito do usuário. As oito missões que
+   os traziam (q_lenhador, q_alquimista, q_coletores, q_serpente,
+   q_mumias, q_curador, q_penumbra, q_sanguessuga) continuam no mundo,
+   com o mesmo NPC e o mesmo diálogo, mas não recrutam mais ninguém —
+   `ver 11-quests.js`: cada uma ganhou um set de equipamento completo
+   no lugar do companheiro. Só q_batedora (Madao) e q_carnicais
+   (Snoopy) sobreviveram do bloco v5.30/v5.31, porque os dois
+   continuam jogáveis. */
 const RECRUIT_QUESTS = ['q_zelador', 'q_bibliotecaria', 'q_veterano', 'q_enfermeira', 'q_mercador',
-                        'q_lenhador', 'q_alquimista', 'q_batedora',
-  /* v5.30 — quatro personagens novos pedem quatro missões novas, uma por
-     região da v5.28. Sem elas o elenco passaria de 13 com 8 missões, e a
-     rotina de sobra despejaria três recrutas na última — que funciona,
-     mas é o caminho de emergência, não o desenho. */
-                        'q_coletores', 'q_serpente', 'q_carnicais', 'q_mumias',
-  /* v5.31 — mesma regra para Beatriz, Calder e Carmila: três recrutas
-     novos, três missões novas, uma por região onde a espécie-alvo já
-     sai em formação (ver comentário em cada missão, `11-quests.js`). */
-                        'q_curador', 'q_penumbra', 'q_sanguessuga'];
+                        'q_batedora', 'q_carnicais'];
 /* Quem cura. Se o protagonista não estiver aqui, o primeiro recruta é —
    um começo sem cura nenhuma trava o jogador na primeira região, e a
    primeira missão é justamente a mais fácil de alcançar. */

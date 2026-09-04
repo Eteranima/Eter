@@ -578,6 +578,11 @@ function loadFromSave(s){
      Save antigo (sem `recruits`) tem os seis em `s.party` e cai aqui com
      os seis — continua carregando igual, que é o esperado. */
   const elenco = (s.party || []).map(p => p.name).filter(n => PARTY_DEFS.some(d => d.name === n));
+  /* v5.32 — nomes de save que NÃO existem mais em PARTY_DEFS (os 8 que
+     saíram do elenco jogável nesta versão): a linha acima já os filtra
+     em silêncio; a diferença aqui é só pra decidir se avisa o jogador
+     (banner logo abaixo, depois que o mapa carregar). */
+  const sumidos = (s.party || []).map(p => p.name).filter(n => !PARTY_DEFS.some(d => d.name === n));
   G.party = (elenco.length ? elenco : [PARTY_DEFS[0].name])
     .map(n => makeChar(PARTY_DEFS.find(d => d.name === n), 5));
   /* Sem `recruits` no save o mapa é remontado a partir de quem falta —
@@ -682,6 +687,11 @@ function loadFromSave(s){
   loadMap(MAPS[mapa] ? mapa : 'patio',
           pos ? pos.tx : s.x, pos ? pos.ty : s.y, pos ? pos.dir : s.dir);
   G.steps = (Array.isArray(s.teams) ? s.teams[ativo]?.steps : s.steps) || 0;
+  /* v5.32 — avisa se algum nome do save sumiu do elenco jogável (os 8
+     que viraram guest-tutorial ou saíram de vez). Só depois de loadMap,
+     que é quando G.map passa a existir e o banner tem onde desenhar. */
+  if (sumidos.length)
+    showBanner(`O elenco mudou: ${sumidos.join(', ')} não ${sumidos.length > 1 ? 'estão' : 'está'} mais disponível para jogar.`);
 }
 
 /* --- Modo Mestre (v5.32) -------------------------------------------

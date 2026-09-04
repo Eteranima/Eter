@@ -542,17 +542,37 @@ const SKILLS = {
   cm_ceia_eterna:{name:'Ceia Eterna',     cost:36, power:78, elem:'blood', type:'atk', target:'one',
                  drain:0.65, poise:1.9, desc:'Ela já bebeu de reis. Este não vai durar muito mais.'},
 
-  /* --- Guests-tutoriais (Malquior, Sebastian) -----------------------
+  /* --- Guests-tutoriais (9: Abel, Ava, Malquior, Sebastian, Orfeu,
+     Beatriz, Calder, Amanda, Scythe) ----------------------------------
      Não pertencem a nenhuma árvore de personagem — só ao par
      GUEST_ALLIES em characters/07-characters.js. `cost:0` de propósito,
      igual às skills de chefe: o convidado nunca gerencia MP, só existe
      para demonstrar a mecânica em 1-2 rodadas e sair. `target:'all'`/
-     `'allies'` de propósito também — evita depender do cursor de alvo
-     manual do jogador (ver guestAct() em combat/27-controller.js). */
-  guest_area:  {name:'Ruína Repartida', cost:0, power:40, elem:'darkness', type:'atk', target:'all',
+     `'allies'`/`'self'` de propósito também — evita depender do cursor
+     de alvo manual do jogador (ver guestAct() em combat/27-controller.js);
+     quando a lição é num alvo só (dreno, nuke), guestAct() cai no
+     fallback de primeiro inimigo vivo. */
+  guest_area:  {name:'Ruína Repartida', cost:0, power:40, elem:'fire', type:'atk', target:'all',
                 desc:'Um golpe só, todo mundo sente. É a lição: área custa foco, não força.'},
-  guest_escudo:{name:'Guarda Silenciosa', cost:0, power:0, elem:'light', type:'buff', target:'allies',
+  guest_escudo:{name:'Guarda Silenciosa', cost:0, power:0, elem:'earth', type:'buff', target:'allies',
                 buff:{def:1.5, turns:3}, desc:'Proteger todo mundo de uma vez vale o turno gasto sem atacar.'},
+  guest_marca: {name:'Sigilo Repartido', cost:0, power:0, elem:'darkness', type:'debuff', target:'all',
+                status:{id:'marked', chance:0.9},
+                desc:'Marcar todo mundo de uma vez custa o turno, mas ninguém escapa da mira depois disso.'},
+  guest_provocar:{name:'Grito de Guarda', cost:0, power:0, elem:'light', type:'buff', target:'self',
+                buff:{def:1.6, turns:3}, taunt:3,
+                desc:'Provocar puxa o golpe pra quem aguenta — o resto do grupo respira um turno.'},
+  guest_contra:{name:'Resposta Certeira', cost:0, power:50, elem:'none', type:'atk', target:'one',
+                phys:true, poise:1.6, desc:'Esperar o golpe errado do inimigo vale mais que apressar o seu.'},
+  guest_cura:  {name:'Luz Repartida', cost:0, power:80, elem:'light', type:'heal', target:'allies',
+                desc:'Curar todo mundo de uma vez custa o turno inteiro — vale quando ninguém pode cair agora.'},
+  guest_dreno: {name:'Sanguessuga Silenciosa', cost:0, power:34, elem:'darkness', type:'atk', target:'one',
+                drain:0.6, desc:'Cada ponto tirado do inimigo é um ponto que volta pra você.'},
+  guest_quebra:{name:'Fenda na Guarda', cost:0, power:0, elem:'fire', type:'debuff', target:'all',
+                status:{id:'exposed', chance:0.8},
+                desc:'Quebrar a guarda de todo mundo de uma vez abre o caminho pro resto do grupo.'},
+  guest_nuke:  {name:'Golpe Final', cost:0, power:95, elem:'poison', type:'atk', target:'one',
+                poise:2.0, desc:'Um golpe só, pensado pra encerrar a luta ali mesmo.'},
 };
 
 /* --- Ultimates (Ressonância) — 1 por personagem ------------------- */
