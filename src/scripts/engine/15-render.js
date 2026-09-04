@@ -729,6 +729,22 @@ const WORLD_ART_FAMILIES = {
         {key:'prop_tree_stone_reach_03', weight:1},
       ],
     },
+    /* Academia: os interiores de Salão, Biblioteca e Anexo alternam
+       estantes catalogadas, sem alterar a grade sólida que as suporta. */
+    hall: {
+      shelf: [
+        {key:'prop_estante_interior', weight:4},
+        {key:'prop_shelf_stone_reach_01', weight:1},
+        {key:'prop_shelf_stone_reach_02', weight:1},
+        {key:'prop_shelf_stone_reach_03', weight:1},
+      ],
+      table: [
+        {key:'prop_mesa_interior', weight:4},
+        {key:'prop_table_stone_reach_01', weight:1},
+        {key:'prop_table_stone_reach_02', weight:1},
+        {key:'prop_table_stone_reach_03', weight:1},
+      ],
+    },
     /* Prova de conceito da Fase 1: reafirma o pilar do Subterrâneo
        como família de variante única. Nenhuma arte nova; só liga o
        cano. */

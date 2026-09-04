@@ -2340,8 +2340,8 @@
       "key": "prop_academia_stone_reach",
       "path": "assets/world/prop_academia_stone_reach.webp",
       "mime": "image/webp",
-      "bytes": 13382,
-      "sha256": "fa2485ed7193247751158dfd80d8e13c08345fd2dec7feb22f4eb7a873df7c10"
+      "bytes": 45432,
+      "sha256": "f32ef6a9362c63b2ed800119f6607e408ddc640d1e90545c17bf08e67d2e68ea"
     },
     {
       "key": "prop_portao_stone_reach",
@@ -2785,6 +2785,97 @@
       "sha256": "5a67b0fe2aaf2173614642a1dffcdcd17d7658847ef5c4625263392b4c5b90b4"
     },
     {
+      "key": "prop_table_stone_reach_01",
+      "path": "assets/world/prop_table_stone_reach_01.webp",
+      "mime": "image/webp",
+      "bytes": 1086,
+      "sha256": "76c2302bed9154a325f3ce0425712d6720d48f61e2f6d82a722a9a4c787bc569"
+    },
+    {
+      "key": "prop_table_stone_reach_02",
+      "path": "assets/world/prop_table_stone_reach_02.webp",
+      "mime": "image/webp",
+      "bytes": 1196,
+      "sha256": "2a8074cf4fc6e990637bc4d82a8fb7aec8f169806dacf04ed43bbce73ada9f91"
+    },
+    {
+      "key": "prop_table_stone_reach_03",
+      "path": "assets/world/prop_table_stone_reach_03.webp",
+      "mime": "image/webp",
+      "bytes": 850,
+      "sha256": "5217869afb5bd663199dd377f33344bd73645a599764163e2dfe4a9ae579b399"
+    },
+    {
+      "key": "prop_bench_stone_reach_01",
+      "path": "assets/world/prop_bench_stone_reach_01.webp",
+      "mime": "image/webp",
+      "bytes": 918,
+      "sha256": "81f3c2a2140cc0b1f669a8f391dbc9848a2155c65c798f2ed65dc4647eaa3d03"
+    },
+    {
+      "key": "prop_bench_stone_reach_02",
+      "path": "assets/world/prop_bench_stone_reach_02.webp",
+      "mime": "image/webp",
+      "bytes": 914,
+      "sha256": "2deb9be99e39a4755da0f6b158851005b890f45485733281a9cc342e6fd4f860"
+    },
+    {
+      "key": "prop_bench_stone_reach_03",
+      "path": "assets/world/prop_bench_stone_reach_03.webp",
+      "mime": "image/webp",
+      "bytes": 894,
+      "sha256": "dec8666d24e6445cde9f7b43da95ebbce96c64484c45ee3c1eceb0de141b558b"
+    },
+    {
+      "key": "prop_plant_stone_reach_01",
+      "path": "assets/world/prop_plant_stone_reach_01.webp",
+      "mime": "image/webp",
+      "bytes": 1888,
+      "sha256": "96a6c5ea8a59bbbf262bf7b4fd9c479dc997f0bfbc945f1a0bc55cedeb8f69d7"
+    },
+    {
+      "key": "prop_plant_stone_reach_02",
+      "path": "assets/world/prop_plant_stone_reach_02.webp",
+      "mime": "image/webp",
+      "bytes": 1690,
+      "sha256": "d00cb13aec635d99364739ea80c006bd9bbf7b82f94d26a0d682eadfcc222f2d"
+    },
+    {
+      "key": "prop_plant_stone_reach_03",
+      "path": "assets/world/prop_plant_stone_reach_03.webp",
+      "mime": "image/webp",
+      "bytes": 1488,
+      "sha256": "fea758ce884912f85593cd7a2557df211be8bb10ea49147b6e4cee1d927a8e26"
+    },
+    {
+      "key": "prop_lake_edge_patio_north",
+      "path": "assets/world/prop_lake_edge_patio_north.webp",
+      "mime": "image/webp",
+      "bytes": 1000,
+      "sha256": "be2088b4b1e96e4248ef9e8ad803211bb68bd96ee52bcf02826e27bfa4ab2461"
+    },
+    {
+      "key": "prop_lake_edge_patio_south",
+      "path": "assets/world/prop_lake_edge_patio_south.webp",
+      "mime": "image/webp",
+      "bytes": 914,
+      "sha256": "36bc60b8048780197e9ede9566bd9cf0f4cb62032ae7131b0c6af5e0146b1e23"
+    },
+    {
+      "key": "prop_lake_edge_patio_west",
+      "path": "assets/world/prop_lake_edge_patio_west.webp",
+      "mime": "image/webp",
+      "bytes": 1026,
+      "sha256": "acf8eb80b178926bdf855c7b46f6d9cb0d5239ee42d3fcb0085f4edfc6924afd"
+    },
+    {
+      "key": "prop_lake_edge_patio_east",
+      "path": "assets/world/prop_lake_edge_patio_east.webp",
+      "mime": "image/webp",
+      "bytes": 942,
+      "sha256": "94fb86045d0a51d536ce5f1ac04ccefed0388eb0f557e8968bb99c804b9ff400"
+    },
+    {
       "key": "prop_mesa_mercado",
       "path": "assets/world/prop_mesa_mercado.webp",
       "mime": "image/webp",
@@ -2797,6 +2888,27 @@
       "mime": "image/webp",
       "bytes": 2790,
       "sha256": "88e1003bf79d8bc9edfde6fa7744eb9de46cea1d9f5f0f85885aa3b462d7dd0f"
+    },
+    {
+      "key": "prop_shelf_stone_reach_01",
+      "path": "assets/world/prop_shelf_stone_reach_01.webp",
+      "mime": "image/webp",
+      "bytes": 2770,
+      "sha256": "00f2ee1d611f207573f136fefb1740992f1df3f875f89eb76ea5e57a6986250d"
+    },
+    {
+      "key": "prop_shelf_stone_reach_02",
+      "path": "assets/world/prop_shelf_stone_reach_02.webp",
+      "mime": "image/webp",
+      "bytes": 3546,
+      "sha256": "53c19bf4f0b1833de0bd15d3b449ad2fdaa4456c82ff8dfad0d1e3003ca33e65"
+    },
+    {
+      "key": "prop_shelf_stone_reach_03",
+      "path": "assets/world/prop_shelf_stone_reach_03.webp",
+      "mime": "image/webp",
+      "bytes": 3752,
+      "sha256": "fcafac7f9d9de0da78a3a189e40f4db994deab11beef9c46d6e25cb6023f110a"
     },
     {
       "key": "prop_barril",

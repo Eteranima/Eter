@@ -2847,8 +2847,12 @@ function runSelfTests(){
             presos.push(`${id}: ${d.s} sólido no ponto de entrada`);
           if (d.solido && (def.npcs || []).some(n => n.x === d.x && n.y === d.y))
             presos.push(`${id}: ${d.s} sólido em cima de NPC`);
-          if (td && td.solid)
-            presos.push(`${id}: ${d.s} dentro de parede (${td.id})`);
+          /* Só sólida em cima de parede é erro (esconde a peça ou dobra o
+             bloqueio). Prop sem `solido` sobre terreno já impassável (ex.:
+             margem d'água desenhada sobre a água) é textura visível de
+             propósito, não armadilha — a água já bloqueia sozinha. */
+          if (d.solido && td && td.solid)
+            presos.push(`${id}: ${d.s} sólido dentro de parede (${td.id})`);
         }
       }
       ok('nenhuma decoração tranca passagem, save, baú ou NPC',
@@ -2861,8 +2865,16 @@ function runSelfTests(){
         ok('há mapa com decoração sólida para testar', !!comDecor, comDecor || 'nenhum');
         if (comDecor){
           loadMap(comDecor); Cut.stop && Cut.stop(); Msg.active = false; Msg.lines = [];
+          const linhasComDecor = (MAPS[comDecor].grid || MAPS[comDecor].rows || []).map(String);
+          /* Prop não-sólida pode ficar sobre terreno já impassável por si
+             só (água, por exemplo) — aí `isSolid` dá true pelo terreno,
+             não pela decoração, e não prova nada sobre o `solido` dela. */
+          const sobreTerrenoSolido = d => {
+            const td = TILEDEF[(linhasComDecor[d.y] || '')[d.x]];
+            return !!(td && td.solid);
+          };
           const solidos = (MAPS[comDecor].decor || []).filter(d => d.solido);
-          const moles   = (MAPS[comDecor].decor || []).filter(d => !d.solido);
+          const moles   = (MAPS[comDecor].decor || []).filter(d => !d.solido && !sobreTerrenoSolido(d));
           ok('decoração marcada como sólida bloqueia',
              solidos.every(d => isSolid(d.x, d.y)),
              solidos.filter(d => !isSolid(d.x, d.y)).map(d => d.s).join(','));
