@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import re
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -29,6 +31,30 @@ class ModularTest(unittest.TestCase):
             if path.is_file() and path.stat().st_size >= 2 * 1024 * 1024
         ]
         self.assertEqual(maiores, [])
+
+    def test_build_carimba_versao_em_toda_imagem_referenciada(self) -> None:
+        """Achado real (2026-09-04): imagem é servida com cache-control
+        `max-age=31536000, immutable` — revisar o conteúdo de um asset já
+        publicado nunca chegava a quem já visitou o jogo. `?v=<build>` em
+        todo caminho `assets/...webp`/`.png` dentro dos scripts
+        materializados obriga a CDN/navegador a buscar de novo."""
+        modulo = carregar_build()
+        with tempfile.TemporaryDirectory() as diretorio:
+            public = Path(diretorio) / "public"
+            modulo.build(ROOT / "src", public)
+            padrao = re.compile(r'''(['"])assets/[^'"]+\.(?:webp|png)\?v=\d+\1''')
+            arquivos = list((public / "scripts").rglob("*.js"))
+            self.assertTrue(arquivos)
+            achou_em = [
+                caminho for caminho in arquivos
+                if padrao.search(caminho.read_text(encoding="utf-8"))
+            ]
+            self.assertIn(public / "scripts" / "00-assets.js", achou_em)
+            self.assertIn(
+                public / "scripts" / "characters" / "07-characters.js", achou_em,
+            )
+            catalogo = (public / "asset-catalog.json").read_text(encoding="utf-8")
+            self.assertNotIn("?v=", catalogo, "catálogo não deve carregar query string")
 
     def test_runtime_preserva_contratos_de_publicacao(self) -> None:
         scripts = "\n".join(

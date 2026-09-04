@@ -77,9 +77,9 @@ def aplicar_cache_bust(public: Path, versao: str) -> None:
     buscar de novo, mesmo com `max-age` alto. Só toca `scripts/*.js` e
     `styles/*.css` locais; nunca um `<script>` de CDN (não existe nenhum
     neste projeto, mas a regra fica explícita pra não quebrar se um dia
-    entrar). Imagem/áudio não entram aqui — cache-bust neles pediria
-    tocar em `00-assets.js` (onde cada `Image().src` é montado), mudança
-    maior e fora do reportado desta vez. """
+    entrar). Imagem/áudio não entram aqui — ver `aplicar_cache_bust_assets`
+    (achado em 2026-09-04: o mesmo problema também afeta imagem, e pior —
+    `max-age=31536000, immutable`, um ano sem revalidar nenhuma). """
     index = public / "index.html"
     texto = index.read_text(encoding="utf-8")
     texto = re.sub(
@@ -90,6 +90,31 @@ def aplicar_cache_bust(public: Path, versao: str) -> None:
     index.write_text(texto, encoding="utf-8")
 
 
+def aplicar_cache_bust_assets(public: Path, versao: str) -> None:
+    """Acrescenta `?v=<versao>` em todo caminho `assets/...webp`/`.png`
+    literal dentro dos scripts materializados.
+
+    Achado ao publicar a fachada revisada da Academia (2026-09-04): as
+    imagens em si (`Image().src = 'assets/...'`, montado a partir de
+    `SPRITE_DATA`/`BATTLE_ART` em `scripts/00-assets.js` e alguns
+    caminhos `-src.webp` literais em `scripts/characters/07-characters.js`)
+    são servidas com `Cache-Control: public, max-age=31536000, immutable`
+    — um ano, sem revalidação nenhuma — e o nome do arquivo nunca muda
+    entre builds. Resultado: revisar o CONTEÚDO de um asset existente
+    (mesma chave, bytes novos) nunca chega a quem já visitou o jogo, nem
+    depois de um `git push` pra main — a CDN e o navegador continuam
+    servindo os bytes antigos indefinidamente, sem erro nenhum pra
+    avisar. Mesma causa-raiz do problema que `aplicar_cache_bust` já
+    resolve pra `scripts/*.js`/`styles/*.css`; esta função fecha o
+    mesmo buraco pro lado das imagens. """
+    pattern = re.compile(r'''(['"])(assets/[^'"]+\.(?:webp|png))\1''')
+    for path in (public / "scripts").rglob("*.js"):
+        texto = path.read_text(encoding="utf-8")
+        novo = pattern.sub(rf'\1\2?v={versao}\1', texto)
+        if novo != texto:
+            path.write_text(novo, encoding="utf-8")
+
+
 def build(source: Path, public: Path) -> None:
     catalog = validate(source)
     temporary = public.with_name(public.name + ".new")
@@ -98,7 +123,9 @@ def build(source: Path, public: Path) -> None:
     shutil.copytree(source, temporary)
     agora_dt = datetime.now(BRT)
     carimbar_build(temporary, agora_dt.strftime("%d/%m/%y às %H:%M"))
-    aplicar_cache_bust(temporary, agora_dt.strftime("%Y%m%d%H%M%S"))
+    versao = agora_dt.strftime("%Y%m%d%H%M%S")
+    aplicar_cache_bust(temporary, versao)
+    aplicar_cache_bust_assets(temporary, versao)
     backup = public.with_name(public.name + ".previous")
     if public.exists():
         if backup.exists():
