@@ -218,14 +218,48 @@ const Msg = {
     const bh = 116, by = H - bh - 12;
     panel(12, by, W - 24, bh);
     const moldura = spriteImages.ui_moldura_dialogo;
+    /* A arte da moldura tem uma fita colada no canto superior ESQUERDO
+       (medida em pixel: banda sólida em y 6..25 de uma folha 512×128,
+       x até ~137) — é o espaço reservado pro nome de quem fala. Quando
+       quem tem foco (a dupla clara, não a esmaecida — ver
+       dialogueParticipants) está do lado DIREITO, a moldura inteira é
+       espelhada (só a imagem, via ctx.scale(-1,1) isolado em seu
+       próprio save/restore) pra fita ir pro canto direito também. O
+       resto do desenho da moldura é simétrico o bastante pra o
+       espelhamento não chamar atenção. O texto NUNCA passa por esse
+       scale — muda só de X/alinhamento, os glifos continuam normais. */
+    const falantes = dialogueParticipants(L);
+    const focado = falantes.find(p => p.focus) || falantes[0];
+    const nomeNaDireita = falantes.length > 1 && focado?.side === 'right';
     if (moldura && (moldura.complete ?? true) && (moldura.naturalWidth || moldura.width)){
       ctx.save(); ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(moldura, 8, by - 6, W - 16, bh + 12);
+      if (nomeNaDireita){
+        ctx.translate(8 + (W - 16), by - 6);
+        ctx.scale(-1, 1);
+        ctx.drawImage(moldura, 0, 0, W - 16, bh + 12);
+      } else {
+        ctx.drawImage(moldura, 8, by - 6, W - 16, bh + 12);
+      }
       ctx.restore();
     }
     let tx = 42, ty = by + 30;
     if (L.speaker){
-      pxText(L.speaker, tx, by + 26, {size:9, color:'#73dbe2'});
+      /* Nome sobe pra dentro da fita (antes ficava por cima do corpo do
+         texto, dentro da caixa) e encolhe até caber na largura dela —
+         mesma ideia de encolher fonte já usada pro nome na tela de
+         escolha (ui/31-character-select.js). */
+      const margemFita = 46, larguraFita = 164, nomeY = by + 13;
+      let tamNome = 8;
+      ctx.save();
+      ctx.font = FONT_PX(tamNome);
+      while (tamNome > 5 && ctx.measureText(L.speaker).width > larguraFita){
+        tamNome--; ctx.font = FONT_PX(tamNome);
+      }
+      ctx.restore();
+      if (nomeNaDireita)
+        pxText(L.speaker, W - 8 - margemFita, nomeY, {size:tamNome, color:'#73dbe2', align:'right'});
+      else
+        pxText(L.speaker, 8 + margemFita, nomeY, {size:tamNome, color:'#73dbe2'});
       ty = by + 52;
     } else ty = by + 34;
     const text = L.text.slice(0, Math.floor(this.shown));
