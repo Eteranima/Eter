@@ -24,6 +24,11 @@
       <h2>Mapa</h2>
       <label>ID <input id="map-id" value="novo_cenario" pattern="[a-z0-9_]+"></label>
       <label>Nome <input id="map-name" value="Novo cenário"></label>
+      <label>Região
+        <select id="map-region"></select>
+      </label>
+      <label id="map-region-nova-wrap" hidden>Nome da região nova <input id="map-region-nova" placeholder="ex.: penhasco" pattern="[a-z0-9_]+"></label>
+      <p id="region-hint" class="small"></p>
       <div class="two-cols">
         <label>Largura <input id="map-width" type="number" min="8" max="48" value="24"></label>
         <label>Altura <input id="map-height" type="number" min="8" max="32" value="16"></label>
@@ -33,7 +38,7 @@
           <select id="map-fill"><option value=".">Grama</option><option value="f">Piso</option><option value="x">Pedra rachada</option></select>
         </label>
         <label>BGM
-          <select id="map-bgm"><option value="field">Campo</option><option value="dungeon">Masmorra</option></select>
+          <select id="map-bgm"></select>
         </label>
       </div>
       <label class="check"><input id="map-outdoor" type="checkbox" checked> Área externa (ciclo dia/noite)</label>
@@ -48,9 +53,15 @@
       <h2>Tiles</h2>
       <div id="tile-palette" class="palette"></div>
 
-      <h2>Props de cenário</h2>
+      <h2>Atlas de props</h2>
+      <label>Buscar asset <input id="atlas-search" type="search" placeholder="Ex.: barco, pedra, porto"></label>
+      <label>Região/categoria
+        <select id="atlas-filter"><option value="all">Todo o atlas</option></select>
+      </label>
+      <p id="atlas-summary" class="small">Carregando catálogo real…</p>
       <div id="prop-palette" class="props"></div>
       <label class="check"><input id="prop-solid" type="checkbox" checked> Prop bloqueia a célula</label>
+      <label class="check"><input id="prop-shadow" type="checkbox" checked> Desenhar sombra de contato</label>
       <label>Texto ao examinar <input id="prop-text" type="text" placeholder='Ex.: "Barril de água limpa."'></label>
       <label class="check"><input id="prop-mute" type="checkbox"> Decoração muda (sem texto, decisão deliberada)</label>
       <p class="small">Requisito do jogo: todo prop, placa (<code>prop_placa</code>) incluída, reage ao interagir
@@ -82,6 +93,25 @@
         coordenada de um prop de <code>decor</code> — decor exige tile aberto, sign exige tile sólido; os dois só
         convivem em coordenadas diferentes do mesmo mapa.</p>
 
+      <h2>NPCs</h2>
+      <div class="two-cols">
+        <label>X <input id="npc-x" type="number" min="0" value="2"></label>
+        <label>Y <input id="npc-y" type="number" min="0" value="2"></label>
+      </div>
+      <label>Nome <input id="npc-name" type="text" placeholder="Ex.: Zelador"></label>
+      <label>Folha (sheet)
+        <select id="npc-sheet"></select>
+      </label>
+      <label class="check"><input id="npc-wander" type="checkbox"> Anda pelo mapa (wander)</label>
+      <label>Falas (uma por linha)<textarea id="npc-lines" spellcheck="false" placeholder="Cada linha vira uma fala estática, na ordem digitada."></textarea></label>
+      <label>Precisa de acabamento manual (opcional) <input id="npc-notas" type="text" placeholder="Ex.: loja, quest, retrato, escolha condicional"></label>
+      <p class="small">Cobre só o caso simples: falas estáticas em sequência. Diálogo condicional
+        (<code>lines: G =&gt; ...</code>), loja (<code>shop</code>), missão (<code>quest</code>) ou retrato
+        (<code>portrait</code>) saem como comentário <code>/* completar: ... */</code> na definição — precisam de
+        edição manual em <code>12-maps.js</code>, não são inventados aqui.</p>
+      <button id="npc-add" class="secondary wide">Adicionar NPC</button>
+      <ul id="npc-list" class="npc-list"></ul>
+
       <h2>Prioridade de arte</h2>
       <ol class="priority">
         <li><strong>Fachada Stone Reach</strong><span>âncora visual do pátio</span></li>
@@ -99,6 +129,16 @@
       </ul>
     </aside>
   </main>
+  <!-- Mesma fonte de verdade do jogo: nenhuma delas tem efeito colateral
+       no topo do arquivo (só const/definição), então carregam seguras
+       fora da ordem normal do motor. Isso é o que deixa o editor
+       validar destino de warp, tile pisável no mapa de destino e nome
+       de trilha de verdade, em vez de reimplementar tudo isso à parte
+       (e arriscar divergir, igual ao pé/escala/sombra antes). -->
+  <script src="../scripts/world/12-maps.js"></script>
+  <script src="../scripts/engine/13-audio.js"></script>
+  <script src="../scripts/engine/14b-prop-layout.js"></script>
+  <script src="../scripts/engine/17-world.js"></script>
   <script src="editor-cenarios.js"></script>
 </body>
 </html>

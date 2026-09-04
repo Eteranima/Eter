@@ -23,7 +23,7 @@ class ModularTest(unittest.TestCase):
         catalog = carregar_build().validate(ROOT / "src")
         self.assertEqual(catalog["version"], "5.31.0")
         self.assertEqual(len(catalog["assets"]), 639)
-        self.assertEqual(len(catalog["scripts"]), 40)
+        self.assertEqual(len(catalog["scripts"]), 41)
 
     def test_nenhum_arquivo_volta_a_ser_monolito(self) -> None:
         maiores = [
