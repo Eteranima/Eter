@@ -2722,6 +2722,27 @@
       "sha256": "3e7ba5d02a3ff234b8a179d709d70c56762bf5dfccb12479cc82e84a2414a578"
     },
     {
+      "key": "prop_tree_stone_reach_01",
+      "path": "assets/world/prop_tree_stone_reach_01.webp",
+      "mime": "image/webp",
+      "bytes": 10682,
+      "sha256": "f63b89f2962af95993d55cfc5c68a5ef27eac6ec98ddc64e4d82186a8627cf10"
+    },
+    {
+      "key": "prop_tree_stone_reach_02",
+      "path": "assets/world/prop_tree_stone_reach_02.webp",
+      "mime": "image/webp",
+      "bytes": 5994,
+      "sha256": "4de031bdb63f8ad2b973e350c2848104d51d54d3b6a81dc9cab1983366ba766b"
+    },
+    {
+      "key": "prop_tree_stone_reach_03",
+      "path": "assets/world/prop_tree_stone_reach_03.webp",
+      "mime": "image/webp",
+      "bytes": 9354,
+      "sha256": "83243321aae7bc7b1fdb2a3fc208e5e43df957d8a134cf8ef021de8341eb5190"
+    },
+    {
       "key": "prop_barco",
       "path": "assets/world/prop_barco.webp",
       "mime": "image/webp",

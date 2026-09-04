@@ -509,6 +509,11 @@ Object.assign(SPRITE_DATA, {
 Object.assign(SPRITE_DATA, {
   "prop_arvore": "assets/world/prop_arvore.webp",
   "prop_arvore_escura": "assets/world/prop_arvore_escura.webp",
+  /* Copas ornamentais do Pátio de Stone Reach; escolhidas pela família
+     regional `patio.tree`, com a árvore original ainda mais frequente. */
+  "prop_tree_stone_reach_01": "assets/world/prop_tree_stone_reach_01.webp",
+  "prop_tree_stone_reach_02": "assets/world/prop_tree_stone_reach_02.webp",
+  "prop_tree_stone_reach_03": "assets/world/prop_tree_stone_reach_03.webp",
   "prop_barco": "assets/world/prop_barco.webp",
   "prop_barril": "assets/world/prop_barril.webp",
   "prop_caixa": "assets/world/prop_caixa.webp",

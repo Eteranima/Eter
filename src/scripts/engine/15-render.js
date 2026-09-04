@@ -718,6 +718,17 @@ const TILE_ART = {
    nunca em lote cego. */
 const WORLD_ART_FAMILIES = {
   regioes: {
+    /* Pátio da Academia: a árvore histórica continua predominante; as
+       três copas ornamentais reduzem a repetição das alamedas sem tocar
+       em colisão, mapa ou no caminho procedural de outros biomas. */
+    patio: {
+      tree: [
+        {key:'prop_arvore', weight:4},
+        {key:'prop_tree_stone_reach_01', weight:1},
+        {key:'prop_tree_stone_reach_02', weight:1},
+        {key:'prop_tree_stone_reach_03', weight:1},
+      ],
+    },
     /* Prova de conceito da Fase 1: reafirma o pilar do Subterrâneo
        como família de variante única. Nenhuma arte nova; só liga o
        cano. */
