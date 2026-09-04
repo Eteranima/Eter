@@ -14,5 +14,11 @@ function calcularLayoutProp(iw, ih, sx, sy, o = {}, tile = 32){
     x:Math.round(peX - largura / 2), y:peY - altura,
     sombra:o.sombra !== false,
     sombraRaioX:Math.min(largura * .40, tile * .58),
+    /* Giro em graus, sempre normalizado pra 0-359. Só existe pra quem
+       pede — sem `o.giro` (a esmagadora maioria dos props hoje) dá 0 e
+       ninguém muda de desenho. O pivô é o PÉ (peX,peY), o mesmo ponto
+       de sempre: a peça gira sobre a própria base, não sobre o centro
+       da imagem, senão ela "flutua" pra fora da célula ao girar. */
+    giro:((o.giro || 0) % 360 + 360) % 360,
   };
 }
