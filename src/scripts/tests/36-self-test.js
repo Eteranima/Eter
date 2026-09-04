@@ -3297,6 +3297,64 @@ function runSelfTests(){
       ok('nenhuma peça de cenário ficou achatada', chatas.length === 0,
          chatas.join(','));
 
+      /* --- Famílias visuais regionais (v5.33, WORLD_ART_FAMILIES) ---
+         Contrato do plano de expansão de assets, seção 18. Cobre: toda
+         chave existe, família nunca vazia, seleção determinística e
+         sempre dentro do array, e a resolução nunca toca TILEDEF (a
+         variante é só pele — colisão/flag lógica continuam do jeito
+         que sempre foram). */
+      {
+        const todasFamilias = [
+          ...Object.entries(WORLD_ART_FAMILIES.regioes).map(([reg, porId]) => ['regiao:' + reg, porId]),
+          ...Object.entries(WORLD_ART_FAMILIES.mapas).map(([mid, porId]) => ['mapa:' + mid, porId]),
+        ];
+        const vazias = [];
+        const chavesAusentes = [];
+        for (const [origem, porId] of todasFamilias)
+          for (const [idLogico, variantes] of Object.entries(porId)){
+            if (!Array.isArray(variantes) || variantes.length === 0){
+              vazias.push(`${origem}/${idLogico}`); continue;
+            }
+            for (const v of variantes)
+              if (!SPRITE_DATA[v.key]) chavesAusentes.push(`${origem}/${idLogico}: ${v.key}`);
+          }
+        ok('nenhuma família visual chega vazia ao renderer', vazias.length === 0, vazias.join(' · '));
+        ok('toda variante de família aponta pra sprite catalogado',
+           chavesAusentes.length === 0, chavesAusentes.join(' · '));
+
+        /* Determinismo: a mesma célula, chamada duas vezes, devolve a
+           mesma chave — nunca Math.random(). Testa contra a família de
+           exemplo (undercroft/pillar) e contra uma família sintética
+           com 3 variantes ponderadas, cobrindo o índice de peso > 1. */
+        const antes = {mapId:G.mapId, map:G.map};
+        G.mapId = 'undercroft'; G.map = {def:{region:'undercroft'}};
+        const rep1 = [chaveDeFamilia('pillar', 3, 5), chaveDeFamilia('pillar', 3, 5), chaveDeFamilia('pillar', 3, 5)];
+        ok('seleção de variante é determinística (mesma célula, mesma chave sempre)',
+           rep1.every(k => k === rep1[0]), rep1.join(','));
+
+        const familiaSintetica = [{key:'a', weight:1}, {key:'b', weight:2}, {key:'c', weight:3}];
+        let foraDoArray = 0;
+        for (let x = 0; x < 40; x++) for (let y = 0; y < 5; y++){
+          G.mapId = 'mapa_teste_familia';
+          const k = varianteDeFamilia(familiaSintetica, 'obj', x, y);
+          if (!familiaSintetica.some(v => v.key === k)) foraDoArray++;
+        }
+        ok('seleção de variante nunca sai do array da família (peso ponderado)',
+           foraDoArray === 0, `${foraDoArray} fora do array`);
+
+        /* A família só decide ARTE — nunca mexe na gramática do tile.
+           `TILEDEF` antes e depois da resolução tem de ser o mesmo
+           objeto, byte a byte (JSON), pra provar que colisão/enc/warp
+           não dependem da variante visual escolhida. */
+        const tiledefAntes = JSON.stringify(TILEDEF);
+        chaveDeFamilia('pillar', 3, 5);
+        varianteDeFamilia(familiaSintetica, 'obj', 1, 1);
+        ok('resolver família nunca altera TILEDEF (colisão/lógica intactas)',
+           JSON.stringify(TILEDEF) === tiledefAntes);
+
+        G.mapId = antes.mapId; G.map = antes.map;
+      }
+
       /* O lampião é uma peça vertical de cais/interior: largura de tile
          e altura alta, mas sem virar uma faixa gigante nem um fragmento
          de arquivo mal recortado. Porto Lúmina usa três dele. */

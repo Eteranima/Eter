@@ -13,8 +13,16 @@ function drawTileArt(ch, x, y, sx, sy, T2){
     /* Um mapa pode trocar a pele de um caractere sem trocar a sua
        gramática. Porto Lúmina, por exemplo, continua usando `,` como
        caminho passável, mas o mostra em tábuas de cais. */
+    /* `chaveLocal` (tileArt do mapa) continua vencendo tudo — é a
+       personalização explícita do lugar, mais específica que qualquer
+       família. Família de mapa/região entra ANTES do `TILE_ART` base
+       (ver 15-render.js, WORLD_ART_FAMILIES): sem família declarada
+       pra esse id, `chaveDeFamilia` devolve null e o comportamento é
+       idêntico ao de sempre. */
     const chaveLocal = G.map?.def?.tileArt?.[ch];
-    const arte = arteTile(chaveLocal || TILE_ART[id]);
+    const arte = chaveLocal
+      ? arteTile(chaveLocal)
+      : (arteTile(chaveDeFamilia(id, x, y)) || arteTile(TILE_ART[id]));
     if (arte){ ctx.drawImage(arte, sx, sy, T2, T2); return; }
   }
 
@@ -155,6 +163,13 @@ const TALL_ART = {
 function drawTallTile(ch, x, y, sx, sy){
   const t = Date.now();
   const idAlto = TILEDEF[ch].id;
+  /* Família de mapa/região (ver WORLD_ART_FAMILIES em 15-render.js)
+     entra ANTES de qualquer coisa fixa — inclusive do hack de árvore
+     escura logo abaixo, que continua intocado pra não regredir nenhum
+     mapa hoje: sem família declarada pra esse id, `chaveDeFamilia`
+     devolve null e cai direto no comportamento de sempre. */
+  const chaveFamilia = chaveDeFamilia(idAlto, x, y);
+  if (chaveFamilia && desenharProp(chaveFamilia, sx, sy)) return;
   /* Uma variação por posição, para uma fileira de árvores não sair toda
      igual. É determinística (sai do x,y), então a mata não pisca. */
   if (idAlto === 'tree' && (x * 7 + y * 13) % 3 === 0 &&
