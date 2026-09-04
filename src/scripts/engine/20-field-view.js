@@ -136,11 +136,7 @@ function desenharProp(chave, sx, sy, o = {}){
   const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
   const e = o.escala ?? 1;
   const lw = Math.round(iw * e), lh = Math.round(ih * e);
-  /* `deslocX`: only for a peça com largura par de casas (6, 4...), cujo
-     centro verdadeiro cai ENTRE duas colunas — nenhuma âncora inteira
-     centra sozinha. Sem isso (0 por padrão) o comportamento de sempre
-     não muda: a peça continua centrada na própria casa. */
-  const bx = sx + TILE / 2 + (o.deslocX ?? 0), by = sy + TILE - (o.recuo ?? 2);
+  const bx = sx + TILE / 2, by = sy + TILE - (o.recuo ?? 2);
   if (o.sombra !== false){
     ctx.save();
     ctx.fillStyle = 'rgba(0,0,0,.32)';

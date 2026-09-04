@@ -79,12 +79,14 @@ const MAPS = {
          tem 6 casas de largura (colunas 10-15) — LARGURA PAR, então o
          centro de verdade (coluna 12,5) cai ENTRE duas células, e
          nenhuma âncora inteira sozinha centra a imagem de 192px (6
-         casas): ancorada em x:13 (a porta), a imagem ficava meia casa
-         deslocada pra direita, sobrando tijolo genérico à mostra do
-         lado esquerdo (achado do usuário, 2º print). `deslocX:-16`
-         desloca só o desenho (não a célula/colisão) meia casa pra
-         esquerda, fechando o vão. */
-      {x:13, y:6,  s:'prop_academia_stone_reach', deslocX:-16,
+         casas) por conta própria: ancorada em x:13 (a porta), sobra
+         meia casa de tijolo genérico à mostra do lado esquerdo
+         (achado do usuário, 2º print). NÃO é pra corrigir isso com
+         deslocamento de desenho no código — a correção é pedir ao
+         Codex uma exportação com folga assimétrica no próprio arquivo
+         (ver `.agentes/prompt-arte-cenarios-codex.md` §4.6); até lá o
+         vão fica visível de propósito, sem gambiarra. */
+      {x:13, y:6,  s:'prop_academia_stone_reach',
        text:'A fachada da Academia ainda ostenta o brasão original, gasto pelo tempo mas legível.'},
       {x:18, y:20, s:'prop_portao_stone_reach',
        text:'O portão sul de Stone Reach — pedra maciça, gravada com o mesmo selo que mantém o Subterrâneo fechado.'},
