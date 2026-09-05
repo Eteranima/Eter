@@ -61,7 +61,7 @@ def carimbar_build(public: Path, agora: str) -> None:
 
 
 def aplicar_cache_bust(public: Path, versao: str) -> None:
-    """Acrescenta `?v=<versao>` em script/CSS locais do index.html materializado.
+    """Acrescenta `?v=<versao>` em script/CSS locais de TODO .html materializado.
 
     O servidor manda `Cache-Control: max-age=14400` (4h) pros arquivos
     estáticos, e o nome do arquivo nunca muda de um build pro outro — um
@@ -75,19 +75,36 @@ def aplicar_cache_bust(public: Path, versao: str) -> None:
     A query string muda a cada build (mesmo carimbo de `carimbar_build`),
     então a URL do script é literalmente outra — o navegador é obrigado a
     buscar de novo, mesmo com `max-age` alto. Só toca `scripts/*.js` e
-    `styles/*.css` locais; nunca um `<script>` de CDN (não existe nenhum
-    neste projeto, mas a regra fica explícita pra não quebrar se um dia
-    entrar). Imagem/áudio não entram aqui — ver `aplicar_cache_bust_assets`
-    (achado em 2026-09-04: o mesmo problema também afeta imagem, e pior —
-    `max-age=31536000, immutable`, um ano sem revalidar nenhuma). """
-    index = public / "index.html"
-    texto = index.read_text(encoding="utf-8")
-    texto = re.sub(
-        r'(src|href)="((?:scripts|styles)/[^"?]+\.(?:js|css))"',
-        rf'\1="\2?v={versao}"',
-        texto,
-    )
-    index.write_text(texto, encoding="utf-8")
+    `styles/*.css` locais, e caminhos RELATIVOS ao próprio .html (o
+    Editor de Cenários referencia `editor-cenarios.js`/`.css` do lado
+    dele, não em `scripts/`/`styles/`); nunca um `<script>` de CDN (não
+    existe nenhum neste projeto, mas a regra fica explícita pra não
+    quebrar se um dia entrar). Imagem/áudio não entram aqui — ver
+    `aplicar_cache_bust_assets` (achado em 2026-09-04: o mesmo problema
+    também afeta imagem, e pior — `max-age=31536000, immutable`, um ano
+    sem revalidar nenhuma).
+
+    Achado em 2026-09-05: isto só rodava em `index.html`, deixando
+    `tools/editor-cenarios.html` de fora — quem já tinha aberto o editor
+    continuava com `editor-cenarios.js` velho em cache por até 4h a cada
+    publicação nova da ferramenta, sem erro nenhum pra avisar (relatado
+    pelo usuário: "preview"/"zoom" novos na tela mas sem efeito, porque o
+    JS rodando ainda era o de antes). Por isso agora varre TODO `.html`
+    publicado, não só o do jogo. """
+    for html in public.rglob("*.html"):
+        texto = html.read_text(encoding="utf-8")
+        novo = re.sub(
+            r'(src|href)="((?:scripts|styles)/[^"?]+\.(?:js|css))"',
+            rf'\1="\2?v={versao}"',
+            texto,
+        )
+        novo = re.sub(
+            r'(src|href)="((?!(?:https?:)?//)[^"?]+\.(?:js|css))"',
+            rf'\1="\2?v={versao}"',
+            novo,
+        )
+        if novo != texto:
+            html.write_text(novo, encoding="utf-8")
 
 
 def aplicar_cache_bust_assets(public: Path, versao: str) -> None:
