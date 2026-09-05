@@ -43,6 +43,40 @@ let PROPS = INITIAL_PROPS.map(prop=>[...prop,gruposDoProp(prop[0]),`assets/world
 const $ = id => document.getElementById(id), canvas = $('map-canvas'), ctx = canvas.getContext('2d');
 let state = {w:24,h:16,fill:'.',grid:[],decor:[],npcs:[],selectedTile:'.',selectedProp:PROPS[0][0],mode:'tile'};
 const images = {};
+/* Id do mapa real carregado pra edição (null = mapa novo). Existe pra
+   `validate()` saber que sobrescrever ESTE id é a intenção — colar a
+   edição de volta em cima do mesmo mapa — e não um erro de "id já
+   existe" como seria pra um mapa novo. */
+let mapaCarregadoId = null;
+/* Campos do MAPS de verdade que o formulário não modela (tint, onEnter,
+   tileArt, triggers, boss, ou qualquer um novo que apareça no futuro).
+   Carregar um mapa real preserva TUDO que não é editável aqui, pra
+   nunca perder cutscene/boss/gatilho ao exportar de volta — mesmo que
+   o autor só queira mexer na decoração. */
+let extrasMapa = {};
+const CAMPOS_MAPA_CONHECIDOS = new Set(['name','region','fill','outdoor','encounter','bgm','rows','spawn','warps','chests','decor','signs','npcs']);
+/* NPCs com diálogo dinâmico (`lines: G => ...`), escolha condicional ou
+   qualquer campo que o formulário simples não representa. Preservados
+   como estão (nunca reescritos pela ferramenta) e exportados via
+   `paraJS`, que serializa QUALQUER valor de volta pra código-fonte
+   JS válido — inclusive função, com o texto original intacto
+   (`Function.prototype.toString()` devolve o código-fonte de verdade
+   de uma arrow function, não uma reconstrução aproximada). Isso é o
+   que evita a ferramenta "simplificar" um NPC de verdade e apagar
+   lógica em silêncio ao exportar um mapa carregado. */
+let npcsAvancados = [];
+function npcEhSimples(n){
+  return Array.isArray(n.lines) && n.lines.every(l=>typeof l==='string');
+}
+function paraJS(valor){
+  if(typeof valor==='function')return valor.toString();
+  if(Array.isArray(valor))return `[${valor.map(paraJS).join(', ')}]`;
+  if(valor && typeof valor==='object'){
+    return `{${Object.entries(valor).map(([k,v])=>`${/^[a-zA-Z_$][\w$]*$/.test(k)?k:JSON.stringify(k)}:${paraJS(v)}`).join(', ')}}`;
+  }
+  if(typeof valor==='string')return `'${valor.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}'`;
+  return JSON.stringify(valor);
+}
 /* Giro (graus) do PRÓXIMO prop a colocar — não é campo de `state`
    porque não é conteúdo do mapa, é só o modo de colocação atual (como
    `prop-solid`/`prop-shadow`). Existe de verdade no jogo: giro é
@@ -60,7 +94,8 @@ function clonarEstado(){
   return {w:state.w, h:state.h, fill:state.fill,
     grid:state.grid.map(linha=>[...linha]),
     decor:state.decor.map(d=>({...d})),
-    npcs:state.npcs.map(n=>({...n, lines:[...(n.lines||[])]}))};
+    npcs:state.npcs.map(n=>({...n, lines:[...(n.lines||[])]})),
+    npcsAvancados:[...npcsAvancados]};
 }
 function pushUndo(){
   undoStack.push(clonarEstado());
@@ -71,6 +106,7 @@ function desfazer(){
   if(!undoStack.length)return;
   const anterior=undoStack.pop();
   state={...state, w:anterior.w, h:anterior.h, fill:anterior.fill, grid:anterior.grid, decor:anterior.decor, npcs:anterior.npcs};
+  npcsAvancados=anterior.npcsAvancados;
   $('map-width').value=state.w; $('map-height').value=state.h; $('map-fill').value=state.fill;
   $('spawn-x').max=state.w-2; $('spawn-y').max=state.h-2;
   $('undo').disabled=!undoStack.length;
@@ -179,6 +215,17 @@ function render(){
     ctx.fillText((n.name||'?').charAt(0).toUpperCase(),cx2,cy2+1);
     ctx.textBaseline='alphabetic';
   });
+  /* NPC avançado (diálogo dinâmico) marcado numa cor diferente — é
+     posição real que ainda importa pra colisão/validação, só não é
+     editável pelo formulário simples. */
+  npcsAvancados.forEach(n=>{
+    const cx2=n.x*CELL+CELL/2, cy2=n.y*CELL+CELL/2;
+    ctx.fillStyle='#8a5ad6';ctx.beginPath();ctx.arc(cx2,cy2,CELL*0.32,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#2a1a4a';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='#f0e8ff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText((n.name||'?').charAt(0).toUpperCase(),cx2,cy2+1);
+    ctx.textBaseline='alphabetic';
+  });
   const x=Number($('spawn-x').value),y=Number($('spawn-y').value);if(Number.isInteger(x)&&Number.isInteger(y)&&x>=0&&y>=0&&x<state.w&&y<state.h){ctx.fillStyle='#ffcf4f';ctx.beginPath();ctx.moveTo((x+.5)*CELL,(y+.14)*CELL);ctx.lineTo((x+.82)*CELL,(y+.82)*CELL);ctx.lineTo((x+.18)*CELL,(y+.82)*CELL);ctx.closePath();ctx.fill();}
 }
 function choose(){
@@ -225,6 +272,59 @@ function popularRegiaoEBgm(){
 function sugerirBgmPelaRegiao(){
   const regiao=regiaoEfetiva(), selBgm=$('map-bgm');
   if(TRILHAS_MAPA.includes(regiao))selBgm.value=regiao;
+}
+/* Lista de mapas de verdade (MAPS, carregado no <head>) — carregar um
+   deles traz a definição EXATA que está publicada agora, pra editar
+   sem redigitar nada e exportar de volta em cima do mesmo id. */
+function popularSelectMapas(){
+  const sel=$('map-load');
+  const ordenados=Object.keys(MAPS).sort();
+  sel.innerHTML='<option value="">— Novo mapa —</option>'
+    +ordenados.map(id=>`<option value="${id}">${id} — ${MAPS[id].name||'(sem nome)'}</option>`).join('');
+  sel.onchange=()=>sel.value?carregarMapaExistente(sel.value):novoMapa();
+}
+function novoMapa(){
+  mapaCarregadoId=null; extrasMapa={}; npcsAvancados=[];
+  undoStack=[]; $('undo').disabled=true;
+  state={w:24,h:16,fill:'.',grid:blank(24,16,'.'),decor:[],npcs:[],selectedTile:'.',selectedProp:PROPS[0][0],mode:'tile'};
+  $('map-id').value='novo_cenario'; $('map-name').value='Novo cenário';
+  $('map-width').value=24; $('map-height').value=16; $('map-fill').value='.';
+  $('map-outdoor').checked=true;
+  $('spawn-x').value=2; $('spawn-y').value=2; $('spawn-x').max=22; $('spawn-y').max=14; $('spawn-dir').value='down';
+  $('warps').value='[]'; $('chests').value='[]'; $('signs').value='[]';
+  $('load-hint').textContent='';
+  popularRegiaoEBgm();
+  renderizarListaNpc(); render(); choose();
+  status('Mapa novo — em branco.','ok');
+}
+function carregarMapaExistente(id){
+  const def=MAPS[id];
+  if(!def){status(`Mapa "${id}" não encontrado.`,'error');return;}
+  mapaCarregadoId=id;
+  undoStack=[]; $('undo').disabled=true;
+  const linhas=normalizeRows(def.rows,def.fill).map(l=>[...l]);
+  const w=linhas[0].length, h=linhas.length;
+  const npcsReais=def.npcs||[];
+  const simples=npcsReais.filter(npcEhSimples).map(n=>({x:n.x,y:n.y,name:n.name,sheet:n.sheet,wander:!!n.wander,lines:[...n.lines],
+    ...(n.shop?{shop:n.shop}:{}),...(n.quest?{quest:n.quest}:{}),...(n.portrait?{portrait:n.portrait}:{})}));
+  npcsAvancados=npcsReais.filter(n=>!npcEhSimples(n));
+  extrasMapa=Object.fromEntries(Object.entries(def).filter(([campo])=>!CAMPOS_MAPA_CONHECIDOS.has(campo)));
+  state={w,h,fill:def.fill,grid:linhas,decor:(def.decor||[]).map(d=>({...d})),npcs:simples,
+    selectedTile:'.',selectedProp:PROPS[0][0],mode:'tile'};
+  $('map-id').value=id; $('map-name').value=def.name||'';
+  $('map-width').value=w; $('map-height').value=h; $('map-fill').value=def.fill;
+  $('map-outdoor').checked=!!def.outdoor;
+  $('spawn-x').value=def.spawn?.x??2; $('spawn-y').value=def.spawn?.y??2;
+  $('spawn-x').max=w-2; $('spawn-y').max=h-2; $('spawn-dir').value=def.spawn?.dir||'down';
+  $('warps').value=JSON.stringify(def.warps||[]); $('chests').value=JSON.stringify(def.chests||[]); $('signs').value=JSON.stringify(def.signs||[]);
+  popularRegiaoEBgm();
+  $('map-region').value=def.region||REGIOES_REAIS[0]; $('map-region').onchange();
+  $('map-bgm').value=def.bgm||regiaoEfetiva();
+  const extras=Object.keys(extrasMapa);
+  $('load-hint').innerHTML=(extras.length?`<strong>Preservado sem edição</strong>: ${extras.join(', ')}. `:'')
+    +(npcsAvancados.length?`<strong>${npcsAvancados.length} NPC(s) com diálogo dinâmico</strong> preservados como estão (não editáveis aqui, listados abaixo).`:'');
+  renderizarListaNpc(); render(); choose();
+  status(`Mapa "${id}" carregado — editando por cima do mapa real.`,'ok');
 }
 /* Nome de região de verdade a usar na exportação: da lista real quando
    escolhida, ou o texto digitado quando o autor está abrindo uma
@@ -274,7 +374,7 @@ function list(id,label){try{const value=JSON.parse($(id).value);if(!Array.isArra
 function validate(){
   const errors=[],warnings=[],id=$('map-id').value.trim(),sx=Number($('spawn-x').value),sy=Number($('spawn-y').value);let warps,chests,signs;
   if(!/^[a-z][a-z0-9_]*$/.test(id))errors.push('ID: use minúsculas, números e _.');
-  else if(MAPS[id])errors.push(`ID "${id}" já existe em MAPS — colar esta definição SOBRESCREVERIA o mapa "${MAPS[id].name}". Escolha outro id, ou é isso mesmo que você quer (edição, não mapa novo)?`);
+  else if(MAPS[id] && id!==mapaCarregadoId)errors.push(`ID "${id}" já existe em MAPS — colar esta definição SOBRESCREVERIA o mapa "${MAPS[id].name}". Escolha outro id, ou é isso mesmo que você quer (edição, não mapa novo)?`);
   if(!regiaoEfetiva())errors.push('Região: escolha uma da lista ou digite o nome da região nova.');
   if(state.grid.some((row,y)=>row.some((tile,x)=>(x===0||y===0||x===state.w-1||y===state.h-1)&&tile!=='#')))warnings.push('Borda não selada: normalizeRows a corrigirá, mas mantenha # para prévia fiel.');
   if(!Number.isInteger(sx)||!Number.isInteger(sy)||sx<0||sy<0||sx>=state.w||sy>=state.h||TILES[state.grid[sy]?.[sx]]?.[2])errors.push('Spawn precisa estar numa célula passável.');
@@ -323,7 +423,12 @@ function validate(){
       if(state.decor.some(d=>d.x===s.x&&d.y===s.y))errors.push(`sign em (${s.x},${s.y}) compartilha coordenada com um decor — mova um dos dois.`);
     });
     const posicoesNpc=new Set();
-    state.npcs.forEach(n=>{
+    /* npcsAvancados (diálogo dinâmico de um mapa real carregado) entra nas
+       mesmas checagens de posição que os NPCs simples — colisão de
+       coordenada, tile sólido e spawn não distinguem "editável no
+       formulário" de "passthrough" — mas não exige nada além da posição,
+       já que o conteúdo (lines/shop/quest) é confiável, vindo do jogo. */
+    [...state.npcs, ...npcsAvancados].forEach(n=>{
       const key=`${n.x},${n.y}`, ch=state.grid[n.y]?.[n.x];
       if(posicoesNpc.has(key))errors.push(`Dois NPCs em (${n.x},${n.y}).`);
       posicoesNpc.add(key);
@@ -347,6 +452,13 @@ function definition(){
     return `      {${bits.join(', ')}},`;
   }).join('\n');
   const regiao=regiaoEfetiva();
+  /* Campos que o formulário não conhece (boss, onEnter, tileArt, tint,
+     triggers, ...) vêm de um mapa real carregado e precisam sobreviver
+     ao passar pelo editor sem edição — paraJS() reconstrói a fonte JS
+     exata (função incluída) a partir do valor já carregado em memória,
+     em vez de o editor precisar reimplementar cada campo exótico. */
+  const extras=Object.entries(extrasMapa).map(([campo,valor])=>`  ${campo}:${paraJS(valor)},`).join('\n');
+  const npcsDinamicos=npcsAvancados.map(n=>`      /* NPC com diálogo dinâmico, preservado do mapa real — não editado aqui */\n      ${paraJS(n)},`).join('\n');
   const npcs=state.npcs.map(n=>{
     const bits=[`x:${n.x}`,`y:${n.y}`,`name:'${n.name.replace(/'/g,"\\'")}'`,`sheet:'${n.sheet}'`];
     if(n.wander)bits.push('wander:true');
@@ -358,7 +470,7 @@ function definition(){
     const linha=`      {${bits.join(', ')}},`;
     return n.notas?`      /* completar manualmente: ${n.notas.replace(/\*\//g,'*\\/')} */\n${linha}`:linha;
   }).join('\n');
-  return `${$('map-id').value.trim()}: {\n  name:'${$('map-name').value.replace(/'/g,"\\'")}', region:'${regiao}',\n  fill:'${$('map-fill').value}', outdoor:${$('map-outdoor').checked}, encounter:null, bgm:'${$('map-bgm').value}',\n  rows:[\n${rows}\n  ],\n  spawn:{x:${$('spawn-x').value}, y:${$('spawn-y').value}, dir:'${$('spawn-dir').value}'},\n  warps:${JSON.stringify(result.warps)},\n  chests:${JSON.stringify(result.chests)},\n  decor:[\n${decor}\n  ],\n  signs:${JSON.stringify(result.signs)},\n  npcs:[\n${npcs}\n  ],\n},`;
+  return `${$('map-id').value.trim()}: {\n  name:'${$('map-name').value.replace(/'/g,"\\'")}', region:'${regiao}',\n  fill:'${$('map-fill').value}', outdoor:${$('map-outdoor').checked}, encounter:null, bgm:'${$('map-bgm').value}',\n${extras?extras+'\n':''}  rows:[\n${rows}\n  ],\n  spawn:{x:${$('spawn-x').value}, y:${$('spawn-y').value}, dir:'${$('spawn-dir').value}'},\n  warps:${JSON.stringify(result.warps)},\n  chests:${JSON.stringify(result.chests)},\n  decor:[\n${decor}\n  ],\n  signs:${JSON.stringify(result.signs)},\n  npcs:[\n${npcs}${npcs&&npcsDinamicos?'\n':''}${npcsDinamicos}\n  ],\n},`;
 }
 canvas.addEventListener('click',event=>{
   const rect=canvas.getBoundingClientRect(),x=Math.floor((event.clientX-rect.left)*canvas.width/rect.width/CELL),y=Math.floor((event.clientY-rect.top)*canvas.height/rect.height/CELL);
@@ -407,6 +519,13 @@ function renderizarListaNpc(){
     remover.onclick=()=>{pushUndo();state.npcs.splice(i,1);renderizarListaNpc();render();};
     item.append(remover);lista.append(item);
   });
+  npcsAvancados.forEach((n,i)=>{
+    const item=document.createElement('li');
+    item.innerHTML=`<span><strong>${n.name}</strong> (${n.x},${n.y}) — <em>diálogo dinâmico, carregado do mapa real — não editável aqui</em></span>`;
+    const remover=document.createElement('button');remover.textContent='Remover';remover.className='secondary';
+    remover.onclick=()=>{pushUndo();npcsAvancados.splice(i,1);renderizarListaNpc();render();};
+    item.append(remover);lista.append(item);
+  });
 }
 $('npc-add').onclick=()=>{
   const x=Number($('npc-x').value),y=Number($('npc-y').value),name=$('npc-name').value.trim(),sheet=$('npc-sheet').value;
@@ -429,4 +548,4 @@ document.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&e
 $('prop-rotate').onclick=()=>{giroAtual=(giroAtual+90)%360;atualizarBotaoGiro();};
 ['spawn-x','spawn-y'].forEach(id=>$(id).addEventListener('input',render));document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{state.mode=button.dataset.mode;choose();});
 ['atlas-search','atlas-filter'].forEach(id=>$(id)?.addEventListener(id==='atlas-search'?'input':'change',palettes));
-state.grid=blank(state.w,state.h,state.fill);atualizarFiltros();palettes();render();choose();popularRegiaoEBgm();popularSheetsDeNpc();popularReferenciasNpc();atualizarBotaoGiro();carregarAtlas();
+state.grid=blank(state.w,state.h,state.fill);atualizarFiltros();palettes();render();choose();popularRegiaoEBgm();popularSheetsDeNpc();popularReferenciasNpc();atualizarBotaoGiro();carregarAtlas();popularSelectMapas();
