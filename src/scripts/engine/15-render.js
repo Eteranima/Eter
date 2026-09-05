@@ -677,18 +677,9 @@ function quadroTile(chaves, ms, x, y){
   return (img && (img.complete ?? true) && (img.naturalWidth || img.width)) ? img : null;
 }
 const TILE_AGUA  = ['tile_agua_0','tile_agua_1','tile_agua_2'];
-/* Arte de cenário por id de tile. Quem não estiver aqui — ou estiver com
-   a chave ausente — continua caindo no desenho procedural de sempre; é o
-   mesmo par de caminhos usado em pet, arma e tile animado, e é o que
-   permite a arte chegar aos poucos sem o mapa ficar com buraco. */
-const TILE_ART = {
-  grass:'tile_grass', path:'tile_path',  dirt:'tile_dirt',   crack:'tile_crack',
-  wall:'tile_wall',   floor:'tile_floor', carpet:'tile_carpet',
-  door:'tile_door',   stairs:'tile_stairs',
-  /* `water` NÃO entra aqui. Ele já tem arte ANIMADA de três quadros
-     (`TILE_AGUA`), e o atalho de `drawTileArt` roda antes do switch —
-     pôr uma imagem estática nesta tabela congelaria a água. */
-};
+/* TILE_ART (arte de cenário por id de tile raso) mora em
+   engine/14c-world-art.js — o Editor de Cenários carrega esse arquivo
+   sem precisar do pipeline de desenho inteiro; ver comentário lá. */
 
 /* ===================================================================
    FAMÍLIAS VISUAIS REGIONAIS (v5.33) — infraestrutura do plano de

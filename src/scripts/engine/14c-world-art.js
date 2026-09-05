@@ -43,6 +43,23 @@ const TALL_ART = {
   pillar:'prop_pilar', rubble:'prop_entulho', save:'prop_save',
 };
 
+/* Arte de cenário por id de tile RASO (chão, não objeto alto — ver
+   TALL_ART acima para os que entram no y-sort). Movida de 15-render.js
+   pra cá (2026-09-05) pra dar ao Editor de Cenários acesso à mesma
+   tabela sem carregar o pipeline de desenho inteiro (câmera, G, atlas
+   de sprite animado) — mesma razão de TALL_ART/WORLD_ART_FAMILIES já
+   estarem aqui. Zero mudança de comportamento: `drawTileArt` continua
+   lendo exatamente este objeto, só que importado em vez de local. */
+const TILE_ART = {
+  grass:'tile_grass', path:'tile_path',  dirt:'tile_dirt',   crack:'tile_crack',
+  wall:'tile_wall',   floor:'tile_floor', carpet:'tile_carpet',
+  door:'tile_door',   stairs:'tile_stairs',
+  /* `water` NÃO entra aqui. Ele já tem arte ANIMADA de três quadros
+     (`TILE_AGUA`, em 15-render.js), e o atalho de `drawTileArt` roda
+     antes do switch — pôr uma imagem estática nesta tabela congelaria
+     a água. */
+};
+
 function hashDeterministico(texto){
   let h = 5381;
   for (let i = 0; i < texto.length; i++) h = ((h * 33) ^ texto.charCodeAt(i)) >>> 0;

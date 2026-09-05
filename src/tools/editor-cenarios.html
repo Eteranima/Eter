@@ -14,6 +14,15 @@
       <p>Autorie a grade e a decoração no mesmo contrato de <code>MAPS</code>.</p>
     </div>
     <div class="header-actions">
+      <label class="check compact"><input id="preview-toggle" type="checkbox"> Preview</label>
+      <select id="zoom-level" class="compact" title="Zoom do canvas">
+        <option value="ajustar" selected>Zoom: ajustar</option>
+        <option value="50">Zoom 50%</option>
+        <option value="75">Zoom 75%</option>
+        <option value="100">Zoom 100%</option>
+        <option value="150">Zoom 150%</option>
+        <option value="200">Zoom 200%</option>
+      </select>
       <button id="undo" class="secondary" disabled title="Ctrl+Z">↶ Desfazer</button>
       <button id="validate" class="secondary">Validar</button>
       <button id="copy" class="primary">Copiar definição</button>
@@ -27,6 +36,7 @@
         <select id="map-load"><option value="">— Novo mapa —</option></select>
       </label>
       <p id="load-hint" class="small"></p>
+      <div id="mapas-conectados"></div>
       <label>ID <input id="map-id" value="novo_cenario" pattern="[a-z0-9_]+"></label>
       <label>Nome <input id="map-name" value="Novo cenário"></label>
       <label>Região
@@ -54,8 +64,24 @@
         <button data-mode="tile" class="selected">Tiles</button><button data-mode="prop">Props</button>
       </div>
       <p id="selection" class="selection">Tile selecionado: grama</p>
+      <button id="tool-eyedropper" type="button" class="secondary wide" title="Clique numa célula da grade pra copiar o que já está lá">💧 Conta-gotas</button>
+      <p class="small">Ativa e clique numa célula da grade pra copiar o tile (ou o prop, se houver decor ali) pra
+        seleção atual, sem editar nada — desativa sozinho depois do clique.</p>
+      <h3>Visibilidade</h3>
+      <div class="layer-toggles">
+        <label class="check"><input id="layer-tiles" type="checkbox" checked> Tiles</label>
+        <label class="check"><input id="layer-decor" type="checkbox" checked> Decoração</label>
+        <label class="check"><input id="layer-npcs" type="checkbox" checked> NPCs</label>
+        <label class="check"><input id="layer-markers" type="checkbox" checked> Marcador de spawn</label>
+      </div>
+      <p class="small">Só some da tela — a grade/decor/NPC continuam no mapa e vão pra exportação normalmente.
+        Útil pra editar decoração sem a poluição visual de tiles ou vice-versa.</p>
 
       <h2>Tiles</h2>
+      <label>Tamanho do pincel
+        <select id="brush-size"><option value="1">1×1</option><option value="3">3×3</option><option value="5">5×5</option></select>
+      </label>
+      <p class="small">Clique e arraste pra pintar vários tiles de uma vez — um só Ctrl+Z desfaz o traço inteiro.</p>
       <div id="tile-palette" class="palette"></div>
 
       <h2>Atlas de props</h2>
