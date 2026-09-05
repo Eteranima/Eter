@@ -5,6 +5,24 @@
    de warp, tile pisável no mapa de destino e nome de trilha real, sem
    reimplementar (e arriscar divergir) essas regras aqui. */
 const CELL = 24;
+/* Zoom é só apresentação (canvas.style.width/height) — nunca muda CELL
+   nem canvas.width/height (o buffer de desenho de verdade), então a
+   matemática de clique (que já normaliza por canvas.width/rect.width)
+   continua exata em qualquer nível. 'ajustar' é o comportamento de
+   sempre (encolhe pra caber via CSS, `.canvas-wrap canvas{max-width:
+   100%}`); um número é tamanho real do buffer × esse percentual. */
+let zoomPct = 'ajustar';
+function aplicarZoom(){
+  if(zoomPct==='ajustar'){canvas.style.width='';canvas.style.height='';canvas.style.maxWidth='';return;}
+  /* `max-width:100%` do CSS (pro modo "ajustar" encolher em telas
+     menores) capa SÓ a largura — desalinharia a proporção se o zoom
+     pedir mais que 100% do container mas a altura inline continuasse
+     livre pra crescer sem o mesmo limite. `maxWidth:'none'` inline vence
+     a regra da folha de estilo e mantém largura/altura no mesmo fator. */
+  canvas.style.maxWidth='none';
+  canvas.style.width=`${Math.round(canvas.width*zoomPct/100)}px`;
+  canvas.style.height=`${Math.round(canvas.height*zoomPct/100)}px`;
+}
 /* TILEDEF só tem id/solid/etc — nome e cor de exibição não fazem parte
    do contrato do jogo, então ficam só aqui, keyed por `id` (não por
    caractere) pra continuar valendo se um mapa usar outro caractere pro
@@ -84,6 +102,42 @@ function paraJS(valor){
    layout.js, 20-field-view.js) — a prévia aqui não inventa nada que o
    motor não sabe desenhar. */
 let giroAtual = 0;
+/* Tamanho do pincel de tile (1/3/5 — sempre ímpar, raio inteiro em volta
+   da célula clicada). Só vale em modo Tiles; prop continua uma célula
+   por clique, como sempre — colocar 9 props de uma vez não tem análogo
+   real (cada prop pode ter texto/giro próprio). */
+let brushSize = 1;
+/* Conta-gotas: arma o PRÓXIMO clique na grade pra copiar o que já está
+   lá (tile, ou prop se houver decor na célula) pra seleção atual, em vez
+   de editar. Depois de um clique, desarma sozinho — como em qualquer
+   editor de pixel art, não é um modo permanente. */
+let eyedropperArmed = false;
+/* Pintura por arraste (mousedown+mousemove) em modo Tiles — um único
+   pushUndo() por TRAÇO inteiro (no mousedown), nunca por célula, senão
+   Ctrl+Z desfaria um pixel de cada vez de um traço de pincel grosso. */
+let pintando = false;
+/* Célula sob o cursor em modo Tiles, só pra desenhar o contorno do
+   pincel (nunca editado por isso) — novo re-render a cada mousemove é
+   barato nestes tamanhos de mapa (até 48×32 células). */
+let hoverCell = null;
+function celulaDoEvento(event){
+  const rect=canvas.getBoundingClientRect();
+  return {
+    x:Math.floor((event.clientX-rect.left)*canvas.width/rect.width/CELL),
+    y:Math.floor((event.clientY-rect.top)*canvas.height/rect.height/CELL),
+  };
+}
+function celulasDoPincel(cx,cy){
+  const raio=Math.floor(brushSize/2), out=[];
+  for(let y=cy-raio;y<=cy+raio;y++)for(let x=cx-raio;x<=cx+raio;x++)
+    if(x>=0&&y>=0&&x<state.w&&y<state.h)out.push({x,y});
+  return out;
+}
+function pintarEm(x,y){
+  let mudou=false;
+  celulasDoPincel(x,y).forEach(c=>{if(state.grid[c.y][c.x]!==state.selectedTile){state.grid[c.y][c.x]=state.selectedTile;mudou=true;}});
+  return mudou;
+}
 /* Undo por snapshot: guarda uma cópia profunda de tudo que É conteúdo
    do mapa (grade/decor/npcs/dimensão) antes de cada mutação. Só isso —
    seleção de ferramenta, texto em edição etc. não entram no histórico,
@@ -168,65 +222,113 @@ function marker(chars){ const out=[]; state.grid.forEach((row,y)=>row.forEach((c
 function propData(){ return PROPS.find(([key])=>key===state.selectedProp); }
 function render(){
   canvas.width=state.w*CELL; canvas.height=state.h*CELL; ctx.imageSmoothingEnabled=false;
-  for(let y=0;y<state.h;y++)for(let x=0;x<state.w;x++){
-    const [,,solid]=TILES[state.grid[y][x]]||TILES['#']; ctx.fillStyle=TILES[state.grid[y][x]]?.[1]||'#333';ctx.fillRect(x*CELL,y*CELL,CELL,CELL);
-    ctx.strokeStyle=solid?'#0005':'#fff1';ctx.strokeRect(x*CELL+.5,y*CELL+.5,CELL-1,CELL-1);
-    const id=TILEDEF[state.grid[y][x]]?.id;
-    if(state.grid[y][x]!=='.'&&!TALL_ART[id]){ctx.fillStyle='#fffb';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText(state.grid[y][x],x*CELL+CELL/2,y*CELL+16);}
-  }
-  /* A seleção de família recebe o mapa/região que o autor está editando.
-     É a mesma chave determinística do campo; só o fator 24/32 adapta o
-     preview, nunca a âncora ou a variante escolhida. */
+  const previewOn=$('preview-toggle')?.checked, camadaTiles=$('layer-tiles')?.checked??true,
+    camadaDecor=$('layer-decor')?.checked??true, camadaNpcs=$('layer-npcs')?.checked??true,
+    camadaMarcadores=$('layer-markers')?.checked??true;
+  /* A seleção de família recebe o mapa/região que o autor está editando
+     e o `tileArt` do próprio mapa quando um mapa real foi carregado
+     (extrasMapa) — a MESMA ordem de prioridade de `drawTileArt` no jogo
+     de verdade (tileArt do mapa > família > TILE_ART base), pra nunca
+     mostrar uma arte diferente da que o campo vai mostrar de verdade. */
   const contextoArte={mapaId:$('map-id').value.trim(),regiaoId:regiaoEfetiva()};
-  for(let y=0;y<state.h;y++)for(let x=0;x<state.w;x++){
-    const id=TILEDEF[state.grid[y][x]]?.id, chave=chaveDeFamilia(id,x,y,contextoArte)||TALL_ART[id];
-    const image=carregarImagemPorChave(chave);
-    if(!chave||!image?.complete||!image.naturalWidth)continue;
-    const fator=CELL/32,layout=calcularLayoutProp(image.naturalWidth,image.naturalHeight,x*CELL,y*CELL,{escala:fator,recuo:2*fator},CELL);
-    if(layout.sombra){ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(layout.peX,layout.peY-2*fator,layout.sombraRaioX,5*fator,0,0,Math.PI*2);ctx.fill();}
-    ctx.drawImage(image,layout.x,layout.y,layout.largura,layout.altura);
-  }
-  state.decor.forEach(d=>{
-    const prop=PROPS.find(([key])=>key===d.s), image=carregarImagem(prop), x=d.x*CELL,y=d.y*CELL;
-    if(image?.complete && image.naturalWidth){
-      /* A arte é 32px/tile no jogo; o canvas do editor é 24px/tile.
-         A função e a âncora são literalmente as mesmas do runtime. */
-      const fator=CELL/32, layout=calcularLayoutProp(image.naturalWidth,image.naturalHeight,x,y,{escala:(d.escala??1)*fator,recuo:(d.recuo??2)*fator,sombra:d.sombra,giro:d.giro},CELL);
-      if(layout.sombra){ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(layout.peX,layout.peY-2*fator,layout.sombraRaioX,5*fator,0,0,Math.PI*2);ctx.fill();}
-      if(layout.giro){
-        ctx.save();ctx.translate(layout.peX,layout.peY);ctx.rotate(layout.giro*Math.PI/180);
-        ctx.drawImage(image,-layout.largura/2,-layout.altura,layout.largura,layout.altura);
-        ctx.restore();
-      }else{
-        ctx.drawImage(image,layout.x,layout.y,layout.largura,layout.altura);
+  const drawables=[];
+  if(camadaTiles)for(let y=0;y<state.h;y++)for(let x=0;x<state.w;x++){
+    const ch=state.grid[y][x], td=TILEDEF[ch]||{}, id=td.id;
+    ctx.fillStyle=TILES[ch]?.[1]||'#333';ctx.fillRect(x*CELL,y*CELL,CELL,CELL);
+    if(!previewOn){
+      ctx.strokeStyle=td.solid?'#0005':'#fff1';ctx.strokeRect(x*CELL+.5,y*CELL+.5,CELL-1,CELL-1);
+    }
+    const chaveLocal=extrasMapa.tileArt?.[ch];
+    if(td.tall){
+      /* Objeto alto (árvore/estante/pilar/...) entra no mesmo y-sort dos
+         props e NPCs — exatamente como `drawField()` faz no jogo de
+         verdade (camada de chão primeiro, objetos altos+atores depois,
+         ordenados por Y). Sem isso um NPC "na frente" de uma árvore
+         (Y menor) aparecia por cima dela na prévia, ao contrário do
+         campo real. */
+      const chave=chaveLocal||chaveDeFamilia(id,x,y,contextoArte)||TALL_ART[id];
+      const cx=x,cy=y;
+      drawables.push({y:cy*CELL+CELL,fn:()=>{
+        const image=carregarImagemPorChave(chave);
+        if(chave&&image?.complete&&image.naturalWidth){
+          const fator=CELL/32,layout=calcularLayoutProp(image.naturalWidth,image.naturalHeight,cx*CELL,cy*CELL,{escala:fator,recuo:2*fator},CELL);
+          if(layout.sombra){ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(layout.peX,layout.peY-2*fator,layout.sombraRaioX,5*fator,0,0,Math.PI*2);ctx.fill();}
+          ctx.drawImage(image,layout.x,layout.y,layout.largura,layout.altura);
+        }else if(!previewOn&&ch!=='.'){
+          ctx.fillStyle='#fffb';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText(ch,cx*CELL+CELL/2,cy*CELL+16);
+        }
+      }});
+    }else{
+      const chave=chaveLocal||chaveDeFamilia(id,x,y,contextoArte)||TILE_ART[id];
+      const image=carregarImagemPorChave(chave);
+      if(chave&&image?.complete&&image.naturalWidth){
+        ctx.drawImage(image,x*CELL,y*CELL,CELL,CELL);
+      }else if(!previewOn&&ch!=='.'){
+        ctx.fillStyle='#fffb';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText(ch,x*CELL+CELL/2,y*CELL+16);
       }
-    }else{ctx.fillStyle='#00a8a8';ctx.fillRect(x+7,y+7,10,10);}
+    }
+  }
+  if(camadaDecor)state.decor.forEach(d=>{
+    const prop=PROPS.find(([key])=>key===d.s), x=d.x*CELL,y=d.y*CELL;
+    drawables.push({y:y+CELL,fn:()=>{
+      const image=carregarImagem(prop);
+      if(image?.complete && image.naturalWidth){
+        /* A arte é 32px/tile no jogo; o canvas do editor é 24px/tile.
+           A função e a âncora são literalmente as mesmas do runtime. */
+        const fator=CELL/32, layout=calcularLayoutProp(image.naturalWidth,image.naturalHeight,x,y,{escala:(d.escala??1)*fator,recuo:(d.recuo??2)*fator,sombra:d.sombra,giro:d.giro},CELL);
+        if(layout.sombra){ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(layout.peX,layout.peY-2*fator,layout.sombraRaioX,5*fator,0,0,Math.PI*2);ctx.fill();}
+        if(layout.giro){
+          ctx.save();ctx.translate(layout.peX,layout.peY);ctx.rotate(layout.giro*Math.PI/180);
+          ctx.drawImage(image,-layout.largura/2,-layout.altura,layout.largura,layout.altura);
+          ctx.restore();
+        }else{
+          ctx.drawImage(image,layout.x,layout.y,layout.largura,layout.altura);
+        }
+      }else{ctx.fillStyle='#00a8a8';ctx.fillRect(x+7,y+7,10,10);}
+    }});
   });
   /* NPC não tem a folha (spritesheet de 3x4 quadros) carregada aqui —
      mostrar a arte real pediria fatiar frame igual ao runtime, fora do
      escopo deste lote. Um marcador com a inicial já mostra colisão
      (NPC ocupa 1 casa) e posição de verdade, que é o que a validação
      de warp/sign/decor também precisa. */
-  state.npcs.forEach(n=>{
-    const cx2=n.x*CELL+CELL/2, cy2=n.y*CELL+CELL/2;
-    ctx.fillStyle='#e0a83a';ctx.beginPath();ctx.arc(cx2,cy2,CELL*0.32,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='#3a2a10';ctx.lineWidth=1.5;ctx.stroke();
-    ctx.fillStyle='#2a1c08';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText((n.name||'?').charAt(0).toUpperCase(),cx2,cy2+1);
-    ctx.textBaseline='alphabetic';
-  });
-  /* NPC avançado (diálogo dinâmico) marcado numa cor diferente — é
-     posição real que ainda importa pra colisão/validação, só não é
-     editável pelo formulário simples. */
-  npcsAvancados.forEach(n=>{
-    const cx2=n.x*CELL+CELL/2, cy2=n.y*CELL+CELL/2;
-    ctx.fillStyle='#8a5ad6';ctx.beginPath();ctx.arc(cx2,cy2,CELL*0.32,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='#2a1a4a';ctx.lineWidth=1.5;ctx.stroke();
-    ctx.fillStyle='#f0e8ff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText((n.name||'?').charAt(0).toUpperCase(),cx2,cy2+1);
-    ctx.textBaseline='alphabetic';
-  });
-  const x=Number($('spawn-x').value),y=Number($('spawn-y').value);if(Number.isInteger(x)&&Number.isInteger(y)&&x>=0&&y>=0&&x<state.w&&y<state.h){ctx.fillStyle='#ffcf4f';ctx.beginPath();ctx.moveTo((x+.5)*CELL,(y+.14)*CELL);ctx.lineTo((x+.82)*CELL,(y+.82)*CELL);ctx.lineTo((x+.18)*CELL,(y+.82)*CELL);ctx.closePath();ctx.fill();}
+  if(camadaNpcs){
+    state.npcs.forEach(n=>{
+      const cx2=n.x*CELL+CELL/2, cy2=n.y*CELL+CELL/2;
+      drawables.push({y:n.y*CELL+CELL,fn:()=>{
+        ctx.fillStyle='#e0a83a';ctx.beginPath();ctx.arc(cx2,cy2,CELL*0.32,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='#3a2a10';ctx.lineWidth=1.5;ctx.stroke();
+        ctx.fillStyle='#2a1c08';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText((n.name||'?').charAt(0).toUpperCase(),cx2,cy2+1);
+        ctx.textBaseline='alphabetic';
+      }});
+    });
+    /* NPC avançado (diálogo dinâmico) marcado numa cor diferente — é
+       posição real que ainda importa pra colisão/validação, só não é
+       editável pelo formulário simples. */
+    npcsAvancados.forEach(n=>{
+      const cx2=n.x*CELL+CELL/2, cy2=n.y*CELL+CELL/2;
+      drawables.push({y:n.y*CELL+CELL,fn:()=>{
+        ctx.fillStyle='#8a5ad6';ctx.beginPath();ctx.arc(cx2,cy2,CELL*0.32,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='#2a1a4a';ctx.lineWidth=1.5;ctx.stroke();
+        ctx.fillStyle='#f0e8ff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText((n.name||'?').charAt(0).toUpperCase(),cx2,cy2+1);
+        ctx.textBaseline='alphabetic';
+      }});
+    });
+  }
+  drawables.sort((a,b)=>a.y-b.y).forEach(d=>d.fn());
+  if(camadaMarcadores){
+    const x=Number($('spawn-x').value),y=Number($('spawn-y').value);if(Number.isInteger(x)&&Number.isInteger(y)&&x>=0&&y>=0&&x<state.w&&y<state.h){ctx.fillStyle='#ffcf4f';ctx.beginPath();ctx.moveTo((x+.5)*CELL,(y+.14)*CELL);ctx.lineTo((x+.82)*CELL,(y+.82)*CELL);ctx.lineTo((x+.18)*CELL,(y+.82)*CELL);ctx.closePath();ctx.fill();}
+  }
+  if(!previewOn&&state.mode==='tile'&&hoverCell){
+    const raio=Math.floor(brushSize/2);
+    const x0=Math.max(0,hoverCell.x-raio),y0=Math.max(0,hoverCell.y-raio);
+    const x1=Math.min(state.w-1,hoverCell.x+raio),y1=Math.min(state.h-1,hoverCell.y+raio);
+    ctx.strokeStyle='#fff9';ctx.lineWidth=2;
+    ctx.strokeRect(x0*CELL+1,y0*CELL+1,(x1-x0+1)*CELL-2,(y1-y0+1)*CELL-2);
+  }
+  aplicarZoom();
 }
 function choose(){
   document.querySelectorAll('[data-mode]').forEach(button=>button.classList.toggle('selected',button.dataset.mode===state.mode));
@@ -293,6 +395,7 @@ function novoMapa(){
   $('spawn-x').value=2; $('spawn-y').value=2; $('spawn-x').max=22; $('spawn-y').max=14; $('spawn-dir').value='down';
   $('warps').value='[]'; $('chests').value='[]'; $('signs').value='[]';
   $('load-hint').textContent='';
+  renderizarMapasConectados(null);
   popularRegiaoEBgm();
   renderizarListaNpc(); render(); choose();
   status('Mapa novo — em branco.','ok');
@@ -323,8 +426,33 @@ function carregarMapaExistente(id){
   const extras=Object.keys(extrasMapa);
   $('load-hint').innerHTML=(extras.length?`<strong>Preservado sem edição</strong>: ${extras.join(', ')}. `:'')
     +(npcsAvancados.length?`<strong>${npcsAvancados.length} NPC(s) com diálogo dinâmico</strong> preservados como estão (não editáveis aqui, listados abaixo).`:'');
+  renderizarMapasConectados(id);
   renderizarListaNpc(); render(); choose();
   status(`Mapa "${id}" carregado — editando por cima do mapa real.`,'ok');
+}
+/* "Andar" aqui não é um campo do formato — MAPS não tem multi-camada Z
+   dentro de um mapa só. O jogo já resolve andar/área conectada com
+   warps entre mapas separados (ex.: spire/spire_top, deserto/
+   deserto_fundo) — então "navegar entre andares" é só atalho pra
+   carregar o mapa de destino de um warp (ida) ou o mapa que aponta pra
+   este (volta), reaproveitando carregarMapaExistente de sempre. */
+function mapasConectados(id){
+  const def=MAPS[id];
+  const idaIds=(def?.warps||[]).map(w=>w.to).filter(Boolean);
+  const voltaIds=Object.entries(MAPS).filter(([outroId,outroDef])=>outroDef.warps?.some(w=>w.to===id)).map(([outroId])=>outroId);
+  return [...new Set([...idaIds,...voltaIds])].filter(outroId=>outroId!==id&&MAPS[outroId]).sort();
+}
+function renderizarMapasConectados(id){
+  const container=$('mapas-conectados');if(!container)return;
+  const conectados=id?mapasConectados(id):[];
+  if(!conectados.length){container.innerHTML='';return;}
+  container.innerHTML='<p class="small"><strong>Mapas conectados por warp</strong> (útil pra alinhar andares/áreas vizinhas):</p>'
+    +conectados.map(outroId=>`<button type="button" class="secondary wide" data-ir-para="${outroId}">${outroId} — ${MAPS[outroId].name||'(sem nome)'}</button>`).join('');
+  container.querySelectorAll('[data-ir-para]').forEach(button=>button.onclick=()=>{
+    const destino=button.dataset.irPara;
+    $('map-load').value=destino;
+    carregarMapaExistente(destino);
+  });
 }
 /* Nome de região de verdade a usar na exportação: da lista real quando
    escolhida, ou o texto digitado quando o autor está abrindo uma
@@ -403,16 +531,21 @@ function validate(){
        reage ao examinar (`text`) ou foi marcado mudo de propósito — nunca
        por esquecimento. `signs` é um mecanismo SEPARADO (placa muda,
        embutida na parede) e nunca compartilha coordenada com decor: o
-       motor só aceita `signs` num tile de base SÓLIDO (parede/água/
-       árvore/estante/mesa/pilar/braseiro/entulho/baú), e só aceita
-       `decor` num tile de base NÃO sólido — as duas regras juntas fazem
-       de "decor em (x,y) == sign em (x,y)" uma contradição, nunca um
-       requisito. (Histórico: essa mistura já foi tentada e quebrou o
-       autoteste de verdade — decor sólido "dentro de parede" e sign fora
-       de tile sólido são os dois erros que a validação abaixo evita.) */
+       motor só aceita `signs` num tile de base SÓLIDO, e nunca na mesma
+       célula de um `decor` (checado abaixo).
+       A regra real de decor-sobre-base-sólida (autoteste de verdade,
+       36-self-test.js "decoração marcada como sólida bloqueia"/"decoração
+       não marcada NÃO bloqueia") é mais estreita do que "nunca": só
+       `d.solido:true` EM CIMA de um tile já sólido é erro de verdade
+       (dobra o bloqueio E esconde a peça atrás da parede). Prop NÃO
+       sólido sobre terreno já impassável — margem de lago sobre água, é
+       o caso real do jogo — é textura de propósito; a água já bloqueia
+       sozinha. (Histórico: uma versão anterior bloqueava QUALQUER decor
+       em base sólida, o que reprovava até patio.decor de verdade, já
+       publicado, ao tentar recarregá-lo e revalidar sem editar nada.) */
     state.decor.forEach(d=>{
       const ch=state.grid[d.y]?.[d.x], solidoDaBase=!!TILES[ch]?.[2];
-      if(solidoDaBase)errors.push(`decor ${d.s} em (${d.x},${d.y}) está em cima de um tile de base sólido — decor só vale em tile aberto.`);
+      if(d.solido && solidoDaBase)errors.push(`decor sólido ${d.s} em (${d.x},${d.y}) está em cima de um tile de base já sólido — dobra o bloqueio e esconde a peça; use uma peça não sólida ou mova o prop.`);
       if(d.solido && '+S*$'.includes(ch))errors.push(`decor sólido ${d.s} em (${d.x},${d.y}) bloqueia o marcador ${ch} — mova o prop ou use uma peça não sólida.`);
       if(d.s?.includes('lake_edge') && d.sombra!==false)errors.push(`Borda de lago ${d.s} em (${d.x},${d.y}) precisa usar sombra:false — overlays transparentes não podem projetar sombra.`);
       if(!d.text && !d.mudo)warnings.push(`Prop ${d.s} em (${d.x},${d.y}) sem texto e sem marcação de mudo deliberado.`);
@@ -472,10 +605,52 @@ function definition(){
   }).join('\n');
   return `${$('map-id').value.trim()}: {\n  name:'${$('map-name').value.replace(/'/g,"\\'")}', region:'${regiao}',\n  fill:'${$('map-fill').value}', outdoor:${$('map-outdoor').checked}, encounter:null, bgm:'${$('map-bgm').value}',\n${extras?extras+'\n':''}  rows:[\n${rows}\n  ],\n  spawn:{x:${$('spawn-x').value}, y:${$('spawn-y').value}, dir:'${$('spawn-dir').value}'},\n  warps:${JSON.stringify(result.warps)},\n  chests:${JSON.stringify(result.chests)},\n  decor:[\n${decor}\n  ],\n  signs:${JSON.stringify(result.signs)},\n  npcs:[\n${npcs}${npcs&&npcsDinamicos?'\n':''}${npcsDinamicos}\n  ],\n},`;
 }
-canvas.addEventListener('click',event=>{
-  const rect=canvas.getBoundingClientRect(),x=Math.floor((event.clientX-rect.left)*canvas.width/rect.width/CELL),y=Math.floor((event.clientY-rect.top)*canvas.height/rect.height/CELL);
+canvas.addEventListener('mousedown',event=>{
+  if(state.mode!=='tile'||eyedropperArmed)return;
+  const {x,y}=celulaDoEvento(event);
   if(x<0||y<0||x>=state.w||y>=state.h)return;
-  if(state.mode==='tile'){pushUndo();state.grid[y][x]=state.selectedTile;render();return;}
+  pushUndo();
+  pintando=true;
+  pintarEm(x,y);
+  render();
+});
+canvas.addEventListener('mousemove',event=>{
+  const {x,y}=celulaDoEvento(event), dentro=x>=0&&y>=0&&x<state.w&&y<state.h;
+  if(pintando&&dentro){if(pintarEm(x,y))render();}
+  if(state.mode==='tile'){
+    const novo=dentro?`${x},${y}`:null, anterior=hoverCell?`${hoverCell.x},${hoverCell.y}`:null;
+    if(novo!==anterior){hoverCell=dentro?{x,y}:null;if(!pintando)render();}
+  }
+});
+window.addEventListener('mouseup',()=>{pintando=false;});
+canvas.addEventListener('mouseleave',()=>{pintando=false;if(hoverCell){hoverCell=null;render();}});
+canvas.addEventListener('click',event=>{
+  const {x,y}=celulaDoEvento(event);
+  if(x<0||y<0||x>=state.w||y>=state.h)return;
+  /* Conta-gotas: intercepta o PRÓXIMO clique (tile ou prop mode, tanto
+     faz) pra copiar o que já está na célula pra seleção, em vez de
+     editar — e desarma sozinho, como em qualquer editor de pixel art.
+     A pintura por arraste (mousedown acima) já ignora o clique quando
+     armado, então só o pick acontece, nunca os dois. */
+  if(eyedropperArmed){
+    const decorAqui=state.decor.find(d=>d.x===x&&d.y===y);
+    if(decorAqui){
+      state.mode='prop'; state.selectedProp=decorAqui.s; giroAtual=decorAqui.giro||0;
+      $('prop-solid').checked=!!decorAqui.solido; $('prop-shadow').checked=decorAqui.sombra!==false;
+      atualizarBotaoGiro();
+      status(`Conta-gotas: prop "${nomeDoProp(decorAqui.s)}" copiado pra seleção.`,'ok');
+    }else{
+      state.mode='tile'; state.selectedTile=state.grid[y][x];
+      status(`Conta-gotas: tile "${TILES[state.selectedTile]?.[0]||state.selectedTile}" copiado pra seleção.`,'ok');
+    }
+    eyedropperArmed=false; $('tool-eyedropper').classList.remove('selected');
+    choose(); render();
+    return;
+  }
+  /* Modo Tiles pinta no mousedown/mousemove (pincel + arraste, ver
+     acima) — o clique aqui não faz mais nada em modo Tiles, só cai
+     direto pro modo Props abaixo. */
+  if(state.mode==='tile')return;
   const at=state.decor.findIndex(d=>d.x===x&&d.y===y);
   if(at>=0){
     /* Shift+clique gira 90° em vez de remover — mesma célula, mesmo
@@ -546,6 +721,14 @@ $('resize').onclick=resize;$('validate').onclick=()=>{const r=validate();status(
 $('undo').onclick=desfazer;
 document.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();desfazer();}});
 $('prop-rotate').onclick=()=>{giroAtual=(giroAtual+90)%360;atualizarBotaoGiro();};
-['spawn-x','spawn-y'].forEach(id=>$(id).addEventListener('input',render));document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{state.mode=button.dataset.mode;choose();});
+['spawn-x','spawn-y'].forEach(id=>$(id).addEventListener('input',render));document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{state.mode=button.dataset.mode;choose();render();});
 ['atlas-search','atlas-filter'].forEach(id=>$(id)?.addEventListener(id==='atlas-search'?'input':'change',palettes));
+['preview-toggle','layer-tiles','layer-decor','layer-npcs','layer-markers'].forEach(id=>$(id)?.addEventListener('change',render));
+$('zoom-level')?.addEventListener('change',()=>{zoomPct=$('zoom-level').value==='ajustar'?'ajustar':Number($('zoom-level').value);aplicarZoom();});
+$('brush-size')?.addEventListener('change',()=>{brushSize=Number($('brush-size').value)||1;});
+$('tool-eyedropper')?.addEventListener('click',()=>{
+  eyedropperArmed=!eyedropperArmed;
+  $('tool-eyedropper').classList.toggle('selected',eyedropperArmed);
+  status(eyedropperArmed?'Conta-gotas ativo — clique numa célula da grade pra copiar o tile (ou o prop, se houver decor ali).':'Conta-gotas desativado.','ok');
+});
 state.grid=blank(state.w,state.h,state.fill);atualizarFiltros();palettes();render();choose();popularRegiaoEBgm();popularSheetsDeNpc();popularReferenciasNpc();atualizarBotaoGiro();carregarAtlas();popularSelectMapas();
