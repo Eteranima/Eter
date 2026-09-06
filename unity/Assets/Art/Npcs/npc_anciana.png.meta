@@ -1,43 +1,43 @@
 fileFormatVersion: 2
-guid: d5e1ea4e480349147a8cf386bab9f566
+guid: 4ee4f01bdb291bb48a44b1eeafe7b645
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7718764685765513050
-    second: protagonista_corrida_sheet_0
+      213: 3567553786033113905
+    second: npc_anciana_0
   - first:
-      213: 8573374139276084711
-    second: protagonista_corrida_sheet_1
+      213: 4261463777741880642
+    second: npc_anciana_1
   - first:
-      213: 354567410950412257
-    second: protagonista_corrida_sheet_2
+      213: -852171128253365944
+    second: npc_anciana_2
   - first:
-      213: 8668152777646997639
-    second: protagonista_corrida_sheet_3
+      213: 1478475891789938245
+    second: npc_anciana_3
   - first:
-      213: -3407164948994973252
-    second: protagonista_corrida_sheet_4
+      213: 5424455257606151530
+    second: npc_anciana_4
   - first:
-      213: 2782284102304978938
-    second: protagonista_corrida_sheet_5
+      213: -993436990022371116
+    second: npc_anciana_5
   - first:
-      213: 6140344372024444225
-    second: protagonista_corrida_sheet_6
+      213: 2133369216455057774
+    second: npc_anciana_6
   - first:
-      213: 9151480520097177089
-    second: protagonista_corrida_sheet_7
+      213: 4731659449718474082
+    second: npc_anciana_7
   - first:
-      213: -1420482838044775299
-    second: protagonista_corrida_sheet_8
+      213: -996024795810519299
+    second: npc_anciana_8
   - first:
-      213: -8699405694175657486
-    second: protagonista_corrida_sheet_9
+      213: -5277523165719338769
+    second: npc_anciana_9
   - first:
-      213: 5484799298193242882
-    second: protagonista_corrida_sheet_10
+      213: 498038963698090390
+    second: npc_anciana_10
   - first:
-      213: 4898045627348535490
-    second: protagonista_corrida_sheet_11
+      213: -5376025438587960283
+    second: npc_anciana_11
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -135,12 +135,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_0
+      name: npc_anciana_0
       rect:
         serializedVersion: 2
         x: 0
         y: 384
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -157,12 +157,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_1
+      name: npc_anciana_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 66
         y: 384
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -179,12 +179,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_2
+      name: npc_anciana_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 132
         y: 384
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -201,12 +201,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_3
+      name: npc_anciana_3
       rect:
         serializedVersion: 2
         x: 0
         y: 256
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -223,12 +223,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_4
+      name: npc_anciana_4
       rect:
         serializedVersion: 2
-        x: 128
+        x: 66
         y: 256
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -245,12 +245,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_5
+      name: npc_anciana_5
       rect:
         serializedVersion: 2
-        x: 256
+        x: 132
         y: 256
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -267,12 +267,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_6
+      name: npc_anciana_6
       rect:
         serializedVersion: 2
         x: 0
         y: 128
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -289,12 +289,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_7
+      name: npc_anciana_7
       rect:
         serializedVersion: 2
-        x: 128
+        x: 66
         y: 128
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -311,12 +311,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_8
+      name: npc_anciana_8
       rect:
         serializedVersion: 2
-        x: 256
+        x: 132
         y: 128
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -333,12 +333,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_9
+      name: npc_anciana_9
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -355,12 +355,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_10
+      name: npc_anciana_10
       rect:
         serializedVersion: 2
-        x: 128
+        x: 66
         y: 0
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -377,12 +377,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: protagonista_corrida_sheet_11
+      name: npc_anciana_11
       rect:
         serializedVersion: 2
-        x: 256
+        x: 132
         y: 0
-        width: 128
+        width: 66
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -412,18 +412,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      protagonista_corrida_sheet_0: -7718764685765513050
-      protagonista_corrida_sheet_1: 8573374139276084711
-      protagonista_corrida_sheet_10: 5484799298193242882
-      protagonista_corrida_sheet_11: 4898045627348535490
-      protagonista_corrida_sheet_2: 354567410950412257
-      protagonista_corrida_sheet_3: 8668152777646997639
-      protagonista_corrida_sheet_4: -3407164948994973252
-      protagonista_corrida_sheet_5: 2782284102304978938
-      protagonista_corrida_sheet_6: 6140344372024444225
-      protagonista_corrida_sheet_7: 9151480520097177089
-      protagonista_corrida_sheet_8: -1420482838044775299
-      protagonista_corrida_sheet_9: -8699405694175657486
+      npc_anciana_0: 3567553786033113905
+      npc_anciana_1: 4261463777741880642
+      npc_anciana_10: 498038963698090390
+      npc_anciana_11: -5376025438587960283
+      npc_anciana_2: -852171128253365944
+      npc_anciana_3: 1478475891789938245
+      npc_anciana_4: 5424455257606151530
+      npc_anciana_5: -993436990022371116
+      npc_anciana_6: 2133369216455057774
+      npc_anciana_7: 4731659449718474082
+      npc_anciana_8: -996024795810519299
+      npc_anciana_9: -5277523165719338769
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
