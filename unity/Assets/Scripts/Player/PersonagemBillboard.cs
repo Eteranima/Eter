@@ -13,24 +13,29 @@ namespace EterAnima.PlayerCore
     /// pose/quadro. Este componente sobrescreve a rotação herdada todo
     /// frame pra sempre encarar a câmera.
     ///
-    /// `quadros` precisa ter exatamente 12 sprites, na ordem gerada por
+    /// Cada folha (`quadrosAndar`, `quadrosPulo`, ...) precisa ter
+    /// exatamente 12 sprites, na ordem gerada por
     /// ImportadorFolhaDePersonagem: índice = linha*3 + coluna, linha
     /// 0=baixo, 1=esquerda, 2=direita, 3=cima (mesma convenção do motor
-    /// antigo, DIR_ROW).
+    /// antigo, DIR_ROW). Ataque/ataque aéreo/magia ainda não entram aqui —
+    /// dependem do sistema de combate, que ainda não existe nesta fatia.
     /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     public class PersonagemBillboard : MonoBehaviour
     {
         private static readonly int[] CicloDeAndar = { 1, 0, 1, 2 }; // coluna do meio = pose parada
         private const float SegundosPorQuadro = 0.13f;
+        private const int ColunaPuloNoAr = 1; // meio da folha de pulo = "no ar" (ver protagonista_pulo_sheet)
 
-        [SerializeField] private Sprite[] quadros = new Sprite[12];
+        [SerializeField] private Sprite[] quadrosAndar = new Sprite[12];
+        [SerializeField] private Sprite[] quadrosPulo = new Sprite[12];
 
         private SpriteRenderer _renderer;
         private JogadorController _jogador;
         private float _tempoAnimacao;
 
-        public Sprite[] Quadros { set => quadros = value; }
+        public Sprite[] QuadrosAndar { set => quadrosAndar = value; }
+        public Sprite[] QuadrosPulo { set => quadrosPulo = value; }
 
         private void Awake()
         {
@@ -50,9 +55,16 @@ namespace EterAnima.PlayerCore
 
         private void AtualizarQuadro()
         {
-            if (_jogador == null || quadros == null || quadros.Length < 12) return;
-
+            if (_jogador == null) return;
             int linha = (int)_jogador.DirecaoCardinal;
+
+            if (!_jogador.NoChao)
+            {
+                AplicarQuadro(quadrosPulo, linha, ColunaPuloNoAr);
+                _tempoAnimacao = 0f;
+                return;
+            }
+
             int coluna;
             if (_jogador.Movendo)
             {
@@ -65,9 +77,13 @@ namespace EterAnima.PlayerCore
                 _tempoAnimacao = 0f;
                 coluna = 1; // pose parada
             }
+            AplicarQuadro(quadrosAndar, linha, coluna);
+        }
 
-            int indice = linha * 3 + coluna;
-            var quadro = quadros[indice];
+        private void AplicarQuadro(Sprite[] folha, int linha, int coluna)
+        {
+            if (folha == null || folha.Length < 12) return;
+            var quadro = folha[linha * 3 + coluna];
             if (quadro != null) _renderer.sprite = quadro;
         }
     }

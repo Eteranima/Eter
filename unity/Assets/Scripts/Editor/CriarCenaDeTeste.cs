@@ -14,7 +14,8 @@ namespace EterAnima.EditorTools
     /// </summary>
     public static class CriarCenaDeTeste
     {
-        private const string CaminhoSpriteJogador = "Assets/Art/Characters/kael_sheet.png";
+        private const string CaminhoSpriteAndar = "Assets/Art/Characters/protagonista_sheet.png";
+        private const string CaminhoSpritePulo = "Assets/Art/Characters/protagonista_pulo_sheet.png";
         private const float AlturaPersonagem = 1.9f; // mesma altura usada no protótipo Three.js
 
         [MenuItem("Éter Anima/Criar Chão + Jogador + Câmera de Teste")]
@@ -72,18 +73,26 @@ namespace EterAnima.EditorTools
             var spriteRenderer = visual.AddComponent<SpriteRenderer>();
             var billboard = visual.AddComponent<PersonagemBillboard>();
 
-            var textura = AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteJogador);
-            if (textura == null)
+            if (AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteAndar) == null)
             {
-                Debug.LogWarning($"[Éter Anima] Sprite do jogador não encontrado em {CaminhoSpriteJogador} — o personagem vai ficar invisível até o arquivo existir.");
+                Debug.LogWarning($"[Éter Anima] Sprite do jogador não encontrado em {CaminhoSpriteAndar} — o personagem vai ficar invisível até o arquivo existir.");
                 return;
             }
 
-            var quadros = CarregarQuadrosOrdenados(CaminhoSpriteJogador);
-            billboard.Quadros = quadros;
+            var quadrosAndar = CarregarQuadrosOrdenados(CaminhoSpriteAndar);
+            billboard.QuadrosAndar = quadrosAndar;
+            if (AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpritePulo) != null)
+            {
+                billboard.QuadrosPulo = CarregarQuadrosOrdenados(CaminhoSpritePulo);
+            }
+            else
+            {
+                Debug.LogWarning($"[Éter Anima] Sprite de pulo não encontrado em {CaminhoSpritePulo} — vai usar a pose de andar mesmo no ar.");
+                billboard.QuadrosPulo = quadrosAndar;
+            }
             // Pose parada (coluna do meio, linha "baixo") só pra já aparecer
             // alguma coisa antes do primeiro Update rodar.
-            if (quadros.Length > 1 && quadros[1] != null) spriteRenderer.sprite = quadros[1];
+            if (quadrosAndar.Length > 1 && quadrosAndar[1] != null) spriteRenderer.sprite = quadrosAndar[1];
         }
 
         /// <summary>
