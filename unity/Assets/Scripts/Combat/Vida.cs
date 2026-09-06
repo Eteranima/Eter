@@ -46,5 +46,11 @@ namespace EterAnima.Combat
             ManaAtual -= custo;
             return true;
         }
+
+        public void Curar(int hp, int mana)
+        {
+            HpAtual = Mathf.Min(HpMaximo, HpAtual + hp);
+            ManaAtual = Mathf.Min(ManaMaximo, ManaAtual + mana);
+        }
     }
 }

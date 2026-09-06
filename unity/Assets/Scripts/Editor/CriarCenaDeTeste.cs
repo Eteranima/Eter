@@ -51,6 +51,8 @@ namespace EterAnima.EditorTools
 
             if (!jogador.TryGetComponent(out Vida vidaJogador)) vidaJogador = jogador.AddComponent<Vida>();
             if (!jogador.TryGetComponent<JogadorCombate>(out _)) jogador.AddComponent<JogadorCombate>();
+            if (!jogador.TryGetComponent(out Inventario inventarioJogador)) inventarioJogador = jogador.AddComponent<Inventario>();
+            if (!jogador.TryGetComponent<JogadorInventario>(out _)) jogador.AddComponent<JogadorInventario>();
 
             // Sempre reaplica as folhas de sprite mais recentes, mesmo se o
             // Jogador já existia — assim, toda vez que uma folha nova chega
@@ -58,7 +60,8 @@ namespace EterAnima.EditorTools
             // de apagar e recriar o Jogador na mão.
             CriarVisualDoPersonagem(jogador.transform);
             CriarMobDeTreino();
-            CriarHud(vidaJogador);
+            CriarPickupsDeTeste();
+            CriarHud(vidaJogador, inventarioJogador);
 
             Camera camera = Camera.main;
             if (camera != null)
@@ -143,7 +146,29 @@ namespace EterAnima.EditorTools
             mob.AddComponent<Mob>();
         }
 
-        private static void CriarHud(Vida vidaJogador)
+        private static void CriarPickupsDeTeste()
+        {
+            CriarPickup("PickupEspada", new Vector3(1.5f, 0.5f, 1.5f), "espada_treino", new Color(0.8f, 0.8f, 0.2f));
+            CriarPickup("PickupPocao", new Vector3(-1.5f, 0.5f, 1.5f), "pocao_vida", new Color(0.9f, 0.2f, 0.5f));
+        }
+
+        private static void CriarPickup(string nome, Vector3 posicao, string itemId, Color cor)
+        {
+            if (GameObject.Find(nome) != null) return;
+
+            var pickup = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            pickup.name = nome;
+            pickup.transform.position = posicao;
+            pickup.transform.localScale = Vector3.one * 0.4f;
+            pickup.GetComponent<Renderer>().material.color = cor;
+            pickup.GetComponent<Collider>().isTrigger = true;
+            var item = pickup.AddComponent<ItemPickup>();
+            var serializado = new SerializedObject(item);
+            serializado.FindProperty("itemId").stringValue = itemId;
+            serializado.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void CriarHud(Vida vidaJogador, Inventario inventarioJogador)
         {
             var canvasGO = GameObject.Find("HudCanvas");
             if (canvasGO == null)
@@ -165,6 +190,34 @@ namespace EterAnima.EditorTools
             hud.Vida = vidaJogador;
             hud.PreenchimentoHp = preenchimentoHp;
             hud.PreenchimentoMana = preenchimentoMana;
+
+            var textoInventario = CriarTextoInventario(canvasGO.transform, new Vector2(24f, -84f));
+            if (!canvasGO.TryGetComponent(out HudInventario hudInventario)) hudInventario = canvasGO.AddComponent<HudInventario>();
+            hudInventario.Inventario = inventarioJogador;
+            hudInventario.Texto = textoInventario;
+        }
+
+        private static Text CriarTextoInventario(Transform pai, Vector2 posicaoAncorada)
+        {
+            var existente = pai.Find("TextoInventario");
+            if (existente != null) return existente.GetComponent<Text>();
+
+            var textoGO = new GameObject("TextoInventario", typeof(RectTransform), typeof(Text));
+            textoGO.transform.SetParent(pai, false);
+            var rect = (RectTransform)textoGO.transform;
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = posicaoAncorada;
+            rect.sizeDelta = new Vector2(280f, 140f);
+
+            var texto = textoGO.GetComponent<Text>();
+            texto.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            texto.fontSize = 16;
+            texto.color = Color.white;
+            texto.alignment = TextAnchor.UpperLeft;
+            texto.text = "(inventário vazio)";
+            return texto;
         }
 
         /// <summary>Cria (ou reaproveita) uma barra simples: fundo fixo +

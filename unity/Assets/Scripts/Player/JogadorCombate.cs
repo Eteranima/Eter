@@ -31,6 +31,7 @@ namespace EterAnima.PlayerCore
 
         private JogadorController _jogador;
         private Vida _vida;
+        private Inventario _inventario;
         private PersonagemBillboard _billboard;
         private float _cooldownRestante;
 
@@ -38,6 +39,7 @@ namespace EterAnima.PlayerCore
         {
             _jogador = GetComponent<JogadorController>();
             _vida = GetComponent<Vida>();
+            _inventario = GetComponent<Inventario>();
             _billboard = GetComponentInChildren<PersonagemBillboard>();
         }
 
@@ -73,7 +75,8 @@ namespace EterAnima.PlayerCore
             _billboard?.TocarAcao(acao, duracaoPoseAtaque);
             _cooldownRestante = duracaoPoseAtaque;
 
-            AcertarAlvosNoCone(alcanceAtaque, anguloAtaqueGraus, danoBaseAtaque);
+            int bonusFisico = _inventario?.Equipado?.BonusDanoFisico ?? 0;
+            AcertarAlvosNoCone(alcanceAtaque, anguloAtaqueGraus, danoBaseAtaque + bonusFisico);
         }
 
         private void ExecutarMagia()
@@ -87,7 +90,8 @@ namespace EterAnima.PlayerCore
             _billboard?.TocarAcao(AcaoPersonagem.Magia, duracaoPoseMagia);
             _cooldownRestante = duracaoPoseMagia;
 
-            AcertarAlvosNoCone(alcanceMagia, anguloMagiaGraus, danoBaseMagia);
+            int bonusMagico = _inventario?.Equipado?.BonusDanoMagico ?? 0;
+            AcertarAlvosNoCone(alcanceMagia, anguloMagiaGraus, danoBaseMagia + bonusMagico);
         }
 
         /// <summary>Cone simples na frente do personagem (não precisa de
