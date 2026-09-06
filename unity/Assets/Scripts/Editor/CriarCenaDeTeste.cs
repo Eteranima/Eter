@@ -1,5 +1,6 @@
 using EterAnima.CameraSystem;
 using EterAnima.Combat;
+using EterAnima.Mundo;
 using EterAnima.PlayerCore;
 using EterAnima.UI;
 using UnityEditor;
@@ -23,7 +24,11 @@ namespace EterAnima.EditorTools
         private const string CaminhoSpriteAtaque = "Assets/Art/Characters/protagonista_ataque_sheet.png";
         private const string CaminhoSpriteAtaqueAereo = "Assets/Art/Characters/protagonista_ataque_aereo_sheet.png";
         private const string CaminhoSpriteMagia = "Assets/Art/Characters/protagonista_magia_sheet.png";
+        private const string CaminhoSpriteNpcAnciana = "Assets/Art/Npcs/npc_anciana.png";
+        private const string CaminhoSpriteMobGoblin = "Assets/Art/Monsters/mob_goblin.png";
         private const float AlturaPersonagem = 1.9f; // mesma altura usada no protótipo Three.js
+        private const float AlturaNpc = 1.8f;
+        private const float AlturaMob = 1.4f;
 
         [MenuItem("Éter Anima/Criar Chão + Jogador + Câmera de Teste")]
         public static void Criar()
@@ -48,11 +53,13 @@ namespace EterAnima.EditorTools
                 controlador.radius = 0.3f;
                 jogador.AddComponent<JogadorController>();
             }
+            jogador.tag = "Player"; // Mob usa isso pra achar o alvo sem depender de PlayerCore
 
             if (!jogador.TryGetComponent(out Vida vidaJogador)) vidaJogador = jogador.AddComponent<Vida>();
             if (!jogador.TryGetComponent<JogadorCombate>(out _)) jogador.AddComponent<JogadorCombate>();
             if (!jogador.TryGetComponent(out Inventario inventarioJogador)) inventarioJogador = jogador.AddComponent<Inventario>();
             if (!jogador.TryGetComponent<JogadorInventario>(out _)) jogador.AddComponent<JogadorInventario>();
+            if (!jogador.TryGetComponent(out JogadorInteracao interacaoJogador)) interacaoJogador = jogador.AddComponent<JogadorInteracao>();
 
             // Sempre reaplica as folhas de sprite mais recentes, mesmo se o
             // Jogador já existia — assim, toda vez que uma folha nova chega
@@ -60,8 +67,9 @@ namespace EterAnima.EditorTools
             // de apagar e recriar o Jogador na mão.
             CriarVisualDoPersonagem(jogador.transform);
             CriarMobDeTreino();
+            CriarNpcDeTeste();
             CriarPickupsDeTeste();
-            CriarHud(vidaJogador, inventarioJogador);
+            CriarHud(vidaJogador, inventarioJogador, interacaoJogador);
 
             Camera camera = Camera.main;
             if (camera != null)
@@ -136,14 +144,86 @@ namespace EterAnima.EditorTools
 
         private static void CriarMobDeTreino()
         {
-            if (GameObject.Find("MobDeTreino") != null) return;
+            var mob = GameObject.Find("MobDeTreino");
+            if (mob != null && mob.transform.Find("Visual") == null)
+            {
+                // Versão antiga (cápsula primitiva sem sprite) — recria do
+                // zero em vez de tentar remendar mesh/collider da primitiva.
+                Object.DestroyImmediate(mob);
+                mob = null;
+            }
 
-            var mob = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            mob.name = "MobDeTreino";
-            mob.transform.position = new Vector3(0f, 1f, 3f);
-            mob.GetComponent<Renderer>().material.color = new Color(0.3f, 0.6f, 0.3f);
-            mob.AddComponent<Vida>();
-            mob.AddComponent<Mob>();
+            if (mob == null)
+            {
+                mob = new GameObject("MobDeTreino");
+                mob.transform.position = new Vector3(0f, 0f, 4f);
+                var colisor = mob.AddComponent<CapsuleCollider>();
+                colisor.center = new Vector3(0f, AlturaMob / 2f, 0f);
+                colisor.height = AlturaMob;
+                colisor.radius = 0.35f;
+                mob.AddComponent<Vida>();
+                mob.AddComponent<Mob>();
+            }
+
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(CaminhoSpriteMobGoblin);
+            if (sprite == null)
+            {
+                Debug.LogWarning($"[Éter Anima] Sprite do mob não encontrado em {CaminhoSpriteMobGoblin} — o mob vai ficar invisível até o arquivo existir.");
+            }
+            CriarVisualEstatico(mob.transform, sprite, AlturaMob);
+        }
+
+        private static void CriarNpcDeTeste()
+        {
+            var npc = GameObject.Find("NpcAnciana");
+            if (npc == null)
+            {
+                npc = new GameObject("NpcAnciana");
+                npc.transform.position = new Vector3(-3f, 0f, 2f);
+                var colisor = npc.AddComponent<CapsuleCollider>();
+                colisor.center = new Vector3(0f, AlturaNpc / 2f, 0f);
+                colisor.height = AlturaNpc;
+                colisor.radius = 0.35f;
+                npc.AddComponent<Npc>();
+            }
+
+            var quadros = AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteNpcAnciana) != null
+                ? CarregarQuadrosOrdenados(CaminhoSpriteNpcAnciana)
+                : null;
+            var spriteIdle = quadros != null && quadros.Length > 1 ? quadros[1] : null; // linha baixo, coluna do meio
+            if (spriteIdle == null)
+            {
+                Debug.LogWarning($"[Éter Anima] Sprite do NPC não encontrado em {CaminhoSpriteNpcAnciana} — o NPC vai ficar invisível até o arquivo existir.");
+            }
+            CriarVisualEstatico(npc.transform, spriteIdle, AlturaNpc);
+        }
+
+        /// <summary>Sprite de pose única (sem folha de andar/pulo) num
+        /// filho "Visual" que só encara a câmera — usado por mob e NPC
+        /// parados. Escala pra ficar com `altura` metros de alto,
+        /// preservando a proporção original da imagem.</summary>
+        private static void CriarVisualEstatico(Transform pai, Sprite sprite, float altura)
+        {
+            var visual = pai.Find("Visual");
+            if (visual == null)
+            {
+                var novoVisual = new GameObject("Visual");
+                novoVisual.transform.SetParent(pai);
+                novoVisual.transform.localPosition = new Vector3(0f, altura * 0.5f, 0f);
+                visual = novoVisual.transform;
+            }
+
+            if (!visual.TryGetComponent(out SpriteRenderer spriteRenderer)) spriteRenderer = visual.gameObject.AddComponent<SpriteRenderer>();
+            if (!visual.TryGetComponent<BillboardSimples>(out _)) visual.gameObject.AddComponent<BillboardSimples>();
+
+            if (sprite == null) return;
+            spriteRenderer.sprite = sprite;
+
+            float alturaSpriteEmMundo = sprite.rect.height / sprite.pixelsPerUnit;
+            if (alturaSpriteEmMundo > 0f)
+            {
+                visual.localScale = Vector3.one * (altura / alturaSpriteEmMundo);
+            }
         }
 
         private static void CriarPickupsDeTeste()
@@ -168,7 +248,7 @@ namespace EterAnima.EditorTools
             serializado.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private static void CriarHud(Vida vidaJogador, Inventario inventarioJogador)
+        private static Transform ObterOuCriarCanvas()
         {
             var canvasGO = GameObject.Find("HudCanvas");
             if (canvasGO == null)
@@ -180,44 +260,116 @@ namespace EterAnima.EditorTools
                 escala.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 escala.referenceResolution = new Vector2(1920f, 1080f);
             }
+            return canvasGO.transform;
+        }
 
-            var preenchimentoHp = CriarBarra(canvasGO.transform, "BarraHp", new Vector2(24f, -24f),
+        private static void CriarHud(Vida vidaJogador, Inventario inventarioJogador, JogadorInteracao interacaoJogador)
+        {
+            var canvas = ObterOuCriarCanvas();
+
+            var preenchimentoHp = CriarBarra(canvas, "BarraHp", new Vector2(24f, -24f),
                 new Color(0.15f, 0.15f, 0.15f, 0.85f), new Color(0.8f, 0.15f, 0.15f));
-            var preenchimentoMana = CriarBarra(canvasGO.transform, "BarraMana", new Vector2(24f, -52f),
+            var preenchimentoMana = CriarBarra(canvas, "BarraMana", new Vector2(24f, -52f),
                 new Color(0.15f, 0.15f, 0.15f, 0.85f), new Color(0.2f, 0.4f, 0.9f));
 
-            if (!canvasGO.TryGetComponent(out HudVida hud)) hud = canvasGO.AddComponent<HudVida>();
+            if (!canvas.TryGetComponent(out HudVida hud)) hud = canvas.gameObject.AddComponent<HudVida>();
             hud.Vida = vidaJogador;
             hud.PreenchimentoHp = preenchimentoHp;
             hud.PreenchimentoMana = preenchimentoMana;
 
-            var textoInventario = CriarTextoInventario(canvasGO.transform, new Vector2(24f, -84f));
-            if (!canvasGO.TryGetComponent(out HudInventario hudInventario)) hudInventario = canvasGO.AddComponent<HudInventario>();
+            var textoInventario = CriarTextoSimples(canvas, "TextoInventario", new Vector2(24f, -84f), new Vector2(280f, 140f), "(inventário vazio)");
+            if (!canvas.TryGetComponent(out HudInventario hudInventario)) hudInventario = canvas.gameObject.AddComponent<HudInventario>();
             hudInventario.Inventario = inventarioJogador;
             hudInventario.Texto = textoInventario;
+
+            var textoDica = CriarTextoSimples(canvas, "TextoDica", new Vector2(24f, -232f), new Vector2(320f, 26f), "Aperte E pra falar");
+            textoDica.gameObject.SetActive(false);
+
+            var (painelDialogo, textoNomeDialogo, textoFalaDialogo) = CriarPainelDialogo(canvas);
+            if (!canvas.TryGetComponent(out HudDialogo hudDialogo)) hudDialogo = canvas.gameObject.AddComponent<HudDialogo>();
+            hudDialogo.Painel = painelDialogo;
+            hudDialogo.TextoNome = textoNomeDialogo;
+            hudDialogo.TextoFala = textoFalaDialogo;
+
+            interacaoJogador.Dialogo = hudDialogo;
+            interacaoJogador.TextoDica = textoDica;
         }
 
-        private static Text CriarTextoInventario(Transform pai, Vector2 posicaoAncorada)
+        private static Text CriarTextoSimples(Transform pai, string nome, Vector2 posicaoAncorada, Vector2 tamanho, string textoInicial)
         {
-            var existente = pai.Find("TextoInventario");
+            var existente = pai.Find(nome);
             if (existente != null) return existente.GetComponent<Text>();
 
-            var textoGO = new GameObject("TextoInventario", typeof(RectTransform), typeof(Text));
+            var textoGO = new GameObject(nome, typeof(RectTransform), typeof(Text));
             textoGO.transform.SetParent(pai, false);
             var rect = (RectTransform)textoGO.transform;
             rect.anchorMin = new Vector2(0f, 1f);
             rect.anchorMax = new Vector2(0f, 1f);
             rect.pivot = new Vector2(0f, 1f);
             rect.anchoredPosition = posicaoAncorada;
-            rect.sizeDelta = new Vector2(280f, 140f);
+            rect.sizeDelta = tamanho;
 
             var texto = textoGO.GetComponent<Text>();
             texto.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             texto.fontSize = 16;
             texto.color = Color.white;
             texto.alignment = TextAnchor.UpperLeft;
-            texto.text = "(inventário vazio)";
+            texto.text = textoInicial;
             return texto;
+        }
+
+        /// <summary>Caixa de diálogo (nome + fala) ancorada embaixo-centro
+        /// da tela, escondida por padrão — HudDialogo mostra/some e troca
+        /// o texto.</summary>
+        private static (GameObject painel, Text nome, Text fala) CriarPainelDialogo(Transform pai)
+        {
+            var existente = pai.Find("PainelDialogo");
+            if (existente != null)
+            {
+                var nomeExistente = existente.Find("TextoNome")?.GetComponent<Text>();
+                var falaExistente = existente.Find("TextoFala")?.GetComponent<Text>();
+                return (existente.gameObject, nomeExistente, falaExistente);
+            }
+
+            var painelGO = new GameObject("PainelDialogo", typeof(RectTransform), typeof(Image));
+            painelGO.transform.SetParent(pai, false);
+            var painelRect = (RectTransform)painelGO.transform;
+            painelRect.anchorMin = new Vector2(0.5f, 0f);
+            painelRect.anchorMax = new Vector2(0.5f, 0f);
+            painelRect.pivot = new Vector2(0.5f, 0f);
+            painelRect.anchoredPosition = new Vector2(0f, 40f);
+            painelRect.sizeDelta = new Vector2(720f, 140f);
+            painelGO.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.85f);
+
+            var nomeGO = new GameObject("TextoNome", typeof(RectTransform), typeof(Text));
+            nomeGO.transform.SetParent(painelGO.transform, false);
+            var nomeRect = (RectTransform)nomeGO.transform;
+            nomeRect.anchorMin = new Vector2(0f, 1f);
+            nomeRect.anchorMax = new Vector2(1f, 1f);
+            nomeRect.pivot = new Vector2(0f, 1f);
+            nomeRect.anchoredPosition = new Vector2(20f, -12f);
+            nomeRect.sizeDelta = new Vector2(-40f, 28f);
+            var textoNome = nomeGO.GetComponent<Text>();
+            textoNome.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            textoNome.fontSize = 20;
+            textoNome.fontStyle = FontStyle.Bold;
+            textoNome.color = new Color(1f, 0.85f, 0.4f);
+
+            var falaGO = new GameObject("TextoFala", typeof(RectTransform), typeof(Text));
+            falaGO.transform.SetParent(painelGO.transform, false);
+            var falaRect = (RectTransform)falaGO.transform;
+            falaRect.anchorMin = Vector2.zero;
+            falaRect.anchorMax = Vector2.one;
+            falaRect.offsetMin = new Vector2(20f, 16f);
+            falaRect.offsetMax = new Vector2(-20f, -44f);
+            var textoFala = falaGO.GetComponent<Text>();
+            textoFala.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            textoFala.fontSize = 18;
+            textoFala.color = Color.white;
+            textoFala.alignment = TextAnchor.UpperLeft;
+
+            painelGO.SetActive(false);
+            return (painelGO, textoNome, textoFala);
         }
 
         /// <summary>Cria (ou reaproveita) uma barra simples: fundo fixo +
