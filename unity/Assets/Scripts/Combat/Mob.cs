@@ -28,6 +28,8 @@ namespace EterAnima.Combat
         private float _flashRestante;
         private SpriteRenderer _renderer;
         private Color _corOriginal = Color.white;
+        private InimigoBillboard _billboard;
+        private int _ultimaDirecao; // 0=baixo,1=esquerda,2=direita,3=cima — mesma convenção de PersonagemBillboard
 
         private void Awake()
         {
@@ -37,6 +39,7 @@ namespace EterAnima.Combat
 
             _renderer = GetComponentInChildren<SpriteRenderer>();
             if (_renderer != null) _corOriginal = _renderer.color;
+            _billboard = GetComponentInChildren<InimigoBillboard>();
 
             var jogador = GameObject.FindWithTag("Player");
             if (jogador != null)
@@ -80,29 +83,51 @@ namespace EterAnima.Combat
 
         private void PerseguirEAtacar()
         {
-            if (_alvo == null) return;
+            bool movendo = false;
 
-            Vector3 paraAlvo = _alvo.position - transform.position;
-            paraAlvo.y = 0f;
-            float distancia = paraAlvo.magnitude;
-            if (distancia < 0.0001f) return;
-
-            if (distancia <= alcanceAtaque)
+            if (_alvo != null)
             {
-                if (_cooldownAtaque <= 0f)
+                Vector3 paraAlvo = _alvo.position - transform.position;
+                paraAlvo.y = 0f;
+                float distancia = paraAlvo.magnitude;
+
+                if (distancia > 0.0001f)
                 {
-                    _vidaAlvo?.ReceberDano(danoContato, elemento);
-                    _cooldownAtaque = intervaloAtaque;
+                    if (distancia <= alcanceAtaque)
+                    {
+                        if (_cooldownAtaque <= 0f)
+                        {
+                            _vidaAlvo?.ReceberDano(danoContato, elemento);
+                            _cooldownAtaque = intervaloAtaque;
+                        }
+                    }
+                    else if (distancia <= raioDeteccao)
+                    {
+                        Vector3 direcao = paraAlvo.normalized;
+                        transform.position += direcao * velocidadePerseguicao * Time.deltaTime;
+                        transform.forward = direcao;
+                        _ultimaDirecao = DirecaoCardinalDe(direcao);
+                        movendo = true;
+                    }
                 }
-                return;
             }
 
-            if (distancia <= raioDeteccao)
+            _billboard?.AtualizarQuadro(_ultimaDirecao, movendo);
+        }
+
+        /// <summary>Mesma convenção de sinal já usada em JogadorController
+        /// pra mapear eixo de mundo pra direção de sprite: +X é Esquerda,
+        /// -X é Direita, -Z é Cima (longe da câmera), +Z é Baixo (perto
+        /// da câmera) — a câmera terceira pessoa é um offset de mundo
+        /// fixo, então essa relação vale pra qualquer objeto, não só o
+        /// jogador.</summary>
+        private static int DirecaoCardinalDe(Vector3 direcaoMundo)
+        {
+            if (Mathf.Abs(direcaoMundo.x) > Mathf.Abs(direcaoMundo.z))
             {
-                Vector3 direcao = paraAlvo.normalized;
-                transform.position += direcao * velocidadePerseguicao * Time.deltaTime;
-                transform.forward = direcao;
+                return direcaoMundo.x > 0f ? 1 : 2; // esquerda : direita
             }
+            return direcaoMundo.z < 0f ? 3 : 0; // cima : baixo
         }
     }
 }

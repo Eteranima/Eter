@@ -26,6 +26,7 @@ namespace EterAnima.EditorTools
         private const string CaminhoSpriteMagia = "Assets/Art/Characters/protagonista_magia_sheet.png";
         private const string CaminhoSpriteNpcAnciana = "Assets/Art/Npcs/npc_anciana.png";
         private const string CaminhoSpriteMobGoblin = "Assets/Art/Monsters/mob_goblin.png";
+        private const string CaminhoSpriteMobGoblinAndar = "Assets/Art/Npcs/mob_goblin_sheet.png";
         private const float AlturaPersonagem = 1.9f; // mesma altura usada no protótipo Three.js
         private const float AlturaNpc = 1.8f;
         private const float AlturaMob = 1.4f;
@@ -165,12 +166,46 @@ namespace EterAnima.EditorTools
                 mob.AddComponent<Mob>();
             }
 
-            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(CaminhoSpriteMobGoblin);
-            if (sprite == null)
+            CriarVisualDoMob(mob.transform);
+        }
+
+        /// <summary>Visual do goblin: prefere a folha animada (3×4, ciclo
+        /// de andar) e cai pra pose estática única se ela ainda não
+        /// existir. Faz upgrade automático de uma versão anterior parada
+        /// pra animada (remove o BillboardSimples se achar um).</summary>
+        private static void CriarVisualDoMob(Transform pai)
+        {
+            var visual = pai.Find("Visual");
+            if (visual == null)
             {
-                Debug.LogWarning($"[Éter Anima] Sprite do mob não encontrado em {CaminhoSpriteMobGoblin} — o mob vai ficar invisível até o arquivo existir.");
+                var novoVisual = new GameObject("Visual");
+                novoVisual.transform.SetParent(pai);
+                novoVisual.transform.localPosition = new Vector3(0f, AlturaMob * 0.5f, 0f);
+                novoVisual.transform.localScale = Vector3.one * AlturaMob;
+                visual = novoVisual.transform;
             }
-            CriarVisualEstatico(mob.transform, sprite, AlturaMob);
+
+            if (!visual.TryGetComponent(out SpriteRenderer spriteRenderer)) spriteRenderer = visual.gameObject.AddComponent<SpriteRenderer>();
+
+            if (AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteMobGoblinAndar) != null)
+            {
+                if (visual.TryGetComponent<BillboardSimples>(out var billboardAntigo)) Object.DestroyImmediate(billboardAntigo);
+                if (!visual.TryGetComponent(out InimigoBillboard billboard)) billboard = visual.gameObject.AddComponent<InimigoBillboard>();
+
+                var quadros = CarregarQuadrosOrdenados(CaminhoSpriteMobGoblinAndar);
+                billboard.QuadrosAndar = quadros;
+                visual.localScale = Vector3.one * AlturaMob;
+                if (quadros.Length > 1 && quadros[1] != null) spriteRenderer.sprite = quadros[1];
+                return;
+            }
+
+            Debug.LogWarning($"[Éter Anima] Folha animada do goblin não encontrada em {CaminhoSpriteMobGoblinAndar} — usando a pose estática como substituta.");
+            var spriteEstatico = AssetDatabase.LoadAssetAtPath<Sprite>(CaminhoSpriteMobGoblin);
+            if (spriteEstatico == null)
+            {
+                Debug.LogWarning($"[Éter Anima] Sprite do mob não encontrado em {CaminhoSpriteMobGoblin} — o mob vai ficar invisível até algum dos dois arquivos existir.");
+            }
+            CriarVisualEstatico(pai, spriteEstatico, AlturaMob);
         }
 
         private static void CriarNpcDeTeste()
