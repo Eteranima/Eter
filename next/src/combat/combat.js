@@ -9,7 +9,7 @@ import { LANCA_DE_FOGO } from './magic.js';
    turn-based-stub.js. Nada aqui é exclusivo do modo em tempo real além
    do próprio "quando" (cooldown de tempo real vs. fila de turno).
    =================================================================== */
-export function criarCombate({ player, mobs, mostrarDano, onMobMorto }) {
+export function criarCombate({ player, mobs, mostrarDano, onMobMorto, vfx }) {
   const cooldowns = { ataque: 0, skill: 0, magia: 0 };
 
   function tick(deltaSeg) {
@@ -42,6 +42,7 @@ export function criarCombate({ player, mobs, mostrarDano, onMobMorto }) {
     if (cooldowns.skill > 0 || player.morto) return false;
     cooldowns.skill = GOLPE_GIRATORIO.cooldownSeg;
     player.tocarAnimacaoDeAtaque();
+    vfx?.criarOndaDeSkill(player.posicao);
     const critico = Math.random() < player.chanceCritico();
     for (const mob of alvosNoAlcance(GOLPE_GIRATORIO.alcance)) {
       aplicarDano(mob, player.danoFisico() * GOLPE_GIRATORIO.multiplicadorDano, player.elemento, critico);
@@ -56,6 +57,7 @@ export function criarCombate({ player, mobs, mostrarDano, onMobMorto }) {
     player.tocarAnimacaoDeAtaque();
     const critico = Math.random() < player.chanceCritico();
     for (const mob of alvosNoAlcance(LANCA_DE_FOGO.alcance)) {
+      vfx?.criarProjetilDeMagia(player.posicao, mob.posicao);
       aplicarDano(mob, player.danoMagico() * LANCA_DE_FOGO.multiplicadorDano, LANCA_DE_FOGO.elemento, critico);
     }
     return true;

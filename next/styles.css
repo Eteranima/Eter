@@ -27,7 +27,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#05070a;color:#e8f0ed}
   gap:2px;font-size:10px;color:#cfe6df}
 #hotbar .slot .key{font-size:10px;color:#7ee0cc;font-weight:700}
 
-#dialogue,#shop{position:fixed;left:50%;transform:translateX(-50%);bottom:96px;width:min(640px,88vw);
+#dialogue,#shop,#inventory{position:fixed;left:50%;transform:translateX(-50%);bottom:96px;width:min(640px,88vw);
   background:rgba(8,14,18,.92);border:1px solid #2f7b81;border-radius:12px;padding:16px 20px;
   color:#e8f0ed;font-size:14px}
 #dialogue-name{font-weight:700;color:#f2c879;margin-bottom:6px}
@@ -46,6 +46,20 @@ html,body{margin:0;height:100%;overflow:hidden;background:#05070a;color:#e8f0ed}
   padding:4px 10px;cursor:pointer;font-size:12px}
 #shop-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
 #shop-close{background:#17343c;border:1px solid #2f7b81;color:#e5f5ef;border-radius:6px;
+  padding:6px 12px;cursor:pointer}
+
+#inventory{top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(460px,88vw)}
+#inventory h2{margin:0 0 10px;font-size:16px;color:#f2c879}
+#inventory-list{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto}
+#inventory-list h3{font-size:11px;color:#9fd6c9;margin:10px 0 2px;text-transform:uppercase;letter-spacing:.4px}
+#inventory-list h3:first-child{margin-top:0}
+.inventory-item{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  border:1px solid #235969;border-radius:6px;padding:6px 10px;font-size:13px}
+.inventory-item em{color:#f2c879;font-style:normal}
+.inventory-item button{background:#17343c;border:1px solid #2f7b81;color:#e5f5ef;border-radius:5px;
+  padding:4px 10px;cursor:pointer;font-size:12px}
+#inventory-footer{display:flex;justify-content:flex-end;margin-top:12px}
+#inventory-close{background:#17343c;border:1px solid #2f7b81;color:#e5f5ef;border-radius:6px;
   padding:6px 12px;cursor:pointer}
 
 #damage-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden}

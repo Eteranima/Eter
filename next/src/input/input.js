@@ -15,6 +15,7 @@ const MAPA_TECLAS = {
   KeyX: 'cancelar',
   Digit1: 'skill', Digit2: 'magia', Digit3: 'item',
   KeyK: 'salvar',
+  KeyI: 'inventario',
 };
 
 window.addEventListener('keydown', (evento) => {

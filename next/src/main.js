@@ -9,13 +9,15 @@ import { criarMob } from './entities/mob.js';
 import { criarCombate } from './combat/combat.js';
 import { criarInventario, adicionarItem, removerItem } from './items/inventory.js';
 import { POCAO_DE_ETER, usarConsumivel } from './items/consumables.js';
-import { ESPADA_DE_TREINO, equipar } from './items/equipment.js';
+import { ESPADA_DE_TREINO, equipar, desequipar } from './items/equipment.js';
 import { LOJA_ACADEMIA, comprar } from './shop/shop.js';
 import { atualizarHud } from './ui/hud.js';
 import { criarMinimapa } from './ui/minimap.js';
 import { criarDialogo } from './ui/dialogue-box.js';
 import { criarMostradorDeDano } from './ui/damage-numbers.js';
 import { criarBarrasDeVidaDeMob } from './ui/mob-health-bars.js';
+import { criarPainelInventario } from './ui/inventory-panel.js';
+import { criarSistemaDeVfx } from './combat/vfx.js';
 import { salvar, carregar, existeSave } from './save/save.js';
 
 /* ===================================================================
@@ -41,6 +43,7 @@ renderizador.setPixelRatio(Math.min(devicePixelRatio, 2));
 
 const cameraRig = criarCameraRig();
 const mapa = construirMapa(cena);
+const vfx = criarSistemaDeVfx(cena);
 
 function redimensionar() {
   renderizador.setSize(window.innerWidth, window.innerHeight);
@@ -114,7 +117,7 @@ const interativos = [
 // --- Combate / UI --------------------------------------------------------
 const mostrarDano = criarMostradorDeDano(cameraRig.camera);
 const combate = criarCombate({
-  player, mobs, mostrarDano,
+  player, mobs, mostrarDano, vfx,
   onMobMorto(mob) {
     player.ganharXp(mob.xp);
     player.ouro += Math.round(mob.xp * 0.6);
@@ -156,6 +159,17 @@ function abrirLoja(loja) {
 }
 document.getElementById('shop-close').onclick = () => { shopEl.hidden = true; };
 
+const painelInventario = criarPainelInventario();
+function abrirOuFecharInventario() {
+  if (painelInventario.ativo) { painelInventario.fechar(); return; }
+  painelInventario.abrir(player, inventario, {
+    onUsarConsumivel: (item) => usarConsumivelEspecifico(item),
+    onEquipar: (item) => equipar(player, item),
+    onDesequipar: () => desequipar(player),
+  });
+}
+document.getElementById('inventory-close').onclick = () => painelInventario.fechar();
+
 // --- Loop de jogo --------------------------------------------------------
 const relogio = new THREE.Clock();
 document.getElementById('boot-status').hidden = true;
@@ -187,11 +201,14 @@ function interagirComOMaisProximo() {
   }
 }
 
+function usarConsumivelEspecifico(item) {
+  usarConsumivel(player, item);
+  removerItem(inventario, item.id, 1);
+}
 function usarItemDoHotbar() {
   const pilha = inventario.consumiveis[0];
   if (!pilha) return;
-  usarConsumivel(player, pilha.item);
-  removerItem(inventario, pilha.item.id, 1);
+  usarConsumivelEspecifico(pilha.item);
 }
 
 function respawnarSeMorreu() {
@@ -218,6 +235,13 @@ function loop() {
     renderizador.render(cena, cameraRig.camera);
     return;
   }
+  if (Input.apertou('inventario')) abrirOuFecharInventario();
+  if (painelInventario.ativo) {
+    if (Input.apertou('cancelar')) painelInventario.fechar();
+    Input.encerrarFrame();
+    renderizador.render(cena, cameraRig.camera);
+    return;
+  }
 
   const intencao = {
     cima: Input.pressionando('cima'), baixo: Input.pressionando('baixo'),
@@ -237,6 +261,7 @@ function loop() {
   if (Input.apertou('interagir')) interagirComOMaisProximo();
   if (Input.apertou('salvar')) salvar(player, inventario);
 
+  vfx.atualizar(deltaSeg);
   cameraRig.atualizar(deltaSeg, player.posicao);
   atualizarHud(player);
   minimapa.desenhar(player, npcs, mobs);
