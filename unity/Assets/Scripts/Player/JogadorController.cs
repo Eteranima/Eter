@@ -55,18 +55,17 @@ namespace EterAnima.PlayerCore
             bool esquerda = teclado.aKey.isPressed || teclado.leftArrowKey.isPressed;
             bool direita = teclado.dKey.isPressed || teclado.rightArrowKey.isPressed;
 
-            /* X do MUNDO invertido de propósito: a câmera fica atrás do
-               personagem em +Z olhando pra -Z (ver CameraTerceiraPessoa) —
-               isso equivale a girar 180° em Y a partir da identidade, o que
-               inverte transform.right da câmera pra -X. Sem esta inversão,
-               "direita" andava +X no mundo, que a câmera via como esquerda
-               na TELA — exatamente o bug relatado ao vivo ("A e D estão
-               trocados"). A direção do SPRITE (DirecaoCardinal, embaixo) usa
-               a intenção de tecla direto, nunca este sinal invertido —
-               senão o personagem viraria de costas pro lado errado. */
+            /* X e Z do MUNDO invertidos de propósito em relação à intenção
+               de tecla — confirmado ao vivo nos dois eixos (A/D trocados
+               primeiro, depois W/S também): a câmera fica atrás do
+               personagem em +Z olhando pra -Z (ver CameraTerceiraPessoa),
+               e isso inverte tanto right quanto forward da câmera em
+               relação ao mundo. A direção do SPRITE (DirecaoCardinal,
+               embaixo) usa a intenção de tecla direto, nunca este sinal
+               invertido — senão o personagem viraria pro lado errado. */
             Vector3 direcao = Vector3.zero;
-            if (cima) direcao.z -= 1;
-            if (baixo) direcao.z += 1;
+            if (cima) direcao.z += 1;
+            if (baixo) direcao.z -= 1;
             if (esquerda) direcao.x += 1;
             if (direita) direcao.x -= 1;
 
