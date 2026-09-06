@@ -19,7 +19,7 @@ const MS_POR_QUADRO = 130;
 /** Sprite direcional (personagem/NPC) fatiado de uma folha 3 colunas × 4 linhas. */
 export function criarBillboardDirecional(url, { cols = 3, rows = 4, alturaMundo = 1.8 } = {}) {
   const textura = new THREE.Texture();
-  const estado = { dir: 'down', animT: 0, pronto: false };
+  const estado = { dir: 'down', animT: 0, pronto: false, escalaBaseX: alturaMundo, escalaBaseY: alturaMundo };
   const material = new THREE.SpriteMaterial({ map: textura, transparent: true, alphaTest: 0.4 });
   const sprite = new THREE.Sprite(material);
   sprite.center.set(0.5, 0); // ancora no PÉ, não no centro — mesma ideia de sempre no projeto
@@ -36,7 +36,9 @@ export function criarBillboardDirecional(url, { cols = 3, rows = 4, alturaMundo 
     textura.repeat.set(1 / cols, 1 / rows);
     textura.needsUpdate = true;
     const proporcao = (imagem.naturalWidth / cols) / (imagem.naturalHeight / rows);
-    sprite.scale.set(alturaMundo * proporcao, alturaMundo, 1);
+    estado.escalaBaseX = alturaMundo * proporcao;
+    estado.escalaBaseY = alturaMundo;
+    sprite.scale.set(estado.escalaBaseX, estado.escalaBaseY, 1);
     aplicarFrame(1, DIR_ROW.down);
     estado.pronto = true;
   };
@@ -60,7 +62,14 @@ export function criarBillboardDirecional(url, { cols = 3, rows = 4, alturaMundo 
     }
   }
 
-  return { sprite, tick };
+  /* PLACEHOLDER de animação de golpe (sem arte de ataque dedicada
+     ainda — ver next/ESPECIFICACAO-DE-ARTE.md): "squash & stretch" no
+     próprio sprite em cima da escala base, nunca substituindo ela. */
+  function aplicarFatorEscala(fatorX, fatorY) {
+    sprite.scale.set(estado.escalaBaseX * fatorX, estado.escalaBaseY * fatorY, 1);
+  }
+
+  return { sprite, tick, aplicarFatorEscala };
 }
 
 /** Sprite estático (mob/prop) — sem grade, a imagem inteira é o quadro. */
@@ -85,5 +94,13 @@ export function criarBillboardEstatico(url, { alturaMundo = 1.4 } = {}) {
   function virarPara(esquerda) {
     sprite.scale.x = Math.abs(sprite.scale.x) * (esquerda ? -1 : 1);
   }
-  return { sprite, virarPara };
+  /* PLACEHOLDER de reação a dano (sem arte de "hit" dedicada ainda —
+     ver next/ESPECIFICACAO-DE-ARTE.md): tinge o sprite de vermelho por
+     um instante multiplicando a cor do material (não altera pixels da
+     textura original). */
+  function piscarImpacto() {
+    material.color.setHex(0xff5a4a);
+    setTimeout(() => material.color.setHex(0xffffff), 110);
+  }
+  return { sprite, virarPara, piscarImpacto };
 }

@@ -29,7 +29,14 @@ export function criarMob({
 
     receberDano(quantidade) {
       this.hp = Math.max(0, this.hp - quantidade);
-      if (this.hp <= 0) this.morto = true;
+      if (this.hp <= 0) {
+        this.morto = true;
+        // Placeholder sem arte de morte dedicada — some da cena.
+        // Ver next/ESPECIFICACAO-DE-ARTE.md.
+        this.sprite.visible = false;
+      } else {
+        billboard.piscarImpacto();
+      }
       return this.hp;
     },
 

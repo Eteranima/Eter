@@ -8,6 +8,7 @@ import {
 
 const GRAVIDADE = -18;
 const VELOCIDADE_PULO = 7;
+const DURACAO_ANIM_ATAQUE = 0.22; // segundos
 
 export class Player {
   constructor({ scene, racaId, elemento, spriteUrl }) {
@@ -41,7 +42,17 @@ export class Player {
     const billboard = criarBillboardDirecional(spriteUrl, { alturaMundo: 1.9 });
     this.sprite = billboard.sprite;
     this._tickSprite = billboard.tick;
+    this._aplicarFatorEscala = billboard.aplicarFatorEscala;
+    this._tempoAnimAtaque = 0;
     scene.add(this.sprite);
+  }
+
+  /* PLACEHOLDER de animação de golpe (sem arte de ataque dedicada
+     ainda — ver next/ESPECIFICACAO-DE-ARTE.md): um "squash & stretch"
+     rápido no próprio sprite, chamado por combat.js a cada ataque
+     básico/skill/magia. */
+  tocarAnimacaoDeAtaque() {
+    this._tempoAnimAtaque = DURACAO_ANIM_ATAQUE;
   }
 
   get hpMax() { return hpMaximo(this.statsEfetivos(), this.progresso.nivel); }
@@ -128,5 +139,14 @@ export class Player {
 
     this.sprite.position.copy(this.posicao);
     this._tickSprite(deltaSeg * 1000, this.movendo, this.direcao);
+
+    if (this._tempoAnimAtaque > 0) {
+      this._tempoAnimAtaque = Math.max(0, this._tempoAnimAtaque - deltaSeg);
+      const progresso = 1 - this._tempoAnimAtaque / DURACAO_ANIM_ATAQUE;
+      const pulso = Math.sin(progresso * Math.PI); // 0 → 1 → 0
+      this._aplicarFatorEscala(1 + pulso * 0.22, 1 - pulso * 0.12);
+    } else {
+      this._aplicarFatorEscala(1, 1);
+    }
   }
 }

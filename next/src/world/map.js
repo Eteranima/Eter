@@ -17,7 +17,12 @@ import * as THREE from 'three';
    sair da borda de uma plataforma sem escada nenhuma por perto (ver o
    buraco do subsolo: o chão simplesmente não existe lá, viver com
    isso é a queda). */
-const TOLERANCIA_DEGRAU = 0.42;
+/* Precisa ser MAIOR que ALTURA_DEGRAU (0.5, logo abaixo) — testado ao
+   vivo pelo usuário: com 0.42 (menor que o degrau de 0.5) o próximo
+   degrau nunca era "alcançável" andando, alturaDoChao devolvia
+   -Infinity bem no meio da escada, e a rede de segurança de Player
+   puxava de volta — ou seja, ele subia um pouco e caía direto. */
+const TOLERANCIA_DEGRAU = 0.58;
 
 function retangulo(minX, maxX, minZ, maxZ, topY) {
   return { minX, maxX, minZ, maxZ, topY };

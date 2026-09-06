@@ -32,6 +32,7 @@ export function criarCombate({ player, mobs, mostrarDano, onMobMorto }) {
   function ataqueBasico() {
     if (cooldowns.ataque > 0 || player.morto) return false;
     cooldowns.ataque = 0.5;
+    player.tocarAnimacaoDeAtaque();
     const critico = Math.random() < player.chanceCritico();
     for (const mob of alvosNoAlcance(1.6)) aplicarDano(mob, player.danoFisico(), player.elemento, critico);
     return true;
@@ -40,6 +41,7 @@ export function criarCombate({ player, mobs, mostrarDano, onMobMorto }) {
   function usarSkill() {
     if (cooldowns.skill > 0 || player.morto) return false;
     cooldowns.skill = GOLPE_GIRATORIO.cooldownSeg;
+    player.tocarAnimacaoDeAtaque();
     const critico = Math.random() < player.chanceCritico();
     for (const mob of alvosNoAlcance(GOLPE_GIRATORIO.alcance)) {
       aplicarDano(mob, player.danoFisico() * GOLPE_GIRATORIO.multiplicadorDano, player.elemento, critico);
@@ -51,6 +53,7 @@ export function criarCombate({ player, mobs, mostrarDano, onMobMorto }) {
     if (cooldowns.magia > 0 || player.morto || player.mp < LANCA_DE_FOGO.custoMana) return false;
     cooldowns.magia = LANCA_DE_FOGO.cooldownSeg;
     player.mp -= LANCA_DE_FOGO.custoMana;
+    player.tocarAnimacaoDeAtaque();
     const critico = Math.random() < player.chanceCritico();
     for (const mob of alvosNoAlcance(LANCA_DE_FOGO.alcance)) {
       aplicarDano(mob, player.danoMagico() * LANCA_DE_FOGO.multiplicadorDano, LANCA_DE_FOGO.elemento, critico);

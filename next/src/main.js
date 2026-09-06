@@ -15,6 +15,7 @@ import { atualizarHud } from './ui/hud.js';
 import { criarMinimapa } from './ui/minimap.js';
 import { criarDialogo } from './ui/dialogue-box.js';
 import { criarMostradorDeDano } from './ui/damage-numbers.js';
+import { criarBarrasDeVidaDeMob } from './ui/mob-health-bars.js';
 import { salvar, carregar, existeSave } from './save/save.js';
 
 /* ===================================================================
@@ -122,6 +123,7 @@ const combate = criarCombate({
   },
 });
 const minimapa = criarMinimapa();
+const barrasDeMob = criarBarrasDeVidaDeMob(cameraRig.camera);
 const dialogo = criarDialogo();
 
 const shopEl = document.getElementById('shop');
@@ -238,6 +240,7 @@ function loop() {
   cameraRig.atualizar(deltaSeg, player.posicao);
   atualizarHud(player);
   minimapa.desenhar(player, npcs, mobs);
+  barrasDeMob.atualizar(mobs);
 
   Input.encerrarFrame();
   renderizador.render(cena, cameraRig.camera);
