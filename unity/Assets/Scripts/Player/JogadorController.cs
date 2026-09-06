@@ -31,6 +31,7 @@ namespace EterAnima.PlayerCore
         public Progresso Progresso { get; private set; }
         public bool NoChao => _controlador.isGrounded;
         public bool Movendo { get; private set; }
+        public bool Correndo { get; private set; }
         public Vector3 DirecaoAtual { get; private set; } = Vector3.forward;
         /// <summary>Direção do SPRITE (tela) — calculada da intenção de
         /// tecla, nunca do sinal cru de mundo (que é invertido em X pela
@@ -73,8 +74,8 @@ namespace EterAnima.PlayerCore
             if (direita) direcao.x -= 1;
 
             Movendo = direcao.sqrMagnitude > 0.001f;
-            bool correndo = Movendo && teclado.leftShiftKey.isPressed;
-            float velocidade = Atributos.VelocidadeMovimento() * (correndo ? multiplicadorCorrida : 1f);
+            Correndo = Movendo && teclado.leftShiftKey.isPressed;
+            float velocidade = Atributos.VelocidadeMovimento() * (Correndo ? multiplicadorCorrida : 1f);
 
             if (Movendo)
             {

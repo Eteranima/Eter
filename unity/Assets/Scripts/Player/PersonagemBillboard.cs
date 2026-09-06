@@ -13,7 +13,7 @@ namespace EterAnima.PlayerCore
     /// pose/quadro. Este componente sobrescreve a rotação herdada todo
     /// frame pra sempre encarar a câmera.
     ///
-    /// Cada folha (`quadrosAndar`, `quadrosPulo`, ...) precisa ter
+    /// Cada folha (`quadrosAndar`, `quadrosCorrida`, `quadrosPulo`, ...) precisa ter
     /// exatamente 12 sprites, na ordem gerada por
     /// ImportadorFolhaDePersonagem: índice = linha*3 + coluna, linha
     /// 0=baixo, 1=esquerda, 2=direita, 3=cima (mesma convenção do motor
@@ -28,6 +28,7 @@ namespace EterAnima.PlayerCore
         private const int ColunaPuloNoAr = 1; // meio da folha de pulo = "no ar" (ver protagonista_pulo_sheet)
 
         [SerializeField] private Sprite[] quadrosAndar = new Sprite[12];
+        [SerializeField] private Sprite[] quadrosCorrida = new Sprite[12];
         [SerializeField] private Sprite[] quadrosPulo = new Sprite[12];
 
         private SpriteRenderer _renderer;
@@ -35,6 +36,7 @@ namespace EterAnima.PlayerCore
         private float _tempoAnimacao;
 
         public Sprite[] QuadrosAndar { set => quadrosAndar = value; }
+        public Sprite[] QuadrosCorrida { set => quadrosCorrida = value; }
         public Sprite[] QuadrosPulo { set => quadrosPulo = value; }
 
         private void Awake()
@@ -77,7 +79,8 @@ namespace EterAnima.PlayerCore
                 _tempoAnimacao = 0f;
                 coluna = 1; // pose parada
             }
-            AplicarQuadro(quadrosAndar, linha, coluna);
+            var folha = _jogador.Correndo ? quadrosCorrida : quadrosAndar;
+            AplicarQuadro(folha, linha, coluna);
         }
 
         private void AplicarQuadro(Sprite[] folha, int linha, int coluna)

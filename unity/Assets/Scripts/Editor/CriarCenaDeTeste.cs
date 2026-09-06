@@ -15,6 +15,7 @@ namespace EterAnima.EditorTools
     public static class CriarCenaDeTeste
     {
         private const string CaminhoSpriteAndar = "Assets/Art/Characters/protagonista_sheet.png";
+        private const string CaminhoSpriteCorrida = "Assets/Art/Characters/protagonista_corrida_sheet.png";
         private const string CaminhoSpritePulo = "Assets/Art/Characters/protagonista_pulo_sheet.png";
         private const float AlturaPersonagem = 1.9f; // mesma altura usada no protótipo Three.js
 
@@ -40,9 +41,13 @@ namespace EterAnima.EditorTools
                 controlador.height = AlturaPersonagem;
                 controlador.radius = 0.3f;
                 jogador.AddComponent<JogadorController>();
-
-                CriarVisualDoPersonagem(jogador.transform);
             }
+
+            // Sempre reaplica as folhas de sprite mais recentes, mesmo se o
+            // Jogador já existia — assim, toda vez que uma folha nova chega
+            // (corrida, ataque, ...), só precisa rodar o menu de novo em vez
+            // de apagar e recriar o Jogador na mão.
+            CriarVisualDoPersonagem(jogador.transform);
 
             Camera camera = Camera.main;
             if (camera != null)
@@ -65,13 +70,18 @@ namespace EterAnima.EditorTools
 
         private static void CriarVisualDoPersonagem(Transform pai)
         {
-            var visual = new GameObject("Visual");
-            visual.transform.SetParent(pai);
-            visual.transform.localPosition = Vector3.zero;
-            visual.transform.localScale = Vector3.one * AlturaPersonagem;
+            var visual = pai.Find("Visual");
+            if (visual == null)
+            {
+                var novoVisual = new GameObject("Visual");
+                novoVisual.transform.SetParent(pai);
+                novoVisual.transform.localPosition = Vector3.zero;
+                novoVisual.transform.localScale = Vector3.one * AlturaPersonagem;
+                visual = novoVisual.transform;
+            }
 
-            var spriteRenderer = visual.AddComponent<SpriteRenderer>();
-            var billboard = visual.AddComponent<PersonagemBillboard>();
+            if (!visual.TryGetComponent(out SpriteRenderer spriteRenderer)) spriteRenderer = visual.gameObject.AddComponent<SpriteRenderer>();
+            if (!visual.TryGetComponent(out PersonagemBillboard billboard)) billboard = visual.gameObject.AddComponent<PersonagemBillboard>();
 
             if (AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteAndar) == null)
             {
@@ -81,6 +91,17 @@ namespace EterAnima.EditorTools
 
             var quadrosAndar = CarregarQuadrosOrdenados(CaminhoSpriteAndar);
             billboard.QuadrosAndar = quadrosAndar;
+
+            if (AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteCorrida) != null)
+            {
+                billboard.QuadrosCorrida = CarregarQuadrosOrdenados(CaminhoSpriteCorrida);
+            }
+            else
+            {
+                Debug.LogWarning($"[Éter Anima] Sprite de corrida não encontrado em {CaminhoSpriteCorrida} — vai usar a pose de andar mesmo correndo.");
+                billboard.QuadrosCorrida = quadrosAndar;
+            }
+
             if (AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpritePulo) != null)
             {
                 billboard.QuadrosPulo = CarregarQuadrosOrdenados(CaminhoSpritePulo);
