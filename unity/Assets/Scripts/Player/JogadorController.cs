@@ -85,8 +85,8 @@ namespace EterAnima.PlayerCore
 
                 if (esquerda && !direita) DirecaoCardinal = DirecaoPersonagem.Esquerda;
                 else if (direita && !esquerda) DirecaoCardinal = DirecaoPersonagem.Direita;
-                else if (baixo) DirecaoCardinal = DirecaoPersonagem.Baixo;
-                else if (cima) DirecaoCardinal = DirecaoPersonagem.Cima;
+                else if (baixo) DirecaoCardinal = DirecaoPersonagem.Cima;
+                else if (cima) DirecaoCardinal = DirecaoPersonagem.Baixo;
             }
 
             // Pulo/gravidade — só sai do chão se já estava apoiado.
