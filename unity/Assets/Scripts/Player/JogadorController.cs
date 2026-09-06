@@ -32,6 +32,11 @@ namespace EterAnima.PlayerCore
         public bool NoChao => _controlador.isGrounded;
         public bool Movendo { get; private set; }
         public Vector3 DirecaoAtual { get; private set; } = Vector3.forward;
+        /// <summary>Direção do SPRITE (tela) — calculada da intenção de
+        /// tecla, nunca do sinal cru de mundo (que é invertido em X pela
+        /// câmera, ver comentário no Update). Down/Up = personagem indo em
+        /// direção à câmera / se afastando dela.</summary>
+        public DirecaoPersonagem DirecaoCardinal { get; private set; } = DirecaoPersonagem.Baixo;
 
         private void Awake()
         {
@@ -45,18 +50,25 @@ namespace EterAnima.PlayerCore
             var teclado = Keyboard.current;
             if (teclado == null) return;
 
-            /* X invertido de propósito: a câmera fica atrás do personagem
-               em +Z olhando pra -Z (ver CameraTerceiraPessoa) — isso
-               equivale a girar 180° em Y a partir da identidade, o que
+            bool cima = teclado.wKey.isPressed || teclado.upArrowKey.isPressed;
+            bool baixo = teclado.sKey.isPressed || teclado.downArrowKey.isPressed;
+            bool esquerda = teclado.aKey.isPressed || teclado.leftArrowKey.isPressed;
+            bool direita = teclado.dKey.isPressed || teclado.rightArrowKey.isPressed;
+
+            /* X do MUNDO invertido de propósito: a câmera fica atrás do
+               personagem em +Z olhando pra -Z (ver CameraTerceiraPessoa) —
+               isso equivale a girar 180° em Y a partir da identidade, o que
                inverte transform.right da câmera pra -X. Sem esta inversão,
-               D (que devia ir pra direita NA TELA) andava +X no mundo, que
-               a câmera via como esquerda — exatamente o bug relatado ao
-               vivo ("A e D estão trocados"). */
+               "direita" andava +X no mundo, que a câmera via como esquerda
+               na TELA — exatamente o bug relatado ao vivo ("A e D estão
+               trocados"). A direção do SPRITE (DirecaoCardinal, embaixo) usa
+               a intenção de tecla direto, nunca este sinal invertido —
+               senão o personagem viraria de costas pro lado errado. */
             Vector3 direcao = Vector3.zero;
-            if (teclado.wKey.isPressed || teclado.upArrowKey.isPressed) direcao.z -= 1;
-            if (teclado.sKey.isPressed || teclado.downArrowKey.isPressed) direcao.z += 1;
-            if (teclado.aKey.isPressed || teclado.leftArrowKey.isPressed) direcao.x += 1;
-            if (teclado.dKey.isPressed || teclado.rightArrowKey.isPressed) direcao.x -= 1;
+            if (cima) direcao.z -= 1;
+            if (baixo) direcao.z += 1;
+            if (esquerda) direcao.x += 1;
+            if (direita) direcao.x -= 1;
 
             Movendo = direcao.sqrMagnitude > 0.001f;
             bool correndo = Movendo && teclado.leftShiftKey.isPressed;
@@ -68,6 +80,11 @@ namespace EterAnima.PlayerCore
                 DirecaoAtual = direcao;
                 _controlador.Move(direcao * velocidade * Time.deltaTime);
                 transform.forward = direcao;
+
+                if (esquerda && !direita) DirecaoCardinal = DirecaoPersonagem.Esquerda;
+                else if (direita && !esquerda) DirecaoCardinal = DirecaoPersonagem.Direita;
+                else if (baixo) DirecaoCardinal = DirecaoPersonagem.Baixo;
+                else if (cima) DirecaoCardinal = DirecaoPersonagem.Cima;
             }
 
             // Pulo/gravidade — só sai do chão se já estava apoiado.
