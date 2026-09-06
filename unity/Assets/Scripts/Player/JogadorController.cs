@@ -1,3 +1,4 @@
+using EterAnima.Combat;
 using EterAnima.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -44,6 +45,9 @@ namespace EterAnima.PlayerCore
             _controlador = GetComponent<CharacterController>();
             Atributos = AtributosPersonagem.Base().ComBonusDeRaca(raca);
             Progresso = Progresso.Inicial();
+
+            var vida = GetComponent<Vida>();
+            if (vida != null) vida.Inicializar(Atributos.HpMaximo(Progresso.Nivel), Atributos.ManaMaxima(Progresso.Nivel), elemento);
         }
 
         private void Update()

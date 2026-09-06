@@ -17,8 +17,9 @@ namespace EterAnima.PlayerCore
     /// exatamente 12 sprites, na ordem gerada por
     /// ImportadorFolhaDePersonagem: índice = linha*3 + coluna, linha
     /// 0=baixo, 1=esquerda, 2=direita, 3=cima (mesma convenção do motor
-    /// antigo, DIR_ROW). Ataque/ataque aéreo/magia ainda não entram aqui —
-    /// dependem do sistema de combate, que ainda não existe nesta fatia.
+    /// antigo, DIR_ROW). Ataque/ataque aéreo/magia entram via TocarAcao,
+    /// chamado pelo JogadorCombate — essa pose tem prioridade sobre
+    /// andar/correr/pular enquanto está tocando.
     /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     public class PersonagemBillboard : MonoBehaviour
@@ -30,14 +31,34 @@ namespace EterAnima.PlayerCore
         [SerializeField] private Sprite[] quadrosAndar = new Sprite[12];
         [SerializeField] private Sprite[] quadrosCorrida = new Sprite[12];
         [SerializeField] private Sprite[] quadrosPulo = new Sprite[12];
+        [SerializeField] private Sprite[] quadrosAtaque = new Sprite[12];
+        [SerializeField] private Sprite[] quadrosAtaqueAereo = new Sprite[12];
+        [SerializeField] private Sprite[] quadrosMagia = new Sprite[12];
 
         private SpriteRenderer _renderer;
         private JogadorController _jogador;
         private float _tempoAnimacao;
+        private AcaoPersonagem _acaoAtual;
+        private float _acaoTempoRestante;
+        private float _acaoDuracaoTotal;
 
         public Sprite[] QuadrosAndar { set => quadrosAndar = value; }
         public Sprite[] QuadrosCorrida { set => quadrosCorrida = value; }
         public Sprite[] QuadrosPulo { set => quadrosPulo = value; }
+        public Sprite[] QuadrosAtaque { set => quadrosAtaque = value; }
+        public Sprite[] QuadrosAtaqueAereo { set => quadrosAtaqueAereo = value; }
+        public Sprite[] QuadrosMagia { set => quadrosMagia = value; }
+
+        /// <summary>Chamado pelo JogadorCombate quando um ataque/magia
+        /// começa — a pose de ação toca do quadro 0 (preparação) ao 2
+        /// (recuperação) ao longo de `duracao` segundos, sobrepondo
+        /// qualquer outra pose até acabar.</summary>
+        public void TocarAcao(AcaoPersonagem acao, float duracao)
+        {
+            _acaoAtual = acao;
+            _acaoDuracaoTotal = Mathf.Max(0.01f, duracao);
+            _acaoTempoRestante = _acaoDuracaoTotal;
+        }
 
         private void Awake()
         {
@@ -59,6 +80,23 @@ namespace EterAnima.PlayerCore
         {
             if (_jogador == null) return;
             int linha = (int)_jogador.DirecaoCardinal;
+
+            if (_acaoTempoRestante > 0f)
+            {
+                _acaoTempoRestante -= Time.deltaTime;
+                float progresso = 1f - Mathf.Clamp01(_acaoTempoRestante / _acaoDuracaoTotal);
+                int colunaAcao = Mathf.Clamp(Mathf.FloorToInt(progresso * 3f), 0, 2);
+                var folhaAcao = _acaoAtual switch
+                {
+                    AcaoPersonagem.Ataque => quadrosAtaque,
+                    AcaoPersonagem.AtaqueAereo => quadrosAtaqueAereo,
+                    AcaoPersonagem.Magia => quadrosMagia,
+                    _ => quadrosAtaque,
+                };
+                AplicarQuadro(folhaAcao, linha, colunaAcao);
+                _tempoAnimacao = 0f;
+                return;
+            }
 
             if (!_jogador.NoChao)
             {

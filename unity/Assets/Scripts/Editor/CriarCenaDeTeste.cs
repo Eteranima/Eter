@@ -1,7 +1,10 @@
 using EterAnima.CameraSystem;
+using EterAnima.Combat;
 using EterAnima.PlayerCore;
+using EterAnima.UI;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace EterAnima.EditorTools
 {
@@ -17,6 +20,9 @@ namespace EterAnima.EditorTools
         private const string CaminhoSpriteAndar = "Assets/Art/Characters/protagonista_sheet.png";
         private const string CaminhoSpriteCorrida = "Assets/Art/Characters/protagonista_corrida_sheet.png";
         private const string CaminhoSpritePulo = "Assets/Art/Characters/protagonista_pulo_sheet.png";
+        private const string CaminhoSpriteAtaque = "Assets/Art/Characters/protagonista_ataque_sheet.png";
+        private const string CaminhoSpriteAtaqueAereo = "Assets/Art/Characters/protagonista_ataque_aereo_sheet.png";
+        private const string CaminhoSpriteMagia = "Assets/Art/Characters/protagonista_magia_sheet.png";
         private const float AlturaPersonagem = 1.9f; // mesma altura usada no protótipo Three.js
 
         [MenuItem("Éter Anima/Criar Chão + Jogador + Câmera de Teste")]
@@ -43,11 +49,16 @@ namespace EterAnima.EditorTools
                 jogador.AddComponent<JogadorController>();
             }
 
+            if (!jogador.TryGetComponent(out Vida vidaJogador)) vidaJogador = jogador.AddComponent<Vida>();
+            if (!jogador.TryGetComponent<JogadorCombate>(out _)) jogador.AddComponent<JogadorCombate>();
+
             // Sempre reaplica as folhas de sprite mais recentes, mesmo se o
             // Jogador já existia — assim, toda vez que uma folha nova chega
             // (corrida, ataque, ...), só precisa rodar o menu de novo em vez
             // de apagar e recriar o Jogador na mão.
             CriarVisualDoPersonagem(jogador.transform);
+            CriarMobDeTreino();
+            CriarHud(vidaJogador);
 
             Camera camera = Camera.main;
             if (camera != null)
@@ -92,28 +103,101 @@ namespace EterAnima.EditorTools
             var quadrosAndar = CarregarQuadrosOrdenados(CaminhoSpriteAndar);
             billboard.QuadrosAndar = quadrosAndar;
 
-            if (AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteCorrida) != null)
-            {
-                billboard.QuadrosCorrida = CarregarQuadrosOrdenados(CaminhoSpriteCorrida);
-            }
-            else
-            {
-                Debug.LogWarning($"[Éter Anima] Sprite de corrida não encontrado em {CaminhoSpriteCorrida} — vai usar a pose de andar mesmo correndo.");
-                billboard.QuadrosCorrida = quadrosAndar;
-            }
+            CarregarOuAvisar(quadrosAndar, CaminhoSpriteCorrida, "corrida", f => billboard.QuadrosCorrida = f);
+            CarregarOuAvisar(quadrosAndar, CaminhoSpritePulo, "pulo", f => billboard.QuadrosPulo = f);
+            CarregarOuAvisar(quadrosAndar, CaminhoSpriteAtaque, "ataque", f => billboard.QuadrosAtaque = f);
+            CarregarOuAvisar(quadrosAndar, CaminhoSpriteAtaqueAereo, "ataque aéreo", f => billboard.QuadrosAtaqueAereo = f);
+            CarregarOuAvisar(quadrosAndar, CaminhoSpriteMagia, "magia", f => billboard.QuadrosMagia = f);
 
-            if (AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpritePulo) != null)
-            {
-                billboard.QuadrosPulo = CarregarQuadrosOrdenados(CaminhoSpritePulo);
-            }
-            else
-            {
-                Debug.LogWarning($"[Éter Anima] Sprite de pulo não encontrado em {CaminhoSpritePulo} — vai usar a pose de andar mesmo no ar.");
-                billboard.QuadrosPulo = quadrosAndar;
-            }
             // Pose parada (coluna do meio, linha "baixo") só pra já aparecer
             // alguma coisa antes do primeiro Update rodar.
             if (quadrosAndar.Length > 1 && quadrosAndar[1] != null) spriteRenderer.sprite = quadrosAndar[1];
+        }
+
+        /// <summary>Carrega a folha indicada se o arquivo existir; senão
+        /// avisa e usa a pose de andar como substituta (nunca deixa o
+        /// campo vazio/null, que faria o personagem sumir naquele
+        /// estado).</summary>
+        private static void CarregarOuAvisar(Sprite[] quadrosAndar, string caminho, string nomeAmigavel, System.Action<Sprite[]> aplicar)
+        {
+            if (AssetDatabase.LoadAssetAtPath<Texture2D>(caminho) != null)
+            {
+                aplicar(CarregarQuadrosOrdenados(caminho));
+            }
+            else
+            {
+                Debug.LogWarning($"[Éter Anima] Sprite de {nomeAmigavel} não encontrado em {caminho} — vai usar a pose de andar como substituta.");
+                aplicar(quadrosAndar);
+            }
+        }
+
+        private static void CriarMobDeTreino()
+        {
+            if (GameObject.Find("MobDeTreino") != null) return;
+
+            var mob = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            mob.name = "MobDeTreino";
+            mob.transform.position = new Vector3(0f, 1f, 3f);
+            mob.GetComponent<Renderer>().material.color = new Color(0.3f, 0.6f, 0.3f);
+            mob.AddComponent<Vida>();
+            mob.AddComponent<Mob>();
+        }
+
+        private static void CriarHud(Vida vidaJogador)
+        {
+            var canvasGO = GameObject.Find("HudCanvas");
+            if (canvasGO == null)
+            {
+                canvasGO = new GameObject("HudCanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+                var canvas = canvasGO.GetComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                var escala = canvasGO.GetComponent<CanvasScaler>();
+                escala.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                escala.referenceResolution = new Vector2(1920f, 1080f);
+            }
+
+            var preenchimentoHp = CriarBarra(canvasGO.transform, "BarraHp", new Vector2(24f, -24f),
+                new Color(0.15f, 0.15f, 0.15f, 0.85f), new Color(0.8f, 0.15f, 0.15f));
+            var preenchimentoMana = CriarBarra(canvasGO.transform, "BarraMana", new Vector2(24f, -52f),
+                new Color(0.15f, 0.15f, 0.15f, 0.85f), new Color(0.2f, 0.4f, 0.9f));
+
+            if (!canvasGO.TryGetComponent(out HudVida hud)) hud = canvasGO.AddComponent<HudVida>();
+            hud.Vida = vidaJogador;
+            hud.PreenchimentoHp = preenchimentoHp;
+            hud.PreenchimentoMana = preenchimentoMana;
+        }
+
+        /// <summary>Cria (ou reaproveita) uma barra simples: fundo fixo +
+        /// preenchimento cujo anchorMax.x o HudVida ajusta a cada frame.
+        /// Retorna o RectTransform do preenchimento.</summary>
+        private static RectTransform CriarBarra(Transform pai, string nome, Vector2 posicaoAncorada, Color corFundo, Color corPreenchimento)
+        {
+            var existente = pai.Find(nome);
+            if (existente != null)
+            {
+                return existente.Find("Preenchimento") as RectTransform;
+            }
+
+            var fundoGO = new GameObject(nome, typeof(RectTransform), typeof(Image));
+            fundoGO.transform.SetParent(pai, false);
+            var fundoRect = (RectTransform)fundoGO.transform;
+            fundoRect.anchorMin = new Vector2(0f, 1f);
+            fundoRect.anchorMax = new Vector2(0f, 1f);
+            fundoRect.pivot = new Vector2(0f, 1f);
+            fundoRect.anchoredPosition = posicaoAncorada;
+            fundoRect.sizeDelta = new Vector2(240f, 22f);
+            fundoGO.GetComponent<Image>().color = corFundo;
+
+            var preenchimentoGO = new GameObject("Preenchimento", typeof(RectTransform), typeof(Image));
+            preenchimentoGO.transform.SetParent(fundoGO.transform, false);
+            var preenchimentoRect = (RectTransform)preenchimentoGO.transform;
+            preenchimentoRect.anchorMin = Vector2.zero;
+            preenchimentoRect.anchorMax = Vector2.one; // HudVida ajusta anchorMax.x a cada frame
+            preenchimentoRect.offsetMin = Vector2.zero;
+            preenchimentoRect.offsetMax = Vector2.zero;
+            preenchimentoGO.GetComponent<Image>().color = corPreenchimento;
+
+            return preenchimentoRect;
         }
 
         /// <summary>
