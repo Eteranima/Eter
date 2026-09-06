@@ -7,5 +7,6 @@
 | Inter | fonte local do jogo | SIL Open Font License 1.1 |
 | Press Start 2P | fonte local do jogo | SIL Open Font License 1.1 |
 | Playwright | testes E2E | Apache-2.0 |
+| Three.js (r160) | motor de renderização 3D da nova arquitetura (`next/`) | MIT |
 
 Direitos sobre artes, narrativa, música e demais conteúdos do jogo não são ampliados por este inventário.

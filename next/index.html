@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Éter Anima — Vertical Slice</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="viewport"></canvas>
+
+  <div id="hud">
+    <div class="bars">
+      <div class="bar hp"><div class="fill" id="hp-fill"></div><span id="hp-text">HP</span></div>
+      <div class="bar mp"><div class="fill" id="mp-fill"></div><span id="mp-text">Mana</span></div>
+    </div>
+    <div class="level-block">
+      <span id="level-text">Nv. 1</span>
+      <div class="bar xp"><div class="fill" id="xp-fill"></div></div>
+    </div>
+    <div class="gold-block">💰 <span id="gold-text">0</span></div>
+  </div>
+
+  <canvas id="minimap"></canvas>
+
+  <div id="hotbar">
+    <div class="slot" data-slot="skill">
+      <span class="key">1</span><span class="label" id="skill-label">Skill</span>
+    </div>
+    <div class="slot" data-slot="magic">
+      <span class="key">2</span><span class="label" id="magic-label">Magia</span>
+    </div>
+    <div class="slot" data-slot="item">
+      <span class="key">3</span><span class="label" id="item-label">Poção</span>
+    </div>
+  </div>
+
+  <div id="dialogue" hidden>
+    <div id="dialogue-name"></div>
+    <div id="dialogue-text"></div>
+    <div id="dialogue-choices"></div>
+    <div id="dialogue-hint">Z / clique para continuar</div>
+  </div>
+
+  <div id="shop" hidden>
+    <h2 id="shop-title">Loja</h2>
+    <div id="shop-list"></div>
+    <div id="shop-footer">
+      <span id="shop-gold"></span>
+      <button id="shop-close">Fechar (X)</button>
+    </div>
+  </div>
+
+  <div id="inventory" hidden>
+    <h2>Inventário</h2>
+    <div id="inventory-list"></div>
+    <div id="inventory-footer">
+      <button id="inventory-close">Fechar (X)</button>
+    </div>
+  </div>
+
+  <div id="damage-layer"></div>
+  <div id="mob-bars"></div>
+
+  <div id="controls-hint">
+    WASD/setas mover · Shift correr · Espaço pular · E interagir · Z confirmar · X cancelar/fechar ·
+    1/2/3 skill/magia/item · I inventário
+  </div>
+
+  <div id="boot-status">Carregando…</div>
+
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.js" } }
+  </script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
