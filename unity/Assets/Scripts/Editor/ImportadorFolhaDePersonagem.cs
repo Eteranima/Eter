@@ -31,7 +31,13 @@ namespace EterAnima.EditorTools
             importador.filterMode = FilterMode.Point; // pixel art nítido, sem borrão
             importador.textureCompression = TextureImporterCompression.Uncompressed;
             importador.alphaIsTransparency = true;
-            importador.mipmapEnabled = false;
+            /* Teste ao vivo: false causava um artefato de "6 cópias em
+               grade" no personagem visto de longe pela câmera terceira
+               pessoa (suspeita: aliasing de minificação sem mipmap, sem
+               nenhum blur perceptível esperado nessa distância fixa de
+               câmera). Se ainda aparecer errado com true, não é isso —
+               reverter e investigar o shader/material em vez da textura. */
+            importador.mipmapEnabled = true;
             importador.wrapMode = TextureWrapMode.Clamp;
             importador.spritePixelsPerUnit = 128; // 1 unidade Unity ≈ 1 tile de personagem
         }
