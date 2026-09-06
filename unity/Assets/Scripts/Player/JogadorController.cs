@@ -45,11 +45,18 @@ namespace EterAnima.PlayerCore
             var teclado = Keyboard.current;
             if (teclado == null) return;
 
+            /* X invertido de propósito: a câmera fica atrás do personagem
+               em +Z olhando pra -Z (ver CameraTerceiraPessoa) — isso
+               equivale a girar 180° em Y a partir da identidade, o que
+               inverte transform.right da câmera pra -X. Sem esta inversão,
+               D (que devia ir pra direita NA TELA) andava +X no mundo, que
+               a câmera via como esquerda — exatamente o bug relatado ao
+               vivo ("A e D estão trocados"). */
             Vector3 direcao = Vector3.zero;
             if (teclado.wKey.isPressed || teclado.upArrowKey.isPressed) direcao.z -= 1;
             if (teclado.sKey.isPressed || teclado.downArrowKey.isPressed) direcao.z += 1;
-            if (teclado.aKey.isPressed || teclado.leftArrowKey.isPressed) direcao.x -= 1;
-            if (teclado.dKey.isPressed || teclado.rightArrowKey.isPressed) direcao.x += 1;
+            if (teclado.aKey.isPressed || teclado.leftArrowKey.isPressed) direcao.x += 1;
+            if (teclado.dKey.isPressed || teclado.rightArrowKey.isPressed) direcao.x -= 1;
 
             Movendo = direcao.sqrMagnitude > 0.001f;
             bool correndo = Movendo && teclado.leftShiftKey.isPressed;
