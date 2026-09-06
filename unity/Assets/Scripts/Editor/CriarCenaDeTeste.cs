@@ -215,12 +215,17 @@ namespace EterAnima.EditorTools
             {
                 npc = new GameObject("NpcAnciana");
                 npc.transform.position = new Vector3(-3f, 0f, 2f);
-                var colisor = npc.AddComponent<CapsuleCollider>();
-                colisor.center = new Vector3(0f, AlturaNpc / 2f, 0f);
-                colisor.height = AlturaNpc;
-                colisor.radius = 0.35f;
                 npc.AddComponent<Npc>();
             }
+
+            // Trigger, não sólido: NPC não deve travar o CharacterController
+            // do jogador (física "esquisita" relatada ao vivo) — só precisa
+            // ser detectável pelo OverlapSphere de JogadorInteracao.
+            if (!npc.TryGetComponent(out CapsuleCollider colisorNpc)) colisorNpc = npc.AddComponent<CapsuleCollider>();
+            colisorNpc.center = new Vector3(0f, AlturaNpc / 2f, 0f);
+            colisorNpc.height = AlturaNpc;
+            colisorNpc.radius = 0.35f;
+            colisorNpc.isTrigger = true;
 
             var quadros = AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteNpcAnciana) != null
                 ? CarregarQuadrosOrdenados(CaminhoSpriteNpcAnciana)
