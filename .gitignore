@@ -8,3 +8,10 @@
 # Cache e arquivos temporários de ferramentas locais.
 __pycache__/
 *.py[cod]
+
+# Referência pessoal do usuário, de outros projetos — nunca faz parte
+# deste repositório (achado 2026-09-06: foi parar aqui por engano num
+# `git add -A`, continha conteúdo de um projeto completamente
+# diferente sem relação com Éter Anima).
+/docs-referencia-Não-commitar/
+/Docs-referencia-nao-commitar/
