@@ -12,6 +12,9 @@ namespace EterAnima.PlayerCore
     [RequireComponent(typeof(Vida))]
     public class JogadorInventario : MonoBehaviour
     {
+        [SerializeField] private JogadorInteracao interacao;
+        public JogadorInteracao Interacao { set => interacao = value; }
+
         private Inventario _inventario;
         private Vida _vida;
 
@@ -23,6 +26,8 @@ namespace EterAnima.PlayerCore
 
         private void Update()
         {
+            if (interacao != null && interacao.Bloqueado) return; // não usa item enquanto fala/compra
+
             var teclado = Keyboard.current;
             if (teclado == null) return;
 

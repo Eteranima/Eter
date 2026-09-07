@@ -60,6 +60,17 @@ namespace EterAnima.Combat
             Mudou?.Invoke();
         }
 
+        /// <summary>Desconta o ouro e adiciona o item, atômico (ou as
+        /// duas coisas acontecem, ou nenhuma). Devolve false se não tem
+        /// ouro suficiente.</summary>
+        public bool TentarComprar(string itemId, int preco)
+        {
+            if (Ouro < preco) return false;
+            Ouro -= preco;
+            Adicionar(ItensPredefinidos.Criar(itemId)); // já dispara Mudou
+            return true;
+        }
+
         /// <summary>Usado só pelo save/load — substitui o inventário
         /// inteiro pelo estado salvo (reconstrói os itens a partir dos
         /// IDs via ItensPredefinidos, já que Item não é persistido por

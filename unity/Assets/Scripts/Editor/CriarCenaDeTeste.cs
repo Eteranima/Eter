@@ -25,6 +25,7 @@ namespace EterAnima.EditorTools
         private const string CaminhoSpriteAtaqueAereo = "Assets/Art/Characters/protagonista_ataque_aereo_sheet.png";
         private const string CaminhoSpriteMagia = "Assets/Art/Characters/protagonista_magia_sheet.png";
         private const string CaminhoSpriteNpcAnciana = "Assets/Art/Npcs/npc_anciana.png";
+        private const string CaminhoSpriteNpcMercador = "Assets/Art/Npcs/npc_mercador.png";
         private const string CaminhoSpriteMobGoblin = "Assets/Art/Monsters/mob_goblin.png";
         private const string CaminhoSpriteMobGoblinAndar = "Assets/Art/Npcs/mob_goblin_sheet.png";
         private const float AlturaPersonagem = 1.9f; // mesma altura usada no protótipo Three.js
@@ -59,9 +60,11 @@ namespace EterAnima.EditorTools
             if (!jogador.TryGetComponent(out Vida vidaJogador)) vidaJogador = jogador.AddComponent<Vida>();
             if (!jogador.TryGetComponent<JogadorCombate>(out _)) jogador.AddComponent<JogadorCombate>();
             if (!jogador.TryGetComponent(out Inventario inventarioJogador)) inventarioJogador = jogador.AddComponent<Inventario>();
-            if (!jogador.TryGetComponent<JogadorInventario>(out _)) jogador.AddComponent<JogadorInventario>();
+            if (!jogador.TryGetComponent(out JogadorInventario inventarioInputJogador)) inventarioInputJogador = jogador.AddComponent<JogadorInventario>();
             if (!jogador.TryGetComponent(out JogadorInteracao interacaoJogador)) interacaoJogador = jogador.AddComponent<JogadorInteracao>();
             if (!jogador.TryGetComponent<JogadorSave>(out _)) jogador.AddComponent<JogadorSave>();
+            inventarioInputJogador.Interacao = interacaoJogador;
+            interacaoJogador.Inventario = inventarioJogador;
 
             // Sempre reaplica as folhas de sprite mais recentes, mesmo se o
             // Jogador já existia — assim, toda vez que uma folha nova chega
@@ -70,6 +73,7 @@ namespace EterAnima.EditorTools
             CriarVisualDoPersonagem(jogador.transform);
             CriarMobDeTreino();
             CriarNpcDeTeste();
+            CriarLojaDeTeste();
             CriarPickupsDeTeste();
             CriarHud(vidaJogador, inventarioJogador, interacaoJogador);
 
@@ -89,7 +93,7 @@ namespace EterAnima.EditorTools
             }
 
             Selection.activeGameObject = jogador;
-            Debug.Log("[Éter Anima] Cena de teste pronta. WASD/Shift/Espaço move, clique/J ataca, clique-direito/K conjura, 1-5 usa/equipa item, E conversa, F5 salva, F9 carrega.");
+            Debug.Log("[Éter Anima] Cena de teste pronta. WASD/Shift/Espaço move, clique/J ataca, clique-direito/K conjura, 1-5 usa/equipa item, E conversa/compra (1-4 na loja), F5 salva, F9 carrega.");
         }
 
         private static void CriarVisualDoPersonagem(Transform pai)
@@ -239,6 +243,33 @@ namespace EterAnima.EditorTools
             CriarVisualEstatico(npc.transform, spriteIdle, AlturaNpc);
         }
 
+        private static void CriarLojaDeTeste()
+        {
+            var loja = GameObject.Find("LojaMercador");
+            if (loja == null)
+            {
+                loja = new GameObject("LojaMercador");
+                loja.transform.position = new Vector3(3f, 0f, -2f);
+                loja.AddComponent<Loja>();
+            }
+
+            if (!loja.TryGetComponent(out CapsuleCollider colisorLoja)) colisorLoja = loja.AddComponent<CapsuleCollider>();
+            colisorLoja.center = new Vector3(0f, AlturaNpc / 2f, 0f);
+            colisorLoja.height = AlturaNpc;
+            colisorLoja.radius = 0.35f;
+            colisorLoja.isTrigger = true; // não bloqueia passagem, mesma razão do NpcAnciana
+
+            var quadros = AssetDatabase.LoadAssetAtPath<Texture2D>(CaminhoSpriteNpcMercador) != null
+                ? CarregarQuadrosOrdenados(CaminhoSpriteNpcMercador)
+                : null;
+            var spriteIdle = quadros != null && quadros.Length > 1 ? quadros[1] : null;
+            if (spriteIdle == null)
+            {
+                Debug.LogWarning($"[Éter Anima] Sprite do mercador não encontrado em {CaminhoSpriteNpcMercador} — vai ficar invisível até o arquivo existir.");
+            }
+            CriarVisualEstatico(loja.transform, spriteIdle, AlturaNpc);
+        }
+
         /// <summary>Sprite de pose única (sem folha de andar/pulo) num
         /// filho "Visual" que só encara a câmera — usado por mob e NPC
         /// parados. Escala pra ficar com `altura` metros de alto,
@@ -334,6 +365,49 @@ namespace EterAnima.EditorTools
 
             interacaoJogador.Dialogo = hudDialogo;
             interacaoJogador.TextoDica = textoDica;
+
+            var (painelLoja, textoLoja) = CriarPainelLoja(canvas);
+            if (!canvas.TryGetComponent(out HudLoja hudLoja)) hudLoja = canvas.gameObject.AddComponent<HudLoja>();
+            hudLoja.Painel = painelLoja;
+            hudLoja.Texto = textoLoja;
+            interacaoJogador.HudLoja = hudLoja;
+        }
+
+        /// <summary>Painel de compra centralizado na tela, escondido por
+        /// padrão — HudLoja mostra/some e monta a lista com preços.</summary>
+        private static (GameObject painel, Text texto) CriarPainelLoja(Transform pai)
+        {
+            var existente = pai.Find("PainelLoja");
+            if (existente != null)
+            {
+                return (existente.gameObject, existente.Find("Texto")?.GetComponent<Text>());
+            }
+
+            var painelGO = new GameObject("PainelLoja", typeof(RectTransform), typeof(Image));
+            painelGO.transform.SetParent(pai, false);
+            var painelRect = (RectTransform)painelGO.transform;
+            painelRect.anchorMin = new Vector2(0.5f, 0.5f);
+            painelRect.anchorMax = new Vector2(0.5f, 0.5f);
+            painelRect.pivot = new Vector2(0.5f, 0.5f);
+            painelRect.anchoredPosition = Vector2.zero;
+            painelRect.sizeDelta = new Vector2(420f, 280f);
+            painelGO.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.9f);
+
+            var textoGO = new GameObject("Texto", typeof(RectTransform), typeof(Text));
+            textoGO.transform.SetParent(painelGO.transform, false);
+            var textoRect = (RectTransform)textoGO.transform;
+            textoRect.anchorMin = Vector2.zero;
+            textoRect.anchorMax = Vector2.one;
+            textoRect.offsetMin = new Vector2(20f, 16f);
+            textoRect.offsetMax = new Vector2(-20f, -16f);
+            var texto = textoGO.GetComponent<Text>();
+            texto.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            texto.fontSize = 18;
+            texto.color = Color.white;
+            texto.alignment = TextAnchor.UpperLeft;
+
+            painelGO.SetActive(false);
+            return (painelGO, texto);
         }
 
         private static Text CriarTextoSimples(Transform pai, string nome, Vector2 posicaoAncorada, Vector2 tamanho, string textoInicial)
