@@ -71,11 +71,11 @@ namespace EterAnima.EditorTools
             // (corrida, ataque, ...), só precisa rodar o menu de novo em vez
             // de apagar e recriar o Jogador na mão.
             CriarVisualDoPersonagem(jogador.transform);
-            CriarMobDeTreino();
-            CriarNpcDeTeste();
-            CriarLojaDeTeste();
+            var mobGO = CriarMobDeTreino();
+            var npcGO = CriarNpcDeTeste();
+            var lojaGO = CriarLojaDeTeste();
             CriarPickupsDeTeste();
-            CriarHud(vidaJogador, inventarioJogador, interacaoJogador);
+            CriarHud(vidaJogador, inventarioJogador, interacaoJogador, jogador.transform, mobGO.transform, npcGO.transform, lojaGO.transform);
 
             Camera camera = Camera.main;
             if (camera != null)
@@ -148,7 +148,7 @@ namespace EterAnima.EditorTools
             }
         }
 
-        private static void CriarMobDeTreino()
+        private static GameObject CriarMobDeTreino()
         {
             var mob = GameObject.Find("MobDeTreino");
             if (mob != null && mob.transform.Find("Visual") == null)
@@ -172,6 +172,7 @@ namespace EterAnima.EditorTools
             }
 
             CriarVisualDoMob(mob.transform);
+            return mob;
         }
 
         /// <summary>Visual do goblin: prefere a folha animada (3×4, ciclo
@@ -213,7 +214,7 @@ namespace EterAnima.EditorTools
             CriarVisualEstatico(pai, spriteEstatico, AlturaMob);
         }
 
-        private static void CriarNpcDeTeste()
+        private static GameObject CriarNpcDeTeste()
         {
             var npc = GameObject.Find("NpcAnciana");
             if (npc == null)
@@ -241,9 +242,10 @@ namespace EterAnima.EditorTools
                 Debug.LogWarning($"[Éter Anima] Sprite do NPC não encontrado em {CaminhoSpriteNpcAnciana} — o NPC vai ficar invisível até o arquivo existir.");
             }
             CriarVisualEstatico(npc.transform, spriteIdle, AlturaNpc);
+            return npc;
         }
 
-        private static void CriarLojaDeTeste()
+        private static GameObject CriarLojaDeTeste()
         {
             var loja = GameObject.Find("LojaMercador");
             if (loja == null)
@@ -268,6 +270,7 @@ namespace EterAnima.EditorTools
                 Debug.LogWarning($"[Éter Anima] Sprite do mercador não encontrado em {CaminhoSpriteNpcMercador} — vai ficar invisível até o arquivo existir.");
             }
             CriarVisualEstatico(loja.transform, spriteIdle, AlturaNpc);
+            return loja;
         }
 
         /// <summary>Sprite de pose única (sem folha de andar/pulo) num
@@ -335,7 +338,8 @@ namespace EterAnima.EditorTools
             return canvasGO.transform;
         }
 
-        private static void CriarHud(Vida vidaJogador, Inventario inventarioJogador, JogadorInteracao interacaoJogador)
+        private static void CriarHud(Vida vidaJogador, Inventario inventarioJogador, JogadorInteracao interacaoJogador,
+            Transform jogador, Transform mob, Transform npc, Transform loja)
         {
             var canvas = ObterOuCriarCanvas();
 
@@ -371,6 +375,44 @@ namespace EterAnima.EditorTools
             hudLoja.Painel = painelLoja;
             hudLoja.Texto = textoLoja;
             interacaoJogador.HudLoja = hudLoja;
+
+            CriarMinimapa(canvas, jogador, mob, npc, loja);
+        }
+
+        private static void CriarMinimapa(Transform canvas, Transform jogador, Transform mob, Transform npc, Transform loja)
+        {
+            var area = CriarAreaMinimapa(canvas);
+            if (!area.TryGetComponent(out HudMinimapa hud)) hud = area.gameObject.AddComponent<HudMinimapa>();
+            hud.Area = area;
+            hud.Jogador = jogador;
+
+            // Só registra os blips na primeira vez (painel recém-criado,
+            // sem filhos) — registrar de novo a cada rodada do menu
+            // duplicaria os blips.
+            if (area.childCount == 0)
+            {
+                hud.Registrar(jogador, Color.white, 10f);
+                hud.Registrar(mob, new Color(0.85f, 0.2f, 0.2f), 8f);
+                hud.Registrar(npc, new Color(0.3f, 0.85f, 0.85f), 8f);
+                hud.Registrar(loja, new Color(0.9f, 0.8f, 0.2f), 8f);
+            }
+        }
+
+        private static RectTransform CriarAreaMinimapa(Transform pai)
+        {
+            var existente = pai.Find("AreaMinimapa");
+            if (existente != null) return (RectTransform)existente;
+
+            var areaGO = new GameObject("AreaMinimapa", typeof(RectTransform), typeof(Image));
+            areaGO.transform.SetParent(pai, false);
+            var rect = (RectTransform)areaGO.transform;
+            rect.anchorMin = new Vector2(1f, 1f);
+            rect.anchorMax = new Vector2(1f, 1f);
+            rect.pivot = new Vector2(1f, 1f);
+            rect.anchoredPosition = new Vector2(-24f, -24f);
+            rect.sizeDelta = new Vector2(180f, 180f);
+            areaGO.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.55f);
+            return rect;
         }
 
         /// <summary>Painel de compra centralizado na tela, escondido por
