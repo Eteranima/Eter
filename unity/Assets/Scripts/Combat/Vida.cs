@@ -52,5 +52,14 @@ namespace EterAnima.Combat
             HpAtual = Mathf.Min(HpMaximo, HpAtual + hp);
             ManaAtual = Mathf.Min(ManaMaximo, ManaAtual + mana);
         }
+
+        /// <summary>Usado só pelo save/load — sobrescreve os pontos
+        /// atuais direto (diferente de Curar, que soma), sem mexer nos
+        /// máximos.</summary>
+        public void CarregarPontos(int hp, int mana)
+        {
+            HpAtual = Mathf.Clamp(hp, 0, HpMaximo);
+            ManaAtual = Mathf.Clamp(mana, 0, ManaMaximo);
+        }
     }
 }

@@ -19,10 +19,12 @@ namespace EterAnima.Combat
         [SerializeField] private int danoContato = 6;
         [SerializeField] private float intervaloAtaque = 1.2f;
         [SerializeField] private float duracaoFlash = 0.15f;
+        [SerializeField] private int ouroRecompensa = 8;
 
         private Vida _vida;
         private Transform _alvo;
         private Vida _vidaAlvo;
+        private Inventario _inventarioAlvo;
         private int _hpAnterior;
         private float _cooldownAtaque;
         private float _flashRestante;
@@ -46,6 +48,7 @@ namespace EterAnima.Combat
             {
                 _alvo = jogador.transform;
                 _vidaAlvo = jogador.GetComponent<Vida>();
+                _inventarioAlvo = jogador.GetComponent<Inventario>();
             }
         }
 
@@ -53,7 +56,8 @@ namespace EterAnima.Combat
         {
             if (_vida.Morto)
             {
-                Debug.Log($"[Éter Anima] {gameObject.name} derrotado!");
+                Debug.Log($"[Éter Anima] {gameObject.name} derrotado! +{ouroRecompensa} de ouro.");
+                _inventarioAlvo?.AdicionarOuro(ouroRecompensa);
                 Destroy(gameObject, 0.4f);
                 enabled = false;
                 return;

@@ -31,13 +31,15 @@ namespace EterAnima.UI
             if (texto == null || inventario == null) return;
 
             var linhas = new StringBuilder();
+            linhas.AppendLine($"Ouro: {inventario.Ouro}");
             for (int i = 0; i < inventario.Itens.Count; i++)
             {
                 var item = inventario.Itens[i];
                 string marcador = ReferenceEquals(inventario.Equipado, item) ? " (equipado)" : "";
                 linhas.AppendLine($"{i + 1}: {item.Nome}{marcador}");
             }
-            texto.text = linhas.Length > 0 ? linhas.ToString() : "(inventário vazio)";
+            if (inventario.Itens.Count == 0) linhas.AppendLine("(inventário vazio)");
+            texto.text = linhas.ToString();
         }
     }
 }

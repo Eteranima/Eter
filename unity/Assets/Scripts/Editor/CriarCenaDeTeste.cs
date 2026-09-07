@@ -61,6 +61,7 @@ namespace EterAnima.EditorTools
             if (!jogador.TryGetComponent(out Inventario inventarioJogador)) inventarioJogador = jogador.AddComponent<Inventario>();
             if (!jogador.TryGetComponent<JogadorInventario>(out _)) jogador.AddComponent<JogadorInventario>();
             if (!jogador.TryGetComponent(out JogadorInteracao interacaoJogador)) interacaoJogador = jogador.AddComponent<JogadorInteracao>();
+            if (!jogador.TryGetComponent<JogadorSave>(out _)) jogador.AddComponent<JogadorSave>();
 
             // Sempre reaplica as folhas de sprite mais recentes, mesmo se o
             // Jogador já existia — assim, toda vez que uma folha nova chega
@@ -88,7 +89,7 @@ namespace EterAnima.EditorTools
             }
 
             Selection.activeGameObject = jogador;
-            Debug.Log("[Éter Anima] Cena de teste pronta: Chão + Jogador (CharacterController + sprite) + Câmera terceira pessoa. Aperta Play e usa WASD/Shift/Espaço.");
+            Debug.Log("[Éter Anima] Cena de teste pronta. WASD/Shift/Espaço move, clique/J ataca, clique-direito/K conjura, 1-5 usa/equipa item, E conversa, F5 salva, F9 carrega.");
         }
 
         private static void CriarVisualDoPersonagem(Transform pai)

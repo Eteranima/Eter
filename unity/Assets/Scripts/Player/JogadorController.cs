@@ -110,6 +110,18 @@ namespace EterAnima.PlayerCore
             _controlador.Move(Vector3.up * _velocidadeVertical * Time.deltaTime);
         }
 
+        /// <summary>Usado só pelo save/load — reconstrói Progresso a
+        /// partir do estado salvo e reaplica os máximos de HP/mana pro
+        /// nível carregado (quem restaura os pontos ATUAIS de volta é
+        /// Vida.CarregarPontos, chamado depois disso pelo JogadorSave).</summary>
+        public void CarregarProgresso(int nivel, int xp)
+        {
+            Progresso = new Progresso { Nivel = nivel, Xp = xp, ProximoNivel = Progresso.XpParaNivel(nivel) };
+
+            var vida = GetComponent<Vida>();
+            if (vida != null) vida.Inicializar(Atributos.HpMaximo(nivel), Atributos.ManaMaxima(nivel), elemento);
+        }
+
         public void ReceberXp(int quantidade)
         {
             int niveisSubiram = Progresso.GanharXp(quantidade);
